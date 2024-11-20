@@ -135,27 +135,35 @@ String dropdown2Value = 'Option A';
         Row(
     children: [
       Expanded(
-        flex: 1,
-        child: DropdownButtonFormField<String>(
-          decoration: InputDecoration(
-            border: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(8 * scale),
-            ),
-          ),
-          items: const [
-            DropdownMenuItem(value: 'Option 1', child: Text('Option 1')),
-            DropdownMenuItem(value: 'Option 2', child: Text('Option 2')),
-          ],
-          onChanged: (value) {},
+  flex: 1,
+  child: SizedBox(
+    height: 40, // Set the height to 20
+    child: DropdownButtonFormField<String>(
+      decoration: InputDecoration(
+        contentPadding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4), // Adjust padding
+        border: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(8 * scale),
         ),
       ),
+      items: const [
+        DropdownMenuItem(value: 'Option 1', child: Text('Option 1', style: TextStyle(fontSize: 10))), // Adjust font size
+        DropdownMenuItem(value: 'Option 2', child: Text('Option 2', style: TextStyle(fontSize: 10))), // Adjust font size
+      ],
+      onChanged: (value) {},
+    ),
+  ),
+),
+
       const SizedBox(width: 8),
       Expanded(
         flex: 1,
-        child: TextField(
-          decoration: InputDecoration(
-            border: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(8 * scale),
+        child: SizedBox(
+          height: 40,
+          child: TextField(
+            decoration: InputDecoration(
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(8 * scale),
+              ),
             ),
           ),
         ),
@@ -183,34 +191,43 @@ String dropdown2Value = 'Option A';
     //FULLNAME TEXTFIELDS
         Row(
     children: [
-      Expanded(
-        child: TextField(
-          decoration: InputDecoration(
-            labelText: 'Family Name',
-            border: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(8 * scale),
+       Expanded(
+        flex: 1,
+        child: SizedBox(
+          height: 40,
+          child: TextField(
+            decoration: InputDecoration(
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(8 * scale),
+              ),
             ),
           ),
         ),
       ),
       const SizedBox(width: 8),
       Expanded(
-        child: TextField(
-          decoration: InputDecoration(
-            labelText: 'First Name',
-            border: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(8 * scale),
+        flex: 1,
+        child: SizedBox(
+          height: 40,
+          child: TextField(
+            decoration: InputDecoration(
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(8 * scale),
+              ),
             ),
           ),
         ),
       ),
       const SizedBox(width: 8),
       Expanded(
-        child: TextField(
-          decoration: InputDecoration(
-            labelText: 'Middle Name',
-            border: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(8 * scale),
+        flex: 1,
+        child: SizedBox(
+          height: 40,
+          child: TextField(
+            decoration: InputDecoration(
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(8 * scale),
+              ),
             ),
           ),
         ),
@@ -268,51 +285,62 @@ String dropdown2Value = 'Option A';
         Row(
     children: [
     Expanded(
-      child: TextField(
-        controller: dateController, // Use the controller to update the text
-        readOnly: true, // Makes the TextField non-editable, so the calendar triggers the date picker
-        decoration: InputDecoration(
-    suffixIcon: IconButton(
-      icon: const Icon(Icons.calendar_today), // Calendar icon
-      onPressed: () async {
-        // Show the date picker dialog
-        DateTime? pickedDate = await showDatePicker(
-          context: context,
-          initialDate: DateTime.now(), // Initial date when the dialog opens
-          firstDate: DateTime(1900), // First date allowed to be selected
-          lastDate: DateTime(2101), // Last date allowed to be selected
-        );
-        if (pickedDate != null) {
-          // Update the text field with the selected date
-          setState(() {
-            dateController.text = "${pickedDate.toLocal()}".split(' ')[0]; // Format the date as YYYY-MM-DD
-          });
-        }
-      },
-    ),
-    border: OutlineInputBorder(
-      borderRadius: BorderRadius.circular(8 * scale), // Scalable radius
-    ),
+      child: SizedBox(
+        height: 40,
+        child: TextField(
+          controller: dateController, // Use the controller to update the text
+          readOnly: true, // Makes the TextField non-editable, so the calendar triggers the date picker
+          decoration: InputDecoration(
+            suffixIcon: IconButton(
+        icon: const Icon(Icons.calendar_today), // Calendar icon
+        onPressed: () async {
+          // Show the date picker dialog
+          DateTime? pickedDate = await showDatePicker(
+            context: context,
+            initialDate: DateTime.now(), // Initial date when the dialog opens
+            firstDate: DateTime(1900), // First date allowed to be selected
+            lastDate: DateTime(2101), // Last date allowed to be selected
+          );
+          if (pickedDate != null) {
+            // Update the text field with the selected date
+            setState(() {
+              dateController.text = "${pickedDate.toLocal()}".split(' ')[0]; // Format the date as YYYY-MM-DD
+            });
+          }
+        },
+            ),
+            border: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(8 * scale), // Scalable radius
+            ),
+          ),
         ),
       ),
     ),
     
       const SizedBox(width: 8),
       Expanded(
-        child: TextField(
-          decoration: InputDecoration(
-            border: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(8 * scale),
+        flex: 1,
+        child: SizedBox(
+          height: 40,
+          child: TextField(
+            decoration: InputDecoration(
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(8 * scale),
+              ),
             ),
           ),
         ),
       ),
       const SizedBox(width: 8),
       Expanded(
-        child: TextField(
-          decoration: InputDecoration(
-            border: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(8 * scale),
+        flex: 1,
+        child: SizedBox(
+          height: 40,
+          child: TextField(
+            decoration: InputDecoration(
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(8 * scale),
+              ),
             ),
           ),
         ),
@@ -425,21 +453,24 @@ String dropdown2Value = 'Option A';
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
     
-        DropdownButtonFormField<String>(
-          decoration: InputDecoration(
-            border: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(8 * scale),
+        SizedBox(
+          height: 40,
+          child: DropdownButtonFormField<String>(
+            decoration: InputDecoration(
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(8 * scale),
+              ),
             ),
+            items: const [
+              DropdownMenuItem(value: 'Option 1', child: Text('Option 1')),
+              DropdownMenuItem(value: 'Option 2', child: Text('Option 2')),
+            ],
+            onChanged: (value) {
+              setState(() {
+                dropdown1Value = value!;
+              });
+            },
           ),
-          items: const [
-            DropdownMenuItem(value: 'Option 1', child: Text('Option 1')),
-            DropdownMenuItem(value: 'Option 2', child: Text('Option 2')),
-          ],
-          onChanged: (value) {
-            setState(() {
-              dropdown1Value = value!;
-            });
-          },
         ),
       ],
     ),
@@ -454,21 +485,24 @@ String dropdown2Value = 'Option A';
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
     
-        DropdownButtonFormField<String>(
-          decoration: InputDecoration(
-            border: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(8 * scale),
+        SizedBox(
+          height: 40,
+          child: DropdownButtonFormField<String>(
+            decoration: InputDecoration(
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(8 * scale),
+              ),
             ),
+            items: const [
+              DropdownMenuItem(value: 'Option A', child: Text('Option A')),
+              DropdownMenuItem(value: 'Option B', child: Text('Option B')),
+            ],
+            onChanged: (value) {
+              setState(() {
+                dropdown2Value = value!;
+              });
+            },
           ),
-          items: const [
-            DropdownMenuItem(value: 'Option A', child: Text('Option A')),
-            DropdownMenuItem(value: 'Option B', child: Text('Option B')),
-          ],
-          onChanged: (value) {
-            setState(() {
-              dropdown2Value = value!;
-            });
-          },
         ),
       ],
     ),
@@ -505,12 +539,15 @@ String dropdown2Value = 'Option A';
     
         Row(
     children: [
-      Expanded(
+       Expanded(
         flex: 1,
-        child: TextField(
-          decoration: InputDecoration(
-            border: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(8 * scale),
+        child: SizedBox(
+          height: 40,
+          child: TextField(
+            decoration: InputDecoration(
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(8 * scale),
+              ),
             ),
           ),
         ),
@@ -551,10 +588,13 @@ String dropdown2Value = 'Option A';
     children: [
       Expanded(
         flex: 1,
-        child: TextField(
-          decoration: InputDecoration(
-            border: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(8 * scale),
+        child: SizedBox(
+          height: 40,
+          child: TextField(
+            decoration: InputDecoration(
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(8 * scale),
+              ),
             ),
           ),
         ),
@@ -606,10 +646,13 @@ String dropdown2Value = 'Option A';
     children: [
       Expanded(
         flex: 1,
-        child: TextField(
-          decoration: InputDecoration(
-            border: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(8 * scale),
+        child: SizedBox(
+          height: 40,
+          child: TextField(
+            decoration: InputDecoration(
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(8 * scale),
+              ),
             ),
           ),
         ),
@@ -617,10 +660,13 @@ String dropdown2Value = 'Option A';
       const SizedBox(width: 8),
       Expanded(
         flex: 1,
-        child: TextField(
-          decoration: InputDecoration(
-            border: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(8 * scale),
+        child: SizedBox(
+          height: 40,
+          child: TextField(
+            decoration: InputDecoration(
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(8 * scale),
+              ),
             ),
           ),
         ),
@@ -677,26 +723,32 @@ String dropdown2Value = 'Option A';
     children: [
       Expanded(
         flex: 1,
-        child: DropdownButtonFormField<String>(
-          decoration: InputDecoration(
-            border: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(8 * scale),
+        child: SizedBox(
+          height: 40,
+          child: DropdownButtonFormField<String>(
+            decoration: InputDecoration(
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(8 * scale),
+              ),
             ),
+            items: const [
+              DropdownMenuItem(value: 'Option 1', child: Text('Option 1')),
+              DropdownMenuItem(value: 'Option 2', child: Text('Option 2')),
+            ],
+            onChanged: (value) {},
           ),
-          items: const [
-            DropdownMenuItem(value: 'Option 1', child: Text('Option 1')),
-            DropdownMenuItem(value: 'Option 2', child: Text('Option 2')),
-          ],
-          onChanged: (value) {},
         ),
       ),
       const SizedBox(width: 8),
       Expanded(
         flex: 1,
-        child: TextField(
-          decoration: InputDecoration(
-            border: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(8 * scale),
+        child: SizedBox(
+          height: 40,
+          child: TextField(
+            decoration: InputDecoration(
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(8 * scale),
+              ),
             ),
           ),
         ),
@@ -829,18 +881,21 @@ String dropdown2Value = 'Option A';
               // 2nd Row - Number of siblings dropdown field
               SizedBox(
   width: 420,
-  child: DropdownButtonFormField<String>(
-    items: ['1', '2', '3', '4', '5']
-        .map((item) => DropdownMenuItem<String>(
-              value: item,
-              child: Text(item),
-            ))
-        .toList(),
-    onChanged: (value) {},
-    decoration: InputDecoration(
-      labelText: 'Number of Siblings',
-      border: OutlineInputBorder(
-        borderRadius: BorderRadius.circular(8),
+  child: SizedBox(
+    height: 40,
+    child: DropdownButtonFormField<String>(
+      items: ['1', '2', '3', '4', '5']
+          .map((item) => DropdownMenuItem<String>(
+                value: item,
+                child: Text(item),
+              ))
+          .toList(),
+      onChanged: (value) {},
+      decoration: InputDecoration(
+        labelText: 'Number of Siblings',
+        border: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(8),
+        ),
       ),
     ),
   ),
@@ -878,6 +933,7 @@ String dropdown2Value = 'Option A';
         const SizedBox(height: 8),
         SizedBox(
           width: 600,
+          height: 40,
           child: TextField(
             decoration: InputDecoration(
               border: OutlineInputBorder(
@@ -901,6 +957,7 @@ String dropdown2Value = 'Option A';
         const SizedBox(height: 8),
         SizedBox(
           width: 120,
+          height: 40,
           child: TextField(
             decoration: InputDecoration(
               border: OutlineInputBorder(
@@ -923,10 +980,13 @@ String dropdown2Value = 'Option A';
             style: TextStyle(fontSize: 11 * scale, fontFamily: 'Roboto-R'),
           ),
           const SizedBox(height: 8),
-          TextField(
-            decoration: InputDecoration(
-              border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(8),
+          SizedBox(
+            height: 40,
+            child: TextField(
+              decoration: InputDecoration(
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(8),
+                ),
               ),
             ),
           ),
@@ -945,10 +1005,13 @@ String dropdown2Value = 'Option A';
             style: TextStyle(fontSize: 11 * scale, fontFamily: 'Roboto-R'),
           ),
           const SizedBox(height: 8),
-          TextField(
-            decoration: InputDecoration(
-              border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(8),
+          SizedBox(
+            height: 40,
+            child: TextField(
+              decoration: InputDecoration(
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(8),
+                ),
               ),
             ),
           ),
@@ -981,6 +1044,7 @@ String dropdown2Value = 'Option A';
         const SizedBox(height: 8),
         SizedBox(
           width: 600,
+          height: 40,
           child: TextField(
             decoration: InputDecoration(
               border: OutlineInputBorder(
@@ -1004,6 +1068,7 @@ String dropdown2Value = 'Option A';
         const SizedBox(height: 8),
         SizedBox(
           width: 120,
+          height: 40,
           child: TextField(
             decoration: InputDecoration(
               border: OutlineInputBorder(
@@ -1026,10 +1091,13 @@ String dropdown2Value = 'Option A';
             style: TextStyle(fontSize: 11 * scale, fontFamily: 'Roboto-R'),
           ),
           const SizedBox(height: 8),
-          TextField(
-            decoration: InputDecoration(
-              border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(8),
+          SizedBox(
+            height: 40,
+            child: TextField(
+              decoration: InputDecoration(
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(8),
+                ),
               ),
             ),
           ),
@@ -1048,10 +1116,13 @@ String dropdown2Value = 'Option A';
             style: TextStyle(fontSize: 11 * scale, fontFamily: 'Roboto-R'),
           ),
           const SizedBox(height: 8),
-          TextField(
-            decoration: InputDecoration(
-              border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(8),
+          SizedBox(
+            height: 40,
+            child: TextField(
+              decoration: InputDecoration(
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(8),
+                ),
               ),
             ),
           ),
@@ -1060,7 +1131,7 @@ String dropdown2Value = 'Option A';
     ),
   ],
 ),
-              const SizedBox(height: 393),
+              const SizedBox(height: 353),
 
               // Centered Back and Next buttons for the second page
 Row(
@@ -1216,6 +1287,7 @@ Row(
         const SizedBox(height: 8),
         SizedBox(
           width: 600,
+          height: 40,
           child: TextField(
             decoration: InputDecoration(
               border: OutlineInputBorder(
@@ -1239,6 +1311,7 @@ Row(
         const SizedBox(height: 8),
         SizedBox(
           width: 120,
+          height: 40,
           child: TextField(
             decoration: InputDecoration(
               border: OutlineInputBorder(
@@ -1261,10 +1334,13 @@ Row(
             style: TextStyle(fontSize: 11 * scale, fontFamily: 'Roboto-R'),
           ),
           const SizedBox(height: 8),
-          TextField(
-            decoration: InputDecoration(
-              border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(8),
+          SizedBox(
+            height: 40,
+            child: TextField(
+              decoration: InputDecoration(
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(8),
+                ),
               ),
             ),
           ),
@@ -1286,33 +1362,36 @@ Expanded(
         ),
       ),
       const SizedBox(height: 8),
-      DropdownButtonFormField<String>(
-        items: const [
-          DropdownMenuItem(
-            value: 'Employed',
-            child: Text('Employed'),
+      SizedBox(
+        height: 40,
+        child: DropdownButtonFormField<String>(
+          items: const [
+            DropdownMenuItem(
+              value: 'Employed',
+              child: Text('Employed'),
+            ),
+            DropdownMenuItem(
+              value: 'Unemployed',
+              child: Text('Unemployed'),
+            ),
+            DropdownMenuItem(
+              value: 'Self-employed',
+              child: Text('Self-employed'),
+            ),
+            DropdownMenuItem(
+              value: 'Student',
+              child: Text('Student'),
+            ),
+          ],
+          onChanged: (value) {
+            // Handle selection change
+          },
+          decoration: InputDecoration(
+            border: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(8),
+            ),
+            contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
           ),
-          DropdownMenuItem(
-            value: 'Unemployed',
-            child: Text('Unemployed'),
-          ),
-          DropdownMenuItem(
-            value: 'Self-employed',
-            child: Text('Self-employed'),
-          ),
-          DropdownMenuItem(
-            value: 'Student',
-            child: Text('Student'),
-          ),
-        ],
-        onChanged: (value) {
-          // Handle selection change
-        },
-        decoration: InputDecoration(
-          border: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(8),
-          ),
-          contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
         ),
       ),
     ],
@@ -1338,10 +1417,13 @@ Row(
             style: TextStyle(fontSize: 11 * scale, fontFamily: 'Roboto-R'),
           ),
           const SizedBox(height: 8),
-          TextField(
-            decoration: InputDecoration(
-              border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(8),
+          SizedBox(
+            height: 40,
+            child: TextField(
+              decoration: InputDecoration(
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(8),
+                ),
               ),
             ),
           ),
@@ -1360,10 +1442,13 @@ Row(
             style: TextStyle(fontSize: 11 * scale, fontFamily: 'Roboto-R'),
           ),
           const SizedBox(height: 8),
-          TextField(
-            decoration: InputDecoration(
-              border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(8),
+          SizedBox(
+            height: 40,
+            child: TextField(
+              decoration: InputDecoration(
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(8),
+                ),
               ),
             ),
           ),
@@ -1388,10 +1473,13 @@ Row(
             style: TextStyle(fontSize: 11 * scale, fontFamily: 'Roboto-R'),
           ),
           const SizedBox(height: 8),
-          TextField(
-            decoration: InputDecoration(
-              border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(8),
+          SizedBox(
+            height: 40,
+            child: TextField(
+              decoration: InputDecoration(
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(8),
+                ),
               ),
             ),
           ),
@@ -1410,10 +1498,13 @@ Row(
             style: TextStyle(fontSize: 11 * scale, fontFamily: 'Roboto-R'),
           ),
           const SizedBox(height: 8),
-          TextField(
-            decoration: InputDecoration(
-              border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(8),
+          SizedBox(
+            height: 40,
+            child: TextField(
+              decoration: InputDecoration(
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(8),
+                ),
               ),
             ),
           ),
@@ -1438,40 +1529,43 @@ Expanded(
         ),
       ),
       const SizedBox(height: 8),
-      DropdownButtonFormField<String>(
-        items: const [
-          DropdownMenuItem(
-            value: 'Below 20,000',
-            child: Text('Below 20,000'),
+      SizedBox(
+        height: 40,
+        child: DropdownButtonFormField<String>(
+          items: const [
+            DropdownMenuItem(
+              value: 'Below 20,000',
+              child: Text('Below 20,000'),
+            ),
+            DropdownMenuItem(
+              value: '20,000 - 50,000',
+              child: Text('20,000 - 50,000'),
+            ),
+            DropdownMenuItem(
+              value: '50,000 - 100,000',
+              child: Text('50,000 - 100,000'),
+            ),
+            DropdownMenuItem(
+              value: 'Above 100,000',
+              child: Text('Above 100,000'),
+            ),
+          ],
+          onChanged: (value) {
+            // Handle the selected value here
+          },
+          decoration: InputDecoration(
+            border: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(8),
+            ),
+            contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
           ),
-          DropdownMenuItem(
-            value: '20,000 - 50,000',
-            child: Text('20,000 - 50,000'),
-          ),
-          DropdownMenuItem(
-            value: '50,000 - 100,000',
-            child: Text('50,000 - 100,000'),
-          ),
-          DropdownMenuItem(
-            value: 'Above 100,000',
-            child: Text('Above 100,000'),
-          ),
-        ],
-        onChanged: (value) {
-          // Handle the selected value here
-        },
-        decoration: InputDecoration(
-          border: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(8),
-          ),
-          contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-        ),
-        hint: Text(
-          'Select Salary Scale',
-          style: TextStyle(
-            fontSize: 11 * scale,
-            fontFamily: 'Roboto-R',
-            color: Colors.grey,
+          hint: Text(
+            'Select Salary Scale',
+            style: TextStyle(
+              fontSize: 11 * scale,
+              fontFamily: 'Roboto-R',
+              color: Colors.grey,
+            ),
           ),
         ),
       ),
@@ -1506,6 +1600,7 @@ Row(
         const SizedBox(height: 8),
         SizedBox(
           width: 600,
+          height: 40,
           child: TextField(
             decoration: InputDecoration(
               border: OutlineInputBorder(
@@ -1529,6 +1624,7 @@ Row(
         const SizedBox(height: 8),
         SizedBox(
           width: 120,
+          height: 40,
           child: TextField(
             decoration: InputDecoration(
               border: OutlineInputBorder(
@@ -1551,10 +1647,13 @@ Row(
             style: TextStyle(fontSize: 11 * scale, fontFamily: 'Roboto-R'),
           ),
           const SizedBox(height: 8),
-          TextField(
-            decoration: InputDecoration(
-              border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(8),
+          SizedBox(
+            height: 40,
+            child: TextField(
+              decoration: InputDecoration(
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(8),
+                ),
               ),
             ),
           ),
@@ -1576,33 +1675,36 @@ Expanded(
         ),
       ),
       const SizedBox(height: 8),
-      DropdownButtonFormField<String>(
-        items: const [
-          DropdownMenuItem(
-            value: 'Employed',
-            child: Text('Employed'),
+      SizedBox(
+        height: 40,
+        child: DropdownButtonFormField<String>(
+          items: const [
+            DropdownMenuItem(
+              value: 'Employed',
+              child: Text('Employed'),
+            ),
+            DropdownMenuItem(
+              value: 'Unemployed',
+              child: Text('Unemployed'),
+            ),
+            DropdownMenuItem(
+              value: 'Self-employed',
+              child: Text('Self-employed'),
+            ),
+            DropdownMenuItem(
+              value: 'Student',
+              child: Text('Student'),
+            ),
+          ],
+          onChanged: (value) {
+            // Handle selection change
+          },
+          decoration: InputDecoration(
+            border: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(8),
+            ),
+            contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
           ),
-          DropdownMenuItem(
-            value: 'Unemployed',
-            child: Text('Unemployed'),
-          ),
-          DropdownMenuItem(
-            value: 'Self-employed',
-            child: Text('Self-employed'),
-          ),
-          DropdownMenuItem(
-            value: 'Student',
-            child: Text('Student'),
-          ),
-        ],
-        onChanged: (value) {
-          // Handle selection change
-        },
-        decoration: InputDecoration(
-          border: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(8),
-          ),
-          contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
         ),
       ),
     ],
@@ -1628,10 +1730,13 @@ Row(
             style: TextStyle(fontSize: 11 * scale, fontFamily: 'Roboto-R'),
           ),
           const SizedBox(height: 8),
-          TextField(
-            decoration: InputDecoration(
-              border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(8),
+          SizedBox(
+            height: 40,
+            child: TextField(
+              decoration: InputDecoration(
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(8),
+                ),
               ),
             ),
           ),
@@ -1650,10 +1755,13 @@ Row(
             style: TextStyle(fontSize: 11 * scale, fontFamily: 'Roboto-R'),
           ),
           const SizedBox(height: 8),
-          TextField(
-            decoration: InputDecoration(
-              border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(8),
+          SizedBox(
+            height: 40,
+            child: TextField(
+              decoration: InputDecoration(
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(8),
+                ),
               ),
             ),
           ),
@@ -1678,10 +1786,13 @@ Row(
             style: TextStyle(fontSize: 11 * scale, fontFamily: 'Roboto-R'),
           ),
           const SizedBox(height: 8),
-          TextField(
-            decoration: InputDecoration(
-              border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(8),
+          SizedBox(
+            height: 40,
+            child: TextField(
+              decoration: InputDecoration(
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(8),
+                ),
               ),
             ),
           ),
@@ -1700,10 +1811,13 @@ Row(
             style: TextStyle(fontSize: 11 * scale, fontFamily: 'Roboto-R'),
           ),
           const SizedBox(height: 8),
-          TextField(
-            decoration: InputDecoration(
-              border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(8),
+          SizedBox(
+            height: 40,
+            child: TextField(
+              decoration: InputDecoration(
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(8),
+                ),
               ),
             ),
           ),
@@ -1728,40 +1842,43 @@ Expanded(
         ),
       ),
       const SizedBox(height: 8),
-      DropdownButtonFormField<String>(
-        items: const [
-          DropdownMenuItem(
-            value: 'Below 20,000',
-            child: Text('Below 20,000'),
+      SizedBox(
+        height: 40,
+        child: DropdownButtonFormField<String>(
+          items: const [
+            DropdownMenuItem(
+              value: 'Below 20,000',
+              child: Text('Below 20,000'),
+            ),
+            DropdownMenuItem(
+              value: '20,000 - 50,000',
+              child: Text('20,000 - 50,000'),
+            ),
+            DropdownMenuItem(
+              value: '50,000 - 100,000',
+              child: Text('50,000 - 100,000'),
+            ),
+            DropdownMenuItem(
+              value: 'Above 100,000',
+              child: Text('Above 100,000'),
+            ),
+          ],
+          onChanged: (value) {
+            // Handle the selected value here
+          },
+          decoration: InputDecoration(
+            border: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(8),
+            ),
+            contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
           ),
-          DropdownMenuItem(
-            value: '20,000 - 50,000',
-            child: Text('20,000 - 50,000'),
-          ),
-          DropdownMenuItem(
-            value: '50,000 - 100,000',
-            child: Text('50,000 - 100,000'),
-          ),
-          DropdownMenuItem(
-            value: 'Above 100,000',
-            child: Text('Above 100,000'),
-          ),
-        ],
-        onChanged: (value) {
-          // Handle the selected value here
-        },
-        decoration: InputDecoration(
-          border: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(8),
-          ),
-          contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-        ),
-        hint: Text(
-          'Select Salary Scale',
-          style: TextStyle(
-            fontSize: 11 * scale,
-            fontFamily: 'Roboto-R',
-            color: Colors.grey,
+          hint: Text(
+            'Select Salary Scale',
+            style: TextStyle(
+              fontSize: 11 * scale,
+              fontFamily: 'Roboto-R',
+              color: Colors.grey,
+            ),
           ),
         ),
       ),
@@ -1774,7 +1891,7 @@ Expanded(
 
 
 
-const SizedBox(height: 113),
+const SizedBox(height: 97),
 
 Row(
   mainAxisAlignment: MainAxisAlignment.center,
@@ -1859,7 +1976,7 @@ Row(
 
 
 
-//PAGEE 4 CONTENT
+//PAGE 4 CONTENT
             if (_currentPage == 4) ...[
               // Add content for the third page here
               Row(
@@ -1917,6 +2034,7 @@ Row(
         const SizedBox(height: 8),
         SizedBox(
           width: 600,
+          height: 40,
           child: TextField(
             decoration: InputDecoration(
               border: OutlineInputBorder(
@@ -1940,6 +2058,7 @@ Row(
         const SizedBox(height: 8),
         SizedBox(
           width: 120,
+          height: 40,
           child: TextField(
             decoration: InputDecoration(
               border: OutlineInputBorder(
@@ -1962,10 +2081,13 @@ Row(
             style: TextStyle(fontSize: 11 * scale, fontFamily: 'Roboto-R'),
           ),
           const SizedBox(height: 8),
-          TextField(
-            decoration: InputDecoration(
-              border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(8),
+          SizedBox(
+            height: 40,
+            child: TextField(
+              decoration: InputDecoration(
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(8),
+                ),
               ),
             ),
           ),
@@ -1987,33 +2109,36 @@ Expanded(
         ),
       ),
       const SizedBox(height: 8),
-      DropdownButtonFormField<String>(
-        items: const [
-          DropdownMenuItem(
-            value: 'Employed',
-            child: Text('Employed'),
+      SizedBox(
+        height: 40,
+        child: DropdownButtonFormField<String>(
+          items: const [
+            DropdownMenuItem(
+              value: 'Employed',
+              child: Text('Employed'),
+            ),
+            DropdownMenuItem(
+              value: 'Unemployed',
+              child: Text('Unemployed'),
+            ),
+            DropdownMenuItem(
+              value: 'Self-employed',
+              child: Text('Self-employed'),
+            ),
+            DropdownMenuItem(
+              value: 'Student',
+              child: Text('Student'),
+            ),
+          ],
+          onChanged: (value) {
+            // Handle selection change
+          },
+          decoration: InputDecoration(
+            border: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(8),
+            ),
+            contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
           ),
-          DropdownMenuItem(
-            value: 'Unemployed',
-            child: Text('Unemployed'),
-          ),
-          DropdownMenuItem(
-            value: 'Self-employed',
-            child: Text('Self-employed'),
-          ),
-          DropdownMenuItem(
-            value: 'Student',
-            child: Text('Student'),
-          ),
-        ],
-        onChanged: (value) {
-          // Handle selection change
-        },
-        decoration: InputDecoration(
-          border: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(8),
-          ),
-          contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
         ),
       ),
     ],
@@ -2039,10 +2164,13 @@ Row(
             style: TextStyle(fontSize: 11 * scale, fontFamily: 'Roboto-R'),
           ),
           const SizedBox(height: 8),
-          TextField(
-            decoration: InputDecoration(
-              border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(8),
+          SizedBox(
+            height: 40,
+            child: TextField(
+              decoration: InputDecoration(
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(8),
+                ),
               ),
             ),
           ),
@@ -2061,10 +2189,13 @@ Row(
             style: TextStyle(fontSize: 11 * scale, fontFamily: 'Roboto-R'),
           ),
           const SizedBox(height: 8),
-          TextField(
-            decoration: InputDecoration(
-              border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(8),
+          SizedBox(
+            height: 40,
+            child: TextField(
+              decoration: InputDecoration(
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(8),
+                ),
               ),
             ),
           ),
@@ -2089,10 +2220,13 @@ Row(
             style: TextStyle(fontSize: 11 * scale, fontFamily: 'Roboto-R'),
           ),
           const SizedBox(height: 8),
-          TextField(
-            decoration: InputDecoration(
-              border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(8),
+          SizedBox(
+            height: 40,
+            child: TextField(
+              decoration: InputDecoration(
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(8),
+                ),
               ),
             ),
           ),
@@ -2111,10 +2245,13 @@ Row(
             style: TextStyle(fontSize: 11 * scale, fontFamily: 'Roboto-R'),
           ),
           const SizedBox(height: 8),
-          TextField(
-            decoration: InputDecoration(
-              border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(8),
+          SizedBox(
+            height: 40,
+            child: TextField(
+              decoration: InputDecoration(
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(8),
+                ),
               ),
             ),
           ),
@@ -2139,40 +2276,43 @@ Expanded(
         ),
       ),
       const SizedBox(height: 8),
-      DropdownButtonFormField<String>(
-        items: const [
-          DropdownMenuItem(
-            value: 'Below 20,000',
-            child: Text('Below 20,000'),
+      SizedBox(
+        height: 40,
+        child: DropdownButtonFormField<String>(
+          items: const [
+            DropdownMenuItem(
+              value: 'Below 20,000',
+              child: Text('Below 20,000'),
+            ),
+            DropdownMenuItem(
+              value: '20,000 - 50,000',
+              child: Text('20,000 - 50,000'),
+            ),
+            DropdownMenuItem(
+              value: '50,000 - 100,000',
+              child: Text('50,000 - 100,000'),
+            ),
+            DropdownMenuItem(
+              value: 'Above 100,000',
+              child: Text('Above 100,000'),
+            ),
+          ],
+          onChanged: (value) {
+            // Handle the selected value here
+          },
+          decoration: InputDecoration(
+            border: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(8),
+            ),
+            contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
           ),
-          DropdownMenuItem(
-            value: '20,000 - 50,000',
-            child: Text('20,000 - 50,000'),
-          ),
-          DropdownMenuItem(
-            value: '50,000 - 100,000',
-            child: Text('50,000 - 100,000'),
-          ),
-          DropdownMenuItem(
-            value: 'Above 100,000',
-            child: Text('Above 100,000'),
-          ),
-        ],
-        onChanged: (value) {
-          // Handle the selected value here
-        },
-        decoration: InputDecoration(
-          border: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(8),
-          ),
-          contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-        ),
-        hint: Text(
-          'Select Salary Scale',
-          style: TextStyle(
-            fontSize: 11 * scale,
-            fontFamily: 'Roboto-R',
-            color: Colors.grey,
+          hint: Text(
+            'Select Salary Scale',
+            style: TextStyle(
+              fontSize: 11 * scale,
+              fontFamily: 'Roboto-R',
+              color: Colors.grey,
+            ),
           ),
         ),
       ),
@@ -2206,40 +2346,43 @@ Row(
             ),
           ),
           const SizedBox(height: 8),
-          DropdownButtonFormField<String>(
-            items: const [
-              DropdownMenuItem(
-                value: 'Parent',
-                child: Text('Parent'),
+          SizedBox(
+            height: 40,
+            child: DropdownButtonFormField<String>(
+              items: const [
+                DropdownMenuItem(
+                  value: 'Parent',
+                  child: Text('Parent'),
+                ),
+                DropdownMenuItem(
+                  value: 'Guardian',
+                  child: Text('Guardian'),
+                ),
+                DropdownMenuItem(
+                  value: 'Relative',
+                  child: Text('Relative'),
+                ),
+                DropdownMenuItem(
+                  value: 'Other',
+                  child: Text('Other'),
+                ),
+              ],
+              onChanged: (value) {
+                // Handle selection change
+              },
+              decoration: InputDecoration(
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(8),
+                ),
+                contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
               ),
-              DropdownMenuItem(
-                value: 'Guardian',
-                child: Text('Guardian'),
-              ),
-              DropdownMenuItem(
-                value: 'Relative',
-                child: Text('Relative'),
-              ),
-              DropdownMenuItem(
-                value: 'Other',
-                child: Text('Other'),
-              ),
-            ],
-            onChanged: (value) {
-              // Handle selection change
-            },
-            decoration: InputDecoration(
-              border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(8),
-              ),
-              contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-            ),
-            hint: Text(
-              'Select Relationship',
-              style: TextStyle(
-                fontSize: 11 * scale,
-                fontFamily: 'Roboto-R',
-                color: Colors.grey,
+              hint: Text(
+                'Select Relationship',
+                style: TextStyle(
+                  fontSize: 11 * scale,
+                  fontFamily: 'Roboto-R',
+                  color: Colors.grey,
+                ),
               ),
             ),
           ),
@@ -2266,40 +2409,43 @@ Row(
             ),
           ),
           const SizedBox(height: 8),
-          DropdownButtonFormField<String>(
-            items: const [
-              DropdownMenuItem(
-                value: 'Single',
-                child: Text('Single'),
+          SizedBox(
+            height: 40,
+            child: DropdownButtonFormField<String>(
+              items: const [
+                DropdownMenuItem(
+                  value: 'Single',
+                  child: Text('Single'),
+                ),
+                DropdownMenuItem(
+                  value: 'Married',
+                  child: Text('Married'),
+                ),
+                DropdownMenuItem(
+                  value: 'Divorced',
+                  child: Text('Divorced'),
+                ),
+                DropdownMenuItem(
+                  value: 'Widowed',
+                  child: Text('Widowed'),
+                ),
+              ],
+              onChanged: (value) {
+                // Handle selection change
+              },
+              decoration: InputDecoration(
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(8),
+                ),
+                contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
               ),
-              DropdownMenuItem(
-                value: 'Married',
-                child: Text('Married'),
-              ),
-              DropdownMenuItem(
-                value: 'Divorced',
-                child: Text('Divorced'),
-              ),
-              DropdownMenuItem(
-                value: 'Widowed',
-                child: Text('Widowed'),
-              ),
-            ],
-            onChanged: (value) {
-              // Handle selection change
-            },
-            decoration: InputDecoration(
-              border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(8),
-              ),
-              contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-            ),
-            hint: Text(
-              'Select Parent Status',
-              style: TextStyle(
-                fontSize: 11 * scale,
-                fontFamily: 'Roboto-R',
-                color: Colors.grey,
+              hint: Text(
+                'Select Parent Status',
+                style: TextStyle(
+                  fontSize: 11 * scale,
+                  fontFamily: 'Roboto-R',
+                  color: Colors.grey,
+                ),
               ),
             ),
           ),
@@ -2323,13 +2469,16 @@ const SizedBox(height: 16,),
                 style: TextStyle(fontSize: 11 * scale, fontFamily: 'Roboto-R'),
               ),
               const SizedBox(height: 8),
-              TextField(
-                decoration: InputDecoration(
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(8),
-                  ),
+              SizedBox(
+            height: 40,
+            child: TextField(
+              decoration: InputDecoration(
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(8),
                 ),
               ),
+            ),
+          ),
             ],
           ),
         ),
@@ -2352,13 +2501,16 @@ const SizedBox(height: 16,),
                 style: TextStyle(fontSize: 11 * scale, fontFamily: 'Roboto-R'),
               ),
               const SizedBox(height: 8),
-              TextField(
-                decoration: InputDecoration(
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(8),
-                  ),
+              SizedBox(
+            height: 40,
+            child: TextField(
+              decoration: InputDecoration(
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(8),
                 ),
               ),
+            ),
+          ),
             ],
                   ),
                 ),
@@ -2367,7 +2519,7 @@ const SizedBox(height: 16,),
 
 
 
-const SizedBox(height: 24,),
+const SizedBox(height: 16,),
 
 
 Row(
@@ -2442,7 +2594,7 @@ Row(
 
 
 
-
+//PAGE 5 CONTENT
             if (_currentPage == 5) ...[
               // Add content for the third page here
               Row(
@@ -2477,7 +2629,6 @@ Row(
         ),
               const SizedBox(height: 16),
 
-              // Example text field for Page 3
                   Row(
       children: [
         Expanded(
@@ -2489,13 +2640,16 @@ Row(
                 style: TextStyle(fontSize: 11 * scale, fontFamily: 'Roboto-R'),
               ),
               const SizedBox(height: 8),
-              TextField(
-                decoration: InputDecoration(
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(8),
-                  ),
+              SizedBox(
+            height: 40,
+            child: TextField(
+              decoration: InputDecoration(
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(8),
                 ),
               ),
+            ),
+          ),
             ],
           ),
         ),
@@ -2514,13 +2668,16 @@ Row(
                 style: TextStyle(fontSize: 11 * scale, fontFamily: 'Roboto-R'),
               ),
               const SizedBox(height: 8),
-              TextField(
-                decoration: InputDecoration(
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(8),
-                  ),
+              SizedBox(
+            height: 40,
+            child: TextField(
+              decoration: InputDecoration(
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(8),
                 ),
               ),
+            ),
+          ),
             ],
           ),
         ),
@@ -2540,13 +2697,16 @@ const SizedBox(height: 16),
                 style: TextStyle(fontSize: 11 * scale, fontFamily: 'Roboto-R'),
               ),
               const SizedBox(height: 8),
-              TextField(
-                decoration: InputDecoration(
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(8),
-                  ),
+              SizedBox(
+            height: 40,
+            child: TextField(
+              decoration: InputDecoration(
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(8),
                 ),
               ),
+            ),
+          ),
             ],
           ),
         ),
@@ -2562,13 +2722,16 @@ const SizedBox(width: 8,),
                           style: TextStyle(fontSize: 11 * scale, fontFamily: 'Roboto-R'),
                         ),
                         const SizedBox(height: 8),
-                        TextField(
-                          decoration: InputDecoration(
-                            border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(8),
-                            ),
-                          ),
-                        ),
+                        SizedBox(
+            height: 40,
+            child: TextField(
+              decoration: InputDecoration(
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(8),
+                ),
+              ),
+            ),
+          ),
                       ],
                     ),
                   ),
@@ -2577,7 +2740,7 @@ const SizedBox(width: 8,),
 
 const SizedBox(height: 16),
 
-              // Example text field for Page 3
+
                   Row(
       children: [
         Expanded(
@@ -2589,13 +2752,16 @@ const SizedBox(height: 16),
                 style: TextStyle(fontSize: 11 * scale, fontFamily: 'Roboto-R'),
               ),
               const SizedBox(height: 8),
-              TextField(
-                decoration: InputDecoration(
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(8),
-                  ),
+              SizedBox(
+            height: 40,
+            child: TextField(
+              decoration: InputDecoration(
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(8),
                 ),
               ),
+            ),
+          ),
             ],
           ),
         ),
@@ -2605,7 +2771,7 @@ const SizedBox(height: 16),
     
 
 
-const SizedBox(height: 383),
+const SizedBox(height: 350),
 
 
 

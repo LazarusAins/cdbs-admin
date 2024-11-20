@@ -288,37 +288,43 @@ class _AdmissionApplicationsPageState extends State<AdmissionApplicationsPage> {
           // Two buttons on the right
           Row(
             children: [
-              ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: const Color(0xFF012169), // Blue color
-                  fixedSize: Size(178 * scale, 37 * scale), // Button size
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(5), // Border radius
+              SizedBox(
+                height: 40,
+                child: ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: const Color(0xFF012169), // Blue color
+                    fixedSize: Size(178 * scale, 37 * scale), // Button size
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(5), // Border radius
+                    ),
                   ),
-                ),
-                onPressed: () {
-                  // Action for first button
-                },
-                child: Text(
-                  "Download PDF",
-                  style: TextStyle(color: Colors.white, fontFamily: 'Roboto-R', fontSize: 12 * scale),
+                  onPressed: () {
+                    // Action for first button
+                  },
+                  child: Text(
+                    "Download PDF",
+                    style: TextStyle(color: Colors.white, fontFamily: 'Roboto-R', fontSize: 12 * scale),
+                  ),
                 ),
               ),
               const SizedBox(width: 8), // Spacing between buttons
-              ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: const Color(0xFF007A33), // Green color
-                  fixedSize: Size(178 * scale, 37 * scale), // Button size
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(5), // Border radius
+              SizedBox(
+                height: 40,
+                child: ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: const Color(0xFF007A33), // Green color
+                    fixedSize: Size(178 * scale, 37 * scale), // Button size
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(5), // Border radius
+                    ),
                   ),
-                ),
-                onPressed: () {
-                  // Action for second button
-                },
-                child: Text(
-                  "Mark as Complete",
-                  style: TextStyle(color: Colors.white, fontFamily: 'Roboto-R', fontSize: 12 * scale),
+                  onPressed: () {
+                    // Action for second button
+                  },
+                  child: Text(
+                    "Mark as Complete",
+                    style: TextStyle(color: Colors.white, fontFamily: 'Roboto-R', fontSize: 12 * scale),
+                  ),
                 ),
               ),
             ],

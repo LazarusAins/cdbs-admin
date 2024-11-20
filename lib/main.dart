@@ -13,5 +13,5 @@ import 'subpages/admission_applications_page2.dart';*/
 void main() => runApp(const MaterialApp(
       debugShowCheckedModeBanner: false,
 //HomePage is the name of the class you're about to run
-      home: LoginPage(),
+      home: LandingPage(),
     ));
