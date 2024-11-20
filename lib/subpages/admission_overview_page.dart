@@ -1,5 +1,6 @@
 import 'package:cdbs_admin/subpages/landing_page.dart';
 import 'package:cdbs_admin/subpages/page3.dart';
+import 'package:cdbs_admin/subpages/s1.dart';
 import 'package:flutter/material.dart';
 
 class AdmissionOverviewPage extends StatefulWidget {
@@ -9,8 +10,13 @@ class AdmissionOverviewPage extends StatefulWidget {
   State<AdmissionOverviewPage> createState() => _AdmissionOverviewPageState();
 }
 
+
+
 class _AdmissionOverviewPageState extends State<AdmissionOverviewPage> {
   List<bool> checkboxStates = List.generate(10, (_) => false);
+
+  // Variable to track current action
+  int _selectedAction = 0; // 0: Default, 1: View, 2: Reminder, 3: Deactivate
 
   @override
   Widget build(BuildContext context) {
@@ -27,7 +33,14 @@ class _AdmissionOverviewPageState extends State<AdmissionOverviewPage> {
         padding: const EdgeInsets.symmetric(horizontal: 40),
         child: Column(
           children: [
-            Row(
+            // Check if _selectedAction == 0 to show the default content
+            if (_selectedAction == 0) _buildDefaultContent(scale), // Default content
+            if (_selectedAction == 1) _buildViewContent(scale), // View content
+            if (_selectedAction == 2) _buildReminderContent(scale), // Reminder content
+            if (_selectedAction == 3) _buildDeactivateContent(scale),
+            if (_selectedAction == 0) ...[
+              // Header and Search Bar
+              Row(
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
                 Text(
@@ -188,103 +201,137 @@ class _AdmissionOverviewPageState extends State<AdmissionOverviewPage> {
                               style: TextStyle(fontFamily: 'Roboto-R', fontSize: 14 * scale),
                             ),
                           ),
-
-
-
-
-Expanded(
-  flex: 1,
-  child: PopupMenuButton<int>(
-    icon: const Icon(Icons.more_vert),
-    onSelected: (value) {
-      // Handle selection here
-      switch (value) {
-        case 1:
-          print("VIEW selected");
-          // Navigate to the desired page here
-          Navigator.push(
-            context,
-            PageRouteBuilder(
-              pageBuilder: (context, animation,
-                      secondaryAnimation) =>
-                  const Page3(),
-              transitionDuration:
-                  Duration.zero, // No animation
-              reverseTransitionDuration: Duration
-                  .zero, // No animation on back
-            ),
-          );
-          break;
-        case 2:
-          print("REMINDER selected");
-          break;
-        case 3:
-          print("DEACTIVATE selected");
-          break;
-        default:
-          break;
-      }
-    },
-    itemBuilder: (context) => [
-      PopupMenuItem(
-        value: 1,
-        child: Column(
-          children: [
-            Row(
-              children: [
-                const Icon(Icons.visibility, color: Colors.black), // Replace with your icon
-                 SizedBox(width: 8 * scale),
-                Text("VIEW", style: TextStyle(fontSize: 16 * scale)),
-              ],
-            ),
-          ],
-        ),
-      ),
-
-      PopupMenuItem(
-        value: 2,
-        child: Column(
-          children: [
-            Row(
-              children: [
-                const Icon(Icons.notifications, color: Colors.black), // Replace with your icon
-                SizedBox(width: 8 * scale),
-                Text("REMINDER", style: TextStyle(fontSize: 16 * scale)),
-              ],
-            ),
-          ],
-        ),
-      ),
-
-
-      PopupMenuItem(
-        value: 3,
-        child: Column(
-          children: [
-            Row(
-              children: [
-                const Icon(Icons.block, color: Colors.black), // Replace with your icon
-                SizedBox(width: 8 * scale),
-                Text("DEACTIVATE", style: TextStyle(fontSize: 16 * scale)),
-              ],
-            ),
-          ],
-        ),
-      ),
-    ],
-  ),
-),
-                        ],
-                      ),
-                      const Divider(color: Colors.grey, thickness: 1),
-                    ],
-                  );
-                },
+                            // Other table cells...
+                            Expanded(
+                              flex: 1,
+                              child: PopupMenuButton<int>(
+                                icon: const Icon(Icons.more_vert),
+                                onSelected: (value) {
+                                  setState(() {
+                                    _selectedAction = value; // Change the selected action
+                                  });
+                                },
+                                itemBuilder: (context) => [
+                                  PopupMenuItem(
+                                    value: 1,
+                                    child: Row(
+                                      children: [
+                                        const Icon(Icons.visibility, color: Colors.black),
+                                        SizedBox(width: 8 * scale),
+                                        Text("VIEW", style: TextStyle(fontSize: 16 * scale)),
+                                      ],
+                                    ),
+                                  ),
+                                  PopupMenuItem(
+                                    value: 2,
+                                    child: Row(
+                                      children: [
+                                        const Icon(Icons.notifications, color: Colors.black),
+                                        SizedBox(width: 8 * scale),
+                                        Text("REMINDER", style: TextStyle(fontSize: 16 * scale)),
+                                      ],
+                                    ),
+                                  ),
+                                  PopupMenuItem(
+                                    value: 3,
+                                    child: Row(
+                                      children: [
+                                        const Icon(Icons.block, color: Colors.black),
+                                        SizedBox(width: 8 * scale),
+                                        Text("DEACTIVATE", style: TextStyle(fontSize: 16 * scale)),
+                                      ],
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ],
+                        ),
+                        const Divider(color: Colors.grey, thickness: 1),
+                      ],
+                    );
+                  },
+                ),
               ),
-            ),
+            ],
           ],
         ),
       ),
     );
   }
+
+  // Build content for each action (VIEW, REMINDER, DEACTIVATE)
+  Widget _buildViewContent(double scale) {
+    return Container(
+      padding: const EdgeInsets.all(16),
+      child: Column(
+        children: [
+          const S1Page(),
+          ElevatedButton(
+            onPressed: () {
+              setState(() {
+                _selectedAction = 0; // Go back to default content
+              });
+            },
+            child: const Text("Go Back"),
+          ),
+        ],
+      )
+    );
+  }
+
+  Widget _buildReminderContent(double scale) {
+    return Container(
+      padding: const EdgeInsets.all(16),
+      child: Column(
+        children: [
+          Text(
+            'REMINDER content goes here.',
+            style: TextStyle(fontSize: 18 * scale),
+          ),
+          ElevatedButton(
+            onPressed: () {
+              setState(() {
+                _selectedAction = 0; // Go back to default content
+              });
+            },
+            child: const Text("Go Back"),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildDeactivateContent(double scale) {
+    return Container(
+      padding: const EdgeInsets.all(16),
+      child: Column(
+        children: [
+          Text(
+            'DEACTIVATE content goes here.',
+            style: TextStyle(fontSize: 18 * scale),
+          ),
+          ElevatedButton(
+            onPressed: () {
+              setState(() {
+                _selectedAction = 0; // Go back to default content
+              });
+            },
+            child: const Text("Go Back"),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildDefaultContent(double scale) {
+    return Container(
+      // padding: const EdgeInsets.all(16),
+      // child: Text(
+      //   '',
+      //   style: TextStyle(fontSize: 18 * scale),
+      // ),
+    );
+  }
 }
+
