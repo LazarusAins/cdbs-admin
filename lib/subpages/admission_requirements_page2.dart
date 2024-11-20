@@ -5,10 +5,12 @@ class AdmissionRequirementsPage2 extends StatefulWidget {
   const AdmissionRequirementsPage2({super.key});
 
   @override
-  State<AdmissionRequirementsPage2> createState() => _AdmissionRequirementsPage2State();
+  State<AdmissionRequirementsPage2> createState() =>
+      _AdmissionRequirementsPage2State();
 }
 
-class _AdmissionRequirementsPage2State extends State<AdmissionRequirementsPage2> {
+class _AdmissionRequirementsPage2State
+    extends State<AdmissionRequirementsPage2> {
   @override
   Widget build(BuildContext context) {
     double screenHeight = MediaQuery.of(context).size.height;
@@ -19,206 +21,188 @@ class _AdmissionRequirementsPage2State extends State<AdmissionRequirementsPage2>
     double heightScale = screenHeight / baseHeight;
     double scale = widthScale < heightScale ? widthScale : heightScale;
 
-
-
-
     return Container(
-      padding: const EdgeInsets.all(16), // Optional padding for spacing
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      padding: const EdgeInsets.all(16),
+      child: Column(
         children: [
-          // Application ID
-          SizedBox(
-            width: 220,
-            child: Row(
-              children: [
-                Expanded(
-  child: Column(
-    crossAxisAlignment: CrossAxisAlignment.start,
-    children: [
-      // Label text
-
-
-      // Row to align the number beside the text
-      Row(
-        mainAxisAlignment: MainAxisAlignment.start,
-        children: [
-          // Number next to the text
-                Text(
-        'Application ID',
-        style: TextStyle(
-          fontSize: 11 * scale,
-          fontFamily: 'Roboto-R',
-        ),
-      ),
-      const SizedBox(width: 30,),
-          Text(
-            '9741',
-            style: TextStyle(
-              fontSize: 11 * scale,
-              fontFamily: 'Roboto-R',
-            ),
-          ),
-        ],
-      ),
-      const SizedBox(height: 4),
-
-      Container(
-        height: 1,
-        color: const Color(0xFF909590), // Underline color
-      ),
-    ],
-  ),
-),
-              ],
-            ),
-          ),
-
-
-
-
-
-
-
-
-
-          const SizedBox(width: 16),
-
-
-SizedBox(
-            width: 550,
-            child: Row(
-              children: [
-                Expanded(
-  child: Column(
-    crossAxisAlignment: CrossAxisAlignment.start,
-    children: [
-
+          const SizedBox(height: 40),
+          // First Row
           Row(
-        mainAxisAlignment: MainAxisAlignment.start,
-        children: [
-          // Number next to the text
-                Text(
-        'Applicant Name',
-        style: TextStyle(
-          fontSize: 11 * scale,
-          fontFamily: 'Roboto-R',
-        ),
-      ),
-      const SizedBox(width: 30),
-          Text(
-            'Lazarus Ains',
-            style: TextStyle(
-              fontSize: 11 * scale,
-              fontFamily: 'Roboto-R',
-            ),
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              // Application ID
+              Expanded(
+                flex: 2,
+                child: _buildInfoColumn(
+                  label: 'Application ID',
+                  value: '9741',
+                  scale: scale,
+                ),
+              ),
+              const SizedBox(width: 16),
+
+              // Applicant Name
+              Expanded(
+                flex: 3,
+                child: _buildInfoColumn(
+                  label: 'Applicant Name',
+                  value: 'Lazarus Ains',
+                  scale: scale,
+                ),
+              ),
+              const SizedBox(width: 16),
+
+              // Grade Level
+              Expanded(
+                flex: 2,
+                child: _buildInfoColumn(
+                  label: 'Grade Level',
+                  value: '11',
+                  scale: scale,
+                ),
+              ),
+              const SizedBox(width: 16),
+
+              // Application Status
+              Expanded(
+                flex: 4,
+                child: _buildInfoColumn(
+                  label: 'Application Status',
+                  value: 'REQUIREMENTS - IN REVIEW',
+                  scale: scale,
+                ),
+              ),
+            ],
           ),
-        ],
-      ),
-      const SizedBox(height: 4),
 
-      Container(
-        height: 1,
-        color: const Color(0xFF909590), // Underline color
-      ),
-    ],
-  ),
-),
-              ],
-            ),
-          ),
+          const SizedBox(height: 16), // Space between rows
 
-
-
-
-
-          const SizedBox(width: 16),
-
-          // Grade Level
-SizedBox(
-            width: 150,
-            child: Row(
-              children: [
-                Expanded(
-  child: Column(
-    crossAxisAlignment: CrossAxisAlignment.start,
-    children: [
-
+          // Second Row
           Row(
-        mainAxisAlignment: MainAxisAlignment.start,
-        children: [
-          // Number next to the text
-                Text(
-        'Grade Level',
-        style: TextStyle(
-          fontSize: 11 * scale,
-          fontFamily: 'Roboto-R',
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              // Date Submitted
+              SizedBox(
+                width: 240,
+                child: Expanded(
+                  child: _buildInfoColumn(
+                    label: 'Date Created',
+                    value: '2024-11-20',
+                    scale: scale,
+                  ),
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 80),
+          const Divider(),
+
+          // Attached Documents
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(
+                'Attached Document/s',
+                style: TextStyle(fontSize: 16 * scale, fontFamily: 'Roboto-R'),
+              ),
+            ],
+          ),
+
+          const SizedBox(height: 40), // Space before images
+
+          // Row of Images
+          Row(
+
+            children: [
+              _buildImageCard(
+                  imagePath: 'assets/q1.jpg',
+                  label: 'Document 1',
+                  scale: scale),
+              _buildImageCard(
+                  imagePath: 'assets/q2.jpg',
+                  label: 'Document 2',
+                  scale: scale),
+              _buildImageCard(
+                  imagePath: 'assets/q3.jpg',
+                  label: 'Document 3',
+                  scale: scale),
+              _buildImageCard(
+                  imagePath: 'assets/q1.jpg',
+                  label: 'Document 4',
+                  scale: scale),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+
+  // Helper method to create the individual information column
+  Widget _buildInfoColumn({
+    required String label,
+    required String value,
+    required double scale,
+  }) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Row(
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: [
+            Text(
+              label,
+              style: TextStyle(
+                fontSize: 11 * scale,
+                fontFamily: 'Roboto-R',
+              ),
+            ),
+            const SizedBox(width: 30),
+            Text(
+              value,
+              style: TextStyle(
+                fontSize: 14 * scale,
+                fontFamily: 'Roboto-R',
+              ),
+            ),
+          ],
         ),
-      ),
-      const SizedBox(width:30),
-          Text(
-            '11',
-            style: TextStyle(
-              fontSize: 11 * scale,
-              fontFamily: 'Roboto-R',
-            ),
+        const SizedBox(height: 5),
+        Container(
+          height: 1,
+          color: const Color(0xFF909590), // Underline color
+        ),
+      ],
+    );
+  }
+
+  // Helper method to create image cards
+  Widget _buildImageCard({
+    required String imagePath,
+    required String label,
+    required double scale,
+  }) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        ClipRRect(
+          borderRadius: BorderRadius.circular(5), // Image radius
+          child: Image.asset(
+            imagePath,
+            width: 158,
+            height: 89,
+            fit: BoxFit.cover,
           ),
-        ],
-      ),
-      const SizedBox(height: 4),
-
-      Container(
-        height: 1,
-        color: const Color(0xFF909590), // Underline color
-      ),
-    ],
-  ),
-),
-              ],
-            ),
+        ),
+        const SizedBox(height: 8), // Space between image and text
+        Text(
+          label,
+          style: TextStyle(
+            fontSize: 11 * scale,
+            fontFamily: 'Roboto-R',
           ),
-
-
-          const SizedBox(width: 16),
-
-          // Application Status
-Expanded(
-  child: Column(
-crossAxisAlignment: CrossAxisAlignment.start,
-children: [
-
-      Row(
-    mainAxisAlignment: MainAxisAlignment.start,
-    children: [
-      // Number next to the text
-Text(
-    'Application Status',
-    style: TextStyle(
-      fontSize: 11 * scale,
-      fontFamily: 'Roboto-R',
-    ),
-  ),
-  const SizedBox(width: 30),
-      Text(
-'REQUIREMENTS - IN REVIEW',
-style: TextStyle(
-  fontSize: 14 * scale,
-  fontFamily: 'Roboto-R',
-),
-      ),
-    ],
-  ),
-  const SizedBox(height: 4),
-
-  Container(
-    height: 1,
-    color: const Color(0xFF909590), // Underline color
-  ),
-],
-  ),
-),
-        ],
-      ),
+          textAlign: TextAlign.left, // Align text to the left
+        ),
+      ],
     );
   }
 }

@@ -1,4 +1,5 @@
 import 'package:cdbs_admin/subpages/forgot_password.dart';
+import 'package:cdbs_admin/subpages/landing_page.dart';
 import 'package:flutter/material.dart';
 
 class LoginPage extends StatefulWidget {
@@ -261,11 +262,45 @@ SizedBox(
 
 
                   // Login Button
+                  // SizedBox(
+                  //   width: 388 * scale,
+                  //   height: 35 * scale,
+                  //   child: ElevatedButton(
+                  //     onPressed: _validateCredentials,
+                  //     style: ElevatedButton.styleFrom(
+                  //       backgroundColor: const Color(0XFF012169),
+                  //       shape: RoundedRectangleBorder(
+                  //         borderRadius: BorderRadius.circular(6 * scale),
+                  //       ),
+                  //     ),
+                  //     child: Text(
+                  //       'Login',
+                  //       style: TextStyle(
+                  //         fontSize: 13 * scale,
+                  //         fontFamily: 'Roboto-R',
+                  //         color: Colors.white,
+                  //       ),
+                  //     ),
+                  //   ),
+                  // ),
                   SizedBox(
                     width: 388 * scale,
                     height: 35 * scale,
                     child: ElevatedButton(
-                      onPressed: _validateCredentials,
+                      onPressed: () {
+                          Navigator.push(
+                            context,
+                            PageRouteBuilder(
+                              pageBuilder: (context, animation,
+                                      secondaryAnimation) =>
+                                  const LandingPage(),
+                              transitionDuration:
+                                  Duration.zero, // No animation
+                              reverseTransitionDuration: Duration
+                                  .zero, // No animation on back
+                            ),
+                          );
+                        },
                       style: ElevatedButton.styleFrom(
                         backgroundColor: const Color(0XFF012169),
                         shape: RoundedRectangleBorder(
