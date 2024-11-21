@@ -351,7 +351,7 @@ Widget _buildMenuItem(int index, String text, IconData icon, double scale) {
                 text,
                 style: TextStyle(
                   fontFamily: 'Roboto-R',
-                  fontSize: 20 * scale, // Make text size scalable
+                  fontSize: 16 * scale, // Make text size scalable
                   color: isSelected ? Colors.white : Colors.black,
                   fontWeight: FontWeight.w500,
                 ),
@@ -423,7 +423,7 @@ Widget _buildMenuItem(int index, String text, IconData icon, double scale) {
                       text,
                       style: TextStyle(
                         fontFamily: 'Roboto-R', // Main item font
-                        fontSize: 20 * scale,
+                        fontSize: 16 * scale,
                         color: isSelected ? Colors.white : Colors.black,
                         fontWeight: FontWeight.w500,
                       ),
@@ -463,7 +463,7 @@ Widget _buildMenuItem(int index, String text, IconData icon, double scale) {
         dropdownOptions[i],
         style: TextStyle(
           fontFamily: 'Roboto-R', // Dropdown options font
-          fontSize: 20 * scale,
+          fontSize: 16 * scale,
           color: _selectedDropdownOption == i
               ? const Color(0xff012169)
               : const Color.fromARGB(118, 0, 0, 0),
@@ -532,7 +532,7 @@ Widget _buildMenuItem(int index, String text, IconData icon, double scale) {
                       text,
                       style: TextStyle(
                         fontFamily: 'Roboto-R', // Main item font
-                        fontSize: 20 * scale,
+                        fontSize: 16 * scale,
                         color: isSelected ? Colors.white : Colors.black,
                         fontWeight: FontWeight.w500,
                       ),
@@ -572,7 +572,7 @@ Widget _buildMenuItem(int index, String text, IconData icon, double scale) {
         dropdownOptions[i],
         style: TextStyle(
           fontFamily: 'Roboto-R', // Dropdown options font
-          fontSize: 20 * scale,
+          fontSize: 16 * scale,
           color: _selectedAdmissionDropdownOption == i
               ? const Color(0xff012169)
               : const Color.fromARGB(118, 0, 0, 0),
@@ -646,7 +646,7 @@ Widget _buildMenuItem(int index, String text, IconData icon, double scale) {
                       text,
                       style: TextStyle(
                         fontFamily: 'Roboto-R', // Main item font
-                        fontSize: 20 * scale,
+                        fontSize: 16 * scale,
                         color: isSelected ? Colors.white : Colors.black,
                         fontWeight: FontWeight.w500,
                       ),
@@ -686,7 +686,7 @@ Widget _buildMenuItem(int index, String text, IconData icon, double scale) {
         dropdownOptions[i],
         style: TextStyle(
           fontFamily: 'Roboto-R', // Dropdown options font
-          fontSize: 20 * scale,
+          fontSize: 16 * scale,
           color: _selectedPreEnrollmentDropdownOption == i
               ? const Color(0xff012169)
               : const Color.fromARGB(118, 0, 0, 0),
