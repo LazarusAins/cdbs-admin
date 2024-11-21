@@ -1,6 +1,10 @@
 import 'package:cdbs_admin/subpages/forgot_password.dart';
 import 'package:cdbs_admin/subpages/landing_page.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
+
+import '../bloc/auth/auth_bloc.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -41,7 +45,37 @@ class _LoginPageState extends State<LoginPage> {
     double scale = widthScale < heightScale ? widthScale : heightScale;
 
     return Scaffold(
-      body: Stack(
+      body: BlocConsumer<AuthBloc, AuthState>(
+        listener: (context, state) {
+          // TODO: implement listener
+          if (state is AuthFailure) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                content: Text(state.error),
+              ),
+            );
+          }
+
+          if (state is AuthSuccess) {
+            Navigator.pushAndRemoveUntil(
+                context,
+                MaterialPageRoute(
+                  builder: (context) =>  const LandingPage(),
+                ),
+                (route) => false);
+          }
+        },
+        builder: (context, state) {
+          if (state is AuthLoading) {
+            return  const Center(
+              // Center the spinner when loading
+                    child: SpinKitCircle(
+                      color: Color(0xff13322B), // Change the color as needed
+                      size: 50.0, // Adjust size as needed
+                    ),
+                  );
+          }
+          return Stack(
         fit: StackFit.expand,
         children: [
           // Background image with 80% opacity
@@ -262,28 +296,36 @@ SizedBox(
 
 
                   // Login Button
-                  // SizedBox(
-                  //   width: 388 * scale,
-                  //   height: 35 * scale,
-                  //   child: ElevatedButton(
-                  //     onPressed: _validateCredentials,
-                  //     style: ElevatedButton.styleFrom(
-                  //       backgroundColor: const Color(0XFF012169),
-                  //       shape: RoundedRectangleBorder(
-                  //         borderRadius: BorderRadius.circular(6 * scale),
-                  //       ),
-                  //     ),
-                  //     child: Text(
-                  //       'Login',
-                  //       style: TextStyle(
-                  //         fontSize: 13 * scale,
-                  //         fontFamily: 'Roboto-R',
-                  //         color: Colors.white,
-                  //       ),
-                  //     ),
-                  //   ),
-                  // ),
                   SizedBox(
+                    width: 388 * scale,
+                    height: 35 * scale,
+                    child: ElevatedButton(
+                      onPressed: (){
+                        _validateCredentials();
+                        context.read<AuthBloc>().add(
+                              AuthLoginRequested(
+                                email: _emailController.text.trim(),
+                                password: _passwordController.text.trim(),
+                              ),
+                            );
+                      },
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: const Color(0XFF012169),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(6 * scale),
+                        ),
+                      ),
+                      child: Text(
+                        'Login',
+                        style: TextStyle(
+                          fontSize: 13 * scale,
+                          fontFamily: 'Roboto-R',
+                          color: Colors.white,
+                        ),
+                      ),
+                    ),
+                  ),
+                  /*SizedBox(
                     width: 388 * scale,
                     height: 35 * scale,
                     child: ElevatedButton(
@@ -316,7 +358,7 @@ SizedBox(
                         ),
                       ),
                     ),
-                  ),
+                  ),*/
                   SizedBox(height: 10 * scale),
 
                   // Sign Up Button
@@ -346,7 +388,11 @@ SizedBox(
             ),
           ),
         ],
-      ),
+      );
+        }
+      )
+        
+      
     );
   }
 }

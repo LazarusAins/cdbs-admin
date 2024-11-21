@@ -1,16 +1,24 @@
 //LANDING PAGE
 
-import 'package:cdbs_admin/subpages/admission_applications_page.dart';
-import 'package:cdbs_admin/subpages/admission_overview_page.dart';
-import 'package:cdbs_admin/subpages/admission_payments_page.dart';
-import 'package:cdbs_admin/subpages/admission_requirements_page.dart';
-import 'package:cdbs_admin/subpages/admission_results_page.dart';
+import 'package:cdbs_admin/bloc/auth/auth_bloc.dart';
+import 'package:cdbs_admin/subpages/admissions/admission_applications_page.dart';
+import 'package:cdbs_admin/subpages/admissions/admission_overview_page.dart';
+import 'package:cdbs_admin/subpages/admissions/admission_payments_page.dart';
+import 'package:cdbs_admin/subpages/admissions/admission_requirements_page.dart';
+import 'package:cdbs_admin/subpages/admissions/admission_results_page.dart';
+import 'package:cdbs_admin/subpages/login_page.dart';
 import 'package:cdbs_admin/subpages/page6.dart';
 import 'package:cdbs_admin/subpages/s1.dart';
 import 'package:cdbs_admin/subpages/s2.dart';
 import 'package:cdbs_admin/subpages/s3.dart';
 import 'package:cdbs_admin/subpages/s4.dart';
+import 'package:cdbs_admin/subpages/user%20overview/user_admin_accounts_page1.dart';
+import 'package:cdbs_admin/subpages/user%20overview/user_guest_accounts_page1.dart';
+import 'package:cdbs_admin/subpages/user%20overview/user_learner_accounts_page1.dart';
+import 'package:cdbs_admin/subpages/user%20overview/user_parent_accounts_page1.dart';
+import 'package:cdbs_admin/subpages/user%20overview/user_teacher_accounts_page1.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'page1.dart'; // Import each page file
 import 'page2.dart';
 import 'page3.dart';
@@ -47,7 +55,27 @@ class _LandingPageState extends State<LandingPage> {
     double scale = widthScale < heightScale ? widthScale : heightScale;
 
     return Scaffold(
-      body: Row(
+      body: BlocConsumer<AuthBloc, AuthState>(
+        listener: (context, state) {
+          if (state is AuthInitial) {
+            Navigator.pushAndRemoveUntil(
+              context,
+              MaterialPageRoute(
+                builder: (context) => const LoginPage(),
+              ),
+              (route) => false,
+            );
+          }
+        },
+        builder: (context, authState) {
+          if (authState is AuthLoading) {
+            return const Center(
+              child: CircularProgressIndicator(
+                color: Colors.red,
+              ),
+            );
+          } else if (authState is AuthSuccess) {
+            return Row(
         children: [
           // Sidebar with 20% width and background image
           Container(
@@ -241,6 +269,9 @@ Padding(
                       onPressed: () {
                         Navigator.of(context).pop(); // Close the modal
                         // Add your "Yes" action here
+                        context
+                                      .read<AuthBloc>()
+                                      .add(AuthLogoutRequested());
                       },
                       style: ElevatedButton.styleFrom(
                         backgroundColor: const Color(0xff012169),
@@ -300,7 +331,13 @@ Padding(
             child: _getPageContent(),
           ),
         ],
-      ),
+      );
+        
+       
+  }
+   return Container();
+        }
+  )
     );
   }
 
@@ -722,17 +759,17 @@ Widget _buildMenuItem(int index, String text, IconData icon, double scale) {
       // Show content based on selected dropdown option for Page 5
       switch (_selectedDropdownOption) {
         case 0:
-          return const S1Page();
+          return const UserGuestAccountsPage1();
         case 1:
-          return const S2Page();
+          return const UserLearnerAccountsPage1();
         case 2:
-          return const S3Page();
+          return const UserTeacherAccountsPage1();
         case 3:
-          return const S4Page();
+          return const UserParentAccountsPage1();
         case 4:
-          return const Page5();
+          return const UserAdminAccountsPage1();
         default:
-          return const Page6();
+          return const UserGuestAccountsPage1();
       }
     }
 

@@ -77,83 +77,87 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
 
 //EMAIL
                   SizedBox(
-                    width: 388 * scale,
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          'Forgot Password',
-                          style: TextStyle(
-                            fontFamily: 'Roboto-R',
-                            fontSize: 20 * scale,
-                            color: const Color(0XFF222222),
-                          ),
-                        ),
-
-                          Text(
-                          'Please enter the email address linked to your account.',
-                          style: TextStyle(
-                            fontFamily: 'Roboto-R',
-                            fontSize: 13 * scale,
-                            color: const Color(0XFF909590),
-                          ),
-                        ),
-
-SizedBox(height: 20* scale,),
-
-                        Text(
-                          'Email Address',
-                          style: TextStyle(
-                            fontFamily: 'Roboto-R',
-                            fontSize: 11 * scale,
-                            color: const Color(0XFF909590),
-                          ),
-                        ),
-                        SizedBox(height: 5 * scale),
-                        SizedBox(
-                          height: 35 * scale,
-                          child: TextFormField(
-                            controller: _emailController,
-                            decoration: InputDecoration(
-                              hintText: 'Email address',
-                              hintStyle: TextStyle(
-                                fontFamily: 'Roboto-R',
-                                fontSize: 11 * scale,
-                              ),
-                              border: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(6 * scale),
-                              ),
-                              contentPadding: EdgeInsets.only(left: 10 * scale),
-                            ),
-                          ),
-                        ),
-                        SizedBox(height: 5 * scale),
-                        SizedBox(
-                          height: 15 * scale,
-                          child: _isEmailIncorrect
-                              ? Row(
-                                  children: [
-                                    Icon(
-                                      Icons.error_outline,
-                                      color: const Color(0XFFC8102E),
-                                      size: 16 * scale,
-                                    ),
-                                    SizedBox(width: 4 * scale),
-                                    Text(
-                                      'Incorrect Email',
-                                      style: TextStyle(
-                                        color: const Color(0XFFC8102E),
-                                        fontFamily: 'Roboto-R',
-                                        fontSize: 11 * scale,
-                                      ),
-                                    ),
-                                  ],
-                                )
-                              : const SizedBox.shrink(),
-                        ),
-                      ],
+  width: 388 * scale,
+  child: Column(
+    crossAxisAlignment: CrossAxisAlignment.start,
+    children: [
+      Text(
+        'Forgot Password',
+        style: TextStyle(
+          fontFamily: 'Roboto-R',
+          fontSize: 20 * scale,
+          color: const Color(0XFF222222),
+        ),
+      ),
+      Text(
+        'Please enter the email address linked to your account.',
+        style: TextStyle(
+          fontFamily: 'Roboto-R',
+          fontSize: 13 * scale,
+          color: const Color(0XFF909590),
+        ),
+      ),
+      SizedBox(height: 20 * scale),
+      Text(
+        'Email Address',
+        style: TextStyle(
+          fontFamily: 'Roboto-R',
+          fontSize: 11 * scale,
+          color: const Color(0XFF909590),
+        ),
+      ),
+      SizedBox(height: 5 * scale),
+      SizedBox(
+        height: 35 * scale,
+        child: TextFormField(
+          controller: _emailController,
+          style: TextStyle(
+            fontFamily: 'Roboto-R',
+            fontSize: 11 * scale,
+            color: Colors.black, // Set the input text color to black
+          ),
+          decoration: InputDecoration(
+            hintText: 'Email address',
+            hintStyle: TextStyle(
+              fontFamily: 'Roboto-R',
+              fontSize: 11 * scale,
+              color: const Color(0XFF909590), // Hint text color
+            ),
+            border: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(6 * scale),
+            ),
+            contentPadding: EdgeInsets.only(left: 10 * scale),
+          ),
+        ),
+      ),
+      SizedBox(height: 5 * scale),
+      SizedBox(
+        height: 15 * scale,
+        child: _isEmailIncorrect
+            ? Row(
+                children: [
+                  Icon(
+                    Icons.error_outline,
+                    color: const Color(0XFFC8102E),
+                    size: 16 * scale,
+                  ),
+                  SizedBox(width: 4 * scale),
+                  Text(
+                    'Incorrect Email',
+                    style: TextStyle(
+                      color: const Color(0XFFC8102E),
+                      fontFamily: 'Roboto-R',
+                      fontSize: 11 * scale,
                     ),
                   ),
+                ],
+              )
+            : const SizedBox.shrink(),
+      ),
+    ],
+  ),
+),
+
                   SizedBox(height: 10 * scale),
 
 
