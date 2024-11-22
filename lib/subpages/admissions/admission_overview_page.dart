@@ -90,7 +90,6 @@ class _AdmissionOverviewPageState extends State<AdmissionOverviewPage> {
                 }
                 requests = snapshot.data ?? []; // Use the data from the snapshot
                 filteredRequest = requests;
-
                 if (snapshot.hasError) {
                   return Center(child: Text('Error: ${snapshot.error}'));
                 }
@@ -218,10 +217,15 @@ class _AdmissionOverviewPageState extends State<AdmissionOverviewPage> {
                   final processBy = request['db_admission_table']['db_admission_form_handler_table'].isNotEmpty
     ? '${request['db_admission_table']['db_admission_form_handler_table'][0]['db_admin_table']['first_name']} ${request['db_admission_table']['db_admission_form_handler_table'][0]['db_admin_table']['last_name']}'
     : '---';
-
-                  String dateCreatedString = request['db_admission_table']['created_at'];
-                  DateTime dateCreated = DateTime.parse(dateCreatedString);
-                  String formattedDate = formatDate(dateCreated);
+                  String dateCreatedString='';
+                  DateTime dateCreated;
+                  String formattedDate='';
+                  if(request['db_admission_table']['created_at']!=null){
+                     dateCreatedString = request['db_admission_table']['created_at'];
+                     dateCreated = DateTime.parse(dateCreatedString);
+                     formattedDate= formatDate(dateCreated);
+                  }
+                  
                   return Column(
                     children: [
                       Row(

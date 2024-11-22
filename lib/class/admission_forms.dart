@@ -27,7 +27,7 @@ class ApiService {
     }
   }
 
-  Stream<List<Map<String, dynamic>>> streamAdmissionForms(String supabaseUrl, String supabaseKey) async* {
+  /*Stream<List<Map<String, dynamic>>> streamAdmissionForms(String supabaseUrl, String supabaseKey) async* {
     while (true) {
       try {
         final members = await fetchAdmissionForms(supabaseUrl, supabaseKey);
@@ -39,7 +39,31 @@ class ApiService {
 
       await Future.delayed(const Duration(seconds: 3)); // Refresh every 10 seconds
     }
+  }*/
+  Stream<List<Map<String, dynamic>>> streamAdmissionForms(String supabaseUrl, String supabaseKey) async* {
+  while (true) {
+    try {
+      // Fetch the admission forms (assuming fetchAdmissionForms is already defined)
+      final members = await fetchAdmissionForms(supabaseUrl, supabaseKey);
+      
+      // Filter out the members where db_admission_table is null
+      final filteredMembers = members.where((member) {
+        // Ensure db_admission_table is not null
+        return member['db_admission_table'] != null;
+      }).toList(); // Convert the iterable to a list
+
+      // Emit the filtered list of members
+      yield filteredMembers;
+    } catch (e) {
+      print('Error fetching members: $e');
+      yield []; // Emit an empty list on error
+    }
+
+    // Delay the next fetch
+    await Future.delayed(const Duration(seconds: 3)); // Refresh every 3 seconds
   }
+}
+
 
   /*Stream<List<Map<String, dynamic>>> streamMembers(String supabaseUrl, String supabaseKey) async* {
     while (true) {

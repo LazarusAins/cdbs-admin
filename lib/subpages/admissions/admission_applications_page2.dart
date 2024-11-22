@@ -40,21 +40,234 @@ TextEditingController fnameController = TextEditingController();
 TextEditingController mnameController = TextEditingController();
 TextEditingController lnameController = TextEditingController();
 TextEditingController schoolYearController = TextEditingController();
+TextEditingController levelApplyingController = TextEditingController();
+TextEditingController birthPlaceController = TextEditingController();
+TextEditingController ageController = TextEditingController();
+TextEditingController religionController = TextEditingController();
+TextEditingController citizenshipController = TextEditingController();
+TextEditingController acrController = TextEditingController();
+TextEditingController addressController = TextEditingController();
+TextEditingController postalController = TextEditingController();
+TextEditingController contactController = TextEditingController();
+TextEditingController languageSpokenController = TextEditingController();
+TextEditingController companionController = TextEditingController();
+TextEditingController siblingQuantityController = TextEditingController();
 
-String selectedGender = 'Male';
+String selectedGender = '';
 String dropdown1Value = 'Option 1';
 String dropdown2Value = 'Option A';
 
+int quantityReceived = 0;
+
+List<TextEditingController> nameControllers = [];
+List<TextEditingController> ageControllers = [];
+List<TextEditingController> gradeLevelControllers = [];
+List<TextEditingController> schoolBisControllers = [];
+
+List<Widget> siblings = [];
+
+  late TextEditingController name;
+  late TextEditingController age;
+  late TextEditingController gradeLevel;
+  late TextEditingController schoolBis;
+
+
+  
+
+void addItemDescription(double scale) {
+    // Ensure descriptionControllers list length matches quantityReceived
+    while (nameControllers.length < quantityReceived) {
+      nameControllers.add(TextEditingController());
+      ageControllers.add(TextEditingController());
+      gradeLevelControllers.add(TextEditingController());
+      schoolBisControllers.add(TextEditingController());
+    }
+    while (nameControllers.length > quantityReceived) {
+      TextEditingController removedController =
+          nameControllers.removeLast();
+      removedController.dispose(); // Dispose the removed controller
+      TextEditingController removedQuantityController =
+          ageControllers.removeLast();
+      removedQuantityController.dispose(); // Dispose the removed controller
+      TextEditingController removedpriceController =
+          gradeLevelControllers.removeLast();
+      removedpriceController.dispose();
+      TextEditingController removedorderDocController =
+          schoolBisControllers.removeLast();
+      removedorderDocController.dispose();
+    }
+    List<Widget> newDescriptions = [];
+    for (int i = 0; i < quantityReceived; i++) {
+      name = nameControllers[i];
+      age = ageControllers[i];
+      gradeLevel = gradeLevelControllers[i];
+      schoolBis = schoolBisControllers[i];
+      newDescriptions.add(
+        Container(
+          padding: const EdgeInsets.fromLTRB(0, 0, 0, 12),
+          child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    // First Column: Fixed width 600
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          'Name*',
+                          style: TextStyle(fontSize: 11 * scale, fontFamily: 'Roboto-R'), // Adjust font size as needed
+                        ),
+                        const SizedBox(height: 8),
+                        SizedBox(
+                          width: 600,
+                          height: 40,
+                          child: TextField(
+                            controller: name,
+                            decoration: InputDecoration(
+                              border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(8),
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(width: 8),
+
+                    // Second Column: Fixed width 120
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          'Age*',
+                          style: TextStyle(fontSize: 11 * scale, fontFamily: 'Roboto-R'),
+                        ),
+                        const SizedBox(height: 8),
+                        SizedBox(
+                          width: 120,
+                          height: 40,
+                          child: TextField(
+                            controller: age,
+                            decoration: InputDecoration(
+                              border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(8),
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(width: 8),
+
+                    // Third Column: Expanded
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            'Grade Level/ Course/ Occupation*',
+                            style: TextStyle(fontSize: 11 * scale, fontFamily: 'Roboto-R'),
+                          ),
+                          const SizedBox(height: 8),
+                          SizedBox(
+                            height: 40,
+                            child: TextField(
+                              controller: gradeLevel,
+                              decoration: InputDecoration(
+                                border: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(8),
+                                ),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    const SizedBox(width: 8),
+
+                    // Fourth Column: Expanded
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            'School/ Business Office*',
+                            style: TextStyle(fontSize: 11 * scale, fontFamily: 'Roboto-R'),
+                          ),
+                          const SizedBox(height: 8),
+                          SizedBox(
+                            height: 40,
+                            child: TextField(
+                              controller: schoolBis,
+                              decoration: InputDecoration(
+                                border: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(8),
+                                ),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+        ),
+      );
+    }
+
+    try {
+      setState(() {
+        siblings = newDescriptions;
+      });
+    } catch (e) {
+      print('Error in putaway addItemDescription: $e');
+    }
+  }
+
+
+  void updateQuantity() {
+    try {
+      setState(() {
+        quantityReceived = int.tryParse(siblingQuantityController.text) ?? 0;
+      });
+    } catch (e) {
+      print('Error in putaway updateQuantity: $e');
+    }
+  }
 
 
   @override
   void initState() {
     super.initState();
     //fetchLoaRequest();
+    selectedGender =widget.formDetails![0]['db_admission_table']['sex'];
     fnameController.text=widget.formDetails![0]['db_admission_table']['first_name'];
     mnameController.text=widget.formDetails![0]['db_admission_table']['middle_name'];
     lnameController.text=widget.formDetails![0]['db_admission_table']['last_name'];
     schoolYearController.text=widget.formDetails![0]['db_admission_table']['school_year'];
+    levelApplyingController.text=widget.formDetails![0]['db_admission_table']['level_applying_for'];
+    dateController.text=widget.formDetails![0]['db_admission_table']['date_of_birth'];
+    birthPlaceController.text=widget.formDetails![0]['db_admission_table']['place_of_birth'];
+    religionController.text=widget.formDetails![0]['db_admission_table']['religion'];
+    citizenshipController.text=widget.formDetails![0]['db_admission_table']['citizenship'];
+    acrController.text=widget.formDetails![0]['db_admission_table']['acr_number'];
+    addressController.text=widget.formDetails![0]['db_admission_table']['address'];
+    postalController.text=widget.formDetails![0]['db_admission_table']['zip_postal_code'];
+    contactController.text=widget.formDetails![0]['db_admission_table']['contact_no'];
+    languageSpokenController.text=widget.formDetails![0]['db_admission_table']['language_dialect_spoken'];
+    companionController.text=widget.formDetails![0]['db_admission_table']['usual_companion_at_home'];
+    siblingQuantityController.text=widget.formDetails![0]['db_admission_table']['db_family_background_table'][0]['no_of_siblings'].toString();
+    DateTime dateOfBirth = DateTime.parse(dateController.text);
+    DateTime today = DateTime.now();
+    int age = today.year - dateOfBirth.year;
+
+  // Adjust for whether the birthday has passed this year or not
+    if (today.month < dateOfBirth.month || (today.month == dateOfBirth.month && today.day < dateOfBirth.day)) {
+      age--;
+    }
+    ageController.text=age.toString();
+    updateQuantity();
+    addItemDescription(1);
   }
 
 
@@ -156,7 +369,7 @@ String dropdown2Value = 'Option A';
     //SCHOOL YEAR DROPDOWN || TEXTFIELD
         Row(
     children: [
-      Expanded(
+      /*Expanded(
   flex: 1,
   child: SizedBox(
     height: 40, // Set the height to 20
@@ -174,7 +387,22 @@ String dropdown2Value = 'Option A';
       onChanged: (value) {},
     ),
   ),
-),
+),*/
+
+Expanded(
+        flex: 1,
+        child: SizedBox(
+          height: 40,
+          child: TextField(
+            controller: levelApplyingController,
+            decoration: InputDecoration(
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(8 * scale),
+              ),
+            ),
+          ),
+        ),
+      ),
 
       const SizedBox(width: 8),
       Expanded(
@@ -349,6 +577,7 @@ String dropdown2Value = 'Option A';
         child: SizedBox(
           height: 40,
           child: TextField(
+            controller: birthPlaceController,
             decoration: InputDecoration(
               border: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(8 * scale),
@@ -363,6 +592,7 @@ String dropdown2Value = 'Option A';
         child: SizedBox(
           height: 40,
           child: TextField(
+            controller: ageController,
             decoration: InputDecoration(
               border: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(8 * scale),
@@ -436,7 +666,9 @@ String dropdown2Value = 'Option A';
                     groupValue: selectedGender,
                     onChanged: (value) {
                       setState(() {
-                        selectedGender = value!;
+                        if(selectedGender.toLowerCase()==value!.toLowerCase()){
+                          selectedGender = value;
+                        }
                       });
                     },
                   ),
@@ -455,7 +687,9 @@ String dropdown2Value = 'Option A';
                     groupValue: selectedGender,
                     onChanged: (value) {
                       setState(() {
-                        selectedGender = value!;
+                         if(selectedGender.toLowerCase()==value!.toLowerCase()){
+                          selectedGender = value;
+                        }
                       });
                     },
                   ),
@@ -473,7 +707,7 @@ String dropdown2Value = 'Option A';
         ),
     
         // Second Column: Dropdown 1
-        Expanded(
+       /* Expanded(
     flex: 1,
     child: Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -500,12 +734,41 @@ String dropdown2Value = 'Option A';
         ),
       ],
     ),
+        ),*/
+        Expanded(
+        flex: 1,
+        child: SizedBox(
+          height: 40,
+          child: TextField(
+            controller: religionController,
+            decoration: InputDecoration(
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(8 * scale),
+              ),
+            ),
+          ),
         ),
+      ),
     
         const SizedBox(width: 8),
+
+        Expanded(
+        flex: 1,
+        child: SizedBox(
+          height: 40,
+          child: TextField(
+            controller: citizenshipController,
+            decoration: InputDecoration(
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(8 * scale),
+              ),
+            ),
+          ),
+        ),
+      ),
     
         // Third Column: Dropdown 2
-        Expanded(
+        /*Expanded(
     flex: 1,
     child: Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -532,7 +795,7 @@ String dropdown2Value = 'Option A';
         ),
       ],
     ),
-        ),
+        ),*/
       ],
     ),
     
@@ -570,6 +833,7 @@ String dropdown2Value = 'Option A';
         child: SizedBox(
           height: 40,
           child: TextField(
+            controller: acrController,
             decoration: InputDecoration(
               border: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(8 * scale),
@@ -617,6 +881,7 @@ String dropdown2Value = 'Option A';
         child: SizedBox(
           height: 40,
           child: TextField(
+            controller: addressController,
             decoration: InputDecoration(
               border: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(8 * scale),
@@ -675,6 +940,7 @@ String dropdown2Value = 'Option A';
         child: SizedBox(
           height: 40,
           child: TextField(
+            controller: postalController,
             decoration: InputDecoration(
               border: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(8 * scale),
@@ -689,6 +955,7 @@ String dropdown2Value = 'Option A';
         child: SizedBox(
           height: 40,
           child: TextField(
+            controller: contactController,
             decoration: InputDecoration(
               border: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(8 * scale),
@@ -747,7 +1014,7 @@ String dropdown2Value = 'Option A';
     //LANGAUAGES ROW || TEXTFIELD
         Row(
     children: [
-      Expanded(
+      /*Expanded(
         flex: 1,
         child: SizedBox(
           height: 40,
@@ -764,6 +1031,20 @@ String dropdown2Value = 'Option A';
             onChanged: (value) {},
           ),
         ),
+      ),*/
+      Expanded(
+        flex: 1,
+        child: SizedBox(
+          height: 40,
+          child: TextField(
+            controller: languageSpokenController,
+            decoration: InputDecoration(
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(8 * scale),
+              ),
+            ),
+          ),
+        ),
       ),
       const SizedBox(width: 8),
       Expanded(
@@ -771,6 +1052,7 @@ String dropdown2Value = 'Option A';
         child: SizedBox(
           height: 40,
           child: TextField(
+            controller: companionController,
             decoration: InputDecoration(
               border: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(8 * scale),
@@ -905,7 +1187,7 @@ String dropdown2Value = 'Option A';
         const SizedBox(height: 16),
 
               // 2nd Row - Number of siblings dropdown field
-              SizedBox(
+              /*SizedBox(
   width: 420,
   child: SizedBox(
     height: 40,
@@ -925,6 +1207,24 @@ String dropdown2Value = 'Option A';
       ),
     ),
   ),
+),*/
+SizedBox(
+  width: 420,
+  height: 40,
+  child: TextField(
+    controller: siblingQuantityController,
+    keyboardType: TextInputType.number,  // To handle numeric input
+    decoration: InputDecoration(
+      labelText: "Number of Siblings", // Optional label
+      border: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(8),
+      ),
+    ),
+    onChanged: (String value) {
+      updateQuantity();
+      addItemDescription(scale);
+    },
+  ),
 ),
 
               const SizedBox(height: 16),
@@ -936,116 +1236,31 @@ String dropdown2Value = 'Option A';
               const SizedBox(height: 16),
 
 
-              
-
-
+Row(
+  mainAxisAlignment: MainAxisAlignment.start,
+  children:
+ 
+ [
+                Container(
+                  
+                  height: screenHeight * 0.45,
+                  width: screenWidth * 0.72,
+                  padding: const EdgeInsets.all(0),
+                  //decoration: boxdecoration.copyWith(borderRadius: BorderRadius.circular(15)),
+                  child: ListView.builder(
+                    itemCount: siblings.length,
+                    itemBuilder: (context, index) {
+                      return siblings[index];
+                    },
+                  ),
+                ),
+              ]),
 
 
 
 
               // 4th Row - Name, Age, Grade, and School text fields
-              Row(
-  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-  crossAxisAlignment: CrossAxisAlignment.start,
-  children: [
-    // First Column: Fixed width 600
-    Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-         Text(
-          'Name*',
-          style: TextStyle(fontSize: 11 * scale, fontFamily: 'Roboto-R'), // Adjust font size as needed
-        ),
-        const SizedBox(height: 8),
-        SizedBox(
-          width: 600,
-          height: 40,
-          child: TextField(
-            decoration: InputDecoration(
-              border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(8),
-              ),
-            ),
-          ),
-        ),
-      ],
-    ),
-    const SizedBox(width: 8),
-
-    // Second Column: Fixed width 120
-    Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-         Text(
-          'Age*',
-          style: TextStyle(fontSize: 11 * scale, fontFamily: 'Roboto-R'),
-        ),
-        const SizedBox(height: 8),
-        SizedBox(
-          width: 120,
-          height: 40,
-          child: TextField(
-            decoration: InputDecoration(
-              border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(8),
-              ),
-            ),
-          ),
-        ),
-      ],
-    ),
-    const SizedBox(width: 8),
-
-    // Third Column: Expanded
-    Expanded(
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-           Text(
-            'Grade Level/ Course/ Occupation*',
-            style: TextStyle(fontSize: 11 * scale, fontFamily: 'Roboto-R'),
-          ),
-          const SizedBox(height: 8),
-          SizedBox(
-            height: 40,
-            child: TextField(
-              decoration: InputDecoration(
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(8),
-                ),
-              ),
-            ),
-          ),
-        ],
-      ),
-    ),
-    const SizedBox(width: 8),
-
-    // Fourth Column: Expanded
-    Expanded(
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-           Text(
-            'School/ Business Office*',
-            style: TextStyle(fontSize: 11 * scale, fontFamily: 'Roboto-R'),
-          ),
-          const SizedBox(height: 8),
-          SizedBox(
-            height: 40,
-            child: TextField(
-              decoration: InputDecoration(
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(8),
-                ),
-              ),
-            ),
-          ),
-        ],
-      ),
-    ),
-  ],
-),
+              
 
               const SizedBox(height: 16),
 
@@ -1055,109 +1270,8 @@ String dropdown2Value = 'Option A';
               const SizedBox(height: 16),
 
               // 6th Row - Name, Age, Grade, and School text fields
-              Row(
-  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-  crossAxisAlignment: CrossAxisAlignment.start,
-  children: [
-    // First Column: Fixed width 600
-    Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-         Text(
-          'Name*',
-          style: TextStyle(fontSize: 11 * scale, fontFamily: 'Roboto-R'), // Adjust font size as needed
-        ),
-        const SizedBox(height: 8),
-        SizedBox(
-          width: 600,
-          height: 40,
-          child: TextField(
-            decoration: InputDecoration(
-              border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(8),
-              ),
-            ),
-          ),
-        ),
-      ],
-    ),
-    const SizedBox(width: 8),
-
-    // Second Column: Fixed width 120
-    Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-         Text(
-          'Age*',
-          style: TextStyle(fontSize: 11 * scale, fontFamily: 'Roboto-R'),
-        ),
-        const SizedBox(height: 8),
-        SizedBox(
-          width: 120,
-          height: 40,
-          child: TextField(
-            decoration: InputDecoration(
-              border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(8),
-              ),
-            ),
-          ),
-        ),
-      ],
-    ),
-    const SizedBox(width: 8),
-
-    // Third Column: Expanded
-    Expanded(
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-           Text(
-            'Grade Level/ Course/ Occupation*',
-            style: TextStyle(fontSize: 11 * scale, fontFamily: 'Roboto-R'),
-          ),
-          const SizedBox(height: 8),
-          SizedBox(
-            height: 40,
-            child: TextField(
-              decoration: InputDecoration(
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(8),
-                ),
-              ),
-            ),
-          ),
-        ],
-      ),
-    ),
-    const SizedBox(width: 8),
-
-    // Fourth Column: Expanded
-    Expanded(
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-           Text(
-            'School/ Business Office*',
-            style: TextStyle(fontSize: 11 * scale, fontFamily: 'Roboto-R'),
-          ),
-          const SizedBox(height: 8),
-          SizedBox(
-            height: 40,
-            child: TextField(
-              decoration: InputDecoration(
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(8),
-                ),
-              ),
-            ),
-          ),
-        ],
-      ),
-    ),
-  ],
-),
-              const SizedBox(height: 347),
+              
+              const SizedBox(height: 75),
 
               // Centered Back and Next buttons for the second page
 Row(
