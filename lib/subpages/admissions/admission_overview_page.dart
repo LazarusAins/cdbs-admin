@@ -1,7 +1,15 @@
+import 'dart:async';
+import 'package:intl/intl.dart';
+import 'package:cdbs_admin/bloc/auth/auth_bloc.dart';
+import 'package:cdbs_admin/class/admission_forms.dart';
+import 'package:cdbs_admin/shared/api.dart';
 import 'package:cdbs_admin/subpages/landing_page.dart';
+import 'package:cdbs_admin/subpages/login_page.dart';
 import 'package:cdbs_admin/subpages/page3.dart';
 import 'package:cdbs_admin/subpages/s1.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 
 class AdmissionOverviewPage extends StatefulWidget {
   const AdmissionOverviewPage({super.key});
@@ -14,9 +22,26 @@ class AdmissionOverviewPage extends StatefulWidget {
 
 class _AdmissionOverviewPageState extends State<AdmissionOverviewPage> {
   List<bool> checkboxStates = List.generate(10, (_) => false);
-
+  late ApiService _apiService;
   // Variable to track current action
   int _selectedAction = 0; // 0: Default, 1: View, 2: Reminder, 3: Deactivate
+  late Stream<List<Map<String, dynamic>>> admissionForms;
+  List<Map<String, dynamic>> requests = [];
+  List<Map<String, dynamic>> filteredRequest = [];
+
+  @override
+  void initState() {
+    super.initState();
+    _apiService = ApiService(apiUrl); // Replace with your actual API URL
+    admissionForms = _apiService.streamAdmissionForms(supabaseUrl, supabaseKey);
+    // Initialize the service with your endpoint
+  }
+
+  String formatDate(DateTime date) {
+    final DateFormat formatter = DateFormat('dd-MM-yyyy HH:mm');
+    return formatter.format(date);
+  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -29,7 +54,47 @@ class _AdmissionOverviewPageState extends State<AdmissionOverviewPage> {
     double scale = widthScale < heightScale ? widthScale : heightScale;
 
     return Scaffold(
-      body: Padding(
+      body: BlocConsumer<AuthBloc, AuthState>(
+        listener: (context, state) {
+          if (state is AuthInitial) {
+            Navigator.pushAndRemoveUntil(
+              context,
+              MaterialPageRoute(
+                builder: (context) => const LoginPage(),
+              ),
+              (route) => false,
+            );
+          }
+        },
+        builder: (context, authState) {
+          if (authState is AuthLoading) {
+            return const Center(
+              // Center the spinner when loading
+              child: SpinKitCircle(
+                color: Color(0xff13322B), // Change the color as needed
+                size: 50.0, // Adjust size as needed
+              ),
+            );
+          } else if (authState is AuthSuccess) {
+            return StreamBuilder<List<Map<String, dynamic>>>(
+              stream: admissionForms,
+              builder: (context, snapshot) {
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return const Center(
+              // Center the spinner when loading
+                    child: SpinKitCircle(
+                      color: Color(0xff13322B), // Change the color as needed
+                      size: 50.0, // Adjust size as needed
+                    ),
+                  );
+                }
+                requests = snapshot.data ?? []; // Use the data from the snapshot
+                filteredRequest = requests;
+
+                if (snapshot.hasError) {
+                  return Center(child: Text('Error: ${snapshot.error}'));
+                }
+                return Padding(
         padding: const EdgeInsets.symmetric(horizontal: 40),
         child: Column(
           children: [
@@ -146,9 +211,17 @@ class _AdmissionOverviewPageState extends State<AdmissionOverviewPage> {
             const Divider(color: Colors.grey, thickness: 1),
             Expanded(
               child: ListView.builder(
-                itemCount: 10,
+                itemCount: filteredRequest.length,
                 itemBuilder: (context, index) {
-                  int sampleId = 1000 + index;
+                  final request = filteredRequest[index];
+                  final fullName = '${request['db_admission_table']['first_name']} ${request['db_admission_table']['last_name']}';
+                  final processBy = request['db_admission_table']['db_admission_form_handler_table'].isNotEmpty
+    ? '${request['db_admission_table']['db_admission_form_handler_table'][0]['db_admin_table']['first_name']} ${request['db_admission_table']['db_admission_form_handler_table'][0]['db_admin_table']['last_name']}'
+    : '---';
+
+                  String dateCreatedString = request['db_admission_table']['created_at'];
+                  DateTime dateCreated = DateTime.parse(dateCreatedString);
+                  String formattedDate = formatDate(dateCreated);
                   return Column(
                     children: [
                       Row(
@@ -166,8 +239,7 @@ class _AdmissionOverviewPageState extends State<AdmissionOverviewPage> {
                                     });
                                   },
                                 ),
-                                Text(
-                                  '$sampleId',
+                                Text(request['admission_id'].toString(),
                                   style: TextStyle(fontSize: 12 * scale),
                                 ),
                               ],
@@ -175,29 +247,25 @@ class _AdmissionOverviewPageState extends State<AdmissionOverviewPage> {
                           ),
                           Expanded(
                             flex: 3,
-                            child: Text(
-                              'Applicant Name $index',
+                            child: Text(fullName,
                               style: TextStyle(fontFamily: 'Roboto-R', fontSize: 14 * scale),
                             ),
                           ),
                           Expanded(
                             flex: 2,
-                            child: Text(
-                              'Handled By $index',
+                            child: Text(processBy ?? '---',
                               style: TextStyle(fontFamily: 'Roboto-R', fontSize: 14 * scale),
                             ),
                           ),
                           Expanded(
                             flex: 2,
-                            child: Text(
-                              'Status $index',
+                            child: Text(request['db_admission_table']['admission_status'].toString().toUpperCase(),
                               style: TextStyle(fontFamily: 'Roboto-R', fontSize: 14 * scale),
                             ),
                           ),
                           Expanded(
                             flex: 1,
-                            child: Text(
-                              'Date Created $index',
+                            child: Text(formattedDate,
                               style: TextStyle(fontFamily: 'Roboto-R', fontSize: 14 * scale),
                             ),
                           ),
@@ -256,7 +324,13 @@ class _AdmissionOverviewPageState extends State<AdmissionOverviewPage> {
             ],
           ],
         ),
-      ),
+      );
+              }
+            );
+          }
+          return Container();
+        }
+      )
     );
   }
 
