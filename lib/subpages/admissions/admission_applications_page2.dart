@@ -3,7 +3,10 @@
 import 'package:flutter/material.dart';
 
 class AdmissionApplicationsPage2 extends StatefulWidget {
-  const AdmissionApplicationsPage2({super.key});
+
+  List<Map<String, dynamic>>? formDetails;
+  
+  AdmissionApplicationsPage2({super.key, required this.formDetails});
 
   @override
   State<AdmissionApplicationsPage2> createState() =>
@@ -31,10 +34,29 @@ class _AdmissionApplicationsPage2State
   }
 
 
+
 TextEditingController dateController = TextEditingController();
+TextEditingController fnameController = TextEditingController();
+TextEditingController mnameController = TextEditingController();
+TextEditingController lnameController = TextEditingController();
+TextEditingController schoolYearController = TextEditingController();
+
 String selectedGender = 'Male';
 String dropdown1Value = 'Option 1';
 String dropdown2Value = 'Option A';
+
+
+
+  @override
+  void initState() {
+    super.initState();
+    //fetchLoaRequest();
+    fnameController.text=widget.formDetails![0]['db_admission_table']['first_name'];
+    mnameController.text=widget.formDetails![0]['db_admission_table']['middle_name'];
+    lnameController.text=widget.formDetails![0]['db_admission_table']['last_name'];
+    schoolYearController.text=widget.formDetails![0]['db_admission_table']['school_year'];
+  }
+
 
   
 
@@ -160,6 +182,7 @@ String dropdown2Value = 'Option A';
         child: SizedBox(
           height: 40,
           child: TextField(
+            controller: schoolYearController,
             decoration: InputDecoration(
               border: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(8 * scale),
@@ -196,6 +219,7 @@ String dropdown2Value = 'Option A';
         child: SizedBox(
           height: 40,
           child: TextField(
+            controller: fnameController,
             decoration: InputDecoration(
               border: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(8 * scale),
@@ -210,6 +234,7 @@ String dropdown2Value = 'Option A';
         child: SizedBox(
           height: 40,
           child: TextField(
+            controller: mnameController,
             decoration: InputDecoration(
               border: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(8 * scale),
@@ -224,6 +249,7 @@ String dropdown2Value = 'Option A';
         child: SizedBox(
           height: 40,
           child: TextField(
+            controller: lnameController,
             decoration: InputDecoration(
               border: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(8 * scale),

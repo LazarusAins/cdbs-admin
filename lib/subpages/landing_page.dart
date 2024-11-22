@@ -6,6 +6,7 @@ import 'package:cdbs_admin/subpages/admissions/admission_overview_page.dart';
 import 'package:cdbs_admin/subpages/admissions/admission_payments_page.dart';
 import 'package:cdbs_admin/subpages/admissions/admission_requirements_page.dart';
 import 'package:cdbs_admin/subpages/admissions/admission_results_page.dart';
+import 'package:cdbs_admin/subpages/admissions/admission_schedules_page.dart';
 import 'package:cdbs_admin/subpages/login_page.dart';
 import 'package:cdbs_admin/subpages/page6.dart';
 import 'package:cdbs_admin/subpages/s1.dart';
@@ -787,7 +788,7 @@ Widget _buildMenuItem(int index, String text, IconData icon, double scale) {
         case 3:
           return const AdmissionPaymentsPage();
         case 4:
-          return const Page5();
+          return const AdmissionSchedulesPage();
         default:
           return const AdmissionResultsPage();
       }

@@ -68,4 +68,46 @@ class ApiService {
     }
   }*/
 
+
+  Future<List<Map<String, dynamic>>> getDetailsById(int admissionId, String supabaseUrl, String supabaseKey) async {
+  
+
+  try {
+    final response = await http.post(
+      Uri.parse('$apiUrl/api/admin/get_admission_details'),
+      headers: {
+        'Content-Type': 'application/json',
+        'supabase-url': supabaseUrl,
+        'supabase-key': supabaseKey,
+      },
+      body: json.encode({
+        'admission_id': admissionId,  // Send customer_id in the request body
+      }),
+    );
+
+    if (response.statusCode == 200) {
+      final data = json.decode(response.body);
+
+      //print('Response data: $data');  // Debugging output
+
+      // Check if 'members' is a list or a map
+      if (data['detail'] is List) {
+        // If it's already a list, return it as a List<Map<String, dynamic>>
+        return List<Map<String, dynamic>>.from(data['detail']);
+      } else if (data['detail'] is Map) {
+        // If it's a map (single member), convert it to a list with that single map
+        return [data['detail']];
+      } else {
+        // Return an empty list if 'members' is neither a List nor a Map
+        return [];
+      }
+    } else {
+      throw Exception('Failed to load member');
+    }
+  } catch (e) {
+    print('Error: $e');
+    return []; // Return an empty list on error
+  }
+}
+
 }

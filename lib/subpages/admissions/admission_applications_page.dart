@@ -23,13 +23,34 @@ class _AdmissionApplicationsPageState extends State<AdmissionApplicationsPage> {
   List<Map<String, dynamic>> requests = [];
   List<Map<String, dynamic>> filteredRequest = [];
   late ApiService _apiService;
-
+  int id=0;
+  List<Map<String, dynamic>>? formDetails;
   @override
   void initState() {
     super.initState();
     _apiService = ApiService(apiUrl); // Replace with your actual API URL
     admissionForms = _apiService.streamAdmissionForms(supabaseUrl, supabaseKey);
     // Initialize the service with your endpoint
+  }
+
+  Future<void> fetchFormDetails(int id) async {
+    try {
+      // Perform the async operation to get the data
+      List<Map<String, dynamic>> details = await ApiService(apiUrl).getDetailsById(
+        id,
+        supabaseUrl,
+        supabaseKey,
+      );
+
+      // Once data is fetched, call setState to update the UI
+      if (mounted) {
+        setState(() {
+          formDetails = details;
+        });
+      }
+    } catch (e) {
+      print("Error fetching form details: $e");
+    }
   }
 
   
@@ -116,7 +137,7 @@ String formatDate(DateTime date) {
             ),
 
             if (_selectedAction == 0) _buildDefaultContent(scale), // Default content
-            if (_selectedAction == 1) _buildViewContent(scale), // View content
+            if (_selectedAction == 1) _buildViewContent(scale, formDetails!), // View content
             if (_selectedAction == 2) _buildReminderContent(scale), // Reminder content
             if (_selectedAction == 3) _buildDeactivateContent(scale),
             if (_selectedAction == 4) _buildDeactivateContent(scale),
@@ -276,10 +297,14 @@ String formatDate(DateTime date) {
                               flex: 1,
                               child: PopupMenuButton<int>(
                                 icon: const Icon(Icons.more_vert),
-                                onSelected: (value) {
-                                  setState(() {
-                                    _selectedAction = value; // Change the selected action
-                                  });
+                                onSelected: (value) async {
+                                     List<Map<String, dynamic>> members = await ApiService(apiUrl).getDetailsById(request['admission_id'], supabaseUrl, supabaseKey);
+                                     if(members.isNotEmpty){       
+                                        setState(()  {
+                                          formDetails=members;
+                                          _selectedAction = value; // Change the selected action
+                                        });
+                                     }
                                 },
                                 itemBuilder: (context) => [
                                   PopupMenuItem(
@@ -337,7 +362,7 @@ String formatDate(DateTime date) {
   }
 
   // Build content for each action (VIEW, REMINDER, DEACTIVATE)
-  Widget _buildViewContent(double scale) {
+  Widget _buildViewContent(double scale, List<Map<String, dynamic>> details) {
     return Container(
   padding: const EdgeInsets.all(16),
   child: Column(
@@ -407,13 +432,10 @@ String formatDate(DateTime date) {
       ),
       
       // Adding AdmissionApplicationsPage2 below the buttons
-      const AdmissionApplicationsPage2(),
+       AdmissionApplicationsPage2(formDetails: details),
     ],
   ),
 );
-
-
-
   }
 
 

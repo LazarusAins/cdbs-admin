@@ -4,6 +4,7 @@ import 'package:cdbs_admin/shared/api.dart';
 import 'package:cdbs_admin/subpages/landing_page.dart';
 import 'package:cdbs_admin/subpages/page3.dart';
 import 'package:cdbs_admin/subpages/s1.dart';
+import 'package:cdbs_admin/subpages/user%20overview/user_guest_accounts_page2.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
@@ -97,11 +98,7 @@ String formatDate(DateTime date) {
         child: Column(
           children: [
             // Check if _selectedAction == 0 to show the default content
-            if (_selectedAction == 0) _buildDefaultContent(scale), // Default content
-            if (_selectedAction == 1) _buildViewContent(scale), // View content
-            if (_selectedAction == 2) _buildReminderContent(scale), // Reminder content
-            if (_selectedAction == 3) _buildDeactivateContent(scale),
-            if (_selectedAction == 0) ...[
+
               // Header and Search Bar
               Row(
               mainAxisAlignment: MainAxisAlignment.start,
@@ -121,6 +118,14 @@ String formatDate(DateTime date) {
               thickness: 2,
               color: Color(0XFF222222),
             ),
+
+                        if (_selectedAction == 0) _buildDefaultContent(scale), // Default content
+            if (_selectedAction == 1) _buildViewContent(scale), // View content
+            if (_selectedAction == 2) _buildReminderContent(scale), // Reminder content
+            if (_selectedAction == 3) _buildDeactivateContent(scale),
+            if (_selectedAction == 0) ...[
+
+              
             Row(
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
@@ -368,23 +373,33 @@ return Container();
   }
 
   // Build content for each action (VIEW, REMINDER, DEACTIVATE)
-  Widget _buildViewContent(double scale) {
+ Widget _buildViewContent(double scale) {
     return Container(
-      padding: const EdgeInsets.all(16),
-      child: Column(
+  padding: const EdgeInsets.all(16),
+  child: Column(
+    children: [
+      // Back button with left arrow and "Back" text
+      Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          const S1Page(),
-          ElevatedButton(
+          TextButton.icon(
             onPressed: () {
               setState(() {
                 _selectedAction = 0; // Go back to default content
               });
             },
-            child: const Text("Go Back"),
+            icon: const Icon(Icons.arrow_back, color: Colors.black),
+            label: Text(
+              "Back",
+              style: TextStyle(color: Colors.black, fontFamily: 'Roboto-R', fontSize: 12 * scale),
+            ),
           ),
         ],
-      )
-    );
+      ),
+      const UserGuestAccountsPage2(),
+    ],
+  ),
+);
   }
 
   Widget _buildReminderContent(double scale) {

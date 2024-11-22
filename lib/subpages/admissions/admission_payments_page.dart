@@ -130,7 +130,7 @@ String formatDate(DateTime date) {
         mainAxisAlignment: MainAxisAlignment.start,
         children: [
           Text(
-            'Requirements',
+            'Payments',
             style: TextStyle(
               color: const Color(0xff222222),
               fontFamily: "Roboto-L",
