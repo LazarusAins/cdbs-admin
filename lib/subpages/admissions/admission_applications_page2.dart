@@ -1,12 +1,15 @@
 //WHOLE APPLICANTIONS PAGE2
 
+import 'package:cdbs_admin/bloc/admission_bloc/admission_bloc.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class AdmissionApplicationsPage2 extends StatefulWidget {
 
   List<Map<String, dynamic>>? formDetails;
-  
-  AdmissionApplicationsPage2({super.key, required this.formDetails});
+  final Function(bool isClicked) onNextPressed;
+
+  AdmissionApplicationsPage2({super.key, required this.formDetails, required this.onNextPressed});
 
   @override
   State<AdmissionApplicationsPage2> createState() =>
@@ -67,7 +70,7 @@ List<TextEditingController> schoolBisControllers = [];
 List<Widget> siblings = [];
 
   late TextEditingController name;
-  late TextEditingController age;
+  late TextEditingController ageSibling;
   late TextEditingController gradeLevel;
   late TextEditingController schoolBis;
 
@@ -99,118 +102,129 @@ void addItemDescription(double scale) {
     List<Widget> newDescriptions = [];
     for (int i = 0; i < quantityReceived; i++) {
       name = nameControllers[i];
-      age = ageControllers[i];
+      ageSibling = ageControllers[i];
       gradeLevel = gradeLevelControllers[i];
       schoolBis = schoolBisControllers[i];
       newDescriptions.add(
-        Container(
-          padding: const EdgeInsets.fromLTRB(0, 0, 0, 12),
-          child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    // First Column: Fixed width 600
-                    Column(
+        Column(
+          children: [
+            const SizedBox(height: 16),
+
+              // 3rd Row - Divider
+              const Divider(),
+
+
+              const SizedBox(height: 16),
+            Container(
+              padding: const EdgeInsets.fromLTRB(0, 0, 0, 12),
+              child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text(
-                          'Name*',
-                          style: TextStyle(fontSize: 11 * scale, fontFamily: 'Roboto-R'), // Adjust font size as needed
-                        ),
-                        const SizedBox(height: 8),
-                        SizedBox(
-                          width: 600,
-                          height: 40,
-                          child: TextField(
-                            controller: name,
-                            decoration: InputDecoration(
-                              border: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(8),
+                        // First Column: Fixed width 600
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              'Name*',
+                              style: TextStyle(fontSize: 11 * scale, fontFamily: 'Roboto-R'), // Adjust font size as needed
+                            ),
+                            const SizedBox(height: 8),
+                            SizedBox(
+                              width: 600,
+                              height: 40,
+                              child: TextField(
+                                controller: name,
+                                decoration: InputDecoration(
+                                  border: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(8),
+                                  ),
+                                ),
                               ),
                             ),
+                          ],
+                        ),
+                        const SizedBox(width: 8),
+            
+                        // Second Column: Fixed width 120
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              'Age*',
+                              style: TextStyle(fontSize: 11 * scale, fontFamily: 'Roboto-R'),
+                            ),
+                            const SizedBox(height: 8),
+                            SizedBox(
+                              width: 120,
+                              height: 40,
+                              child: TextField(
+                                controller: ageSibling,
+                                decoration: InputDecoration(
+                                  border: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(8),
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                        const SizedBox(width: 8),
+            
+                        // Third Column: Expanded
+                        Expanded(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                'Grade Level/ Course/ Occupation*',
+                                style: TextStyle(fontSize: 11 * scale, fontFamily: 'Roboto-R'),
+                              ),
+                              const SizedBox(height: 8),
+                              SizedBox(
+                                height: 40,
+                                child: TextField(
+                                  controller: gradeLevel,
+                                  decoration: InputDecoration(
+                                    border: OutlineInputBorder(
+                                      borderRadius: BorderRadius.circular(8),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                        const SizedBox(width: 8),
+            
+                        // Fourth Column: Expanded
+                        Expanded(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                'School/ Business Office*',
+                                style: TextStyle(fontSize: 11 * scale, fontFamily: 'Roboto-R'),
+                              ),
+                              const SizedBox(height: 8),
+                              SizedBox(
+                                height: 40,
+                                child: TextField(
+                                  controller: schoolBis,
+                                  decoration: InputDecoration(
+                                    border: OutlineInputBorder(
+                                      borderRadius: BorderRadius.circular(8),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ],
                           ),
                         ),
                       ],
                     ),
-                    const SizedBox(width: 8),
-
-                    // Second Column: Fixed width 120
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          'Age*',
-                          style: TextStyle(fontSize: 11 * scale, fontFamily: 'Roboto-R'),
-                        ),
-                        const SizedBox(height: 8),
-                        SizedBox(
-                          width: 120,
-                          height: 40,
-                          child: TextField(
-                            controller: age,
-                            decoration: InputDecoration(
-                              border: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(8),
-                              ),
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                    const SizedBox(width: 8),
-
-                    // Third Column: Expanded
-                    Expanded(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            'Grade Level/ Course/ Occupation*',
-                            style: TextStyle(fontSize: 11 * scale, fontFamily: 'Roboto-R'),
-                          ),
-                          const SizedBox(height: 8),
-                          SizedBox(
-                            height: 40,
-                            child: TextField(
-                              controller: gradeLevel,
-                              decoration: InputDecoration(
-                                border: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(8),
-                                ),
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                    const SizedBox(width: 8),
-
-                    // Fourth Column: Expanded
-                    Expanded(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            'School/ Business Office*',
-                            style: TextStyle(fontSize: 11 * scale, fontFamily: 'Roboto-R'),
-                          ),
-                          const SizedBox(height: 8),
-                          SizedBox(
-                            height: 40,
-                            child: TextField(
-                              controller: schoolBis,
-                              decoration: InputDecoration(
-                                border: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(8),
-                                ),
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ],
-                ),
+            ),
+          ],
         ),
       );
     }
@@ -240,6 +254,7 @@ void addItemDescription(double scale) {
   void initState() {
     super.initState();
     //fetchLoaRequest();
+    print(widget.formDetails);
     selectedGender =widget.formDetails![0]['db_admission_table']['sex'];
     fnameController.text=widget.formDetails![0]['db_admission_table']['first_name'];
     mnameController.text=widget.formDetails![0]['db_admission_table']['middle_name'];
@@ -260,6 +275,29 @@ void addItemDescription(double scale) {
     DateTime dateOfBirth = DateTime.parse(dateController.text);
     DateTime today = DateTime.now();
     int age = today.year - dateOfBirth.year;
+
+    for(int i=0; i<widget.formDetails![0]['db_admission_table']['db_family_background_table'][0]['db_sibling_table'].length;i++){
+      var sibling = widget.formDetails![0]['db_admission_table']['db_family_background_table'][0]['db_sibling_table'][i];
+      String sdate=sibling['sibling_bday'];
+      DateTime siblingBday = DateTime.parse(sdate);
+      int siblingAge = today.year - siblingBday.year;
+      if (today.month < siblingBday.month || (today.month == siblingBday.month && today.day < siblingBday.day)) {
+        siblingAge--;
+      }
+      nameControllers.add(TextEditingController());
+      ageControllers.add(TextEditingController());
+      gradeLevelControllers.add(TextEditingController());
+      schoolBisControllers.add(TextEditingController());
+      name = nameControllers[i];
+      ageSibling=ageControllers[i];
+      gradeLevel = gradeLevelControllers[i];
+      schoolBis = schoolBisControllers[i];
+
+      name.text='${sibling['sibling_first_name']} ${sibling['sibling_middle_name']} ${sibling['sibling_last_name']}';
+      ageSibling.text=siblingAge.toString();
+      gradeLevel.text=sibling['sibling_grade_course_occupation'];
+      schoolBis.text=sibling['sibling_school_business'];
+    }
 
   // Adjust for whether the birthday has passed this year or not
     if (today.month < dateOfBirth.month || (today.month == dateOfBirth.month && today.day < dateOfBirth.day)) {
@@ -1227,14 +1265,6 @@ SizedBox(
   ),
 ),
 
-              const SizedBox(height: 16),
-
-              // 3rd Row - Divider
-              const Divider(),
-
-
-              const SizedBox(height: 16),
-
 
 Row(
   mainAxisAlignment: MainAxisAlignment.start,
@@ -1259,15 +1289,6 @@ Row(
 
 
 
-              // 4th Row - Name, Age, Grade, and School text fields
-              
-
-              const SizedBox(height: 16),
-
-              // 5th Row - Divider
-              const Divider(),
-
-              const SizedBox(height: 16),
 
               // 6th Row - Name, Age, Grade, and School text fields
               
@@ -2666,7 +2687,10 @@ Row(
   mainAxisAlignment: MainAxisAlignment.center,
   children: [
     ElevatedButton(
-      onPressed: _previousPage, // Toggle to go back to the first page
+      onPressed: (){
+        widget.onNextPressed(false);
+        _previousPage();
+      }, // Toggle to go back to the first page
       style: ElevatedButton.styleFrom(
         backgroundColor: const Color(0xFFD3D3D3), // Button color
         fixedSize: const Size(188, 35), // Width and height
@@ -2690,7 +2714,11 @@ Row(
   mainAxisAlignment: MainAxisAlignment.center,
   children: [
     ElevatedButton(
-      onPressed: _nextPage, // Toggle to the next page
+      onPressed: (){
+        
+         widget.onNextPressed(true);
+        _nextPage();
+      }, // Toggle to the next page
       style: ElevatedButton.styleFrom(
         backgroundColor: const Color(0xFF012169), // Button color
         fixedSize: const Size(188, 35), // Width and height
@@ -2708,7 +2736,8 @@ Row(
       ),
     ),
   ],
-),
+    ),
+
 
             ],
 
@@ -2919,7 +2948,9 @@ const SizedBox(height: 350),
   mainAxisAlignment: MainAxisAlignment.center,
   children: [
     ElevatedButton(
-      onPressed: _previousPage, // Toggle to go back to the first page
+      onPressed: (){
+         widget.onNextPressed(false);
+        _previousPage();}, // Toggle to go back to the first page
       style: ElevatedButton.styleFrom(
         backgroundColor: const Color(0xFFD3D3D3), // Button color
         fixedSize: const Size(188, 35), // Width and height

@@ -1,3 +1,4 @@
+import 'package:cdbs_admin/bloc/admission_bloc/admission_bloc.dart';
 import 'package:cdbs_admin/bloc/auth/auth_bloc.dart';
 import 'package:cdbs_admin/class/admission_forms.dart';
 import 'package:cdbs_admin/shared/api.dart';
@@ -304,6 +305,7 @@ String formatDate(DateTime date) {
                                           formDetails=members;
                                           _selectedAction = value; // Change the selected action
                                         });
+                                        
                                      }
                                 },
                                 itemBuilder: (context) => [
@@ -363,7 +365,16 @@ String formatDate(DateTime date) {
 
   // Build content for each action (VIEW, REMINDER, DEACTIVATE)
   Widget _buildViewContent(double scale, List<Map<String, dynamic>> details) {
-    return Container(
+    return BlocConsumer<AdmissionBloc, AdmissionState>(
+      listener: (context, state) {},
+      builder: (context, state) {
+              bool isButtonEnabled = false;
+
+              // Enable button based on the state
+              if (state is AdmissionStatusUpdated) {
+                isButtonEnabled = state.isComplete;
+              }
+              return Container(
   padding: const EdgeInsets.all(16),
   child: Column(
     children: [
@@ -417,9 +428,10 @@ String formatDate(DateTime date) {
                       borderRadius: BorderRadius.circular(5), // Border radius
                     ),
                   ),
-                  onPressed: () {
+                  onPressed: isButtonEnabled? () {
                     // Action for second button
-                  },
+                    
+                  }:null,
                   child: Text(
                     "Mark as Complete",
                     style: TextStyle(color: Colors.white, fontFamily: 'Roboto-R', fontSize: 12 * scale),
@@ -432,10 +444,14 @@ String formatDate(DateTime date) {
       ),
       
       // Adding AdmissionApplicationsPage2 below the buttons
-       AdmissionApplicationsPage2(formDetails: details),
+       AdmissionApplicationsPage2(formDetails: details, onNextPressed: (bool isClicked) {
+        print(isClicked);
+         context.read<AdmissionBloc>().add(MarkAsCompleteClicked(isClicked));
+       },),
     ],
   ),
 );
+  });
   }
 
 

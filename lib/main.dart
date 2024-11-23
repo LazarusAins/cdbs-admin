@@ -1,4 +1,5 @@
 //import 'package:cdbs_admin/subpages/admission_overview_page.dart';
+import 'package:cdbs_admin/bloc/admission_bloc/admission_bloc.dart';
 import 'package:cdbs_admin/bloc/auth/auth_bloc.dart';
 import 'package:cdbs_admin/subpages/landing_page.dart';
 import 'package:cdbs_admin/subpages/login_page.dart';
@@ -34,6 +35,7 @@ class MyApp extends StatelessWidget {
     return MultiBlocProvider(
       providers: [
         BlocProvider(create: (context) => AuthBloc()),
+        BlocProvider(create: (context) => AdmissionBloc()),
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
