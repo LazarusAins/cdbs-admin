@@ -8,6 +8,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:intl/intl.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
 
 class AdmissionApplicationsPage extends StatefulWidget {
   const AdmissionApplicationsPage({super.key});
@@ -283,7 +285,7 @@ String formatDate(DateTime date) {
                           ),
                           Expanded(
                             flex: 2,
-                            child: Text(request['db_admission_table']['admission_status'].toString().toUpperCase(),
+                            child: Text(!request['db_admission_table']['is_complete_view']?request['db_admission_table']['admission_status'].toString().toUpperCase():"COMPLETE",
                               style: TextStyle(fontFamily: 'Roboto-R', fontSize: 14 * scale),
                             ),
                           ),
@@ -300,11 +302,38 @@ String formatDate(DateTime date) {
                                 icon: const Icon(Icons.more_vert),
                                 onSelected: (value) async {
                                      List<Map<String, dynamic>> members = await ApiService(apiUrl).getDetailsById(request['admission_id'], supabaseUrl, supabaseKey);
-                                     if(members.isNotEmpty){       
+                                     if(members.isNotEmpty){
+                                             
                                         setState(()  {
                                           formDetails=members;
                                           _selectedAction = value; // Change the selected action
                                         });
+
+                                        try {
+                                          final response = await http.post(
+                                            Uri.parse('$apiUrl/api/admin/update_admission'),
+                                            headers: {
+                                              'Content-Type': 'application/json',
+                                              'supabase-url': supabaseUrl,
+                                              'supabase-key': supabaseKey,
+                                            },
+                                            body: json.encode({
+                                              'admission_id': request['admission_id'],
+                                              'admission_status':'in review'  // Send customer_id in the request body
+                                            }),
+                                          );
+
+                                          if (response.statusCode == 200) {
+                                            final responseBody = jsonDecode(response.body);
+                                          } else {
+                                            // Handle failure
+                                            final responseBody = jsonDecode(response.body);
+                                            print('Error: ${responseBody['error']}');
+                                          }
+                                        } catch (error) {
+                                          // Handle error (e.g., network error)
+                                          print('Error: $error');
+                                        }
                                         
                                      }
                                 },
@@ -385,6 +414,7 @@ String formatDate(DateTime date) {
           TextButton.icon(
             onPressed: () {
               setState(() {
+                context.read<AdmissionBloc>().add(MarkAsCompleteClicked(false));
                 _selectedAction = 0; // Go back to default content
               });
             },
@@ -408,8 +438,9 @@ String formatDate(DateTime date) {
                       borderRadius: BorderRadius.circular(5), // Border radius
                     ),
                   ),
-                  onPressed: () {
+                  onPressed: ()async {
                     // Action for first button
+                    
                   },
                   child: Text(
                     "Download PDF",
@@ -428,9 +459,34 @@ String formatDate(DateTime date) {
                       borderRadius: BorderRadius.circular(5), // Border radius
                     ),
                   ),
-                  onPressed: isButtonEnabled? () {
+                  onPressed: isButtonEnabled? () async{
                     // Action for second button
-                    
+                    try {
+                        final response = await http.post(
+                          Uri.parse('$apiUrl/api/admin/update_admission'),
+                          headers: {
+                            'Content-Type': 'application/json',
+                            'supabase-url': supabaseUrl,
+                            'supabase-key': supabaseKey,
+                          },
+                          body: json.encode({
+                            'admission_id': details[0]['admission_id'],  // Send customer_id in the request body
+                            'admission_status':"complete review",
+                            'is_complete_view':true
+                          }),
+                        );
+
+                        if (response.statusCode == 200) {
+                          final responseBody = jsonDecode(response.body);
+                        } else {
+                          // Handle failure
+                          final responseBody = jsonDecode(response.body);
+                          print('Error: ${responseBody['error']}');
+                        }
+                      } catch (error) {
+                        // Handle error (e.g., network error)
+                        print('Error: $error');
+                      }
                   }:null,
                   child: Text(
                     "Mark as Complete",
@@ -445,7 +501,6 @@ String formatDate(DateTime date) {
       
       // Adding AdmissionApplicationsPage2 below the buttons
        AdmissionApplicationsPage2(formDetails: details, onNextPressed: (bool isClicked) {
-        print(isClicked);
          context.read<AdmissionBloc>().add(MarkAsCompleteClicked(isClicked));
        },),
     ],

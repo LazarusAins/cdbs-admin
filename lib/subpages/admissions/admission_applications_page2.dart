@@ -254,7 +254,6 @@ void addItemDescription(double scale) {
   void initState() {
     super.initState();
     //fetchLoaRequest();
-    print(widget.formDetails);
     selectedGender =widget.formDetails![0]['db_admission_table']['sex'];
     fnameController.text=widget.formDetails![0]['db_admission_table']['first_name'];
     mnameController.text=widget.formDetails![0]['db_admission_table']['middle_name'];

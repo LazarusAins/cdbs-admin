@@ -94,8 +94,6 @@ class ApiService {
 
 
   Future<List<Map<String, dynamic>>> getDetailsById(int admissionId, String supabaseUrl, String supabaseKey) async {
-  
-
   try {
     final response = await http.post(
       Uri.parse('$apiUrl/api/admin/get_admission_details'),
@@ -133,5 +131,46 @@ class ApiService {
     return []; // Return an empty list on error
   }
 }
+
+
+
+Future<bool> updateAdmission({
+    required int admissionId,
+    String? admissionStatus,
+    bool? isCompleteView,
+    String? supabaseUrl, 
+    String? supabaseKey
+  }) async {
+
+    try {
+      final response = await http.post(
+        Uri.parse('$apiUrl/api/admin/update_admission'),
+        headers: {
+          'Content-Type': 'application/json',
+          'supabase-url': supabaseUrl!,
+          'supabase-key': supabaseKey!,
+        },
+        body: json.encode({
+          'admission_id': admissionId,  // Send customer_id in the request body
+        }),
+      );
+
+      if (response.statusCode == 200) {
+        final responseBody = jsonDecode(response.body);
+        return true;
+      } else {
+        // Handle failure
+        final responseBody = jsonDecode(response.body);
+        print('Error: ${responseBody['error']}');
+        return false;
+      }
+    } catch (error) {
+      // Handle error (e.g., network error)
+      print('Error: $error');
+      return false;
+    }
+  }
+
+
 
 }
