@@ -109,7 +109,6 @@ String formatDate(DateTime date) {
                 }
                 requests = snapshot.data ?? []; // Use the data from the snapshot
                 filteredRequest = requests;
-
                 if (snapshot.hasError) {
                   return Center(child: Text('Error: ${snapshot.error}'));
                 }
@@ -140,7 +139,7 @@ String formatDate(DateTime date) {
             ),
 
             if (_selectedAction == 0) _buildDefaultContent(scale), // Default content
-            if (_selectedAction == 1) _buildViewContent(scale, formDetails!), // View content
+            if (_selectedAction == 1) _buildViewContent(scale, formDetails!, authState.uid), // View content
             if (_selectedAction == 2) _buildReminderContent(scale), // Reminder content
             if (_selectedAction == 3) _buildDeactivateContent(scale),
             if (_selectedAction == 4) _buildDeactivateContent(scale),
@@ -319,7 +318,8 @@ String formatDate(DateTime date) {
                                             },
                                             body: json.encode({
                                               'admission_id': request['admission_id'],
-                                              'admission_status':'in review'  // Send customer_id in the request body
+                                              'admission_status':'in review',  // Send customer_id in the request body
+                                              'user_id':authState.uid
                                             }),
                                           );
 
@@ -393,7 +393,7 @@ String formatDate(DateTime date) {
   }
 
   // Build content for each action (VIEW, REMINDER, DEACTIVATE)
-  Widget _buildViewContent(double scale, List<Map<String, dynamic>> details) {
+  Widget _buildViewContent(double scale, List<Map<String, dynamic>> details, int user_id) {
     return BlocConsumer<AdmissionBloc, AdmissionState>(
       listener: (context, state) {},
       builder: (context, state) {
@@ -472,7 +472,9 @@ String formatDate(DateTime date) {
                           body: json.encode({
                             'admission_id': details[0]['admission_id'],  // Send customer_id in the request body
                             'admission_status':"complete review",
-                            'is_complete_view':true
+                            'is_complete_view':true,
+                            'user_id': user_id,
+                            'is_done':true
                           }),
                         );
 

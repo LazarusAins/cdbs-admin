@@ -7119,7 +7119,7 @@ this.b=b},
 ol:function ol(){},
 du:function du(){},
 eo:function eo(){},
-eq:function eq(){},
+eq:function eq(a){this.a=a},
 im:function im(a){this.a=a},
 ep:function ep(){},
 ft:function ft(a){this.a=a},
@@ -7176,32 +7176,38 @@ ahC:function ahC(){},
 ahD:function ahD(){},
 ahF:function ahF(a,b){this.a=a
 this.b=b},
-ahE:function ahE(a,b){this.a=a
-this.b=b},
+ahE:function ahE(a,b,c){this.a=a
+this.b=b
+this.c=c},
 ahA:function ahA(){},
-ahB:function ahB(a,b){this.a=a
-this.b=b},
+ahB:function ahB(a,b,c){this.a=a
+this.b=b
+this.c=c},
 ahx:function ahx(a,b){this.a=a
 this.b=b},
 ahw:function ahw(a,b,c){this.a=a
 this.b=b
 this.c=c},
-ahz:function ahz(a,b){this.a=a
-this.b=b},
+ahz:function ahz(a,b,c){this.a=a
+this.b=b
+this.c=c},
 ahv:function ahv(a,b,c){this.a=a
 this.b=b
 this.c=c},
 ahy:function ahy(a){this.a=a},
 ahu:function ahu(){},
-aht:function aht(a,b,c){this.a=a
-this.b=b
-this.c=c},
+aht:function aht(a,b,c,d){var _=this
+_.a=a
+_.b=b
+_.c=c
+_.d=d},
 ahp:function ahp(a,b){this.a=a
 this.b=b},
 aho:function aho(a,b){this.a=a
 this.b=b},
 ahq:function ahq(){},
-ahr:function ahr(a){this.a=a},
+ahr:function ahr(a,b){this.a=a
+this.b=b},
 ahs:function ahs(a){this.a=a},
 ahn:function ahn(a){this.a=a},
 ahm:function ahm(a){this.a=a},
@@ -39428,7 +39434,7 @@ h=A.cw(n.a.h(0,"lastName"))
 g=A.cw(n.a.h(0,"email"))
 f=A.cw(n.a.h(0,"department"))
 if(m!=null&&l!=null&&k!=null&&j!=null&&i!=null&&h!=null&&g!=null&&!J.c(g,f)){f.toString
-o.wp(new A.eq())}else o.wp(new A.eo())
+o.wp(new A.eq(m))}else o.wp(new A.eo())
 q=1
 s=5
 break
@@ -39490,7 +39496,7 @@ return A.X(i.lW("String","department",J.t(J.t(j,"db_admin_department"),"departme
 case 21:s=22
 return A.X(i.lW("Int","departmentId",J.t(j,"department_id")),$async$hP)
 case 22:A.ds("ADMINTYPE: "+A.i(J.t(j,"admin_type")))
-J.t(j,"admin_id")
+g=J.t(j,"admin_id")
 J.t(J.t(j,"db_admin_type"),"admin_type")
 J.t(j,"first_name")
 J.t(j,"middle_name")
@@ -39498,7 +39504,7 @@ J.t(j,"last_name")
 J.t(j,"email_address")
 J.t(J.t(j,"db_admin_department"),"department")
 J.t(j,"department_id")
-if(!b.d)b.a.$1(new A.eq())
+if(!b.d)b.a.$1(new A.eq(g))
 s=12
 break
 case 13:if(!b.d)b.a.$1(new A.im("Login failed"))
@@ -39687,7 +39693,7 @@ this.x=s
 this.f=s.f9(u.y,u.I)},
 F(a){var s=t.w,r=A.ay(a,null,s).w,q=A.ay(a,null,s).w.a.a/400,p=r.a.b/800
 return A.dA(null,A.fZ(new A.ahF(this,q<p?q:p),new A.ahG(),t.T,t.FB))},
-a2W(a,b){return A.fZ(new A.aht(this,a,b),new A.ahu(),t.LA,t.hR)},
+a2W(a,b,c){return A.fZ(new A.aht(this,a,b,c),new A.ahu(),t.LA,t.hR)},
 a2V(a){var s=null
 return A.as(s,A.a3(A.a([A.j("REMINDER content goes here.",s,s,s,A.k(s,s,s,s,s,s,s,s,s,s,s,18*a,s,s,s,s,s,!0,s,s,s,s,s,s,s,s),s,s),A.be(B.ai,new A.ahn(this),s)],t.p),B.h,B.f,B.e),B.l,s,s,s,s,s,s,B.U,s,s,s)},
 Cc(a){var s=null
@@ -39707,30 +39713,30 @@ if(b instanceof A.ep)return B.av
 else if(b instanceof A.eq){s=this.a
 r=s.f
 r===$&&A.b()
-return A.jX(new A.ahE(s,this.b),r,t.F)}return A.as(q,q,B.l,q,q,q,q,q,q,q,q,q,q)},
+return A.jX(new A.ahE(s,this.b,b),r,t.F)}return A.as(q,q,B.l,q,q,q,q,q,q,q,q,q,q)},
 $S:27}
 A.ahE.prototype={
-$2(a,b){var s,r,q,p,o,n,m,l=null,k="Roboto-L"
+$2(a,b){var s,r,q,p,o,n,m,l=this,k=null,j="Roboto-L"
 if(b.a===B.bB)return B.av
-s=this.a
+s=l.a
 r=b.b
 s.w=s.r=r==null?A.a([],t.Y):r
 r=b.c
-if(r!=null)return A.d7(A.j("Error: "+A.i(r),l,l,l,l,l,l),l,l)
-r=this.b
+if(r!=null)return A.d7(A.j("Error: "+A.i(r),k,k,k,k,k,k),k,k)
+r=l.b
 q=32*r
 p=t.p
-o=A.a([A.K(A.a([A.j("Admissions",l,l,l,A.k(l,l,B.ad,l,l,l,l,l,"Roboto-R",l,l,q,l,l,l,l,l,!0,l,l,l,l,l,l,l,l),l,l)],p),B.h,B.f,B.e),B.c3,B.bT],p)
-if(s.e===0)o.push(A.as(l,l,B.l,l,l,l,l,l,l,l,l,l,l))
+o=A.a([A.K(A.a([A.j("Admissions",k,k,k,A.k(k,k,B.ad,k,k,k,k,k,"Roboto-R",k,k,q,k,k,k,k,k,!0,k,k,k,k,k,k,k,k),k,k)],p),B.h,B.f,B.e),B.c3,B.bT],p)
+if(s.e===0)o.push(A.as(k,k,B.l,k,k,k,k,k,k,k,k,k,k))
 if(s.e===1){n=s.z
 n.toString
-o.push(s.a2W(r,n))}if(s.e===2)o.push(s.a2V(r))
+o.push(s.a2W(r,n,l.c.a))}if(s.e===2)o.push(s.a2V(r))
 if(s.e===3)o.push(s.Cc(r))
 if(s.e===4)o.push(s.Cc(r))
 if(s.e===5)o.push(s.Cc(r))
 if(s.e===0){n=20*r
 m=14*r
-B.b.N(o,A.a([A.K(A.a([A.j("Applications",l,l,l,A.k(l,l,B.ad,l,l,l,l,l,k,l,l,n,l,l,l,l,l,!0,l,l,l,l,l,l,l,l),l,l),B.br,A.L(A.bb(!0,B.B,!1,l,!0,B.p,l,A.bh(),l,l,l,l,l,l,2,A.aR(l,new A.aq(4,A.a7(5),B.bM),l,B.bh,l,l,l,l,!0,l,l,l,l,l,l,l,l,l,l,l,l,new A.aq(4,A.a7(5),B.bN),l,l,l,l,l,l,l,l,"",l,l,l,l,l,l,l,l,l,l,A.eO(!1,l,!0,A.d1(B.bW,B.aH,l,n),l,!0,l,l,l,l,l,l,l,l,l,l,new A.ahA(),l,l,l,l,l),l,l,l,l,l,l,l,l,l,l,l),B.r,!0,l,!0,l,!1,l,B.C,l,l,l,l,l,l,l,1,l,l,!1,"\u2022",l,l,l,l,l,!1,l,!1,l,!0,l,B.E,l,l,B.A,B.z,l,l,l,l,l,l,A.k(l,l,l,l,l,l,l,l,l,l,l,m,l,l,l,l,l,!0,l,l,l,l,l,l,l,l),B.v,l,B.F,l,l,l,l),q,226*r)],p),B.h,B.f,B.e),B.bc,A.K(A.a([A.C(A.j("Application ID",l,l,l,A.k(l,l,l,l,l,l,l,l,k,l,l,m,l,l,l,l,l,!0,l,l,l,l,l,l,l,l),l,l),1),A.C(A.j("Applicant Name",l,l,l,A.k(l,l,l,l,l,l,l,l,k,l,l,m,l,l,l,l,l,!0,l,l,l,l,l,l,l,l),l,l),3),A.C(A.j("Handled By",l,l,l,A.k(l,l,l,l,l,l,l,l,k,l,l,m,l,l,l,l,l,!0,l,l,l,l,l,l,l,l),l,l),2),A.C(A.j("Status",l,l,l,A.k(l,l,l,l,l,l,l,l,k,l,l,m,l,l,l,l,l,!0,l,l,l,l,l,l,l,l),l,l),2),A.C(A.j("Date Created",l,l,l,A.k(l,l,l,l,l,l,l,l,k,l,l,m,l,l,l,l,l,!0,l,l,l,l,l,l,l,l),l,l),1),B.bV],p),B.h,B.f,B.e),B.aB,A.C(A.iD(new A.ahB(s,r),J.bP(s.w)),1)],p))}return new A.b5(B.bU,A.a3(o,B.h,B.f,B.e),l)},
+B.b.N(o,A.a([A.K(A.a([A.j("Applications",k,k,k,A.k(k,k,B.ad,k,k,k,k,k,j,k,k,n,k,k,k,k,k,!0,k,k,k,k,k,k,k,k),k,k),B.br,A.L(A.bb(!0,B.B,!1,k,!0,B.p,k,A.bh(),k,k,k,k,k,k,2,A.aR(k,new A.aq(4,A.a7(5),B.bM),k,B.bh,k,k,k,k,!0,k,k,k,k,k,k,k,k,k,k,k,k,new A.aq(4,A.a7(5),B.bN),k,k,k,k,k,k,k,k,"",k,k,k,k,k,k,k,k,k,k,A.eO(!1,k,!0,A.d1(B.bW,B.aH,k,n),k,!0,k,k,k,k,k,k,k,k,k,k,new A.ahA(),k,k,k,k,k),k,k,k,k,k,k,k,k,k,k,k),B.r,!0,k,!0,k,!1,k,B.C,k,k,k,k,k,k,k,1,k,k,!1,"\u2022",k,k,k,k,k,!1,k,!1,k,!0,k,B.E,k,k,B.A,B.z,k,k,k,k,k,k,A.k(k,k,k,k,k,k,k,k,k,k,k,m,k,k,k,k,k,!0,k,k,k,k,k,k,k,k),B.v,k,B.F,k,k,k,k),q,226*r)],p),B.h,B.f,B.e),B.bc,A.K(A.a([A.C(A.j("Application ID",k,k,k,A.k(k,k,k,k,k,k,k,k,j,k,k,m,k,k,k,k,k,!0,k,k,k,k,k,k,k,k),k,k),1),A.C(A.j("Applicant Name",k,k,k,A.k(k,k,k,k,k,k,k,k,j,k,k,m,k,k,k,k,k,!0,k,k,k,k,k,k,k,k),k,k),3),A.C(A.j("Handled By",k,k,k,A.k(k,k,k,k,k,k,k,k,j,k,k,m,k,k,k,k,k,!0,k,k,k,k,k,k,k,k),k,k),2),A.C(A.j("Status",k,k,k,A.k(k,k,k,k,k,k,k,k,j,k,k,m,k,k,k,k,k,!0,k,k,k,k,k,k,k,k),k,k),2),A.C(A.j("Date Created",k,k,k,A.k(k,k,k,k,k,k,k,k,j,k,k,m,k,k,k,k,k,!0,k,k,k,k,k,k,k,k),k,k),1),B.bV],p),B.h,B.f,B.e),B.aB,A.C(A.iD(new A.ahB(s,r,l.c),J.bP(s.w)),1)],p))}return new A.b5(B.bU,A.a3(o,B.h,B.f,B.e),k)},
 $S:32}
 A.ahA.prototype={
 $0(){A.ds("Search icon tapped")},
@@ -39740,7 +39746,7 @@ $2(a0,a1){var s,r="db_admission_table",q="first_name",p="last_name",o="db_admiss
 h=A.C(A.j(i+" "+h,m,m,m,A.k(m,m,m,m,m,m,m,m,l,m,m,a,m,m,m,m,m,!0,m,m,m,m,m,m,m,m),m,m),3)
 i=A.C(A.j(g,m,m,m,A.k(m,m,m,m,m,m,m,m,l,m,m,a,m,m,m,m,m,!0,m,m,m,m,m,m,m,m),m,m),2)
 s=!J.t(j.h(0,r),"is_complete_view")?J.c3(J.t(j.h(0,r),"admission_status")).toUpperCase():"COMPLETE"
-return A.a3(A.a([A.K(A.a([b,h,i,A.C(A.j(s,m,m,m,A.k(m,m,m,m,m,m,m,m,l,m,m,a,m,m,m,m,m,!0,m,m,m,m,m,m,m,m),m,m),2),A.C(A.j(e,m,m,m,A.k(m,m,m,m,m,m,m,m,l,m,m,a,m,m,m,m,m,!0,m,m,m,m,m,m,m,m),m,m),1),A.C(A.jN(B.bZ,new A.ahy(d),new A.ahz(k,j),t.S),1)],c),B.h,B.f,B.e),B.aB],c),B.h,B.f,B.e)},
+return A.a3(A.a([A.K(A.a([b,h,i,A.C(A.j(s,m,m,m,A.k(m,m,m,m,m,m,m,m,l,m,m,a,m,m,m,m,m,!0,m,m,m,m,m,m,m,m),m,m),2),A.C(A.j(e,m,m,m,A.k(m,m,m,m,m,m,m,m,l,m,m,a,m,m,m,m,m,!0,m,m,m,m,m,m,m,m),m,m),1),A.C(A.jN(B.bZ,new A.ahy(d),new A.ahz(k,j,this.c),t.S),1)],c),B.h,B.f,B.e),B.aB],c),B.h,B.f,B.e)},
 $S:33}
 A.ahx.prototype={
 $1(a){var s=this.a
@@ -39766,7 +39772,7 @@ k=A.eY(u.x)
 j=t.N
 i=A.aB(["Content-Type","application/json","supabase-url",u.y,"supabase-key",u.I],j,j)
 s=9
-return A.X(A.awo(k,B.aS.iB(A.aB(["admission_id",g.h(0,"admission_id"),"admission_status","in review"],j,t.z)),i),$async$$1)
+return A.X(A.awo(k,B.aS.iB(A.aB(["admission_id",g.h(0,"admission_id"),"admission_status","in review","user_id",o.c.a],j,t.z)),i),$async$$1)
 case 9:n=c
 if(n.b===200){g=n
 B.aS.q0(A.wy(A.wr(g.e).c.a.h(0,"charset")).dm(g.w),null)}else{g=n
@@ -39807,7 +39813,7 @@ m=37*m
 s=A.cx(o,o,B.aA,o,o,o,o,o,o,new A.B(j,m),o,o,o,o,o,new A.bk(A.a7(5),B.o),o,o,o,o)
 s=A.L(A.be(A.j("Download PDF",o,o,o,A.k(o,o,B.n,o,o,o,o,o,p,o,o,l,o,o,o,o,o,!0,o,o,o,o,o,o,o,o),o,o),new A.ahq(),s),40,o)
 m=A.cx(o,o,B.h_,o,o,o,o,o,o,new A.B(j,m),o,o,o,o,o,new A.bk(A.a7(5),B.o),o,o,o,o)
-j=n?new A.ahr(q.c):o
+j=n?new A.ahr(q.c,q.d):o
 r=t.p
 return A.as(o,A.a3(A.a([A.K(A.a([k,A.K(A.a([s,B.X,A.L(A.be(A.j("Mark as Complete",o,o,o,A.k(o,o,B.n,o,o,o,o,o,p,o,o,l,o,o,o,o,o,!0,o,o,o,o,o,o,o,o),o,o),j,m),40,o)],r),B.h,B.f,B.e)],r),B.h,B.Y,B.e),new A.wJ(q.c,new A.ahs(a),o)],r),B.h,B.f,B.e),B.l,o,o,o,o,o,o,B.U,o,o,o)},
 $S:505}
@@ -39833,7 +39839,7 @@ k=A.eY(u.x)
 j=t.N
 i=A.aB(["Content-Type","application/json","supabase-url",u.y,"supabase-key",u.I],j,j)
 s=6
-return A.X(A.awo(k,B.aS.iB(A.aB(["admission_id",J.t(J.t(o.a,0),"admission_id"),"admission_status","complete review","is_complete_view",!0],j,t.z)),i),$async$$0)
+return A.X(A.awo(k,B.aS.iB(A.aB(["admission_id",J.t(J.t(o.a,0),"admission_id"),"admission_status","complete review","is_complete_view",!0,"user_id",o.b,"is_done",!0],j,t.z)),i),$async$$0)
 case 6:n=b
 if(n.b===200){k=n
 B.aS.q0(A.wy(A.wr(k.e).c.a.h(0,"charset")).dm(k.w),null)}else{k=n
