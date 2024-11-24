@@ -41264,7 +41264,7 @@ j=t.N
 i=A.az(["Content-Type","application/json","supabase-url",u.y,"supabase-key",u.I],j,j)
 h=t.z
 s=6
-return A.I(A.Ip(k,B.ax.hI(A.az(["admission_id",J.o(J.o(o.a,0),"admission_id"),"admission_status","complete review","is_complete_view",!0,"user_id",o.b,"is_done",!0],j,h)),i),$async$$0)
+return A.I(A.Ip(k,B.ax.hI(A.az(["admission_id",J.o(J.o(o.a,0),"admission_id"),"admission_status","complete","is_complete_view",!0,"user_id",o.b,"is_done",!0],j,h)),i),$async$$0)
 case 6:n=b
 k=o.c
 if(n.b===200){j=n

@@ -472,7 +472,7 @@ String formatDate(DateTime date) {
                 },
                 body: json.encode({
                   'admission_id': details[0]['admission_id'], // Send admission_id in the request body
-                  'admission_status': "complete review",
+                  'admission_status': "complete",
                   'is_complete_view': true,
                   'user_id': userId,
                   'is_done': true,
