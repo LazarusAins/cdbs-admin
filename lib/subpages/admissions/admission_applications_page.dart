@@ -450,52 +450,110 @@ String formatDate(DateTime date) {
               ),
               const SizedBox(width: 8), // Spacing between buttons
               SizedBox(
-                height: 40,
-                child: ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: const Color(0xFF007A33), // Green color
-                    fixedSize: Size(178 * scale, 37 * scale), // Button size
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(5), // Border radius
-                    ),
-                  ),
-                  onPressed: isButtonEnabled? () async{
-                    // Action for second button
-                    try {
-                        final response = await http.post(
-                          Uri.parse('$apiUrl/api/admin/update_admission'),
-                          headers: {
-                            'Content-Type': 'application/json',
-                            'supabase-url': supabaseUrl,
-                            'supabase-key': supabaseKey,
-                          },
-                          body: json.encode({
-                            'admission_id': details[0]['admission_id'],  // Send customer_id in the request body
-                            'admission_status':"complete review",
-                            'is_complete_view':true,
-                            'user_id': userId,
-                            'is_done':true
-                          }),
-                        );
+  height: 40,
+  child: ElevatedButton(
+    style: ElevatedButton.styleFrom(
+      backgroundColor: const Color(0xFF007A33), // Green color
+      fixedSize: Size(178 * scale, 37 * scale), // Button size
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(5), // Border radius
+      ),
+    ),
+    onPressed: isButtonEnabled
+        ? () async {
+            // Perform the action
+            try {
+              final response = await http.post(
+                Uri.parse('$apiUrl/api/admin/update_admission'),
+                headers: {
+                  'Content-Type': 'application/json',
+                  'supabase-url': supabaseUrl,
+                  'supabase-key': supabaseKey,
+                },
+                body: json.encode({
+                  'admission_id': details[0]['admission_id'], // Send admission_id in the request body
+                  'admission_status': "complete review",
+                  'is_complete_view': true,
+                  'user_id': userId,
+                  'is_done': true,
+                }),
+              );
 
-                        if (response.statusCode == 200) {
-                          final responseBody = jsonDecode(response.body);
-                        } else {
-                          // Handle failure
-                          final responseBody = jsonDecode(response.body);
-                          print('Error: ${responseBody['error']}');
-                        }
-                      } catch (error) {
-                        // Handle error (e.g., network error)
-                        print('Error: $error');
-                      }
-                  }:null,
-                  child: Text(
-                    "Mark as Complete",
-                    style: TextStyle(color: Colors.white, fontFamily: 'Roboto-R', fontSize: 12 * scale),
+              if (response.statusCode == 200) {
+                final responseBody = jsonDecode(response.body);
+
+                // Show success modal
+                showDialog(
+                  context: context,
+                  builder: (context) => AlertDialog(
+                    title: const Text("Success"),
+                    content: const Text("The review has been marked as complete."),
+                    actions: [
+                      TextButton(
+                        onPressed: () {
+                          Navigator.of(context).pop(); // Close the dialog
+                        },
+                        child: const Text("OK"),
+                      ),
+                    ],
                   ),
+                );
+              } else {
+                // Handle failure
+                final responseBody = jsonDecode(response.body);
+                print('Error: ${responseBody['error']}');
+
+                // Show failure modal
+                showDialog(
+                  context: context,
+                  builder: (context) => AlertDialog(
+                    title: const Text("Error"),
+                    content: Text("Failed to complete review: ${responseBody['error']}"),
+                    actions: [
+                      TextButton(
+                        onPressed: () {
+                          Navigator.of(context).pop(); // Close the dialog
+                        },
+                        child: const Text("OK"),
+                      ),
+                    ],
+                  ),
+                );
+              }
+            } catch (error) {
+              // Handle error (e.g., network error)
+              print('Error: $error');
+
+              // Show error modal
+              showDialog(
+                context: context,
+                builder: (context) => AlertDialog(
+                  title: const Text("Error"),
+                  content: const Text("An unexpected error occurred. Please try again later."),
+                  actions: [
+                    TextButton(
+                      onPressed: () {
+                        Navigator.of(context).pop(); // Close the dialog
+                      },
+                      child: const Text("OK"),
+                    ),
+                  ],
                 ),
-              ),
+              );
+            }
+          }
+        : null,
+    child: Text(
+      "Mark as Complete",
+      style: TextStyle(
+        color: Colors.white,
+        fontFamily: 'Roboto-R',
+        fontSize: 12 * scale,
+      ),
+    ),
+  ),
+),
+
             ],
           ),
         ],
