@@ -27,6 +27,7 @@ class _UserGuestAccountsPage1State extends State<UserGuestAccountsPage1> {
   List<Map<String, dynamic>> requests = [];
   List<Map<String, dynamic>> filteredRequest = [];
   late ApiService _apiService;
+   List<Map<String, dynamic>>? formDetails;
 
   @override
   void initState() {
@@ -120,7 +121,7 @@ String formatDate(DateTime date) {
             ),
 
                         if (_selectedAction == 0) _buildDefaultContent(scale), // Default content
-            if (_selectedAction == 1) _buildViewContent(scale), // View content
+            if (_selectedAction == 1) _buildViewContent(scale, formDetails!, authState.uid), // View content
             if (_selectedAction == 2) _buildReminderContent(scale), // Reminder content
             if (_selectedAction == 3) _buildDeactivateContent(scale),
             if (_selectedAction == 0) ...[
@@ -312,10 +313,14 @@ String formatDate(DateTime date) {
                               flex: 1,
                               child: PopupMenuButton<int>(
                                 icon: const Icon(Icons.more_vert),
-                                onSelected: (value) {
+                                onSelected: (value)async {
+                                  List<Map<String, dynamic>> members = await ApiService(apiUrl).getDetailsById(request['admission_id'], supabaseUrl, supabaseKey);
+                                     if(members.isNotEmpty){
                                   setState(() {
+                                    formDetails=members;
                                     _selectedAction = value; // Change the selected action
                                   });
+                                     }
                                 },
                                 itemBuilder: (context) => [
                                   PopupMenuItem(
@@ -373,7 +378,7 @@ return Container();
   }
 
   // Build content for each action (VIEW, REMINDER, DEACTIVATE)
- Widget _buildViewContent(double scale) {
+ Widget _buildViewContent(double scale, List<Map<String, dynamic>> details, int user_id) {
     return Container(
   padding: const EdgeInsets.all(16),
   child: Column(

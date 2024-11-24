@@ -4,15 +4,30 @@ import 'package:flutter/material.dart';
 
 // Name of your class
 class AdmissionRequirementsPage2 extends StatefulWidget {
-  const AdmissionRequirementsPage2({super.key});
+
+  List<Map<String, dynamic>>? formDetails;
+  final Function(bool isClicked) onNextPressed;
+
+  AdmissionRequirementsPage2({super.key, required this.formDetails, required this.onNextPressed});
 
   @override
   State<AdmissionRequirementsPage2> createState() =>
       _AdmissionRequirementsPage2State();
 }
 
-class _AdmissionRequirementsPage2State
-    extends State<AdmissionRequirementsPage2> {
+class _AdmissionRequirementsPage2State extends State<AdmissionRequirementsPage2> {
+
+  String? applicationId;
+  String? fullName;
+
+  @override
+  void initState() {
+    super.initState();
+    print(widget.formDetails);
+    applicationId = widget.formDetails![0]['db_admission_table']['admission_form_id'];
+    fullName='${widget.formDetails![0]['db_admission_table']['first_name']} ${widget.formDetails![0]['db_admission_table']['last_name']}';
+  }
+
   @override
   Widget build(BuildContext context) {
     double screenHeight = MediaQuery.of(context).size.height;
@@ -24,127 +39,133 @@ class _AdmissionRequirementsPage2State
     double scale = widthScale < heightScale ? widthScale : heightScale;
 
     return Container(
-      padding: const EdgeInsets.all(16),
-      child: Column(
+  padding: const EdgeInsets.all(16),
+  child: Column(
+    children: [
+      const SizedBox(height: 40),
+      // First Row
+      Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          const SizedBox(height: 40),
-          // First Row
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              // Application ID
-              Expanded(
-                flex: 2,
-                child: _buildInfoColumn(
-                  label: 'Application ID',
-                  value: '9741',
-                  scale: scale,
-                ),
-              ),
-              const SizedBox(width: 16),
-
-              // Applicant Name
-              Expanded(
-                flex: 3,
-                child: _buildInfoColumn(
-                  label: 'Applicant Name',
-                  value: 'Lazarus Ains',
-                  scale: scale,
-                ),
-              ),
-              const SizedBox(width: 16),
-
-              // Grade Level
-              Expanded(
-                flex: 2,
-                child: _buildInfoColumn(
-                  label: 'Grade Level',
-                  value: '11',
-                  scale: scale,
-                ),
-              ),
-              const SizedBox(width: 16),
-
-              // Application Status
-              Expanded(
-                flex: 4,
-                child: _buildInfoColumn(
-                  label: 'Application Status',
-                  value: 'REQUIREMENTS - IN REVIEW',
-                  scale: scale,
-                ),
-              ),
-            ],
+          // Application ID
+          Expanded(
+            flex: 2,
+            child: _buildInfoColumn(
+              label: "Application ID",
+              value: applicationId!,
+              scale: scale,
+            ),
           ),
+          const SizedBox(width: 16),
 
-          const SizedBox(height: 16), // Space between rows
-
-          // Second Row
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              // Date Submitted
-              SizedBox(
-                width: 240,
-                child: Expanded(
-                  child: _buildInfoColumn(
-                    label: 'Date Created',
-                    value: '2024-11-20',
-                    scale: scale,
-                  ),
-                ),
-              ),
-            ],
+          // Applicant Name
+          Expanded(
+            flex: 3,
+            child: _buildInfoColumn(
+              label: 'Applicant Name',
+              value: fullName!,
+              scale: scale,
+            ),
           ),
-          const SizedBox(height: 80),
-          const Divider(),
+          const SizedBox(width: 16),
 
-          // Attached Documents
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Text(
-                'Attached Document/s',
-                style: TextStyle(fontSize: 16 * scale, fontFamily: 'Roboto-R'),
-              ),
-            ],
+          // Grade Level
+          Expanded(
+            flex: 2,
+            child: _buildInfoColumn(
+              label: 'Grade Level',
+              value: '11',
+              scale: scale,
+            ),
           ),
+          const SizedBox(width: 16),
 
-          const SizedBox(height: 40), // Space before images
-
-          // Row of Images
-          Row(
-            children: [
-              _buildImageCard(
-                  imagePath: 'assets/q4.jpg', label: '*Birth Certificate (PSA Copy)', scale: scale),
-              const SizedBox(width: 20),
-              _buildImageCard(
-                  imagePath: 'assets/q2.jpg', label: '*Recent ID Photo', scale: scale),
-              const SizedBox(width: 20),
-              _buildImageCard(
-                  imagePath: 'assets/q3.jpg', label: '*Parent Questionnaire', scale: scale),
-              const SizedBox(width: 20),
-              _buildImageCard(
-                  imagePath: 'assets/q4.jpg', label: 'Baptismal Certificate', scale: scale),
-              const SizedBox(width: 20),
-              _buildImageCard(
-                label: 'First Communion Certificate',
-                scale: scale,
-                isPlaceholder: true,
-                isDashedLine: true, // Dashed border for placeholder
-              ),
-              const SizedBox(width: 20),
-              _buildImageCard(
-                label: 'Parent’s Marriage Certificate',
-                scale: scale,
-                isPlaceholder: true,
-                isDashedLine: true, // Dashed border for placeholder
-              ),
-            ],
+          // Application Status
+          Expanded(
+            flex: 4,
+            child: _buildInfoColumn(
+              label: 'Application Status',
+              value: 'REQUIREMENTS - IN REVIEW',
+              scale: scale,
+            ),
           ),
         ],
       ),
-    );
+      const SizedBox(height: 16), // Space between rows
+
+      // Second Row
+      Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          // Date Submitted
+          Expanded(
+            child: _buildInfoColumn(
+              label: 'Date Created',
+              value: '2024-11-20',
+              scale: scale,
+            ),
+          ),
+        ],
+      ),
+      const SizedBox(height: 80),
+      const Divider(),
+
+      // Attached Documents Header
+      Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Text(
+            'Attached Document/s',
+            style: TextStyle(fontSize: 16 * scale, fontFamily: 'Roboto-R'),
+          ),
+        ],
+      ),
+
+      const SizedBox(height: 40), // Space before images
+
+      // Row of Images
+      Wrap(
+        alignment: WrapAlignment.start,
+        spacing: 20,
+        runSpacing: 20,
+        children: [
+          _buildImageCard(
+            imagePath: 'assets/q4.jpg',
+            label: '*Birth Certificate (PSA Copy)',
+            scale: scale,
+          ),
+          _buildImageCard(
+            imagePath: 'assets/q2.jpg',
+            label: '*Recent ID Photo',
+            scale: scale,
+          ),
+          _buildImageCard(
+            imagePath: 'assets/q3.jpg',
+            label: '*Parent Questionnaire',
+            scale: scale,
+          ),
+          _buildImageCard(
+            imagePath: 'assets/q4.jpg',
+            label: 'Baptismal Certificate',
+            scale: scale,
+          ),
+          _buildImageCard(
+            label: 'First Communion Certificate',
+            scale: scale,
+            isPlaceholder: true,
+            isDashedLine: true, // Dashed border for placeholder
+          ),
+          _buildImageCard(
+            label: 'Parent’s Marriage Certificate',
+            scale: scale,
+            isPlaceholder: true,
+            isDashedLine: true, // Dashed border for placeholder
+          ),
+        ],
+      ),
+    ],
+  ),
+);
   }
 
   // Helper method to create the individual information column
