@@ -1,6 +1,8 @@
 import 'dart:ui';
 
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:intl/intl.dart';
 
 // Name of your class
@@ -54,6 +56,7 @@ class _AdmissionRequirementsPage2State extends State<AdmissionRequirementsPage2>
     return Container(
   padding: const EdgeInsets.all(16),
   child: Column(
+    crossAxisAlignment: CrossAxisAlignment.start,
     children: [
       const SizedBox(height: 40),
       // First Row
@@ -142,7 +145,31 @@ class _AdmissionRequirementsPage2State extends State<AdmissionRequirementsPage2>
         spacing: 20,
         runSpacing: 20,
         children: [
-          _buildImageCard(
+
+          if (widget.formDetails != null && widget.formDetails!.isNotEmpty)
+            ...widget.formDetails![0]['db_admission_table']['db_required_documents_table']
+                .map<Widget>((document) {
+              // Check if the document has a document_url
+              if (document != null && document['document_url'] != null) {
+                String originalUrl = document['document_url'].substring(2, document['document_url'].length - 2);
+                String encodedUrl = Uri.encodeFull(originalUrl);
+
+                return _buildImageCard(
+                  imagePath: encodedUrl, // Use document_url
+                  label:  document['db_requirement_type_table']['doc_type'], // Default label if not provided
+                  scale: scale,
+                );
+              } else {
+                // If no document_url is provided, show a placeholder
+                return _buildImageCard(
+                  label:  document['db_requirement_type_table']['doc_type'], // Display document name
+                  scale: scale,
+                  isPlaceholder: true,
+                  isDashedLine: true, // Dashed border for placeholder
+                );
+              }
+            }).toList(),
+         /* _buildImageCard(
             imagePath: 'assets/q4.jpg',
             label: '*Birth Certificate (PSA Copy)',
             scale: scale,
@@ -173,7 +200,7 @@ class _AdmissionRequirementsPage2State extends State<AdmissionRequirementsPage2>
             scale: scale,
             isPlaceholder: true,
             isDashedLine: true, // Dashed border for placeholder
-          ),
+          ),*/
         ],
       ),
     ],
@@ -220,7 +247,7 @@ class _AdmissionRequirementsPage2State extends State<AdmissionRequirementsPage2>
   }
 
   // Helper method to create image cards
-  Widget _buildImageCard({
+ /* Widget _buildImageCard({
     String? imagePath,
     required String label,
     required double scale,
@@ -272,7 +299,83 @@ class _AdmissionRequirementsPage2State extends State<AdmissionRequirementsPage2>
         ],
       ),
     );
-  }
+  }*/
+
+  Widget _buildImageCard({
+  String? imagePath,
+  required String label,
+  required double scale,
+  bool isPlaceholder = false,
+  bool isDashedLine = false,
+}) {
+  return GestureDetector(
+    onTap: () {
+      _showImageDialog(imagePath);
+      print(imagePath);
+    }, // Open dialog on tap
+    child: Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        SizedBox(
+          width: 158,
+          height: 89,
+          child: isDashedLine
+              ? CustomPaint(
+                  painter: DashedBorderPainter(),
+                  child: Center(
+                    child: isPlaceholder
+                        ? Text(
+                            "No Image",
+                            style: TextStyle(
+                              fontSize: 10 * scale,
+                              color: Colors.grey,
+                            ),
+                          )
+                        : null,
+                  ),
+                )
+              : ClipRRect(
+                  borderRadius: BorderRadius.circular(5), // Image radius
+                  child: imagePath != null
+                      ? Image.network(
+                          imagePath,
+                          width: 158,
+                          height: 89,
+                          fit: BoxFit.cover,
+                          errorBuilder: (context, error, stackTrace) {
+                            return const Center(
+                              child: Text(
+                                "Failed to load image",
+                                style: TextStyle(color: Colors.grey),
+                              ),
+                            );
+                          },
+                        )
+                      : Center(
+                          child: Text(
+                            "No Image",
+                            style: TextStyle(
+                              fontSize: 10 * scale,
+                              color: Colors.grey,
+                            ),
+                          ),
+                        ),
+                ),
+        ),
+        const SizedBox(height: 8), // Space between image and text
+        Text(
+          label,
+          style: TextStyle(
+            fontSize: 11 * scale,
+            fontFamily: 'Roboto-R',
+          ),
+          textAlign: TextAlign.left, // Align text to the left
+        ),
+      ],
+    ),
+  );
+}
+
 
   // Show image dialog when image is clicked
   void _showImageDialog(String? imagePath) {
@@ -285,19 +388,27 @@ class _AdmissionRequirementsPage2State extends State<AdmissionRequirementsPage2>
           ),
           child: Container(
             width: 550,
-            height: 600,
+            height: 900,
             padding: const EdgeInsets.all(16),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 ClipRRect(
                   borderRadius: BorderRadius.circular(10),
-                  child: Image.asset(
-                    imagePath!,
-                    width: 200,
-                    height: 200,
-                    fit: BoxFit.cover,
-                  ),
+                  child: CachedNetworkImage(
+                          imageUrl: imagePath!,
+                          placeholder: (context, url) => const SizedBox(
+                            width: 5.0, // Set your desired width
+                            height: 30.0, // Set your desired height
+                            child: Center(child: SpinKitCircle(
+                              color: Color(
+                                  0xff13322B), // Change the color as needed
+                              size: 50.0, // Adjust size as needed
+                            )),
+                          ),
+                          
+                        )
+
                 ),
                 const SizedBox(height: 20),
                 Row(
