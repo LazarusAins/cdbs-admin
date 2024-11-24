@@ -393,7 +393,7 @@ String formatDate(DateTime date) {
   }
 
   // Build content for each action (VIEW, REMINDER, DEACTIVATE)
-  Widget _buildViewContent(double scale, List<Map<String, dynamic>> details, int user_id) {
+  Widget _buildViewContent(double scale, List<Map<String, dynamic>> details, int userId) {
     return BlocConsumer<AdmissionBloc, AdmissionState>(
       listener: (context, state) {},
       builder: (context, state) {
@@ -473,7 +473,7 @@ String formatDate(DateTime date) {
                             'admission_id': details[0]['admission_id'],  // Send customer_id in the request body
                             'admission_status':"complete review",
                             'is_complete_view':true,
-                            'user_id': user_id,
+                            'user_id': userId,
                             'is_done':true
                           }),
                         );

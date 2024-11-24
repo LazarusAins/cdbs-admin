@@ -1,3 +1,4 @@
+import 'package:cdbs_admin/bloc/admission_bloc/admission_bloc.dart';
 import 'package:cdbs_admin/bloc/auth/auth_bloc.dart';
 import 'package:cdbs_admin/class/admission_forms.dart';
 import 'package:cdbs_admin/shared/api.dart';
@@ -33,13 +34,19 @@ class _UserGuestAccountsPage1State extends State<UserGuestAccountsPage1> {
   void initState() {
     super.initState();
     _apiService = ApiService(apiUrl); // Replace with your actual API URL
-    admissionForms = _apiService.streamAdmissionForms(supabaseUrl, supabaseKey);
+    admissionForms = _apiService.streamRegisteredUser(supabaseUrl, supabaseKey);
     // Initialize the service with your endpoint
   }
 
   
 String formatDate(DateTime date) {
     final DateFormat formatter = DateFormat('dd-MM-yyyy HH:mm');
+    return formatter.format(date);
+  }
+
+
+  String stringDate(DateTime date) {
+    final DateFormat formatter = DateFormat('dd-MM-yyyy');
     return formatter.format(date);
   }
 
@@ -233,14 +240,23 @@ String formatDate(DateTime date) {
                 itemCount: filteredRequest.length,
                 itemBuilder: (context, index) {
                   final request = filteredRequest[index];
-                  final fullName = '${request['db_admission_table']['first_name']} ${request['db_admission_table']['last_name']}';
-                  final processBy = request['db_admission_table']['db_admission_form_handler_table'].isNotEmpty
-    ? '${request['db_admission_table']['db_admission_form_handler_table'][0]['db_admin_table']['first_name']} ${request['db_admission_table']['db_admission_form_handler_table'][0]['db_admin_table']['last_name']}'
-    : '---';
-
-                  String dateCreatedString = request['db_admission_table']['created_at'];
-                  DateTime dateCreated = DateTime.parse(dateCreatedString);
-                  String formattedDate = formatDate(dateCreated);
+                  final fullName = '${request['first_name']} ${request['last_name']}';
+                  String dateCreatedString;
+                  DateTime dateCreated;
+                  String formattedDate;
+                  DateTime now= DateTime.now();
+                  String today = DateFormat('dd-MM-yyyy').format(DateTime.now());
+                  String loginDate;
+                  if(request['last_login']!=null){
+                    dateCreatedString= request['last_login'];
+                    dateCreated = DateTime.parse(dateCreatedString);
+                    formattedDate = formatDate(dateCreated);
+                    loginDate=stringDate(dateCreated);
+                  }else{
+                    formattedDate='---';
+                    loginDate='';
+                  }
+                  
                   return Column(
                     children: [
                       Row(
@@ -270,8 +286,7 @@ String formatDate(DateTime date) {
 
                           Expanded(
                             flex: 2,
-                            child: Text(
-                              '0912-345-678$index',
+                            child: Text(request['contact_no'],
                               style: TextStyle(fontFamily: 'Roboto-R', fontSize: 14 * scale),
                             ),
                           ),
@@ -280,8 +295,16 @@ String formatDate(DateTime date) {
                           
                           Expanded(
                             flex: 3,
-                            child: Text(
-                              'email$index@gmail.com',
+                            child: Text(request['email_address'],
+                              style: TextStyle(fontFamily: 'Roboto-R', fontSize: 14 * scale),
+                            ),
+                          ),
+
+                          const SizedBox(width: 40,),
+
+                          Expanded(
+                            flex: 2,
+                            child: Text(today==loginDate?'ACTIVE':"INACTIVE",
                               style: TextStyle(fontFamily: 'Roboto-R', fontSize: 14 * scale),
                             ),
                           ),
@@ -291,17 +314,7 @@ String formatDate(DateTime date) {
                           Expanded(
                             flex: 2,
                             child: Text(
-                              request['db_admission_table']['admission_status'].toString().toUpperCase(),
-                              style: TextStyle(fontFamily: 'Roboto-R', fontSize: 14 * scale),
-                            ),
-                          ),
-
-                          const SizedBox(width: 40,),
-
-                          Expanded(
-                            flex: 2,
-                            child: Text(
-                              formattedDate,
+                              formattedDate ??"",
                               style: TextStyle(fontFamily: 'Roboto-R', fontSize: 14 * scale),
                             ),
                           ),
@@ -314,7 +327,7 @@ String formatDate(DateTime date) {
                               child: PopupMenuButton<int>(
                                 icon: const Icon(Icons.more_vert),
                                 onSelected: (value)async {
-                                  List<Map<String, dynamic>> members = await ApiService(apiUrl).getDetailsById(request['admission_id'], supabaseUrl, supabaseKey);
+                                  List<Map<String, dynamic>> members = await ApiService(apiUrl).getUserAllRequest(request['user_id'], supabaseUrl, supabaseKey);
                                      if(members.isNotEmpty){
                                   setState(() {
                                     formDetails=members;
@@ -378,7 +391,17 @@ return Container();
   }
 
   // Build content for each action (VIEW, REMINDER, DEACTIVATE)
- Widget _buildViewContent(double scale, List<Map<String, dynamic>> details, int user_id) {
+ Widget _buildViewContent(double scale, List<Map<String, dynamic>> details, int userId) {
+
+     return BlocConsumer<AdmissionBloc, AdmissionState>(
+      listener: (context, state) {},
+      builder: (context, state) {
+              bool isButtonEnabled = false;
+
+              // Enable button based on the state
+              if (state is AdmissionStatusUpdated) {
+                isButtonEnabled = state.isComplete;
+              }
     return Container(
   padding: const EdgeInsets.all(16),
   child: Column(
@@ -401,10 +424,14 @@ return Container();
           ),
         ],
       ),
-      const UserGuestAccountsPage2(),
+       UserGuestAccountsPage2(formDetails: details, onNextPressed: (bool isClicked) {
+         context.read<AdmissionBloc>().add(MarkAsCompleteClicked(isClicked));
+       }),
     ],
   ),
 );
+      }
+     ); 
   }
 
   Widget _buildReminderContent(double scale) {
