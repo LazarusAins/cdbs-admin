@@ -333,6 +333,8 @@ String formatDate(DateTime date) {
                                     formDetails=members;
                                     _selectedAction = value; // Change the selected action
                                   });
+                                     }else{
+                                      _showMessage('No form submitted', "Form Submit");
                                      }
                                 },
                                 itemBuilder: (context) => [
@@ -485,6 +487,39 @@ return Container();
       //   '',
       //   style: TextStyle(fontSize: 18 * scale),
       // ),
+    );
+  }
+
+  void _showMessage(String message, String title) {
+    showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          backgroundColor: Colors.white,
+          shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(20.0),
+              side: const BorderSide(color: Color(0xff13322b), width: 2)),
+          title: Center(
+              child: Text(
+            title,
+            style: const TextStyle(
+                fontSize: 16,
+                fontWeight: FontWeight.w700,
+                color: Color(0xff13322b)),
+          )),
+          content: Text(message,
+              style: const TextStyle(fontSize: 16, color: Color(0xff13322b))),
+          actions: <Widget>[
+            TextButton(
+              child: const Text("OK",
+                  style: TextStyle(fontSize: 16, color: Color(0xff13322b))),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
     );
   }
 }
