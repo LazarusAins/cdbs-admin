@@ -1,9 +1,13 @@
 import 'dart:ui';
 
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:cdbs_admin/class/admission_forms.dart';
+import 'package:cdbs_admin/shared/api.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:intl/intl.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
 
 // Name of your class
 class AdmissionRequirementsPage2 extends StatefulWidget {
@@ -25,17 +29,24 @@ class _AdmissionRequirementsPage2State extends State<AdmissionRequirementsPage2>
   String? status;
   String? dateCreatedString;
   String? formattedDate;
+  String? docStatus;
+
+  List<Map<String, dynamic>> myformDetails=[];
 
   @override
   void initState() {
     super.initState();
-    print(widget.formDetails);
-    applicationId = widget.formDetails![0]['db_admission_table']['admission_form_id'];
-    fullName='${widget.formDetails![0]['db_admission_table']['first_name']} ${widget.formDetails![0]['db_admission_table']['last_name']}';
-    status=widget.formDetails![0]['db_admission_table']['admission_status'];
-    dateCreatedString = widget.formDetails![0]['db_admission_table']['created_at'];
+    myformDetails=widget.formDetails!;
+    applicationId = myformDetails[0]['db_admission_table']['admission_form_id'];
+    fullName='${myformDetails[0]['db_admission_table']['first_name']} ${myformDetails[0]['db_admission_table']['last_name']}';
+    status=myformDetails[0]['db_admission_table']['admission_status'];
+    dateCreatedString = myformDetails[0]['db_admission_table']['created_at'];
     DateTime dateCreated = DateTime.parse(dateCreatedString!);
     formattedDate = formatDate(dateCreated);
+  }
+
+  Future<void> updateData(int admissionId) async  {
+    myformDetails = await ApiService(apiUrl).getFormsDetailsById(admissionId, supabaseUrl, supabaseKey);
   }
 
   String formatDate(DateTime date) {
@@ -90,7 +101,7 @@ class _AdmissionRequirementsPage2State extends State<AdmissionRequirementsPage2>
             flex: 2,
             child: _buildInfoColumn(
               label: 'Grade Level',
-              value: widget.formDetails![0]['db_admission_table']['level_applying_for'],
+              value: myformDetails[0]['db_admission_table']['level_applying_for'],
               scale: scale,
             ),
           ),
@@ -146,26 +157,34 @@ class _AdmissionRequirementsPage2State extends State<AdmissionRequirementsPage2>
         runSpacing: 20,
         children: [
 
-          if (widget.formDetails != null && widget.formDetails!.isNotEmpty)
-            ...widget.formDetails![0]['db_admission_table']['db_required_documents_table']
+          if (myformDetails.isNotEmpty)
+            ...myformDetails[0]['db_admission_table']['db_required_documents_table']
                 .map<Widget>((document) {
               // Check if the document has a document_url
               if (document != null && document['document_url'] != null) {
                 String originalUrl = document['document_url'].substring(2, document['document_url'].length - 2);
                 String encodedUrl = Uri.encodeFull(originalUrl);
-
+                docStatus=document['document_status'];
                 return _buildImageCard(
                   imagePath: encodedUrl, // Use document_url
+                  id:document['required_doc_id'],
+                  status: docStatus,
                   label:  document['db_requirement_type_table']['doc_type'], // Default label if not provided
                   scale: scale,
+                  setState: setState,
+                  admissionId: document['admission_id']
                 );
               } else {
                 // If no document_url is provided, show a placeholder
                 return _buildImageCard(
-                  label:  document['db_requirement_type_table']['doc_type'], // Display document name
+                  label:  'Image is not Available', // Display document name
+                  id:document['required_doc_id'],
+                  status: docStatus,
                   scale: scale,
                   isPlaceholder: true,
                   isDashedLine: true, // Dashed border for placeholder
+                  setState: setState,
+                  admissionId: document['admission_id']
                 );
               }
             }).toList(),
@@ -301,16 +320,20 @@ class _AdmissionRequirementsPage2State extends State<AdmissionRequirementsPage2>
     );
   }*/
 
-  Widget _buildImageCard({
+ /* Widget _buildImageCard({
   String? imagePath,
+  int? id,
+  int? admissionId,
+  String? status,
   required String label,
   required double scale,
   bool isPlaceholder = false,
   bool isDashedLine = false,
+  required StateSetter setState
 }) {
   return GestureDetector(
     onTap: () {
-      _showImageDialog(imagePath);
+      _showImageDialog(imagePath, id!, admissionId!);
       print(imagePath);
     }, // Open dialog on tap
     child: Column(
@@ -363,13 +386,131 @@ class _AdmissionRequirementsPage2State extends State<AdmissionRequirementsPage2>
                 ),
         ),
         const SizedBox(height: 8), // Space between image and text
-        Text(
-          label,
-          style: TextStyle(
-            fontSize: 11 * scale,
-            fontFamily: 'Roboto-R',
+        Column(
+          children: [
+            Text(
+              label,
+              style: TextStyle(
+                fontSize: 11 * scale,
+                fontFamily: 'Roboto-R',
+              ),
+              textAlign: TextAlign.left, // Align text to the left
+            ),
+            Text(status!!='pending'?status.toUpperCase():'',
+              style: TextStyle(
+                fontSize: 11 * scale,
+                fontFamily: 'Roboto-R',
+              ),
+              textAlign: TextAlign.left, // Align text to the left
+            )
+          ],
+        ),
+      ],
+    ),
+  );
+}*/
+
+
+Widget _buildImageCard({
+  String? imagePath,
+  int? id,
+  int? admissionId,
+  String? status,
+  required String label,
+  required double scale,
+  bool isPlaceholder = false,
+  bool isDashedLine = false,
+  required StateSetter setState
+}) {
+  // Determine the color for the status circle
+  Color statusColor = Colors.transparent;
+  if (status == 'accepted') {
+    statusColor = Colors.green;
+  } else if (status == 'rejected') {
+    statusColor = Colors.red;
+  } // Default is transparent for 'pending'
+
+  return GestureDetector(
+    onTap: () {
+      _showImageDialog(imagePath, id!, admissionId!);
+      print(imagePath);
+    }, // Open dialog on tap
+    child: Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        SizedBox(
+          width: 158,
+          height: 89,
+          child: Stack(
+            clipBehavior: Clip.none,  // Allow content to overflow out of the Stack
+            children: [
+              // Image or placeholder
+              isDashedLine
+                  ? CustomPaint(
+                      painter: DashedBorderPainter(),
+                      child: Center(
+                        child: isPlaceholder
+                            ? Text(
+                                "No Image",
+                                style: TextStyle(
+                                  fontSize: 10 * scale,
+                                  color: Colors.grey,
+                                ),
+                              )
+                            : null,
+                      ),
+                    )
+                  : ClipRRect(
+                      borderRadius: BorderRadius.circular(5), // Image radius
+                      child: imagePath != null
+                          ? Image.network(
+                              imagePath,
+                              width: 158,
+                              height: 89,
+                              fit: BoxFit.cover,
+                              errorBuilder: (context, error, stackTrace) {
+                                return const Center(
+                                  child: Text(
+                                    "Failed to load image",
+                                    style: TextStyle(color: Colors.grey),
+                                  ),
+                                );
+                              },
+                            )
+                          : Center(
+                              child: Text(
+                                "No Image",
+                                style: TextStyle(
+                                  fontSize: 10 * scale,
+                                  color: Colors.grey,
+                                ),
+                              ),
+                            ),
+                    ),
+              // Status circle in the upper-right corner (floating above the image)
+              Positioned(
+                top: -4,  // Move it slightly outside the image (top)
+                right: -4, // Move it slightly outside the image (right)
+                child: CircleAvatar(
+                  radius: 10,  // Larger radius for the floating effect
+                  backgroundColor: statusColor,
+                ),
+              ),
+            ],
           ),
-          textAlign: TextAlign.left, // Align text to the left
+        ),
+        const SizedBox(height: 8), // Space between image and text
+        Column(
+          children: [
+            Text(
+              label,
+              style: TextStyle(
+                fontSize: 11 * scale,
+                fontFamily: 'Roboto-R',
+              ),
+              textAlign: TextAlign.left, // Align text to the left
+            ),
+          ],
         ),
       ],
     ),
@@ -377,8 +518,10 @@ class _AdmissionRequirementsPage2State extends State<AdmissionRequirementsPage2>
 }
 
 
+
+
   // Show image dialog when image is clicked
-  void _showImageDialog(String? imagePath) {
+  void _showImageDialog(String? imagePath, int id, int admissionId) {
     showDialog(
       context: context,
       builder: (BuildContext context) {
@@ -415,9 +558,88 @@ class _AdmissionRequirementsPage2State extends State<AdmissionRequirementsPage2>
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     ElevatedButton(
-                      onPressed: () {
+                      onPressed: ()async {
                         // Handle accept action
-                        Navigator.pop(context);
+                        try {
+                          final response = await http.post(
+                            Uri.parse('$apiUrl/api/admin/update_required_form'),
+                            headers: {
+                              'Content-Type': 'application/json',
+                              'supabase-url': supabaseUrl,
+                              'supabase-key': supabaseKey,
+                            },
+                            body: json.encode({
+                              'document_status': 'accepted', // Send admission_id in the request body
+                              'required_doc_id': id
+                            }),
+                          );
+
+                          if (response.statusCode == 200) {
+                            final responseBody = jsonDecode(response.body);
+                            print(admissionId);
+                            setState(() {
+                            updateData(admissionId);
+                            });
+                            // Show success modal
+                            showDialog(
+                              context: context,
+                              builder: (context) => AlertDialog(
+                                title: const Text("Success"),
+                                content: const Text("The review has been marked as complete."),
+                                actions: [
+                                  TextButton(
+                                    onPressed: () {
+                                      Navigator.of(context).popUntil((route) => route.isFirst); // Close the dialog
+                                    },
+                                    child: const Text("OK"),
+                                  ),
+                                ],
+                              ),
+                            );
+                            
+                          } else {
+                            // Handle failure
+                            final responseBody = jsonDecode(response.body);
+                            print('Error: ${responseBody['error']}');
+
+                            // Show failure modal
+                            showDialog(
+                              context: context,
+                              builder: (context) => AlertDialog(
+                                title: const Text("Error"),
+                                content: Text("Failed to complete review: ${responseBody['error']}"),
+                                actions: [
+                                  TextButton(
+                                    onPressed: () {
+                                      Navigator.of(context).pop(); // Close the dialog
+                                    },
+                                    child: const Text("OK"),
+                                  ),
+                                ],
+                              ),
+                            );
+                          }
+                        } catch (error) {
+                          // Handle error (e.g., network error)
+                          print('Error: $error');
+
+                          // Show error modal
+                          showDialog(
+                            context: context,
+                            builder: (context) => AlertDialog(
+                              title: const Text("Error"),
+                              content: const Text("An unexpected error occurred. Please try again later."),
+                              actions: [
+                                TextButton(
+                                  onPressed: () {
+                                    Navigator.of(context).pop(); // Close the dialog
+                                  },
+                                  child: const Text("OK"),
+                                ),
+                              ],
+                            ),
+                          );
+                        }
                       },
                       style: ElevatedButton.styleFrom(
                         backgroundColor: Colors.green,
@@ -427,9 +649,87 @@ class _AdmissionRequirementsPage2State extends State<AdmissionRequirementsPage2>
                     ),
                     const SizedBox(width: 20),
                     ElevatedButton(
-                      onPressed: () {
-                        // Handle reject action
-                        Navigator.pop(context);
+                      onPressed: () async{
+                        try {
+                          final response = await http.post(
+                            Uri.parse('$apiUrl/api/admin/update_required_form'),
+                            headers: {
+                              'Content-Type': 'application/json',
+                              'supabase-url': supabaseUrl,
+                              'supabase-key': supabaseKey,
+                            },
+                            body: json.encode({
+                              'document_status': 'rejected', // Send admission_id in the request body
+                              'required_doc_id': id
+                            }),
+                          );
+
+                          if (response.statusCode == 200) {
+                            final responseBody = jsonDecode(response.body);
+                            print(admissionId);
+                            setState(() {
+                            updateData(admissionId);
+                            });
+                            // Show success modal
+                            showDialog(
+                              context: context,
+                              builder: (context) => AlertDialog(
+                                title: const Text("Reject"),
+                                content: const Text("The review has been marked as rejected."),
+                                actions: [
+                                  TextButton(
+                                    onPressed: () {
+                                      Navigator.of(context).popUntil((route) => route.isFirst); // Close the dialog
+                                    },
+                                    child: const Text("OK"),
+                                  ),
+                                ],
+                              ),
+                            );
+                            
+                          } else {
+                            // Handle failure
+                            final responseBody = jsonDecode(response.body);
+                            print('Error: ${responseBody['error']}');
+
+                            // Show failure modal
+                            showDialog(
+                              context: context,
+                              builder: (context) => AlertDialog(
+                                title: const Text("Error"),
+                                content: Text("Failed to complete review: ${responseBody['error']}"),
+                                actions: [
+                                  TextButton(
+                                    onPressed: () {
+                                      Navigator.of(context).pop(); // Close the dialog
+                                    },
+                                    child: const Text("OK"),
+                                  ),
+                                ],
+                              ),
+                            );
+                          }
+                        } catch (error) {
+                          // Handle error (e.g., network error)
+                          print('Error: $error');
+
+                          // Show error modal
+                          showDialog(
+                            context: context,
+                            builder: (context) => AlertDialog(
+                              title: const Text("Error"),
+                              content: const Text("An unexpected error occurred. Please try again later."),
+                              actions: [
+                                TextButton(
+                                  onPressed: () {
+                                    Navigator.of(context).pop(); // Close the dialog
+                                  },
+                                  child: const Text("OK"),
+                                ),
+                              ],
+                            ),
+                          );
+                        }
                       },
                       style: ElevatedButton.styleFrom(
                         backgroundColor: Colors.red,
