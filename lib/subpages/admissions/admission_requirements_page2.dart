@@ -1,6 +1,7 @@
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 // Name of your class
 class AdmissionRequirementsPage2 extends StatefulWidget {
@@ -19,6 +20,9 @@ class _AdmissionRequirementsPage2State extends State<AdmissionRequirementsPage2>
 
   String? applicationId;
   String? fullName;
+  String? status;
+  String? dateCreatedString;
+  String? formattedDate;
 
   @override
   void initState() {
@@ -26,6 +30,15 @@ class _AdmissionRequirementsPage2State extends State<AdmissionRequirementsPage2>
     print(widget.formDetails);
     applicationId = widget.formDetails![0]['db_admission_table']['admission_form_id'];
     fullName='${widget.formDetails![0]['db_admission_table']['first_name']} ${widget.formDetails![0]['db_admission_table']['last_name']}';
+    status=widget.formDetails![0]['db_admission_table']['admission_status'];
+    dateCreatedString = widget.formDetails![0]['db_admission_table']['created_at'];
+    DateTime dateCreated = DateTime.parse(dateCreatedString!);
+    formattedDate = formatDate(dateCreated);
+  }
+
+  String formatDate(DateTime date) {
+    final DateFormat formatter = DateFormat('dd-MM-yyyy HH:mm');
+    return formatter.format(date);
   }
 
   @override
@@ -74,7 +87,7 @@ class _AdmissionRequirementsPage2State extends State<AdmissionRequirementsPage2>
             flex: 2,
             child: _buildInfoColumn(
               label: 'Grade Level',
-              value: '11',
+              value: widget.formDetails![0]['db_admission_table']['level_applying_for'],
               scale: scale,
             ),
           ),
@@ -85,7 +98,7 @@ class _AdmissionRequirementsPage2State extends State<AdmissionRequirementsPage2>
             flex: 4,
             child: _buildInfoColumn(
               label: 'Application Status',
-              value: 'REQUIREMENTS - IN REVIEW',
+              value: status!.toUpperCase(),
               scale: scale,
             ),
           ),
@@ -101,7 +114,7 @@ class _AdmissionRequirementsPage2State extends State<AdmissionRequirementsPage2>
           Expanded(
             child: _buildInfoColumn(
               label: 'Date Created',
-              value: '2024-11-20',
+              value: formattedDate!,
               scale: scale,
             ),
           ),

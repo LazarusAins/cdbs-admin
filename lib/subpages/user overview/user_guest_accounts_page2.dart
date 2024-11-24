@@ -1,13 +1,34 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 class UserGuestAccountsPage2 extends StatefulWidget {
-  const UserGuestAccountsPage2({super.key});
+    List<Map<String, dynamic>>? formDetails;
+  final Function(bool isClicked) onNextPressed;
+  
+  UserGuestAccountsPage2({super.key, required this.formDetails, required this.onNextPressed});
 
   @override
   State<UserGuestAccountsPage2> createState() => _UserGuestAccountsPage2State();
 }
 
 class _UserGuestAccountsPage2State extends State<UserGuestAccountsPage2> {
+
+
+    String? applicationId;
+  String? fullName;
+
+  @override
+  void initState() {
+    super.initState();
+    print(widget.formDetails);
+  }
+
+  String formatDate(DateTime date) {
+    final DateFormat formatter = DateFormat('dd-MM-yyyy');
+    return formatter.format(date);
+  }
+
+
   @override
   Widget build(BuildContext context) {
     double screenHeight = MediaQuery.of(context).size.height;
@@ -42,22 +63,21 @@ class _UserGuestAccountsPage2State extends State<UserGuestAccountsPage2> {
                       fit: BoxFit.cover,
                     ),
                   ),
-                  const Column(
+                  Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     mainAxisAlignment: MainAxisAlignment.center, 
                     children: [
-                      Text(
-                        'John Mark Romero',
-                        style: TextStyle(
+                      Text('${widget.formDetails![0]['db_admission_users_table']['first_name']} ${widget.formDetails![0]['db_admission_users_table']['last_name']}',
+                        style: const TextStyle(
                           fontSize: 16,
                           fontFamily: 'Roboto-R',
                           fontWeight: FontWeight.bold,
                         ),
                       ),
-                      SizedBox(height: 4),
+                      const SizedBox(height: 4),
                       Text(
-                        'jm@email.com / 0912-345-678',
-                        style: TextStyle(
+                        '${widget.formDetails![0]['db_admission_users_table']['email_address']} / ${widget.formDetails![0]['db_admission_users_table']['contact_no']}',
+                        style: const TextStyle(
                           fontSize: 14,
                           fontFamily: 'Roboto-R',
                           color: Colors.grey,
@@ -77,115 +97,133 @@ class _UserGuestAccountsPage2State extends State<UserGuestAccountsPage2> {
           const SizedBox(height: 40),
 
           // Three Copies of Rows in Containers
-          for (int i = 0; i < 2; i++) 
-            Container(
-              padding: const EdgeInsets.all(16),
-              decoration: BoxDecoration(
-                color: Colors.grey[200],
-                borderRadius: BorderRadius.circular(8),
-              ),
-              margin: const EdgeInsets.only(bottom: 20),
-              child: Column(
+          SizedBox(
+                    height: 300,
+                    width: 1500,
+            child: Expanded(
+              child: ListView.builder(
+                itemCount: widget.formDetails!.length,
+                itemBuilder: (context, index) {
+                  final admissionData = widget.formDetails![index]['db_admission_table'];
+                  final applicationId = admissionData['admission_form_id'] ?? 'N/A'; // Handle null values gracefully
+                  final fullName = '${admissionData['first_name']} ${admissionData['last_name']}'; // Handle null values gracefully
+                  String dateCreatedString = admissionData['created_at'];
+                  DateTime dateCreated = DateTime.parse(dateCreatedString);
+                  String formattedDate = formatDate(dateCreated);
+                  return Container(
+                    padding: const EdgeInsets.all(16),
+                    decoration: BoxDecoration(
+            color: Colors.grey[200],
+            borderRadius: BorderRadius.circular(8),
+                    ),
+                    margin: const EdgeInsets.only(bottom: 20),
+                    child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start, // Align content to the start
+            children: [
+              // Second Row
+              Row(
+                crossAxisAlignment: CrossAxisAlignment.start, // Avoid alignment issues
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  // Second Row
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Expanded(
-                        flex: 2,
-                        child: _buildInfoColumn(
-                          label: 'Application ID',
-                          value: '9741',
-                          scale: scale,
-                        ),
-                      ),
-                      const SizedBox(width: 16),
-                      Expanded(
-                        flex: 3,
-                        child: _buildInfoColumn(
-                          label: 'Applicant Name',
-                          value: 'Lazarus Ains',
-                          scale: scale,
-                        ),
-                      ),
-                      const SizedBox(width: 16),
-                      Expanded(
-                        flex: 2,
-                        child: _buildInfoColumn(
-                          label: 'Grade Level',
-                          value: '11',
-                          scale: scale,
-                        ),
-                      ),
-                      const SizedBox(width: 16),
-                      Expanded(
-                        flex: 4,
-                        child: _buildInfoColumn(
-                          label: 'Application Status',
-                          value: 'REQUIREMENTS - IN REVIEW',
-                          scale: scale,
-                        ),
-                      ),
-                      const SizedBox(width: 16),
-                      SizedBox(
-                        width: 99,
-                        height: 37,
-                        child: ElevatedButton(
-                          onPressed: () {
-                            // Handle button press
-                          },
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: const Color(0xff012169),
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(5),
-                            ),
-                            padding: EdgeInsets.zero,
-                          ),
-                          child: const Text(
-                            'Action',
-                            style: TextStyle(
-                              fontSize: 14,
-                              fontWeight: FontWeight.bold,
-                              color: Colors.white,
-                            ),
-                          ),
-                        ),
-                      ),
-                    ],
+                  Expanded(
+                    flex: 2,
+                    child: _buildInfoColumn(
+                      label: 'Application ID',
+                      value: applicationId,
+                      scale: scale,
+                    ),
                   ),
-
-                  const SizedBox(height: 16),
-
-                  // Third Row
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      SizedBox(
-                        width: 240,
-                        child: _buildInfoColumn(
-                          label: 'Date Created',
-                          value: '2024-11-20',
-                          scale: scale,
+                  const SizedBox(width: 16),
+                  Expanded(
+                    flex: 3,
+                    child: _buildInfoColumn(
+                      label: 'Applicant Name',
+                      value: fullName,
+                      scale: scale,
+                    ),
+                  ),
+                  const SizedBox(width: 16),
+                  Expanded(
+                    flex: 2,
+                    child: _buildInfoColumn(
+                      label: 'Grade Level',
+                      value: admissionData['level_applying_for'], // Replace with dynamic data if available
+                      scale: scale,
+                    ),
+                  ),
+                  const SizedBox(width: 16),
+                  Expanded(
+                    flex: 4,
+                    child: _buildInfoColumn(
+                      label: 'Application Status',
+                      value: admissionData['admission_status'].toUpperCase(), // Replace with dynamic data if available
+                      scale: scale,
+                    ),
+                  ),
+                  const SizedBox(width: 16),
+                  SizedBox(
+                    width: 99,
+                    height: 37,
+                    child: ElevatedButton(
+                      onPressed: () {
+                        // Handle button press
+                      },
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: const Color(0xff012169),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(5),
+                        ),
+                        padding: EdgeInsets.zero,
+                      ),
+                      child: const Text(
+                        'Action',
+                        style: TextStyle(
+                          fontSize: 14,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.white,
                         ),
                       ),
-                    ],
+                    ),
                   ),
                 ],
               ),
+            
+              const SizedBox(height: 16),
+            
+              // Third Row
+              Row(
+                children: [
+                  SizedBox(
+                    width: 240,
+                    child: _buildInfoColumn(
+                      label: 'Date Created',
+                      value: formattedDate, // Replace with dynamic data if available
+                      scale: scale,
+                    ),
+                  ),
+                ],
+              ),
+            ],
+                    ),
+                  );
+                },
+              ),
             ),
-            const Row(
+          ),
+
+
+             Row(
   mainAxisAlignment: MainAxisAlignment.start, // Aligns the content to the left
   children: [
-    Text(
+    const Text(
       'Number of Applications: ',
       style: TextStyle(
         fontSize: 14, // Adjust the font size as needed
         fontWeight: FontWeight.bold,
       ),
     ),
-    Text(
-      '(2)', // Display the number of applications
-      style: TextStyle(
+    Text(widget.formDetails!.length.toString(), // Display the number of applications
+      style: const TextStyle(
         fontSize: 14,
         color: Colors.blue, // You can customize the color
       ),

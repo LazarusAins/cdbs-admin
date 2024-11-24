@@ -1,3 +1,4 @@
+import 'package:cdbs_admin/bloc/admission_bloc/admission_bloc.dart';
 import 'package:cdbs_admin/bloc/auth/auth_bloc.dart';
 import 'package:cdbs_admin/class/admission_forms.dart';
 import 'package:cdbs_admin/shared/api.dart';
@@ -314,7 +315,7 @@ String formatDate(DateTime date) {
                               child: PopupMenuButton<int>(
                                 icon: const Icon(Icons.more_vert),
                                 onSelected: (value)async {
-                                  List<Map<String, dynamic>> members = await ApiService(apiUrl).getDetailsById(request['admission_id'], supabaseUrl, supabaseKey);
+                                  List<Map<String, dynamic>> members = await ApiService(apiUrl).getUserAllRequest(request['user_id'], supabaseUrl, supabaseKey);
                                      if(members.isNotEmpty){
                                   setState(() {
                                     formDetails=members;
@@ -378,7 +379,17 @@ return Container();
   }
 
   // Build content for each action (VIEW, REMINDER, DEACTIVATE)
- Widget _buildViewContent(double scale, List<Map<String, dynamic>> details, int user_id) {
+ Widget _buildViewContent(double scale, List<Map<String, dynamic>> details, int userId) {
+
+     return BlocConsumer<AdmissionBloc, AdmissionState>(
+      listener: (context, state) {},
+      builder: (context, state) {
+              bool isButtonEnabled = false;
+
+              // Enable button based on the state
+              if (state is AdmissionStatusUpdated) {
+                isButtonEnabled = state.isComplete;
+              }
     return Container(
   padding: const EdgeInsets.all(16),
   child: Column(
@@ -401,10 +412,14 @@ return Container();
           ),
         ],
       ),
-      const UserGuestAccountsPage2(),
+       UserGuestAccountsPage2(formDetails: details, onNextPressed: (bool isClicked) {
+         context.read<AdmissionBloc>().add(MarkAsCompleteClicked(isClicked));
+       }),
     ],
   ),
 );
+      }
+     ); 
   }
 
   Widget _buildReminderContent(double scale) {
