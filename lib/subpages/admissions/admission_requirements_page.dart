@@ -9,6 +9,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:intl/intl.dart';
 
+import 'package:http/http.dart' as http;
+import 'dart:convert';
+
 class AdmissionRequirementsPage extends StatefulWidget {
   const AdmissionRequirementsPage({super.key});
 
@@ -465,8 +468,86 @@ String formatDate(DateTime date) {
                     borderRadius: BorderRadius.circular(5), // Border radius
                   ),
                 ),
-                onPressed: isButtonEnabled?() {
+                onPressed: isButtonEnabled?() async {
                   // Action for second button
+                  try {
+                      final response = await http.post(
+                        Uri.parse('$apiUrl/api/admin/update_admission'),
+                        headers: {
+                          'Content-Type': 'application/json',
+                          'supabase-url': supabaseUrl,
+                          'supabase-key': supabaseKey,
+                        },
+                        body: json.encode({
+                          'admission_id': details[0]['admission_id'], // Send admission_id in the request body
+                          'is_all_required_file_uploaded': true,
+                          'user_id': userId,
+                          'admission_status':'complete',
+                        }),
+                      );
+
+                      if (response.statusCode == 200) {
+                        final responseBody = jsonDecode(response.body);
+
+                        // Show success modal
+                        showDialog(
+                          context: context,
+                          builder: (context) => AlertDialog(
+                            title: const Text("Success"),
+                            content: const Text("The review has been marked as complete."),
+                            actions: [
+                              TextButton(
+                                onPressed: () {
+                                  Navigator.of(context).pop(); // Close the dialog
+                                },
+                                child: const Text("OK"),
+                              ),
+                            ],
+                          ),
+                        );
+                      } else {
+                        // Handle failure
+                        final responseBody = jsonDecode(response.body);
+                        print('Error: ${responseBody['error']}');
+
+                        // Show failure modal
+                        showDialog(
+                          context: context,
+                          builder: (context) => AlertDialog(
+                            title: const Text("Error"),
+                            content: Text("Failed to complete review: ${responseBody['error']}"),
+                            actions: [
+                              TextButton(
+                                onPressed: () {
+                                  Navigator.of(context).pop(); // Close the dialog
+                                },
+                                child: const Text("OK"),
+                              ),
+                            ],
+                          ),
+                        );
+                      }
+                    } catch (error) {
+                      // Handle error (e.g., network error)
+                      print('Error: $error');
+
+                      // Show error modal
+                      showDialog(
+                        context: context,
+                        builder: (context) => AlertDialog(
+                          title: const Text("Error"),
+                          content: const Text("An unexpected error occurred. Please try again later."),
+                          actions: [
+                            TextButton(
+                              onPressed: () {
+                                Navigator.of(context).pop(); // Close the dialog
+                              },
+                              child: const Text("OK"),
+                            ),
+                          ],
+                        ),
+                      );
+                    }
                 }:null,
                 child: Text(
                   "Mark as Complete",
