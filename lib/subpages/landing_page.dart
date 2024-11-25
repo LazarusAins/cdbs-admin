@@ -224,7 +224,7 @@ Padding(
                   ),
                   SizedBox(height: 8 * scale),
                   Text(
-                    'Are you sure you want to [action]?',
+                    'Are you sure you want to Logout?',
                     style: TextStyle(
                       fontFamily: "Roboto-L",
                       fontSize: 13 * scale,

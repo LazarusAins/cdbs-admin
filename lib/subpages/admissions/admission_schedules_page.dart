@@ -249,8 +249,10 @@ class _AdmissionSchedulesPageState extends State<AdmissionSchedulesPage> {
                                       checkboxStates[index] = value ?? false;
                                     });
                                   },
+                                  activeColor: const Color(0XFF012169), // Set the active color to pink
                                 ),
-                                Text(request['admission_id'].toString(),
+                                Text(
+                                  request['admission_id'].toString(),
                                   style: TextStyle(fontSize: 12 * scale),
                                 ),
                               ],
@@ -352,23 +354,39 @@ class _AdmissionSchedulesPageState extends State<AdmissionSchedulesPage> {
   }
 
   // Build content for each action (VIEW, REMINDER, DEACTIVATE)
-  Widget _buildViewContent(double scale) {
+Widget _buildViewContent(double scale) {
     return Container(
-      padding: const EdgeInsets.all(16),
-      child: const Column(
+  padding: const EdgeInsets.all(16),
+  child: Column(
+    children: [
+      // Back button with left arrow and "Back" text
+      Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          AdmissionSchedulesPage2(),
-          // ElevatedButton(
-          //   onPressed: () {
-          //     setState(() {
-          //       _selectedAction = 0; // Go back to default content
-          //     });
-          //   },
-          //   child: const Text("Go Back"),
-          // ),
+          TextButton.icon(
+            onPressed: () {
+              setState(() {
+                _selectedAction = 0; // Go back to default content
+              });
+            },
+            icon: const Icon(Icons.arrow_back, color: Colors.black),
+            label: Text(
+              "Back",
+              style: TextStyle(color: Colors.black, fontFamily: 'Roboto-R', fontSize: 12 * scale),
+            ),
+          ),
+
         ],
-      )
-    );
+      ),
+      
+      // Adding AdmissionApplicationsPage2 below the buttons
+      const AdmissionSchedulesPage2(),
+    ],
+  ),
+);
+
+
+
   }
 
   Widget _buildReminderContent(double scale) {
