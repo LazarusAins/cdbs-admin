@@ -273,6 +273,7 @@ String formatDate(DateTime date) {
                                       checkboxStates[index] = value ?? false;
                                     });
                                   },
+                                  activeColor: const Color(0XFF012169), // Set the active color to pink
                                 ),
                                 Text(
                                   fullName,
@@ -281,6 +282,7 @@ String formatDate(DateTime date) {
                               ],
                             ),
                           ),
+
 
                           const SizedBox(width: 40,),
 
@@ -322,55 +324,57 @@ String formatDate(DateTime date) {
                           const SizedBox(width: 40,),
 
                             // Other table cells...
-                            Expanded(
-                              flex: 1,
-                              child: PopupMenuButton<int>(
-                                icon: const Icon(Icons.more_vert),
-                                onSelected: (value)async {
-                                  List<Map<String, dynamic>> members = await ApiService(apiUrl).getUserAllRequest(request['user_id'], supabaseUrl, supabaseKey);
-                                     if(members.isNotEmpty){
-                                  setState(() {
-                                    formDetails=members;
-                                    _selectedAction = value; // Change the selected action
-                                  });
-                                     }else{
-                                      _showMessage('No form submitted', "Form Submit");
-                                     }
-                                },
-                                itemBuilder: (context) => [
-                                  PopupMenuItem(
-                                    value: 1,
-                                    child: Row(
-                                      children: [
-                                        const Icon(Icons.visibility, color: Colors.black),
-                                        SizedBox(width: 8 * scale),
-                                        Text("VIEW", style: TextStyle(fontSize: 16 * scale)),
-                                      ],
-                                    ),
-                                  ),
-                                  PopupMenuItem(
-                                    value: 2,
-                                    child: Row(
-                                      children: [
-                                        const Icon(Icons.notifications, color: Colors.black),
-                                        SizedBox(width: 8 * scale),
-                                        Text("REMINDER", style: TextStyle(fontSize: 16 * scale)),
-                                      ],
-                                    ),
-                                  ),
-                                  PopupMenuItem(
-                                    value: 3,
-                                    child: Row(
-                                      children: [
-                                        const Icon(Icons.block, color: Colors.black),
-                                        SizedBox(width: 8 * scale),
-                                        Text("DEACTIVATE", style: TextStyle(fontSize: 16 * scale)),
-                                      ],
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
+                           Expanded(
+  flex: 1,
+  child: PopupMenuButton<int>(
+    icon: const Icon(Icons.more_vert),
+    onSelected: (value) async {
+      if (value == 1) {
+        // Show the modal when "VIEW" is clicked
+        _showViewModal(context);
+      } else if (value == 2) {
+        // Handle REMINDER action
+        _showMessage('Reminder action', "Reminder");
+      } else if (value == 3) {
+        // Handle DEACTIVATE action
+        _showMessage('Deactivate action', "Deactivate");
+      }
+    },
+    itemBuilder: (context) => [
+      PopupMenuItem(
+        value: 1,
+        child: Row(
+          children: [
+            const Icon(Icons.visibility, color: Colors.black),
+            SizedBox(width: 8 * scale),
+            Text("VIEW", style: TextStyle(fontSize: 16 * scale)),
+          ],
+        ),
+      ),
+      PopupMenuItem(
+        // value: 2,
+        child: Row(
+          children: [
+            const Icon(Icons.notifications, color: Colors.black),
+            SizedBox(width: 8 * scale),
+            Text("REMINDER", style: TextStyle(fontSize: 16 * scale)),
+          ],
+        ),
+      ),
+      PopupMenuItem(
+        // value: 3,
+        child: Row(
+          children: [
+            const Icon(Icons.block, color: Colors.black),
+            SizedBox(width: 8 * scale),
+            Text("DEACTIVATE", style: TextStyle(fontSize: 16 * scale)),
+          ],
+        ),
+      ),
+    ],
+  ),
+),
+
                           ],
                         ),
                         const Divider(color: Colors.grey, thickness: 1),
@@ -489,6 +493,103 @@ return Container();
       // ),
     );
   }
+
+
+
+
+//VIEW MODAL
+void _showViewModal(BuildContext context) {
+  showDialog(
+    context: context,
+    builder: (BuildContext context) {
+      return Dialog(
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(10),
+        ),
+        child: Container(
+          width: 349,
+          height: 272,
+          padding: const EdgeInsets.all(16),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              // Centered Text
+              const Center(
+                child: Text(
+                  "",
+                  style: TextStyle(
+                    fontSize: 20,
+                  ),
+                  textAlign: TextAlign.center,
+                ),
+              ),
+              // Red X Icon with Circular Outline
+              Column(
+                children: [
+                  Container(
+                    width: 50,
+                    height: 50,
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      border: Border.all(color: const Color(0XFF012169), width: 2),
+                    ),
+                    child: const Center(
+                      child: Icon(
+                        Icons.close,
+                        color: Color(0XFF012169),
+                        size: 28,
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: 8),
+                  // No Form Submitted Text
+                  const Text(
+                    "No form Submitted!",
+                    style: TextStyle(
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold,
+                    ),
+                    textAlign: TextAlign.center,
+                  ),
+                ],
+              ),
+              // Divider
+              const Divider(
+                thickness: 1,
+                color: Colors.grey,
+              ),
+              // Close Button
+              Align(
+                alignment: Alignment.bottomCenter,
+                child: ElevatedButton(
+                  onPressed: () {
+                    Navigator.of(context).pop(); // Close the modal
+                  },
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: const Color(0xff012169), // Button color
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                    minimumSize: const Size(double.infinity, 50), // Expand width and set height
+                  ),
+                  child: const Text(
+                    "Close",
+                    style: TextStyle(fontSize: 16, color: Colors.white),
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+      );
+    },
+  );
+}
+
+
+
+
+
 
   void _showMessage(String message, String title) {
     showDialog(

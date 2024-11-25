@@ -232,24 +232,25 @@ String formatDate(DateTime date) {
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
                     Expanded(
-                      flex: 1,
-                      child: Row(
-                        children: [
-                          Checkbox(
-                            value: checkboxStates[index],
-                            onChanged: (value) {
-                              setState(() {
-                                checkboxStates[index] = value ?? false;
-                              });
-                            },
+                            flex: 1,
+                            child: Row(
+                              children: [
+                                Checkbox(
+                                  value: checkboxStates[index],
+                                  onChanged: (value) {
+                                    setState(() {
+                                      checkboxStates[index] = value ?? false;
+                                    });
+                                  },
+                                  activeColor: const Color(0XFF012169), // Set the active color to pink
+                                ),
+                                Text(
+                                  request['admission_id'].toString(),
+                                  style: TextStyle(fontSize: 12 * scale),
+                                ),
+                              ],
+                            ),
                           ),
-                          Text(
-                            request['admission_id'].toString(),
-                            style: TextStyle(fontSize: 12 * scale),
-                          ),
-                        ],
-                      ),
-                    ),
                     Expanded(
                       flex: 3,
                       child: Text(
@@ -348,7 +349,7 @@ String formatDate(DateTime date) {
   }
 
   // Build content for each action (VIEW, REMINDER, DEACTIVATE)
-  Widget _buildViewContent(double scale, List<Map<String, dynamic>> details, int user_id) {
+  Widget _buildViewContent(double scale, List<Map<String, dynamic>> details, int userId) {
    return BlocConsumer<AdmissionBloc, AdmissionState>(
       listener: (context, state) {},
       builder: (context, state) {
