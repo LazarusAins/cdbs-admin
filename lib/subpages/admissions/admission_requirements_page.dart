@@ -40,6 +40,47 @@ String formatDate(DateTime date) {
     return formatter.format(date);
   }
 
+
+
+  bool checkDocumentRequirements(String gradeLevel, List<Map<String, dynamic>> formRequirements) {
+    // Define the list of required doc_ids based on the grade level
+    List<int> requiredDocIds;
+
+    // Check the gradeLevel and set the required doc_ids accordingly
+    if (gradeLevel.toLowerCase() == 'pre-kinder' || gradeLevel.toLowerCase() == 'kinder') {
+      requiredDocIds = [1, 2, 4]; // For 'pre-kinder' or 'kinder', require doc_ids 1, 2, and 4
+    } else {
+      requiredDocIds = [1, 2, 3, 5]; // For other grade levels, require doc_ids 1, 2, 3, and 5
+    }
+    
+    // Loop through the required doc_ids
+    for (int docId in requiredDocIds) {
+      bool docFound = false;
+      
+      // Check if each doc_id (from requiredDocIds) is in the formRequirements and has 'accepted' status
+      for (var requirement in formRequirements) {
+        if (requirement['db_requirement_type_table'] != null) {
+          var requirementDocId = requirement['db_requirement_type_table']['doc_id'];
+          var documentStatus = requirement['document_status'];
+          
+          // If we find the document with the required doc_id and 'accepted' status, mark it as found
+          if (requirementDocId == docId && documentStatus == 'accepted') {
+            docFound = true;
+            break; // No need to check further for this docId, move on to the next docId
+          }
+        }
+      }
+      
+      // If any required document (from requiredDocIds) is missing or not 'accepted', return false
+      if (!docFound) {
+        return false; // Exit early, because we found a missing or not accepted document
+      }
+    }
+    
+    // If all required docs (1, 2, 3, 4, or 5) are found with 'accepted' status, return true
+    return true;
+  }
+
   @override
   Widget build(BuildContext context) {
     double screenHeight = MediaQuery.of(context).size.height;
@@ -279,12 +320,25 @@ String formatDate(DateTime date) {
                       ),
                     ),
                       // Other table cells...
-                      Expanded(
+                      BlocConsumer<AdmissionBloc, AdmissionState>(
+                        listener: (context, state) {},
+                        builder: (context, state) {
+                                bool isButtonEnabled = false;
+
+                                // Enable button based on the state
+                                if (state is AdmissionStatusUpdated) {
+                                  isButtonEnabled = state.isComplete;
+                                }
+                      return Expanded(
                         flex: 1,
                         child: PopupMenuButton<int>(
                           icon: const Icon(Icons.more_vert),
                           onSelected: (value) async {
                             List<Map<String, dynamic>> members = await ApiService(apiUrl).getFormsDetailsById(request['admission_id'], supabaseUrl, supabaseKey);
+                            bool isComplete=checkDocumentRequirements(members[0]['db_admission_table']['level_applying_for'],List<Map<String, dynamic>>.from(
+                    members[0]['db_admission_table']['db_required_documents_table']
+                  ));
+                            context.read<AdmissionBloc>().add(MarkAsCompleteClicked(isComplete));
                             if(members.isNotEmpty){
                               setState(() {
                                 formDetails=members;
@@ -325,7 +379,9 @@ String formatDate(DateTime date) {
                             ),
                           ],
                         ),
-                      ),
+                      );
+                        }
+                      )
                     ],
                   ),
                   const Divider(color: Colors.grey, thickness: 1),
@@ -420,6 +476,8 @@ String formatDate(DateTime date) {
           ),
         ],
       ),
+
+      
       
       // Adding AdmissionApplicationsPage2 below the buttons
        AdmissionRequirementsPage2(formDetails: details, onNextPressed: (bool isClicked) {
@@ -429,8 +487,10 @@ String formatDate(DateTime date) {
   ),
 );
       }
-    );
 
+
+      
+    );
 
 
   }

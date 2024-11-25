@@ -173,7 +173,11 @@ class _AdmissionRequirementsPage2State extends State<AdmissionRequirementsPage2>
                   label:  document['db_requirement_type_table']['doc_type'], // Default label if not provided
                   scale: scale,
                   setState: setState,
-                  admissionId: document['admission_id']
+                  admissionId: document['admission_id'],
+                  formRequirements: List<Map<String, dynamic>>.from(
+                    myformDetails[0]['db_admission_table']['db_required_documents_table']
+                  ),
+                  gradeLevel: myformDetails[0]['db_admission_table']['level_applying_for']
                 );
               } else {
                 // If no document_url is provided, show a placeholder
@@ -185,7 +189,11 @@ class _AdmissionRequirementsPage2State extends State<AdmissionRequirementsPage2>
                   isPlaceholder: true,
                   isDashedLine: true, // Dashed border for placeholder
                   setState: setState,
-                  admissionId: document['admission_id']
+                  admissionId: document['admission_id'],
+                  formRequirements: List<Map<String, dynamic>>.from(
+                    myformDetails[0]['db_admission_table']['db_required_documents_table']
+                  ),
+                  gradeLevel: myformDetails[0]['db_admission_table']['level_applying_for']
                 );
               }
             }).toList(),
@@ -421,7 +429,9 @@ Widget _buildImageCard({
   required double scale,
   bool isPlaceholder = false,
   bool isDashedLine = false,
-  required StateSetter setState
+  required StateSetter setState,
+  required List<Map<String, dynamic>> formRequirements,
+  String? gradeLevel
 }) {
   // Determine the color for the status circle
   Color statusColor = Colors.transparent;
@@ -433,8 +443,7 @@ Widget _buildImageCard({
 
   return GestureDetector(
     onTap: () {
-      _showImageDialog(imagePath, id!, admissionId!, status!);
-      print(imagePath);
+      _showImageDialog(imagePath, id!, admissionId!, status!, formRequirements, gradeLevel!);
     }, // Open dialog on tap
     child: Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -518,11 +527,50 @@ Widget _buildImageCard({
   );
 }
 
+bool checkDocumentRequirements(String gradeLevel, List<Map<String, dynamic>> formRequirements) {
+    // Define the list of required doc_ids based on the grade level
+    List<int> requiredDocIds;
 
+    // Check the gradeLevel and set the required doc_ids accordingly
+    if (gradeLevel.toLowerCase() == 'pre-kinder' || gradeLevel.toLowerCase() == 'kinder') {
+      requiredDocIds = [1, 2, 4]; // For 'pre-kinder' or 'kinder', require doc_ids 1, 2, and 4
+    } else {
+      requiredDocIds = [1, 2, 3, 5]; // For other grade levels, require doc_ids 1, 2, 3, and 5
+    }
+    
+    // Loop through the required doc_ids
+    for (int docId in requiredDocIds) {
+      bool docFound = false;
+      
+      // Check if each doc_id (from requiredDocIds) is in the formRequirements and has 'accepted' status
+      for (var requirement in formRequirements) {
+        if (requirement['db_requirement_type_table'] != null) {
+          var requirementDocId = requirement['db_requirement_type_table']['doc_id'];
+          var documentStatus = requirement['document_status'];
+          
+          // If we find the document with the required doc_id and 'accepted' status, mark it as found
+          if (requirementDocId == docId && documentStatus == 'accepted') {
+            docFound = true;
+            break; // No need to check further for this docId, move on to the next docId
+          }
+        }
+      }
+      
+      // If any required document (from requiredDocIds) is missing or not 'accepted', return false
+      if (!docFound) {
+        return false; // Exit early, because we found a missing or not accepted document
+      }
+    }
+    
+    // If all required docs (1, 2, 3, 4, or 5) are found with 'accepted' status, return true
+    return true;
+  }
 
 
   // Show image dialog when image is clicked
-  void _showImageDialog(String? imagePath, int id, int admissionId, String docStatus) {
+  void _showImageDialog(String? imagePath, int id, int admissionId, String docStatus, List<Map<String, dynamic>> formRequirements, String gradeLevel) {
+
+    bool isComplete=false;
   showDialog(
     context: context,
     builder: (BuildContext context) {
@@ -562,8 +610,7 @@ Widget _buildImageCard({
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   ElevatedButton(
-                    onPressed: docStatus == 'pending'
-                        ? () async {
+                    onPressed:  docStatus=='pending'?() async {
                             // Handle accept action
                             try {
                               final response = await http.post(
@@ -582,9 +629,11 @@ Widget _buildImageCard({
 
                               if (response.statusCode == 200) {
                                 final responseBody = jsonDecode(response.body);
-                                print(admissionId);
                                 setState(() {
                                   updateData(admissionId);
+                                  checkDocumentRequirements(gradeLevel, List<Map<String, dynamic>>.from(
+                    myformDetails[0]['db_admission_table']['db_required_documents_table']
+                  ));
                                 });
                                 // Show success modal
                                 Navigator.of(context).popUntil((route) => route.isFirst);
@@ -596,6 +645,10 @@ Widget _buildImageCard({
                                     actions: [
                                       TextButton(
                                         onPressed: () {
+                                          isComplete=checkDocumentRequirements(gradeLevel, List<Map<String, dynamic>>.from(
+                    myformDetails[0]['db_admission_table']['db_required_documents_table']
+                  ));
+                                          widget.onNextPressed(isComplete);
                                           Navigator.of(context).pop(); // Close dialog
                                         },
                                         child: const Text("OK"),
@@ -644,8 +697,7 @@ Widget _buildImageCard({
                                 ),
                               );
                             }
-                          }
-                        : null,
+                          }:null,
                     style: ElevatedButton.styleFrom(
                       backgroundColor: Colors.green,
                       padding: const EdgeInsets.symmetric(horizontal: 30),
@@ -660,7 +712,7 @@ Widget _buildImageCard({
                   ),
                   const SizedBox(width: 2),
                   ElevatedButton(
-                    onPressed: () {
+                    onPressed: docStatus=='pending'?() {
                       showDialog(
                         context: context,
                         builder: (context) {
@@ -708,20 +760,26 @@ Widget _buildImageCard({
 
                                     if (response.statusCode == 200) {
                                       final responseBody = jsonDecode(response.body);
-                                      print(admissionId);
                                       setState(() {
                                         updateData(admissionId);
+                                        checkDocumentRequirements(gradeLevel, List<Map<String, dynamic>>.from(
+                    myformDetails[0]['db_admission_table']['db_required_documents_table']
+                  ));
                                       });
                                       // Show success modal
                                       Navigator.of(context).popUntil((route) => route.isFirst);
                                       showDialog(
                                         context: context,
                                         builder: (context) => AlertDialog(
-                                          title: const Text("Success"),
+                                          title: const Text("Rejected"),
                                           content: const Text("The review has been marked as rejected."),
                                           actions: [
                                             TextButton(
                                               onPressed: () {
+                                              isComplete=checkDocumentRequirements(gradeLevel, List<Map<String, dynamic>>.from(
+                    myformDetails[0]['db_admission_table']['db_required_documents_table']
+                  ));
+                                          widget.onNextPressed(isComplete);
                                                 Navigator.of(context).pop(); // Close dialog
                                               },
                                               child: const Text("OK"),
@@ -780,7 +838,7 @@ Widget _buildImageCard({
                           );
                         },
                       );
-                    },
+                    }:null,
                     style: ElevatedButton.styleFrom(
                       backgroundColor: Colors.red,
                       padding: const EdgeInsets.symmetric(horizontal: 30),
