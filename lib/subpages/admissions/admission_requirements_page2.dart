@@ -542,7 +542,7 @@ Widget _buildImageCard({
                   borderRadius: BorderRadius.circular(10),
                   child: CachedNetworkImage(
                     imageUrl: imagePath!,
-                    fit: BoxFit.contain, // Ensures the image is contained within its bounds
+                    fit: BoxFit.contain,
                     placeholder: (context, url) => const SizedBox(
                       width: 50.0,
                       height: 50.0,
@@ -562,95 +562,103 @@ Widget _buildImageCard({
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   ElevatedButton(
-                    onPressed: docStatus =='pending'?() async {
-                      // Handle accept action
-                      try {
-                        final response = await http.post(
-                          Uri.parse('$apiUrl/api/admin/update_required_form'),
-                          headers: {
-                            'Content-Type': 'application/json',
-                            'supabase-url': supabaseUrl,
-                            'supabase-key': supabaseKey,
-                          },
-                          body: json.encode({
-                            'document_status': 'accepted',
-                            'required_doc_id': id,
-                            'reject_reason': '',
-                          }),
-                        );
-
-                        if (response.statusCode == 200) {
-                          final responseBody = jsonDecode(response.body);
-                          print(admissionId);
-                          setState(() {
-                            updateData(admissionId);
-                          });
-                          // Show success modal
-                          Navigator.of(context).popUntil((route) => route.isFirst);
-                          showDialog(
-                            context: context,
-                            builder: (context) => AlertDialog(
-                              title: const Text("Success"),
-                              content: const Text("The review has been marked as complete."),
-                              actions: [
-                                TextButton(
-                                  onPressed: () {
-                                    Navigator.of(context).pop(); // Close dialog
-                                  },
-                                  child: const Text("OK"),
-                                ),
-                              ],
-                            ),
-                          );
-                        } else {
-                          // Handle failure
-                          final responseBody = jsonDecode(response.body);
-                          print('Error: ${responseBody['error']}');
-                          Navigator.of(context).pop();
-                          showDialog(
-                            context: context,
-                            builder: (context) => AlertDialog(
-                              title: const Text("Error"),
-                              content: Text("Failed to complete review: ${responseBody['error']}"),
-                              actions: [
-                                TextButton(
-                                  onPressed: () {
-                                    Navigator.of(context).pop(); // Close dialog
-                                  },
-                                  child: const Text("OK"),
-                                ),
-                              ],
-                            ),
-                          );
-                        }
-                      } catch (error) {
-                        // Handle network error
-                        print('Error: $error');
-                        Navigator.of(context).pop();
-                        showDialog(
-                          context: context,
-                          builder: (context) => AlertDialog(
-                            title: const Text("Error"),
-                            content: const Text("An unexpected error occurred. Please try again later."),
-                            actions: [
-                              TextButton(
-                                onPressed: () {
-                                  Navigator.of(context).pop(); // Close dialog
+                    onPressed: docStatus == 'pending'
+                        ? () async {
+                            // Handle accept action
+                            try {
+                              final response = await http.post(
+                                Uri.parse('$apiUrl/api/admin/update_required_form'),
+                                headers: {
+                                  'Content-Type': 'application/json',
+                                  'supabase-url': supabaseUrl,
+                                  'supabase-key': supabaseKey,
                                 },
-                                child: const Text("OK"),
-                              ),
-                            ],
-                          ),
-                        );
-                      }
-                    }:null,
+                                body: json.encode({
+                                  'document_status': 'accepted',
+                                  'required_doc_id': id,
+                                  'reject_reason': '',
+                                }),
+                              );
+
+                              if (response.statusCode == 200) {
+                                final responseBody = jsonDecode(response.body);
+                                print(admissionId);
+                                setState(() {
+                                  updateData(admissionId);
+                                });
+                                // Show success modal
+                                Navigator.of(context).popUntil((route) => route.isFirst);
+                                showDialog(
+                                  context: context,
+                                  builder: (context) => AlertDialog(
+                                    title: const Text("Success"),
+                                    content: const Text("The review has been marked as complete."),
+                                    actions: [
+                                      TextButton(
+                                        onPressed: () {
+                                          Navigator.of(context).pop(); // Close dialog
+                                        },
+                                        child: const Text("OK"),
+                                      ),
+                                    ],
+                                  ),
+                                );
+                              } else {
+                                // Handle failure
+                                final responseBody = jsonDecode(response.body);
+                                print('Error: ${responseBody['error']}');
+                                Navigator.of(context).pop();
+                                showDialog(
+                                  context: context,
+                                  builder: (context) => AlertDialog(
+                                    title: const Text("Error"),
+                                    content: Text("Failed to complete review: ${responseBody['error']}"),
+                                    actions: [
+                                      TextButton(
+                                        onPressed: () {
+                                          Navigator.of(context).pop(); // Close dialog
+                                        },
+                                        child: const Text("OK"),
+                                      ),
+                                    ],
+                                  ),
+                                );
+                              }
+                            } catch (error) {
+                              // Handle network error
+                              print('Error: $error');
+                              Navigator.of(context).pop();
+                              showDialog(
+                                context: context,
+                                builder: (context) => AlertDialog(
+                                  title: const Text("Error"),
+                                  content: const Text("An unexpected error occurred. Please try again later."),
+                                  actions: [
+                                    TextButton(
+                                      onPressed: () {
+                                        Navigator.of(context).pop(); // Close dialog
+                                      },
+                                      child: const Text("OK"),
+                                    ),
+                                  ],
+                                ),
+                              );
+                            }
+                          }
+                        : null,
                     style: ElevatedButton.styleFrom(
                       backgroundColor: Colors.green,
                       padding: const EdgeInsets.symmetric(horizontal: 30),
+                      shape: const RoundedRectangleBorder(
+                        borderRadius: BorderRadius.only(
+                          topLeft: Radius.circular(10),
+                          bottomLeft: Radius.circular(10),
+                        ),
+                      ),
                     ),
                     child: const Text('Accept'),
                   ),
-                  const SizedBox(width: 20),
+                  const SizedBox(width: 2),
                   ElevatedButton(
                     onPressed: () {
                       showDialog(
@@ -684,84 +692,84 @@ Widget _buildImageCard({
                                 onPressed: () async {
                                   // Handle rejection submission
                                   try {
-                        final response = await http.post(
-                          Uri.parse('$apiUrl/api/admin/update_required_form'),
-                          headers: {
-                            'Content-Type': 'application/json',
-                            'supabase-url': supabaseUrl,
-                            'supabase-key': supabaseKey,
-                          },
-                          body: json.encode({
-                            'document_status': 'rejected',
-                            'required_doc_id': id,
-                            'reject_reason': rejectController.text,
-                          }),
-                        );
+                                    final response = await http.post(
+                                      Uri.parse('$apiUrl/api/admin/update_required_form'),
+                                      headers: {
+                                        'Content-Type': 'application/json',
+                                        'supabase-url': supabaseUrl,
+                                        'supabase-key': supabaseKey,
+                                      },
+                                      body: json.encode({
+                                        'document_status': 'rejected',
+                                        'required_doc_id': id,
+                                        'reject_reason': rejectController.text,
+                                      }),
+                                    );
 
-                        if (response.statusCode == 200) {
-                          final responseBody = jsonDecode(response.body);
-                          print(admissionId);
-                          setState(() {
-                            updateData(admissionId);
-                          });
-                          // Show success modal
-                          Navigator.of(context).popUntil((route) => route.isFirst);
-                          showDialog(
-                            context: context,
-                            builder: (context) => AlertDialog(
-                              title: const Text("Success"),
-                              content: const Text("The review has been marked as rejected."),
-                              actions: [
-                                TextButton(
-                                  onPressed: () {
-                                    Navigator.of(context).pop(); // Close dialog
-                                  },
-                                  child: const Text("OK"),
-                                ),
-                              ],
-                            ),
-                          );
-                        } else {
-                          // Handle failure
-                          final responseBody = jsonDecode(response.body);
-                          print('Error: ${responseBody['error']}');
-                          Navigator.of(context).pop();
-                          showDialog(
-                            context: context,
-                            builder: (context) => AlertDialog(
-                              title: const Text("Error"),
-                              content: Text("Failed to complete review: ${responseBody['error']}"),
-                              actions: [
-                                TextButton(
-                                  onPressed: () {
-                                    Navigator.of(context).pop(); // Close dialog
-                                  },
-                                  child: const Text("OK"),
-                                ),
-                              ],
-                            ),
-                          );
-                        }
-                      } catch (error) {
-                        // Handle network error
-                        print('Error: $error');
-                        Navigator.of(context).pop();
-                        showDialog(
-                          context: context,
-                          builder: (context) => AlertDialog(
-                            title: const Text("Error"),
-                            content: const Text("An unexpected error occurred. Please try again later."),
-                            actions: [
-                              TextButton(
-                                onPressed: () {
-                                  Navigator.of(context).pop(); // Close dialog
-                                },
-                                child: const Text("OK"),
-                              ),
-                            ],
-                          ),
-                        );
-                      }
+                                    if (response.statusCode == 200) {
+                                      final responseBody = jsonDecode(response.body);
+                                      print(admissionId);
+                                      setState(() {
+                                        updateData(admissionId);
+                                      });
+                                      // Show success modal
+                                      Navigator.of(context).popUntil((route) => route.isFirst);
+                                      showDialog(
+                                        context: context,
+                                        builder: (context) => AlertDialog(
+                                          title: const Text("Success"),
+                                          content: const Text("The review has been marked as rejected."),
+                                          actions: [
+                                            TextButton(
+                                              onPressed: () {
+                                                Navigator.of(context).pop(); // Close dialog
+                                              },
+                                              child: const Text("OK"),
+                                            ),
+                                          ],
+                                        ),
+                                      );
+                                    } else {
+                                      // Handle failure
+                                      final responseBody = jsonDecode(response.body);
+                                      print('Error: ${responseBody['error']}');
+                                      Navigator.of(context).pop();
+                                      showDialog(
+                                        context: context,
+                                        builder: (context) => AlertDialog(
+                                          title: const Text("Error"),
+                                          content: Text("Failed to complete review: ${responseBody['error']}"),
+                                          actions: [
+                                            TextButton(
+                                              onPressed: () {
+                                                Navigator.of(context).pop(); // Close dialog
+                                              },
+                                              child: const Text("OK"),
+                                            ),
+                                          ],
+                                        ),
+                                      );
+                                    }
+                                  } catch (error) {
+                                    // Handle network error
+                                    print('Error: $error');
+                                    Navigator.of(context).pop();
+                                    showDialog(
+                                      context: context,
+                                      builder: (context) => AlertDialog(
+                                        title: const Text("Error"),
+                                        content: const Text("An unexpected error occurred. Please try again later."),
+                                        actions: [
+                                          TextButton(
+                                            onPressed: () {
+                                              Navigator.of(context).pop(); // Close dialog
+                                            },
+                                            child: const Text("OK"),
+                                          ),
+                                        ],
+                                      ),
+                                    );
+                                  }
                                 },
                                 style: ElevatedButton.styleFrom(
                                   backgroundColor: Colors.red,
@@ -776,6 +784,12 @@ Widget _buildImageCard({
                     style: ElevatedButton.styleFrom(
                       backgroundColor: Colors.red,
                       padding: const EdgeInsets.symmetric(horizontal: 30),
+                      shape: const RoundedRectangleBorder(
+                        borderRadius: BorderRadius.only(
+                          topRight: Radius.circular(10),
+                          bottomRight: Radius.circular(10),
+                        ),
+                      ),
                     ),
                     child: const Text('Reject'),
                   ),
@@ -788,6 +802,7 @@ Widget _buildImageCard({
     },
   );
 }
+
 
 }
 
