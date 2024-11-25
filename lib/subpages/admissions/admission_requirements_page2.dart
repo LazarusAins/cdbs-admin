@@ -23,6 +23,7 @@ class AdmissionRequirementsPage2 extends StatefulWidget {
 }
 
 class _AdmissionRequirementsPage2State extends State<AdmissionRequirementsPage2> {
+  TextEditingController rejectController = TextEditingController();
 
   String? applicationId;
   String? fullName;
@@ -648,95 +649,153 @@ Widget _buildImageCard({
                       child: const Text('Accept'),
                     ),
                     const SizedBox(width: 20),
-                    ElevatedButton(
-                      onPressed: () async{
-                        try {
-                          final response = await http.post(
-                            Uri.parse('$apiUrl/api/admin/update_required_form'),
-                            headers: {
-                              'Content-Type': 'application/json',
-                              'supabase-url': supabaseUrl,
-                              'supabase-key': supabaseKey,
+                   
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ElevatedButton(
+  onPressed: () {
+    showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: const Text("Reject"),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              const Text("Please provide a reason for rejection:"),
+              const SizedBox(height: 10),
+              TextField(
+                controller: rejectController,
+                decoration: const InputDecoration(
+                  border: OutlineInputBorder(),
+                  hintText: "Enter rejection reason",
+                ),
+                maxLines: 3, // Allow multi-line input
+              ),
+            ],
+          ),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop(); // Close the dialog
+              },
+              child: const Text("Close"),
+            ),
+            ElevatedButton(
+              onPressed: () async {
+                try {
+                  final response = await http.post(
+                    Uri.parse('$apiUrl/api/admin/update_required_form'),
+                    headers: {
+                      'Content-Type': 'application/json',
+                      'supabase-url': supabaseUrl,
+                      'supabase-key': supabaseKey,
+                    },
+                    body: json.encode({
+                      'document_status': 'rejected',
+                      'required_doc_id': id,
+                      'reject_reason': rejectController.text, // Use the text from the TextField
+                    }),
+                  );
+
+                  if (response.statusCode == 200) {
+                    final responseBody = jsonDecode(response.body);
+                    print(admissionId);
+
+                    setState(() {
+                      updateData(admissionId);
+                    });
+
+                    Navigator.of(context).pop(); // Close the dialog
+                    showDialog(
+                      context: context,
+                      builder: (context) => AlertDialog(
+                        title: const Text("Rejected"),
+                        content: const Text("The review has been marked as rejected."),
+                        actions: [
+                          TextButton(
+                            onPressed: () {
+                              Navigator.of(context).pop(); // Close the success dialog
                             },
-                            body: json.encode({
-                              'document_status': 'rejected', // Send admission_id in the request body
-                              'required_doc_id': id
-                            }),
-                          );
-
-                          if (response.statusCode == 200) {
-                            final responseBody = jsonDecode(response.body);
-                            print(admissionId);
-                            setState(() {
-                            updateData(admissionId);
-                            });
-                            // Show success modal
-                            showDialog(
-                              context: context,
-                              builder: (context) => AlertDialog(
-                                title: const Text("Reject"),
-                                content: const Text("The review has been marked as rejected."),
-                                actions: [
-                                  TextButton(
-                                    onPressed: () {
-                                      Navigator.of(context).popUntil((route) => route.isFirst); // Close the dialog
-                                    },
-                                    child: const Text("OK"),
-                                  ),
-                                ],
-                              ),
-                            );
-                            
-                          } else {
-                            // Handle failure
-                            final responseBody = jsonDecode(response.body);
-                            print('Error: ${responseBody['error']}');
-
-                            // Show failure modal
-                            showDialog(
-                              context: context,
-                              builder: (context) => AlertDialog(
-                                title: const Text("Error"),
-                                content: Text("Failed to complete review: ${responseBody['error']}"),
-                                actions: [
-                                  TextButton(
-                                    onPressed: () {
-                                      Navigator.of(context).pop(); // Close the dialog
-                                    },
-                                    child: const Text("OK"),
-                                  ),
-                                ],
-                              ),
-                            );
-                          }
-                        } catch (error) {
-                          // Handle error (e.g., network error)
-                          print('Error: $error');
-
-                          // Show error modal
-                          showDialog(
-                            context: context,
-                            builder: (context) => AlertDialog(
-                              title: const Text("Error"),
-                              content: const Text("An unexpected error occurred. Please try again later."),
-                              actions: [
-                                TextButton(
-                                  onPressed: () {
-                                    Navigator.of(context).pop(); // Close the dialog
-                                  },
-                                  child: const Text("OK"),
-                                ),
-                              ],
-                            ),
-                          );
-                        }
-                      },
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.red,
-                        padding: const EdgeInsets.symmetric(horizontal: 30),
+                            child: const Text("OK"),
+                          ),
+                        ],
                       ),
-                      child: const Text('Reject'),
+                    );
+                  } else {
+                    // Handle failure
+                    final responseBody = jsonDecode(response.body);
+                    print('Error: ${responseBody['error']}');
+                    Navigator.of(context).pop(); // Close the dialog
+                    showDialog(
+                      context: context,
+                      builder: (context) => AlertDialog(
+                        title: const Text("Error"),
+                        content: Text("Failed to reject: ${responseBody['error']}"),
+                        actions: [
+                          TextButton(
+                            onPressed: () {
+                              Navigator.of(context).pop(); // Close the error dialog
+                            },
+                            child: const Text("OK"),
+                          ),
+                        ],
+                      ),
+                    );
+                  }
+                } catch (error) {
+                  // Handle error (e.g., network error)
+                  print('Error: $error');
+                  Navigator.of(context).pop(); // Close the dialog
+                  showDialog(
+                    context: context,
+                    builder: (context) => AlertDialog(
+                      title: const Text("Error"),
+                      content: const Text("An unexpected error occurred. Please try again later."),
+                      actions: [
+                        TextButton(
+                          onPressed: () {
+                            Navigator.of(context).pop(); // Close the error dialog
+                          },
+                          child: const Text("OK"),
+                        ),
+                      ],
                     ),
+                  );
+                }
+              },
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Colors.red,
+              ),
+              child: const Text("Submit"),
+            ),
+          ],
+        );
+      },
+    );
+  },
+  style: ElevatedButton.styleFrom(
+    backgroundColor: Colors.red,
+    padding: const EdgeInsets.symmetric(horizontal: 30),
+  ),
+  child: const Text('Reject'),
+)
+
                   ],
                 ),
               ],
