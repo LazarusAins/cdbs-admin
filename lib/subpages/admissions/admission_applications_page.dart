@@ -263,8 +263,10 @@ String formatDate(DateTime date) {
                                       checkboxStates[index] = value ?? false;
                                     });
                                   },
+                                  activeColor: const Color(0XFF012169), // Set the active color to pink
                                 ),
-                                Text(request['admission_id'].toString(),
+                                Text(
+                                  request['admission_id'].toString(),
                                   style: TextStyle(fontSize: 12 * scale),
                                 ),
                               ],
