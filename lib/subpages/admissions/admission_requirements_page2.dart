@@ -433,7 +433,7 @@ Widget _buildImageCard({
 
   return GestureDetector(
     onTap: () {
-      _showImageDialog(imagePath, id!, admissionId!);
+      _showImageDialog(imagePath, id!, admissionId!, status!);
       print(imagePath);
     }, // Open dialog on tap
     child: Column(
@@ -522,7 +522,7 @@ Widget _buildImageCard({
 
 
   // Show image dialog when image is clicked
-  void _showImageDialog(String? imagePath, int id, int admissionId) {
+  void _showImageDialog(String? imagePath, int id, int admissionId, String docStatus) {
     showDialog(
       context: context,
       builder: (BuildContext context) {
@@ -559,7 +559,7 @@ Widget _buildImageCard({
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     ElevatedButton(
-                      onPressed: ()async {
+                      onPressed: docStatus=='pending'?()async {
                         // Handle accept action
                         try {
                           final response = await http.post(
@@ -641,12 +641,12 @@ Widget _buildImageCard({
                             ),
                           );
                         }
-                      },
+                      }:null,
                       style: ElevatedButton.styleFrom(
                         backgroundColor: Colors.green,
                         padding: const EdgeInsets.symmetric(horizontal: 30),
                       ),
-                      child: const Text('Accept'),
+                      child: const Text('Accept', style: TextStyle(color: Colors.white),),
                     ),
                     const SizedBox(width: 20),
                    
@@ -668,12 +668,12 @@ Widget _buildImageCard({
 
 
 ElevatedButton(
-  onPressed: () {
+  onPressed: docStatus=='pending'?() {
     showDialog(
       context: context,
       builder: (context) {
         return AlertDialog(
-          title: const Text("Reject"),
+          title: const Text("Reject", style: TextStyle(color: Colors.white)),
           content: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
@@ -788,7 +788,7 @@ ElevatedButton(
         );
       },
     );
-  },
+  }:null,
   style: ElevatedButton.styleFrom(
     backgroundColor: Colors.red,
     padding: const EdgeInsets.symmetric(horizontal: 30),
