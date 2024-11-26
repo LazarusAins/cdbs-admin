@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'package:cdbs_admin/subpages/s2.dart';
 import 'package:intl/intl.dart';
 import 'package:cdbs_admin/bloc/auth/auth_bloc.dart';
 import 'package:cdbs_admin/class/admission_forms.dart';
@@ -345,18 +346,30 @@ class _AdmissionOverviewPageState extends State<AdmissionOverviewPage> {
     return Container(
       padding: const EdgeInsets.all(16),
       child: Column(
+    children: [
+      // Back button with left arrow and "Back" text
+      Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          const S1Page(),
-          ElevatedButton(
+          TextButton.icon(
             onPressed: () {
               setState(() {
                 _selectedAction = 0; // Go back to default content
               });
             },
-            child: const Text("Go Back"),
+            icon: const Icon(Icons.arrow_back, color: Colors.black),
+            label: Text(
+              "Back",
+              style: TextStyle(color: Colors.black, fontFamily: 'Roboto-R', fontSize: 12 * scale),
+            ),
           ),
         ],
-      )
+      ),
+      
+      // Adding AdmissionApplicationsPage2 below the buttons
+      const S2Page(),
+    ],
+  ),
     );
   }
 

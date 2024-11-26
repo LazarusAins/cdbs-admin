@@ -37,9 +37,13 @@ class _UserAdminAccountsPage1State extends State<UserAdminAccountsPage1> {
 
   
 String formatDate(DateTime date) {
+    final DateTime localDate = date.toLocal();
     final DateFormat formatter = DateFormat('dd-MM-yyyy HH:mm');
-    return formatter.format(date);
+    return formatter.format(localDate);
   }
+
+
+  
 
   @override
   Widget build(BuildContext context) {
