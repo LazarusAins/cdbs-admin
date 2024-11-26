@@ -40,8 +40,9 @@ class _UserGuestAccountsPage1State extends State<UserGuestAccountsPage1> {
 
   
 String formatDate(DateTime date) {
+    final DateTime localDate = date.toLocal();
     final DateFormat formatter = DateFormat('dd-MM-yyyy HH:mm');
-    return formatter.format(date);
+    return formatter.format(localDate);
   }
 
 
