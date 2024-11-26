@@ -160,7 +160,7 @@ class _AdmissionSchedulesPage2State extends State<AdmissionSchedulesPage2> {
                             padding: EdgeInsets.zero,
                           ),
                           child: const Text(
-                            'Action',
+                            'View',
                             style: TextStyle(
                               fontSize: 14,
                               fontWeight: FontWeight.bold,
