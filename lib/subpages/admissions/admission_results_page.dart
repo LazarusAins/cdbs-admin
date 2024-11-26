@@ -4,6 +4,7 @@ import 'package:cdbs_admin/shared/api.dart';
 import 'package:cdbs_admin/subpages/admissions/admission_requirements_page2.dart';
 import 'package:cdbs_admin/subpages/landing_page.dart';
 import 'package:cdbs_admin/subpages/s1.dart';
+import 'package:cdbs_admin/subpages/s2.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
@@ -408,7 +409,7 @@ String formatDate(DateTime date) {
       ),
       
       // Adding AdmissionApplicationsPage2 below the buttons
-      const S1Page(),
+      const S2Page(),
     ],
   ),
 );
