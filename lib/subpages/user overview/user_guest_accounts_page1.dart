@@ -329,16 +329,28 @@ String formatDate(DateTime date) {
   child: PopupMenuButton<int>(
     icon: const Icon(Icons.more_vert),
     onSelected: (value) async {
-      if (value == 1) {
+
+      List<Map<String, dynamic>> members = await ApiService(apiUrl).getUserAllRequest(request['user_id'], supabaseUrl, supabaseKey);
+                                     if(members.isNotEmpty){
+                                             
+                                        setState(()  {
+                                          formDetails=members;
+                                          _selectedAction = value; // Change the selected action
+                                        });
+                                     }else{
+                                      _showViewModal(context);
+                                     }
+
+      /*if (value == 1) {
         // Show the modal when "VIEW" is clicked
-        _showViewModal(context);
+        _buildViewContent(scale, formDetails!, authState.uid);
       } else if (value == 2) {
         // Handle REMINDER action
         _showMessage('Reminder action', "Reminder");
       } else if (value == 3) {
         // Handle DEACTIVATE action
         _showMessage('Deactivate action', "Deactivate");
-      }
+      }*/
     },
     itemBuilder: (context) => [
       PopupMenuItem(
