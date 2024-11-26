@@ -36,14 +36,14 @@ class LandingPage extends StatefulWidget {
 
 class _LandingPageState extends State<LandingPage> {
   int _selectedPage = 0;
-  bool _isDropdownOpen = false; // Controls dropdown visibility
-  bool _isAdmissionDropdownOpen = false;
-  bool _isPreEnrollmentDropdownOpen = false;
+  final bool _isDropdownOpen = false; // Controls dropdown visibility
+  final bool _isAdmissionDropdownOpen = false;
+  final bool _isPreEnrollmentDropdownOpen = false;
   
   int _selectedDropdownOption = 0; // Tracks selected option in dropdown
   int _selectedAdmissionDropdownOption = 0; // Tracks selected option in dropdown
   int _selectedPreEnrollmentDropdownOption = 0; 
-
+   int _openDropdownIndex = -1;
 
   @override
   Widget build(BuildContext context) {
@@ -54,6 +54,7 @@ class _LandingPageState extends State<LandingPage> {
     double widthScale = screenWidth / baseWidth;
     double heightScale = screenHeight / baseHeight;
     double scale = widthScale < heightScale ? widthScale : heightScale;
+    
 
     return Scaffold(
       body: BlocConsumer<AuthBloc, AuthState>(
@@ -311,12 +312,14 @@ Padding(
 
   // SIDEBAR CONTENTS
 Widget _buildMenuItem(int index, String text, IconData icon, double scale) {
-  bool isSelected = _selectedPage == index;
-  return GestureDetector(
+  bool isSelected  = _selectedPage == index;
+  bool isDropdownOpen = _openDropdownIndex == index;
+    return GestureDetector(
     onTap: () {
       setState(() {
         _selectedPage = index;
-        _isDropdownOpen = false;
+       _openDropdownIndex = (isDropdownOpen) ? -1 : index;
+        
       });
     },
     child: Padding(
@@ -358,6 +361,7 @@ Widget _buildMenuItem(int index, String text, IconData icon, double scale) {
 //DROPWDOWN MENU OVERVIEW
   Widget _buildDropdownMenuItem(int index, String text, IconData icon, double scale) {
   bool isSelected = _selectedPage == index;
+  bool isDropdownOpen = _openDropdownIndex == index;
   List<String> dropdownOptions = ["Guest Accounts", "Learner Accounts", "Teacher Accounts", "Parent Accounts", "Admin Accounts"];
 return Column(
     children: [
@@ -365,7 +369,7 @@ return Column(
         onTap: () {
           setState(() {
             _selectedPage = index;
-            _isDropdownOpen = !_isDropdownOpen; // Toggle dropdown visibility
+            _openDropdownIndex = isDropdownOpen ? -1 : index;// Toggle dropdown visibility
           });
         },
         child: Padding(
@@ -413,7 +417,7 @@ return Column(
         ),
       ),
       // Dropdown options
-      if (_isDropdownOpen)
+      if (isDropdownOpen)
         Padding(
           padding: const EdgeInsets.only(left: 30, right: 30),
           child: Column(
@@ -458,6 +462,7 @@ return Column(
 //DROPWDOWN MENU ADMISSION
  Widget _buildAdmissionDropdownMenu(int index, String text, IconData icon, double scale) {
   bool isSelected = _selectedPage == index;
+  bool isDropdownOpen = _openDropdownIndex == index;
   List<String> dropdownOptions = ["Overview", "Applications", "Requirements", "Payments", "Schedules", "Results"];
 
   return Column(
@@ -466,7 +471,7 @@ return Column(
         onTap: () {
           setState(() {
             _selectedPage = index;
-            _isAdmissionDropdownOpen = !_isAdmissionDropdownOpen; // Toggle dropdown visibility
+            _openDropdownIndex  = _isAdmissionDropdownOpen ? -1: index; // Toggle dropdown visibility
           });
         },
         child: Padding(
@@ -514,7 +519,7 @@ return Column(
         ),
       ),
       // Dropdown options
-      if (_isAdmissionDropdownOpen)
+      if (isDropdownOpen)
         Padding(
           padding: const EdgeInsets.only(left: 30, right: 30),
           child: Column(
@@ -559,6 +564,7 @@ return Column(
 //DROPWDOWN MENU PRE ENROLLMENT
  Widget _buildPreEnrollmentDropdownMenu(int index, String text, IconData icon, double scale) {
   bool isSelected = _selectedPage == index;
+  bool isDropdownOpen = _openDropdownIndex == index;
   List<String> dropdownOptions = ["Reservation", "Requirements"];
 
   return Column(
@@ -567,7 +573,7 @@ return Column(
         onTap: () {
           setState(() {
             _selectedPage = index;
-            _isPreEnrollmentDropdownOpen = !_isPreEnrollmentDropdownOpen; // Toggle dropdown visibility
+            _openDropdownIndex = _isPreEnrollmentDropdownOpen ? -1:index ; // Toggle dropdown visibility
           });
         },
         child: Padding(
@@ -615,7 +621,7 @@ return Column(
         ),
       ),
       // Dropdown options
-      if (_isPreEnrollmentDropdownOpen)
+      if (isDropdownOpen)
         Padding(
           padding: const EdgeInsets.only(left: 30, right: 30),
           child: Column(
