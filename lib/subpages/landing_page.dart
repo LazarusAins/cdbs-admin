@@ -149,25 +149,6 @@ class _LandingPageState extends State<LandingPage> {
                 // Sidebar Categories
 
 
-
-
-
-
-
-
-
-
-                // Expanded(
-                //   child: ListView(
-                //     children: [
-                //       const SizedBox(height: 40),
-                //       _buildMenuItem(0, 'Dashboard', Icons.dashboard),
-                //       const SizedBox(height: 20),
-                //       _buildMenuItem(1, 'Inquiry Forms', Icons.note_alt_rounded),
-                //       const SizedBox(height: 20),
-                //     ],
-                //   ),
-                // ),
 //SIDEBAR CATEGORIES
 Expanded(
   child: ListView(
@@ -185,12 +166,6 @@ Expanded(
     ],
   ),
 ),
-
-
-
-
-
-
 
 
 
@@ -316,46 +291,23 @@ Padding(
   ),
 ),
 
-
-
-
               ],
             ),
           ),
 
-
-
-
-          
           // Main content area
                     Expanded(
             child: _getPageContent(),
           ),
         ],
       );
-        
-       
+      
   }
    return Container();
         }
   )
     );
   }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
   // SIDEBAR CONTENTS
 Widget _buildMenuItem(int index, String text, IconData icon, double scale) {
@@ -403,31 +355,11 @@ Widget _buildMenuItem(int index, String text, IconData icon, double scale) {
 }
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 //DROPWDOWN MENU OVERVIEW
   Widget _buildDropdownMenuItem(int index, String text, IconData icon, double scale) {
   bool isSelected = _selectedPage == index;
   List<String> dropdownOptions = ["Guest Accounts", "Learner Accounts", "Teacher Accounts", "Parent Accounts", "Admin Accounts"];
-
-  return Column(
+return Column(
     children: [
       GestureDetector(
         onTap: () {
@@ -520,14 +452,6 @@ Widget _buildMenuItem(int index, String text, IconData icon, double scale) {
     ],
   );
 }
-
-
-
-
-
-
-
-
 
 
 
@@ -629,19 +553,6 @@ Widget _buildMenuItem(int index, String text, IconData icon, double scale) {
     ],
   );
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -762,11 +673,11 @@ Widget _buildMenuItem(int index, String text, IconData icon, double scale) {
         case 0:
           return const UserGuestAccountsPage1();
         case 1:
-          return const UserLearnerAccountsPage1();
+          return const S1Page();
         case 2:
-          return const UserTeacherAccountsPage1();
+          return const S1Page();
         case 3:
-          return const UserParentAccountsPage1();
+          return const S1Page();
         case 4:
           return const UserAdminAccountsPage1();
         default:
@@ -805,13 +716,7 @@ Widget _buildMenuItem(int index, String text, IconData icon, double scale) {
         case 0:
           return const S1Page();
         case 1:
-          return const S2Page();
-        case 2:
-          return const S3Page();
-        case 3:
-          return const S4Page();
-        case 4:
-          return const Page5();
+          return const S1Page();
         default:
           return const Page6();
       }
@@ -822,9 +727,9 @@ Widget _buildMenuItem(int index, String text, IconData icon, double scale) {
     // Show the main page content for other pages
     switch (_selectedPage) {
       case 0:
-        return const Page1();
+        return const S1Page();
       case 1:
-        return const Page2();
+        return const S1Page();
       case 2:
         return const Page3();
       case 3:
