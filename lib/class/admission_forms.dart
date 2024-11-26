@@ -250,4 +250,129 @@ Future<List<Map<String, dynamic>>> fetchRegisteredUser(String supabaseUrl, Strin
   }
 
 
+
+
+
+//PAYMENT
+Future<List<Map<String, dynamic>>> fetchPaymentForms(String supabaseUrl, String supabaseKey) async {
+    final response = await http.get(
+      Uri.parse('$apiUrl/api/admin/get_admission_for_payment'),
+      headers: {
+        "supabase-url": supabaseUrl,
+        "supabase-key": supabaseKey,
+      },
+    );
+
+    if (response.statusCode == 200) {
+      final Map<String, dynamic> data = json.decode(response.body);
+      
+      // Ensure the type safety by converting to List<Map<String, dynamic>>
+      return List<Map<String, dynamic>>.from(data['user'] ?? []);
+      
+    } else {
+      throw Exception('Failed to form data');
+    }
+  }
+
+  Stream<List<Map<String, dynamic>>> streamPaymentForms(String supabaseUrl, String supabaseKey) async* {
+  while (true) {
+    try {
+      // Fetch the admission forms (assuming fetchAdmissionForms is already defined)
+      final members = await fetchPaymentForms(supabaseUrl, supabaseKey);
+      
+      // Filter out the members where db_admission_table is null
+      final filteredMembers = members.where((member) {
+        // Ensure db_admission_table is not null
+        return member['db_admission_table'] != null;
+      }).toList(); // Convert the iterable to a list
+
+      // Emit the filtered list of members
+      yield filteredMembers;
+    } catch (e) {
+      print('Error fetching members: $e');
+      yield []; // Emit an empty list on error
+    }
+
+    // Delay the next fetch
+    await Future.delayed(const Duration(seconds: 3)); // Refresh every 3 seconds
+  }
+}
+
+
+
+Future<List<Map<String, dynamic>>> fetchSchedule(String supabaseUrl, String supabaseKey) async {
+    final response = await http.get(
+      Uri.parse('$apiUrl/api/admin/check_exam_schedule'),
+      headers: {
+        "supabase-url": supabaseUrl,
+        "supabase-key": supabaseKey,
+      },
+    );
+
+    if (response.statusCode == 200) {
+      final Map<String, dynamic> data = json.decode(response.body);
+      
+      // Ensure the type safety by converting to List<Map<String, dynamic>>
+      return List<Map<String, dynamic>>.from(data['exam_schedules'] ?? []);
+      
+    } else {
+      throw Exception('Failed to form data');
+    }
+  }
+
+
+  Stream<List<Map<String, dynamic>>> streamSchedule(String supabaseUrl, String supabaseKey) async* {
+    while (true) {
+      try {
+        final members = await fetchSchedule(supabaseUrl, supabaseKey);
+        yield members; // Emit the list of members
+      } catch (e) {
+        print('Error fetching members: $e');
+        yield []; // Emit an empty list on error
+      }
+
+      await Future.delayed(const Duration(seconds: 3)); // Refresh every 10 seconds
+    }
+  }
+
+
+  Future<List<Map<String, dynamic>>> fetchScheduleById(int scheduleId, String supabaseUrl, String supabaseKey) async {
+  try {
+    final response = await http.post(
+      Uri.parse('$apiUrl/api/admin/get_all_schedule'),
+      headers: {
+        'Content-Type': 'application/json',
+        'supabase-url': supabaseUrl,
+        'supabase-key': supabaseKey,
+      },
+      body: json.encode({
+        'schedule_id': scheduleId,  // Send customer_id in the request body
+      }),
+    );
+
+    if (response.statusCode == 200) {
+      final data = json.decode(response.body);
+
+      //print('Response data: $data');  // Debugging output
+
+      // Check if 'members' is a list or a map
+      if (data['exam_schedules'] is List) {
+        // If it's already a list, return it as a List<Map<String, dynamic>>
+        return List<Map<String, dynamic>>.from(data['exam_schedules']);
+      } else if (data['exam_schedules'] is Map) {
+        // If it's a map (single member), convert it to a list with that single map
+        return [data['exam_schedules']];
+      } else {
+        // Return an empty list if 'members' is neither a List nor a Map
+        return [];
+      }
+    } else {
+      throw Exception('Failed to load member');
+    }
+  } catch (e) {
+    print('Error: $e');
+    return []; // Return an empty list on error
+  }
+}
+
 }

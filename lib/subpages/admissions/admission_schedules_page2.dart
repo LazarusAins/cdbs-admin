@@ -1,13 +1,63 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 class AdmissionSchedulesPage2 extends StatefulWidget {
-  const AdmissionSchedulesPage2({super.key});
+  List<Map<String, dynamic>>? formDetails;
+  final Function(bool isClicked) onNextPressed;
+
+  AdmissionSchedulesPage2({super.key, required this.formDetails, required this.onNextPressed});
 
   @override
   State<AdmissionSchedulesPage2> createState() => _AdmissionSchedulesPage2State();
 }
 
 class _AdmissionSchedulesPage2State extends State<AdmissionSchedulesPage2> {
+
+  String? dateCreatedString;
+  DateTime? dateCreated;
+  String? formattedDate;
+
+  String? examDate;
+  DateTime? dateExam;
+  String? formattedExamDate;
+
+
+
+  @override
+  void initState() {
+    super.initState();
+    // Initialize the service with your endpoint
+     dateCreatedString = widget.formDetails![0]['create_at'];
+     dateCreated = DateTime.parse(dateCreatedString!);
+     formattedDate = formatDate(dateCreated!);
+
+     examDate = widget.formDetails![0]['exam_date'];
+     dateExam = DateTime.parse(examDate!);
+     formattedExamDate = formatDate(dateExam!);
+  }
+
+
+  String formatDate(DateTime date) {
+    final DateTime localDate = date.toLocal(); // Converts to local time zone
+
+  final DateFormat formatter = DateFormat('dd-MM-yyyy');
+  return formatter.format(localDate);
+  }
+
+
+  String formatTime(String time) {
+  // Parse the time string into a DateTime object. 
+  // For example, "8:00" should be parsed into a DateTime object with 12:00 AM
+  final DateTime parsedTime = DateFormat('HH:mm').parse(time);
+
+  // Format the DateTime object into a 12-hour format with AM/PM
+  final DateFormat formatter = DateFormat('hh a'); // 'hh' for 12-hour format, 'a' for AM/PM
+  
+  // Return formatted time
+  return formatter.format(parsedTime);  // Format the DateTime object to time only
+}
+
+
   @override
   Widget build(BuildContext context) {
     double screenHeight = MediaQuery.of(context).size.height;
@@ -22,61 +72,7 @@ class _AdmissionSchedulesPage2State extends State<AdmissionSchedulesPage2> {
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
       child: Column(
         children: [
-          const SizedBox(height: 20),
-
-          // Row with Logo, Text, and Icon
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              // Logo and Text
-              Row(
-                children: [
-                  // Logo (replace 'assets/logo.png' with your image path)
-                  Container(
-                    width: 50,
-                    height: 50,
-                    margin: const EdgeInsets.only(right: 8),
-                    child: Image.asset(
-                      'assets/Logo.png', 
-                      fit: BoxFit.cover,
-                    ),
-                  ),
-                  const Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    mainAxisAlignment: MainAxisAlignment.center, 
-                    children: [
-                      Text(
-                        'John Mark Romero',
-                        style: TextStyle(
-                          fontSize: 16,
-                          fontFamily: 'Roboto-R',
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                      SizedBox(height: 4),
-                      Text(
-                        'jm@email.com / 0912-345-678',
-                        style: TextStyle(
-                          fontSize: 14,
-                          fontFamily: 'Roboto-R',
-                          color: Colors.grey,
-                        ),
-                      ),
-                    ],
-                  ),
-                ],
-              ),
-              const Icon(
-                Icons.more_vert,
-                color: Colors.black,
-              ),
-            ],
-          ),
-
-          const SizedBox(height: 40),
-
-
+          const SizedBox(height: 60),
 
           Container(
               padding: const EdgeInsets.all(16),
@@ -95,7 +91,7 @@ class _AdmissionSchedulesPage2State extends State<AdmissionSchedulesPage2> {
                         flex: 2,
                         child: _buildInfoColumn(
                           label: 'Exam Date',
-                          value: '12/11/2024',
+                          value: formattedExamDate!,
                           scale: scale,
                         ),
                       ),
@@ -104,7 +100,7 @@ class _AdmissionSchedulesPage2State extends State<AdmissionSchedulesPage2> {
                         flex: 2,
                         child: _buildInfoColumn(
                           label: 'Exam Time',
-                          value: '9AM - 10AM',
+                          value: '${formatTime(widget.formDetails![0]['start_time'])} - ${formatTime(widget.formDetails![0]['end_time'])}',
                           scale: scale,
                         ),
                       ),
@@ -113,7 +109,7 @@ class _AdmissionSchedulesPage2State extends State<AdmissionSchedulesPage2> {
                         flex: 2,
                         child: _buildInfoColumn(
                           label: 'Exam Location',
-                          value: 'Lobby',
+                          value: widget.formDetails![0]['location'],
                           scale: scale,
                         ),
                       ),
@@ -122,7 +118,7 @@ class _AdmissionSchedulesPage2State extends State<AdmissionSchedulesPage2> {
                         flex: 2,
                         child: _buildInfoColumn(
                           label: 'Grade Level',
-                          value: 'Grade 1',
+                          value: widget.formDetails![0]['grade_level'],
                           scale: scale,
                         ),
                       ),
@@ -140,7 +136,7 @@ class _AdmissionSchedulesPage2State extends State<AdmissionSchedulesPage2> {
                         flex: 2,
                         child: _buildInfoColumn(
                           label: 'Date Created',
-                          value: '06/11/2024',
+                          value: formattedDate!,
                           scale: scale,
                         ),
                       ),
@@ -160,7 +156,7 @@ class _AdmissionSchedulesPage2State extends State<AdmissionSchedulesPage2> {
                             padding: EdgeInsets.zero,
                           ),
                           child: const Text(
-                            'Action',
+                            'View',
                             style: TextStyle(
                               fontSize: 14,
                               fontWeight: FontWeight.bold,
@@ -184,7 +180,7 @@ class _AdmissionSchedulesPage2State extends State<AdmissionSchedulesPage2> {
             const SizedBox(height: 40),
 
           // Three Copies of Rows in Containers
-          for (int i = 0; i < 2; i++) 
+          /*for (int i = 0; i < 2; i++) 
             Container(
               padding: const EdgeInsets.all(16),
               decoration: BoxDecoration(
@@ -257,12 +253,100 @@ class _AdmissionSchedulesPage2State extends State<AdmissionSchedulesPage2> {
                   ),
                 ],
               ),
+            ),*/
+
+
+            Container(
+              height: 500,
+              width: 1500,
+              child: ListView.builder(
+                itemCount: widget.formDetails![0]['db_exam_admission_schedule'].length,
+                itemBuilder: (context, i) {
+                  // You can access your data here like this:
+                  var admissionSchedule = widget.formDetails![0]['db_exam_admission_schedule'][i];
+                  String admissionCreated = admissionSchedule['db_admission_table']['created_at'];
+                  DateTime admissionDate = DateTime.parse(admissionCreated);
+                  String formattedAdmissionDate = formatDate(admissionDate);
+                  return Container(
+                    padding: const EdgeInsets.all(16),
+                    decoration: BoxDecoration(
+                      color: Colors.grey[200],
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                    margin: const EdgeInsets.only(bottom: 20),
+                    child: Column(
+                      children: [
+                        // Second Row
+                        Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Expanded(
+                  flex: 2,
+                  child: _buildInfoColumn(
+                    label: 'Application ID',
+                    value: admissionSchedule['admission_id'].toString() ?? 'N/A', // Example, adjust according to your data
+                    scale: scale,
+                  ),
+                ),
+                const SizedBox(width: 16),
+                Expanded(
+                  flex: 3,
+                  child: _buildInfoColumn(
+                    label: 'Applicant Name',
+                    value: '${admissionSchedule['db_admission_table']['first_name']} ${admissionSchedule['db_admission_table']['last_name']}', // Example, adjust according to your data
+                    scale: scale,
+                  ),
+                ),
+                const SizedBox(width: 16),
+                Expanded(
+                  flex: 2,
+                  child: _buildInfoColumn(
+                    label: 'Grade Level',
+                    value: admissionSchedule['db_admission_table']['level_applying_for'] ?? 'N/A', // Example, adjust according to your data
+                    scale: scale,
+                  ),
+                ),
+                const SizedBox(width: 16),
+                Expanded(
+                  flex: 4,
+                  child: _buildInfoColumn(
+                    label: 'Application Status',
+                    value: admissionSchedule['db_admission_table']['admission_status'].toUpperCase() ?? 'N/A', // Example, adjust according to your data
+                    scale: scale,
+                  ),
+                ),
+                const SizedBox(width: 16),
+                const SizedBox(width: 99), // This could still be removed if unnecessary
+              ],
+                        ),
+                        const SizedBox(height: 16),
+              
+                        // Third Row (Date Created)
+                        Row(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                SizedBox(
+                  width: 220,
+                  child: _buildInfoColumn(
+                    label: 'Date Created',
+                    value: formattedAdmissionDate ?? 'N/A', // Example, adjust according to your data
+                    scale: scale,
+                  ),
+                ),
+              ],
+                        ),
+                      ],
+                    ),
+                  );
+                },
+              ),
             ),
-            const Row(
+
+             Row(
   mainAxisAlignment: MainAxisAlignment.start, // Aligns the content to the left
   crossAxisAlignment: CrossAxisAlignment.center, // Aligns text and icon vertically
   children: [
-    Text(
+    const Text(
       'Reschedule ',
       style: TextStyle(
         fontSize: 14, // Adjust the font size as needed
@@ -270,8 +354,8 @@ class _AdmissionSchedulesPage2State extends State<AdmissionSchedulesPage2> {
       ),
     ),
     Text(
-      '(3)', // Display the number of applications
-      style: TextStyle(
+      widget.formDetails![0]['db_exam_admission_schedule'].length.toString(), // Display the number of applications
+      style: const TextStyle(
         fontSize: 14,
       ),
     ),

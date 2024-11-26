@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'package:cdbs_admin/bloc/admission_bloc/admission_bloc.dart';
 import 'package:cdbs_admin/subpages/admissions/admission_schedules_page2.dart';
 import 'package:intl/intl.dart';
 import 'package:cdbs_admin/bloc/auth/auth_bloc.dart';
@@ -29,19 +30,37 @@ class _AdmissionSchedulesPageState extends State<AdmissionSchedulesPage> {
   late Stream<List<Map<String, dynamic>>> admissionForms;
   List<Map<String, dynamic>> requests = [];
   List<Map<String, dynamic>> filteredRequest = [];
+  List<Map<String, dynamic>>? formDetails;
+
+  
 
   @override
   void initState() {
     super.initState();
     _apiService = ApiService(apiUrl); // Replace with your actual API URL
-    admissionForms = _apiService.streamAdmissionForms(supabaseUrl, supabaseKey);
+    admissionForms = _apiService.streamSchedule(supabaseUrl, supabaseKey);
     // Initialize the service with your endpoint
   }
 
   String formatDate(DateTime date) {
-    final DateFormat formatter = DateFormat('dd-MM-yyyy HH:mm');
-    return formatter.format(date);
+    final DateTime localDate = date.toLocal(); // Converts to local time zone
+
+  final DateFormat formatter = DateFormat('dd-MM-yyyy');
+  return formatter.format(localDate);
   }
+
+
+  String formatTime(String time) {
+  // Parse the time string into a DateTime object. 
+  // For example, "8:00" should be parsed into a DateTime object with 12:00 AM
+  final DateTime parsedTime = DateFormat('HH:mm').parse(time);
+
+  // Format the DateTime object into a 12-hour format with AM/PM
+  final DateFormat formatter = DateFormat('hh:mm a'); // 'hh' for 12-hour format, 'a' for AM/PM
+  
+  // Return formatted time
+  return formatter.format(parsedTime);  // Format the DateTime object to time only
+}
 
 
   @override
@@ -122,7 +141,7 @@ class _AdmissionSchedulesPageState extends State<AdmissionSchedulesPage> {
             ),
 
             if (_selectedAction == 0) _buildDefaultContent(scale), // Default content
-            if (_selectedAction == 1) _buildViewContent(scale), // View content
+            if (_selectedAction == 1) _buildViewContent(scale, formDetails!, authState.uid), // View content
             if (_selectedAction == 2) _buildReminderContent(scale), // Reminder content
             if (_selectedAction == 3) _buildDeactivateContent(scale),
             if (_selectedAction == 0) ...[
@@ -225,14 +244,17 @@ class _AdmissionSchedulesPageState extends State<AdmissionSchedulesPage> {
                 itemCount: filteredRequest.length,
                 itemBuilder: (context, index) {
                   final request = filteredRequest[index];
-                  final fullName = '${request['db_admission_table']['first_name']} ${request['db_admission_table']['last_name']}';
-                  final processBy = request['db_admission_table']['db_admission_form_handler_table'].isNotEmpty
-    ? '${request['db_admission_table']['db_admission_form_handler_table'][0]['db_admin_table']['first_name']} ${request['db_admission_table']['db_admission_form_handler_table'][0]['db_admin_table']['last_name']}'
-    : '---';
 
-                  String dateCreatedString = request['db_admission_table']['created_at'];
+                  String dateCreatedString = request['create_at'];
                   DateTime dateCreated = DateTime.parse(dateCreatedString);
                   String formattedDate = formatDate(dateCreated);
+
+                  String examDate = request['exam_date'];
+                  DateTime dateExam = DateTime.parse(examDate);
+                  String formattedExamDate = formatDate(dateExam);
+
+                  String startTime = formatTime(request['start_time']);
+                  String endTime = formatTime(request['end_time']);
                   return Column(
                     children: [
                       Row(
@@ -242,17 +264,7 @@ class _AdmissionSchedulesPageState extends State<AdmissionSchedulesPage> {
                             flex: 1,
                             child: Row(
                               children: [
-                                Checkbox(
-                                  value: checkboxStates[index],
-                                  onChanged: (value) {
-                                    setState(() {
-                                      checkboxStates[index] = value ?? false;
-                                    });
-                                  },
-                                  activeColor: const Color(0XFF012169), // Set the active color to pink
-                                ),
-                                Text(
-                                  request['admission_id'].toString(),
+                                Text(formattedExamDate,
                                   style: TextStyle(fontSize: 12 * scale),
                                 ),
                               ],
@@ -260,25 +272,25 @@ class _AdmissionSchedulesPageState extends State<AdmissionSchedulesPage> {
                           ),
                           Expanded(
                             flex: 2,
-                            child: Text(fullName,
+                            child: Text('$startTime - $endTime',
                               style: TextStyle(fontFamily: 'Roboto-R', fontSize: 14 * scale),
                             ),
                           ),
                           Expanded(
                             flex: 2,
-                            child: Text(processBy ?? '---',
+                            child: Text(request['location'],
                               style: TextStyle(fontFamily: 'Roboto-R', fontSize: 14 * scale),
                             ),
                           ),
                           Expanded(
                             flex: 2,
-                            child: Text(request['db_admission_table']['admission_status'].toString().toUpperCase(),
+                            child: Text(request['grade_level'].toUpperCase(),
                               style: TextStyle(fontFamily: 'Roboto-R', fontSize: 14 * scale),
                             ),
                           ),
                           Expanded(
                             flex: 2,
-                            child: Text(request['db_admission_table']['admission_status'].toString().toUpperCase(),
+                            child: Text(request['reservation_count']==request['slots']?'FULL':'${request['reservation_count']}/${request['slots']}',
                               style: TextStyle(fontFamily: 'Roboto-R', fontSize: 14 * scale),
                             ),
                           ),
@@ -293,10 +305,15 @@ class _AdmissionSchedulesPageState extends State<AdmissionSchedulesPage> {
                               flex: 1,
                               child: PopupMenuButton<int>(
                                 icon: const Icon(Icons.more_vert),
-                                onSelected: (value) {
-                                  setState(() {
-                                    _selectedAction = value; // Change the selected action
-                                  });
+                                onSelected: (value) async {
+                                  List<Map<String, dynamic>> members = await ApiService(apiUrl).fetchScheduleById(request['schedule_id'], supabaseUrl, supabaseKey);
+                                     if(members.isNotEmpty){
+                                             
+                                        setState(()  {
+                                          formDetails=members;
+                                          _selectedAction = value; // Change the selected action
+                                        });
+                                     }
                                 },
                                 itemBuilder: (context) => [
                                   PopupMenuItem(
@@ -354,7 +371,7 @@ class _AdmissionSchedulesPageState extends State<AdmissionSchedulesPage> {
   }
 
   // Build content for each action (VIEW, REMINDER, DEACTIVATE)
-Widget _buildViewContent(double scale) {
+Widget _buildViewContent(double scale, List<Map<String, dynamic>> details, int userId) {
     return Container(
   padding: const EdgeInsets.all(16),
   child: Column(
@@ -380,7 +397,9 @@ Widget _buildViewContent(double scale) {
       ),
       
       // Adding AdmissionApplicationsPage2 below the buttons
-      const AdmissionSchedulesPage2(),
+       AdmissionSchedulesPage2(formDetails: details, onNextPressed: (bool isClicked) {
+         context.read<AdmissionBloc>().add(MarkAsCompleteClicked(isClicked));
+       },),
     ],
   ),
 );

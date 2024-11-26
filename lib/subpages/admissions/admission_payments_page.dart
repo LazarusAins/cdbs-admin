@@ -1,6 +1,8 @@
+import 'package:cdbs_admin/bloc/admission_bloc/admission_bloc.dart';
 import 'package:cdbs_admin/bloc/auth/auth_bloc.dart';
 import 'package:cdbs_admin/class/admission_forms.dart';
 import 'package:cdbs_admin/shared/api.dart';
+import 'package:cdbs_admin/subpages/admissions/admission_payments_page2.dart';
 import 'package:cdbs_admin/subpages/admissions/admission_requirements_page2.dart';
 import 'package:cdbs_admin/subpages/landing_page.dart';
 import 'package:cdbs_admin/subpages/s1.dart';
@@ -24,12 +26,33 @@ List<bool> checkboxStates = List.generate(10, (_) => false);
   List<Map<String, dynamic>> requests = [];
   List<Map<String, dynamic>> filteredRequest = [];
   late ApiService _apiService;
+  List<Map<String, dynamic>>? formDetails;
+
+  Future<void> fetchFormDetails(int id) async {
+    try {
+      // Perform the async operation to get the data
+      List<Map<String, dynamic>> details = await ApiService(apiUrl).getDetailsById(
+        id,
+        supabaseUrl,
+        supabaseKey,
+      );
+
+      // Once data is fetched, call setState to update the UI
+      if (mounted) {
+        setState(() {
+          formDetails = details;
+        });
+      }
+    } catch (e) {
+      print("Error fetching form details: $e");
+    }
+  }
 
   @override
   void initState() {
     super.initState();
     _apiService = ApiService(apiUrl); // Replace with your actual API URL
-    admissionForms = _apiService.streamAdmissionForms(supabaseUrl, supabaseKey);
+    admissionForms = _apiService.streamPaymentForms(supabaseUrl, supabaseKey);
     // Initialize the service with your endpoint
   }
 
@@ -85,6 +108,7 @@ String formatDate(DateTime date) {
                   );
                 }
                 requests = snapshot.data ?? []; // Use the data from the snapshot
+                print(requests);
                 filteredRequest = requests;
 
                 if (snapshot.hasError) {
@@ -117,7 +141,7 @@ String formatDate(DateTime date) {
       ),
 
       if (_selectedAction == 0) _buildDefaultContent(scale), // Default content
-      if (_selectedAction == 1) _buildViewContent(scale), // View content
+      if (_selectedAction == 1) _buildViewContent(scale, formDetails!, authState.uid), // View content
       if (_selectedAction == 2) _buildReminderContent(scale), // Reminder content
       if (_selectedAction == 3) _buildDeactivateContent(scale),
       if (_selectedAction == 4) _buildDeactivateContent(scale),
@@ -283,10 +307,15 @@ String formatDate(DateTime date) {
                         flex: 1,
                         child: PopupMenuButton<int>(
                           icon: const Icon(Icons.more_vert),
-                          onSelected: (value) {
-                            setState(() {
-                              _selectedAction = value; // Change the selected action
-                            });
+                          onSelected: (value) async {
+                            List<Map<String, dynamic>> members = await ApiService(apiUrl).getDetailsById(request['admission_id'], supabaseUrl, supabaseKey);
+                                     if(members.isNotEmpty){
+                                             
+                                        setState(()  {
+                                          formDetails=members;
+                                          _selectedAction = value; // Change the selected action
+                                        });
+                                     }
                           },
                           itemBuilder: (context) => [
                             PopupMenuItem(
@@ -344,7 +373,7 @@ String formatDate(DateTime date) {
   }
 
   // Build content for each action (VIEW, REMINDER, DEACTIVATE)
-  Widget _buildViewContent(double scale) {
+  Widget _buildViewContent(double scale, List<Map<String, dynamic>> details, int userId) {
     return Container(
   padding: const EdgeInsets.all(16),
   child: Column(
@@ -365,50 +394,13 @@ String formatDate(DateTime date) {
               style: TextStyle(color: Colors.black, fontFamily: 'Roboto-R', fontSize: 12 * scale),
             ),
           ),
-          
-          // Two buttons on the right
-          Row(
-            children: [
-              ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: const Color(0xFF012169), // Blue color
-                  fixedSize: Size(178 * scale, 37 * scale), // Button size
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(5), // Border radius
-                  ),
-                ),
-                onPressed: () {
-                  // Action for first button
-                },
-                child: Text(
-                  "Download PDF",
-                  style: TextStyle(color: Colors.white, fontFamily: 'Roboto-R', fontSize: 12 * scale),
-                ),
-              ),
-              const SizedBox(width: 8), // Spacing between buttons
-              ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: const Color(0xFF007A33), // Green color
-                  fixedSize: Size(178 * scale, 37 * scale), // Button size
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(5), // Border radius
-                  ),
-                ),
-                onPressed: () {
-                  // Action for second button
-                },
-                child: Text(
-                  "Mark as Complete",
-                  style: TextStyle(color: Colors.white, fontFamily: 'Roboto-R', fontSize: 12 * scale),
-                ),
-              ),
-            ],
-          ),
         ],
       ),
       
       // Adding AdmissionApplicationsPage2 below the buttons
-      const S1Page(),
+       AdmissionPaymentsPage2(formDetails: details, onNextPressed: (bool isClicked) {
+         context.read<AdmissionBloc>().add(MarkAsCompleteClicked(isClicked));
+       },userId: userId),
     ],
   ),
 );
