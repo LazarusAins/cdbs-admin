@@ -258,10 +258,10 @@ class _AdmissionOverviewPageState extends State<AdmissionOverviewPage> {
                             titleText = 'ASSESSMENT - ';
                             statusColor = _getStatusColor(statusText);
                           } else if (isRequired) {
-                            titleText = 'PAYMENT - ';
+                            titleText = 'PAYMENTS - ';
                             statusColor = _getStatusColor(statusText);
                           } else if (isComplete) {
-                            titleText = 'REQUIRMENTS - ';
+                            titleText = 'REQUIREMENTS - ';
                             statusColor = _getStatusColor(statusText);
                           } else {
                             titleText = 'APPLICATION - ';
