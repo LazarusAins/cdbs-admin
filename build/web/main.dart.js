@@ -43258,11 +43258,11 @@ $S:27}
 A.asN.prototype={
 $2(a6,a7){var s,r,q,p,o,n,m,l,k,j,i,h,g,f,e,d,c,b,a,a0,a1,a2,a3=null,a4="Roboto-R",a5="Password"
 if(a7 instanceof A.fn)return B.aW
-s=A.MS(A.pH("assets/background.jpg",B.dQ,a3,a3),0.2)
+s=A.MS(A.pH("background.jpg",B.dQ,a3,a3),0.2)
 r=this.a
 q=this.b
 p=293*q
-p=A.pH("assets/logo.png",a3,p,p)
+p=A.pH("logo.png",a3,p,p)
 o=A.T(a3,30*q,a3)
 n=388*q
 m=11*q
