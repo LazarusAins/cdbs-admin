@@ -1,11 +1,15 @@
+import 'package:cdbs_admin/shared/api.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
 
 class AdmissionSchedulesPage2 extends StatefulWidget {
   List<Map<String, dynamic>>? formDetails;
   final Function(bool isClicked) onNextPressed;
+  int userId;
 
-  AdmissionSchedulesPage2({super.key, required this.formDetails, required this.onNextPressed});
+  AdmissionSchedulesPage2({super.key, required this.formDetails, required this.onNextPressed, required this.userId});
 
   @override
   State<AdmissionSchedulesPage2> createState() => _AdmissionSchedulesPage2State();
@@ -42,6 +46,13 @@ class _AdmissionSchedulesPage2State extends State<AdmissionSchedulesPage2> {
 
   final DateFormat formatter = DateFormat('dd-MM-yyyy');
   return formatter.format(localDate);
+  }
+
+  bool isExamToday(String dateExam) {
+    // Get today's date and format it
+    final String today = formatDate(DateTime.now());
+    // Compare if today is the same as the exam date
+    return today == dateExam;
   }
 
 
@@ -320,6 +331,7 @@ class _AdmissionSchedulesPage2State extends State<AdmissionSchedulesPage2> {
                   ),
                 ),
                 const SizedBox(width: 16),
+                 if(isExamToday(formattedExamDate!))
                  Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
@@ -331,7 +343,33 @@ class _AdmissionSchedulesPage2State extends State<AdmissionSchedulesPage2> {
                               height: 44,
                               child: ElevatedButton(
                                 onPressed: () async {
-                                  
+                                  try {
+                                            final response = await http.post(
+                                              Uri.parse('$apiUrl/api/admin/update_admission'),
+                                              headers: {
+                                                'Content-Type': 'application/json',
+                                                'supabase-url': supabaseUrl,
+                                                'supabase-key': supabaseKey,
+                                              },
+                                              body: json.encode({
+                                                'admission_id': admissionSchedule['db_admission_table']['admission_id'],  
+                                                'user_id':widget.userId,
+                                                'is_assessment':true,
+                                                'is_attended':true
+                                              }),
+                                            );
+
+                                            if (response.statusCode == 200) {
+                                              final responseBody = jsonDecode(response.body);
+                                            } else {
+                                              // Handle failure
+                                              final responseBody = jsonDecode(response.body);
+                                              print('Error: ${responseBody['error']}');
+                                            }
+                                          } catch (error) {
+                                            // Handle error (e.g., network error)
+                                            print('Error: $error');
+                                          }
                                 },
                                 style: ElevatedButton.styleFrom(
                                   backgroundColor: Colors.green,
@@ -358,7 +396,34 @@ class _AdmissionSchedulesPage2State extends State<AdmissionSchedulesPage2> {
                               width: isRedExpanded[i] ? 99 : 44,
                               height: 44,
                               child: ElevatedButton(
-                                onPressed: () {
+                                onPressed: ()async {
+                                  try {
+                                            final response = await http.post(
+                                              Uri.parse('$apiUrl/api/admin/update_admission'),
+                                              headers: {
+                                                'Content-Type': 'application/json',
+                                                'supabase-url': supabaseUrl,
+                                                'supabase-key': supabaseKey,
+                                              },
+                                              body: json.encode({
+                                                'admission_id': admissionSchedule['db_admission_table']['admission_id'],  
+                                                'user_id':widget.userId,
+                                                'is_assessment':false,
+                                                'is_attended':false
+                                              }),
+                                            );
+
+                                            if (response.statusCode == 200) {
+                                              final responseBody = jsonDecode(response.body);
+                                            } else {
+                                              // Handle failure
+                                              final responseBody = jsonDecode(response.body);
+                                              print('Error: ${responseBody['error']}');
+                                            }
+                                          } catch (error) {
+                                            // Handle error (e.g., network error)
+                                            print('Error: $error');
+                                          }
 
                                   setState(() {
                                     isRedExpanded[i] = true;

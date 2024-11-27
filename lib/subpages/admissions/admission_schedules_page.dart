@@ -703,7 +703,7 @@ Widget _buildViewContent(double scale, List<Map<String, dynamic>> details, int u
       // Adding AdmissionApplicationsPage2 below the buttons
        AdmissionSchedulesPage2(formDetails: details, onNextPressed: (bool isClicked) {
          context.read<AdmissionBloc>().add(MarkAsCompleteClicked(isClicked));
-       },),
+       },userId: userId,),
     ],
   ),
 );
