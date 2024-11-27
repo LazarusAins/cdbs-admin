@@ -73,6 +73,17 @@ class _AdmissionSchedulesPageState extends State<AdmissionSchedulesPage> {
     double heightScale = screenHeight / baseHeight;
     double scale = widthScale < heightScale ? widthScale : heightScale;
     TextEditingController dateController = TextEditingController();
+    TextEditingController startTimeController = TextEditingController();
+    TextEditingController endTimeController = TextEditingController();
+
+
+
+@override
+void dispose() {
+  startTimeController.dispose();
+  endTimeController.dispose();
+  super.dispose();
+}
 
     return Scaffold(
       body: BlocConsumer<AuthBloc, AuthState>(
@@ -220,66 +231,78 @@ showDialog(
             const SizedBox(height: 16),
             // First Row of Dropdowns
             Row(
-              children: [
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      const Text(
-                        'Exam Start Time',
-                        style: TextStyle(fontSize: 11),
-                      ),
-                      const SizedBox(height: 8),
-                      DropdownButtonFormField<String>(
-                        items: ['Option 1', 'Option 2', 'Option 3']
-                            .map((option) => DropdownMenuItem(
-                                  value: option,
-                                  child: Text(option),
-                                ))
-                            .toList(),
-                        onChanged: (value) {
-                          // Handle change
-                        },
-                        decoration: InputDecoration(
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(5),
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-                const SizedBox(width: 16),
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      const Text(
-                        'Exam End Time',
-                        style: TextStyle(fontSize: 11),
-                      ),
-                      const SizedBox(height: 8),
-                      DropdownButtonFormField<String>(
-                        items: ['Option A', 'Option B', 'Option C']
-                            .map((option) => DropdownMenuItem(
-                                  value: option,
-                                  child: Text(option),
-                                ))
-                            .toList(),
-                        onChanged: (value) {
-                          // Handle change
-                        },
-                        decoration: InputDecoration(
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(5),
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ],
+  children: [
+    Expanded(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          const Text(
+            'Exam Start Time',
+            style: TextStyle(fontSize: 11),
+          ),
+          const SizedBox(height: 8),
+          TextField(
+            controller: startTimeController, // Controller for start time
+            decoration: InputDecoration(
+              hintText: 'Select start time',
+              suffixIcon: const Icon(Icons.access_time),
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(5),
+              ),
             ),
+            readOnly: true,
+            onTap: () async {
+              final TimeOfDay? pickedTime = await showTimePicker(
+                context: context,
+                initialTime: TimeOfDay.now(),
+              );
+              if (pickedTime != null) {
+                // Update the text field with the selected time
+                startTimeController.text = pickedTime.format(context);
+              }
+            },
+          ),
+        ],
+      ),
+    ),
+    const SizedBox(width: 16),
+    Expanded(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          const Text(
+            'Exam End Time',
+            style: TextStyle(fontSize: 11),
+          ),
+          const SizedBox(height: 8),
+          TextField(
+            controller: endTimeController, // Controller for end time
+            decoration: InputDecoration(
+              hintText: 'Select end time',
+              suffixIcon: const Icon(Icons.access_time),
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(5),
+              ),
+            ),
+            readOnly: true,
+            onTap: () async {
+              final TimeOfDay? pickedTime = await showTimePicker(
+                context: context,
+                initialTime: TimeOfDay.now(),
+              );
+              if (pickedTime != null) {
+                // Update the text field with the selected time
+                endTimeController.text = pickedTime.format(context);
+              }
+            },
+          ),
+        ],
+      ),
+    ),
+  ],
+),
+
+
             const SizedBox(height: 16),
             // Expanded Dropdown
             const Text(
@@ -287,54 +310,65 @@ showDialog(
               style: TextStyle(fontSize: 11),
             ),
             const SizedBox(height: 8),
-            DropdownButtonFormField<String>(
-              items: ['Option X', 'Option Y', 'Option Z']
-                  .map((option) => DropdownMenuItem(
-                        value: option,
-                        child: Text(option),
-                      ))
-                  .toList(),
-              onChanged: (value) {
-                // Handle change
-              },
-              decoration: InputDecoration(
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(5),
-                ),
-              ),
-            ),
+            TextField(
+  decoration: InputDecoration(
+    border: OutlineInputBorder(
+      borderRadius: BorderRadius.circular(5),
+    ),
+  ),
+  onChanged: (value) {
+    // Handle text input
+  },
+),
+
             const SizedBox(height: 16),
             // Second Row of Dropdowns
             Row(
               children: [
                 Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      const Text(
-                        'Grade Level',
-                        style: TextStyle(fontSize: 11),
-                      ),
-                      const SizedBox(height: 8),
-                      DropdownButtonFormField<String>(
-                        items: ['Option 1', 'Option 2', 'Option 3']
-                            .map((option) => DropdownMenuItem(
-                                  value: option,
-                                  child: Text(option),
-                                ))
-                            .toList(),
-                        onChanged: (value) {
-                          // Handle change
-                        },
-                        decoration: InputDecoration(
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(5),
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
+  child: Column(
+    crossAxisAlignment: CrossAxisAlignment.start,
+    children: [
+      const Text(
+        'Grade Level',
+        style: TextStyle(fontSize: 11),
+      ),
+      const SizedBox(height: 8),
+      DropdownButtonFormField<String>(
+        items: [
+          'Pre-Kinder',
+          'Kinder',
+          'Grade 1',
+          'Grade 2',
+          'Grade 3',
+          'Grade 4',
+          'Grade 5',
+          'Grade 6',
+          'Grade 7',
+          'Grade 8',
+          'Grade 9',
+          'Grade 10',
+          'Grade 11',
+          'Grade 12',
+        ]
+        .map((grade) => DropdownMenuItem(
+              value: grade,
+              child: Text(grade),
+            ))
+        .toList(),
+        onChanged: (value) {
+          // Handle change
+        },
+        decoration: InputDecoration(
+          border: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(5),
+          ),
+        ),
+      ),
+    ],
+  ),
+),
+
                 const SizedBox(width: 16),
                 Expanded(
                   child: Column(
@@ -345,22 +379,17 @@ showDialog(
                         style: TextStyle(fontSize: 11),
                       ),
                       const SizedBox(height: 8),
-                      DropdownButtonFormField<String>(
-                        items: ['Option A', 'Option B', 'Option C']
-                            .map((option) => DropdownMenuItem(
-                                  value: option,
-                                  child: Text(option),
-                                ))
-                            .toList(),
-                        onChanged: (value) {
-                          // Handle change
-                        },
-                        decoration: InputDecoration(
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(5),
-                          ),
-                        ),
-                      ),
+                      TextField(
+  decoration: InputDecoration(
+    border: OutlineInputBorder(
+      borderRadius: BorderRadius.circular(5),
+    ),
+  ),
+  onChanged: (value) {
+    // Handle text input
+  },
+),
+
                     ],
                   ),
                 ),

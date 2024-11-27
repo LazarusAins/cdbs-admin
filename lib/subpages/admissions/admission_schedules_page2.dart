@@ -68,6 +68,10 @@ class _AdmissionSchedulesPage2State extends State<AdmissionSchedulesPage2> {
     double heightScale = screenHeight / baseHeight;
     double scale = widthScale < heightScale ? widthScale : heightScale;
 
+      final List<bool> isGreenExpanded = List.generate(widget.formDetails![0]['db_exam_admission_schedule'].length, (_) => false);
+      final List<bool> isRedExpanded = List.generate(widget.formDetails![0]['db_exam_admission_schedule'].length, (_) => false);
+    final List<bool> isInvoiceDisabled = List.generate(widget.formDetails![0]['db_exam_admission_schedule'].length, (_) => false);
+
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
       child: Column(
@@ -256,7 +260,7 @@ class _AdmissionSchedulesPage2State extends State<AdmissionSchedulesPage2> {
             ),*/
 
 
-            Container(
+            SizedBox(
               height: 500,
               width: 1500,
               child: ListView.builder(
@@ -316,7 +320,67 @@ class _AdmissionSchedulesPage2State extends State<AdmissionSchedulesPage2> {
                   ),
                 ),
                 const SizedBox(width: 16),
-                const SizedBox(width: 99), // This could still be removed if unnecessary
+                 Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          // Green Check Button
+                          if (!isRedExpanded[i])
+                            AnimatedContainer(
+                              duration: const Duration(milliseconds: 300),
+                              width: isGreenExpanded[i] ? 99 : 44,
+                              height: 44,
+                              child: ElevatedButton(
+                                onPressed: () async {
+                                  
+                                },
+                                style: ElevatedButton.styleFrom(
+                                  backgroundColor: Colors.green,
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(10),
+                                  ),
+                                  padding: EdgeInsets.zero,
+                                ),
+                                child: const Icon(
+                                  Icons.check,
+                                  color: Colors.white,
+                                ),
+                              ),
+                            ),
+
+                          // Space between buttons
+                          if (!isGreenExpanded[i])
+                            const SizedBox(width: 2),
+
+                          // Red X Button
+                          if (!isGreenExpanded[i])
+                            AnimatedContainer(
+                              duration: const Duration(milliseconds: 300),
+                              width: isRedExpanded[i] ? 99 : 44,
+                              height: 44,
+                              child: ElevatedButton(
+                                onPressed: () {
+
+                                  setState(() {
+                                    isRedExpanded[i] = true;
+                                    isGreenExpanded[i] = false;
+                                    isInvoiceDisabled[i] = true; // Disable invoice button
+                                  });
+                                },
+                                style: ElevatedButton.styleFrom(
+                                  backgroundColor: Colors.red,
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(10),
+                                  ),
+                                  padding: EdgeInsets.zero,
+                                ),
+                                child: const Icon(
+                                  Icons.close,
+                                  color: Colors.white,
+                                ),
+                              ),
+                            ),
+                        ],
+                      ), // This could still be removed if unnecessary
               ],
                         ),
                         const SizedBox(height: 16),
@@ -359,8 +423,8 @@ class _AdmissionSchedulesPage2State extends State<AdmissionSchedulesPage2> {
         fontSize: 14,
       ),
     ),
-    SizedBox(width: 4), // Space between text and icon
-    Icon(
+    const SizedBox(width: 4), // Space between text and icon
+    const Icon(
       Icons.keyboard_arrow_down, // Down arrow icon
       size: 20, // Adjust size as needed
     ),
