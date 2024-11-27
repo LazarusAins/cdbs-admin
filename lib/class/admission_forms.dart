@@ -300,6 +300,8 @@ Future<List<Map<String, dynamic>>> fetchPaymentForms(String supabaseUrl, String 
 
 
 
+
+//EXAM SCHEDULE
 Future<List<Map<String, dynamic>>> fetchSchedule(String supabaseUrl, String supabaseKey) async {
     final response = await http.get(
       Uri.parse('$apiUrl/api/admin/check_exam_schedule'),
@@ -336,6 +338,9 @@ Future<List<Map<String, dynamic>>> fetchSchedule(String supabaseUrl, String supa
   }
 
 
+
+
+//ALL SCHED
   Future<List<Map<String, dynamic>>> fetchScheduleById(int scheduleId, String supabaseUrl, String supabaseKey) async {
   try {
     final response = await http.post(
@@ -374,5 +379,44 @@ Future<List<Map<String, dynamic>>> fetchSchedule(String supabaseUrl, String supa
     return []; // Return an empty list on error
   }
 }
+
+
+
+
+
+//ADMIN ACCOUNTS
+Future<List<Map<String, dynamic>>> fetchAdminForms(String supabaseUrl, String supabaseKey) async {
+    final response = await http.get(
+      Uri.parse('$apiUrl/api/admin/get_admin_users'),
+      headers: {
+        "supabase-url": supabaseUrl,
+        "supabase-key": supabaseKey,
+      },
+    );
+
+    if (response.statusCode == 200) {
+      final Map<String, dynamic> data = json.decode(response.body);
+      
+      // Ensure the type safety by converting to List<Map<String, dynamic>>
+      return List<Map<String, dynamic>>.from(data['user'] ?? []);
+      
+    } else {
+      throw Exception('Failed to form data');
+    }
+  }
+
+  Stream<List<Map<String, dynamic>>> streamAdminForms(String supabaseUrl, String supabaseKey) async* {
+    while (true) {
+      try {
+        final members = await fetchAdminForms(supabaseUrl, supabaseKey);
+        yield members; // Emit the list of members
+      } catch (e) {
+        print('Error fetching members: $e');
+        yield []; // Emit an empty list on error
+      }
+
+      await Future.delayed(const Duration(seconds: 3)); // Refresh every 10 seconds
+    }
+  }
 
 }

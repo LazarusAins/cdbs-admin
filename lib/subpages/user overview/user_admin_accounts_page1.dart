@@ -4,6 +4,7 @@ import 'package:cdbs_admin/shared/api.dart';
 import 'package:cdbs_admin/subpages/landing_page.dart';
 import 'package:cdbs_admin/subpages/page3.dart';
 import 'package:cdbs_admin/subpages/s1.dart';
+import 'package:cdbs_admin/subpages/s2.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
@@ -31,7 +32,7 @@ class _UserAdminAccountsPage1State extends State<UserAdminAccountsPage1> {
   void initState() {
     super.initState();
     _apiService = ApiService(apiUrl); // Replace with your actual API URL
-    admissionForms = _apiService.streamAdmissionForms(supabaseUrl, supabaseKey);
+    admissionForms = _apiService.streamAdminForms(supabaseUrl, supabaseKey);
     // Initialize the service with your endpoint
   }
 
@@ -231,14 +232,14 @@ String formatDate(DateTime date) {
                 itemCount: filteredRequest.length,
                 itemBuilder: (context, index) {
                   final request = filteredRequest[index];
-                  final fullName = '${request['db_admission_table']['first_name']} ${request['db_admission_table']['last_name']}';
-                  final processBy = request['db_admission_table']['db_admission_form_handler_table'].isNotEmpty
-    ? '${request['db_admission_table']['db_admission_form_handler_table'][0]['db_admin_table']['first_name']} ${request['db_admission_table']['db_admission_form_handler_table'][0]['db_admin_table']['last_name']}'
-    : '---';
+                  final fullName = '${request['first_name']} ${request['last_name']}';
+    //               final processBy = request['db_admission_table']['db_admission_form_handler_table'].isNotEmpty
+    // ? '${request['db_admission_table']['db_admission_form_handler_table'][0]['db_admin_table']['first_name']} ${request['db_admission_table']['db_admission_form_handler_table'][0]['db_admin_table']['last_name']}'
+    // : '---';
 
-                  String dateCreatedString = request['db_admission_table']['created_at'];
-                  DateTime dateCreated = DateTime.parse(dateCreatedString);
-                  String formattedDate = formatDate(dateCreated);
+                  // String dateCreatedString = request]['created_at'];
+                  // DateTime dateCreated = DateTime.parse(dateCreatedString);
+                  // String formattedDate = formatDate(dateCreated);
                   return Column(
                     children: [
                       Row(
@@ -258,7 +259,7 @@ String formatDate(DateTime date) {
                                   activeColor: const Color(0XFF012169), // Set the active color to pink
                                 ),
                                 Text(
-                                  request['admission_id'].toString(),
+                                  request['admin_id'].toString(),
                                   style: TextStyle(fontSize: 12 * scale),
                                 ),
                               ],
@@ -280,7 +281,7 @@ String formatDate(DateTime date) {
                           Expanded(
                             flex: 3,
                             child: Text(
-                              'Email$index@gmail.com',
+                              request['email_address'],
                               style: TextStyle(fontFamily: 'Roboto-R', fontSize: 14 * scale),
                             ),
                           ),
@@ -290,7 +291,7 @@ String formatDate(DateTime date) {
                           Expanded(
                             flex: 2,
                             child: Text(
-                              'Role $index',
+                              request['db_admin_type']['admin_type'],
                               style: TextStyle(fontFamily: 'Roboto-R', fontSize: 14 * scale),
                             ),
                           ),
@@ -300,7 +301,7 @@ String formatDate(DateTime date) {
                           Expanded(
                             flex: 2,
                             child: Text(
-                              'Deaprtment $index',
+                              request['db_admin_department']['department'],
                               style: TextStyle(fontFamily: 'Roboto-R', fontSize: 14 * scale),
                             ),
                           ),
@@ -377,7 +378,7 @@ return Container();
       padding: const EdgeInsets.all(16),
       child: Column(
         children: [
-          const S1Page(),
+          const S2Page(),
           ElevatedButton(
             onPressed: () {
               setState(() {
