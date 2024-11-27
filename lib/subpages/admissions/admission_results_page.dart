@@ -1,7 +1,11 @@
+//RESULTS PAGE1
+
+import 'package:cdbs_admin/bloc/admission_bloc/admission_bloc.dart';
 import 'package:cdbs_admin/bloc/auth/auth_bloc.dart';
 import 'package:cdbs_admin/class/admission_forms.dart';
 import 'package:cdbs_admin/shared/api.dart';
 import 'package:cdbs_admin/subpages/admissions/admission_requirements_page2.dart';
+import 'package:cdbs_admin/subpages/admissions/admission_results_page2.dart';
 import 'package:cdbs_admin/subpages/landing_page.dart';
 import 'package:cdbs_admin/subpages/s1.dart';
 import 'package:cdbs_admin/subpages/s2.dart';
@@ -25,6 +29,7 @@ List<bool> checkboxStates = List.generate(10, (_) => false);
   List<Map<String, dynamic>> requests = [];
   List<Map<String, dynamic>> filteredRequest = [];
   late ApiService _apiService;
+  List<Map<String, dynamic>>? formDetails;
 
   @override
   void initState() {
@@ -118,7 +123,7 @@ String formatDate(DateTime date) {
       ),
 
       if (_selectedAction == 0) _buildDefaultContent(scale), // Default content
-      if (_selectedAction == 1) _buildViewContent(scale), // View content
+      if (_selectedAction == 1) _buildViewContent(scale, formDetails!, authState.uid), // View content
       if (_selectedAction == 2) _buildReminderContent(scale), // Reminder content
       if (_selectedAction == 3) _buildDeactivateContent(scale),
       if (_selectedAction == 4) _buildDeactivateContent(scale),
@@ -284,10 +289,14 @@ String formatDate(DateTime date) {
                         flex: 1,
                         child: PopupMenuButton<int>(
                           icon: const Icon(Icons.more_vert),
-                          onSelected: (value) {
-                            setState(() {
+                          onSelected: (value) async {
+                            List<Map<String, dynamic>> members = await ApiService(apiUrl).getFormsDetailsById(request['admission_id'], supabaseUrl, supabaseKey);
+                            if(members.isNotEmpty){
+                              setState(() {
+                                formDetails=members;
                               _selectedAction = value; // Change the selected action
                             });
+                            }
                           },
                           itemBuilder: (context) => [
                             PopupMenuItem(
@@ -345,7 +354,7 @@ String formatDate(DateTime date) {
   }
 
   // Build content for each action (VIEW, REMINDER, DEACTIVATE)
-  Widget _buildViewContent(double scale) {
+  Widget _buildViewContent(double scale, List<Map<String, dynamic>> details, int userId) {
     return Container(
   padding: const EdgeInsets.all(16),
   child: Column(
@@ -399,7 +408,7 @@ String formatDate(DateTime date) {
                   // Action for second button
                 },
                 child: Text(
-                  "Mark as Complete",
+                  "Send Results",
                   style: TextStyle(color: Colors.white, fontFamily: 'Roboto-R', fontSize: 12 * scale),
                 ),
               ),
@@ -409,7 +418,9 @@ String formatDate(DateTime date) {
       ),
       
       // Adding AdmissionApplicationsPage2 below the buttons
-      const S2Page(),
+       AdmissionResultsPage2(formDetails: details, onNextPressed: (bool isClicked) {
+         context.read<AdmissionBloc>().add(MarkAsCompleteClicked(isClicked));
+       },userId: userId,),
     ],
   ),
 );
