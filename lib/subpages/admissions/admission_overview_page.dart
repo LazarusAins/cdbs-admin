@@ -255,13 +255,13 @@ class _AdmissionOverviewPageState extends State<AdmissionOverviewPage> {
                         // Start checking other conditions based on is_final_result being false
                         if (!isAssess) {
                           if (isPaid) {
-                            titleText = 'PAYMENT - ';
+                            titleText = 'ASSESSMENT - ';
                             statusColor = _getStatusColor(statusText);
                           } else if (isRequired) {
-                            titleText = 'REQUIRMENTS - ';
+                            titleText = 'PAYMENT - ';
                             statusColor = _getStatusColor(statusText);
                           } else if (isComplete) {
-                            titleText = 'REQUIRMENTS - PENDING';
+                            titleText = 'REQUIRMENTS - ';
                             statusColor = _getStatusColor(statusText);
                           } else {
                             titleText = 'APPLICATION - ';

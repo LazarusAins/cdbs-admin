@@ -41843,12 +41843,12 @@ if(J.k(b.h(0,k),e)!=null){s=A.f0(J.k(b.h(0,k),e))
 r=A.eM("dd-MM-yyyy HH:mm").eS(s)}else r=""
 q=J.k(b.h(0,k),"admission_status")
 if(a6){c.y=c.pO(q)
-p="RESULTS -"}else if(!a5)if(a4){c.y=c.pO(q)
-p="PAYMENT - "}else if(a3){c.y=c.pO(q)
-p="REQUIRMENTS - "}else if(a2){c.y=c.pO(q)
-p="REQUIRMENTS - PENDING"}else{c.y=c.pO(q)
-p="APPLICATION - "}else{c.y=c.pO(q)
-p="ASSESSMENT - "}o=this.b
+p="RESULTS -"}else{p="ASSESSMENT - "
+if(!a5)if(a4)c.y=c.pO(q)
+else if(a3){c.y=c.pO(q)
+p="PAYMENT - "}else if(a2){c.y=c.pO(q)
+p="REQUIRMENTS - "}else{c.y=c.pO(q)
+p="APPLICATION - "}else c.y=c.pO(q)}o=this.b
 n=t.p
 m=A.O(A.X(A.a([A.t7(B.a9,new A.akB(c,a8),c.d[a8]),A.m(J.cW(b.h(0,"admission_id")),f,f,f,A.o(f,f,f,f,f,f,f,f,f,f,f,12*o,f,f,f,f,f,!0,f,f,f,f,f,f,f,f),f,f)],n),B.h,B.f,B.e),1)
 l=14*o
