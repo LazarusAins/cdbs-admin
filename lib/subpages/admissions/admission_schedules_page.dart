@@ -72,6 +72,7 @@ class _AdmissionSchedulesPageState extends State<AdmissionSchedulesPage> {
     double widthScale = screenWidth / baseWidth;
     double heightScale = screenHeight / baseHeight;
     double scale = widthScale < heightScale ? widthScale : heightScale;
+    TextEditingController dateController = TextEditingController();
 
     return Scaffold(
       body: BlocConsumer<AuthBloc, AuthState>(
@@ -146,49 +147,323 @@ class _AdmissionSchedulesPageState extends State<AdmissionSchedulesPage> {
             if (_selectedAction == 3) _buildDeactivateContent(scale),
             if (_selectedAction == 0) ...[
 
+Row(
+  mainAxisAlignment: MainAxisAlignment.start,
+  children: [
+    Text(
+      'Schedules',
+      style: TextStyle(
+        color: const Color(0xff222222),
+        fontFamily: "Roboto-L",
+        fontSize: 20 * scale,
+      ),
+    ),
+    const Spacer(),
+    SizedBox(
+      width: 178,
+      height: 37,
+      child: ElevatedButton(
+        onPressed: () {
+showDialog(
+  context: context,
+  builder: (context) => Dialog(
+    shape: RoundedRectangleBorder(
+      borderRadius: BorderRadius.circular(5),
+    ),
+    child: SizedBox(
+      width: 500,
+      height: 520,
+      child: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const Text(
+              'New Schedule Form',
+              style: TextStyle(
+                fontSize: 20,
+                fontFamily: "Roboto-R",
+                fontWeight: FontWeight.normal,
+              ),
+            ),
+            const SizedBox(height: 16),
+            // Date Field
+            const Text(
+              'Exam Date',
+              style: TextStyle(fontSize: 11),
+            ),
+            const SizedBox(height: 8),
+            TextField(
+  controller: dateController, // Attach the controller to the TextField
+  decoration: InputDecoration(
+    hintText: 'Select date',
+    suffixIcon: const Icon(Icons.calendar_today),
+    border: OutlineInputBorder(
+      borderRadius: BorderRadius.circular(5),
+    ),
+  ),
+  readOnly: true,
+  onTap: () async {
+    // Open date picker
+    DateTime? selectedDate = await showDatePicker(
+      context: context,
+      initialDate: DateTime.now(),
+      firstDate: DateTime(2000),
+      lastDate: DateTime(2100),
+    );
+    if (selectedDate != null) {
+      // Update the text field with the selected date
+      dateController.text = selectedDate.toLocal().toString().split(' ')[0];
+    }
+  },
+),
+            const SizedBox(height: 16),
+            // First Row of Dropdowns
             Row(
-              mainAxisAlignment: MainAxisAlignment.start,
               children: [
-                Text(
-                  'Schedules',
-                  style: TextStyle(
-                    color: const Color(0xff222222),
-                    fontFamily: "Roboto-L",
-                    fontSize: 20 * scale,
-                  ),
-                ),
-                const Spacer(),
-                SizedBox(
-                  width: 226 * scale,
-                  height: 32 * scale,
-                  child: TextField(
-                    decoration: InputDecoration(
-                      hintText: '',
-                      contentPadding: const EdgeInsets.symmetric(vertical: 10),
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(5),
-                        borderSide: const BorderSide(color: Colors.grey, width: 1),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      const Text(
+                        'Exam Start Time',
+                        style: TextStyle(fontSize: 11),
                       ),
-                      focusedBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(5),
-                        borderSide: const BorderSide(color: Colors.blue, width: 1),
-                      ),
-                      prefixIcon: InkWell(
-                        onTap: () {
-                          print("Search icon tapped");
+                      const SizedBox(height: 8),
+                      DropdownButtonFormField<String>(
+                        items: ['Option 1', 'Option 2', 'Option 3']
+                            .map((option) => DropdownMenuItem(
+                                  value: option,
+                                  child: Text(option),
+                                ))
+                            .toList(),
+                        onChanged: (value) {
+                          // Handle change
                         },
-                        child: Icon(
-                          Icons.search,
-                          size: 20 * scale,
-                          color: Colors.grey,
+                        decoration: InputDecoration(
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(5),
+                          ),
                         ),
                       ),
-                    ),
-                    style: TextStyle(fontSize: 14 * scale),
+                    ],
+                  ),
+                ),
+                const SizedBox(width: 16),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      const Text(
+                        'Exam End Time',
+                        style: TextStyle(fontSize: 11),
+                      ),
+                      const SizedBox(height: 8),
+                      DropdownButtonFormField<String>(
+                        items: ['Option A', 'Option B', 'Option C']
+                            .map((option) => DropdownMenuItem(
+                                  value: option,
+                                  child: Text(option),
+                                ))
+                            .toList(),
+                        onChanged: (value) {
+                          // Handle change
+                        },
+                        decoration: InputDecoration(
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(5),
+                          ),
+                        ),
+                      ),
+                    ],
                   ),
                 ),
               ],
             ),
+            const SizedBox(height: 16),
+            // Expanded Dropdown
+            const Text(
+              'Location',
+              style: TextStyle(fontSize: 11),
+            ),
+            const SizedBox(height: 8),
+            DropdownButtonFormField<String>(
+              items: ['Option X', 'Option Y', 'Option Z']
+                  .map((option) => DropdownMenuItem(
+                        value: option,
+                        child: Text(option),
+                      ))
+                  .toList(),
+              onChanged: (value) {
+                // Handle change
+              },
+              decoration: InputDecoration(
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(5),
+                ),
+              ),
+            ),
+            const SizedBox(height: 16),
+            // Second Row of Dropdowns
+            Row(
+              children: [
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      const Text(
+                        'Grade Level',
+                        style: TextStyle(fontSize: 11),
+                      ),
+                      const SizedBox(height: 8),
+                      DropdownButtonFormField<String>(
+                        items: ['Option 1', 'Option 2', 'Option 3']
+                            .map((option) => DropdownMenuItem(
+                                  value: option,
+                                  child: Text(option),
+                                ))
+                            .toList(),
+                        onChanged: (value) {
+                          // Handle change
+                        },
+                        decoration: InputDecoration(
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(5),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                const SizedBox(width: 16),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      const Text(
+                        'Slots',
+                        style: TextStyle(fontSize: 11),
+                      ),
+                      const SizedBox(height: 8),
+                      DropdownButtonFormField<String>(
+                        items: ['Option A', 'Option B', 'Option C']
+                            .map((option) => DropdownMenuItem(
+                                  value: option,
+                                  child: Text(option),
+                                ))
+                            .toList(),
+                        onChanged: (value) {
+                          // Handle change
+                        },
+                        decoration: InputDecoration(
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(5),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+            const Spacer(),
+            // Submit Button
+            Center(
+              child: SizedBox(
+                width: 289,
+                height: 35,
+                child: ElevatedButton(
+                  onPressed: () {
+                    // Handle submit action
+                  },
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: const Color(0xff012169),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(5),
+                    ),
+                  ),
+                  child: const Text('Submit', style: TextStyle(color: Colors.white, fontFamily: 'Roboto-R', fontSize: 13),),
+                ),
+              ),
+            ),
+            const SizedBox(height: 8),
+            // Cancel Button
+            Center(
+              child: SizedBox(
+                width: 289,
+                height: 35,
+                child: ElevatedButton(
+                  onPressed: () {
+                    Navigator.of(context).pop(); // Close the modal
+                  },
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: const Color(0xffD3D3D3),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(5),
+                    ),
+                  ),
+                  child: const Text('Cancel', style: TextStyle(color: Colors.black, fontFamily: 'Roboto-R', fontSize: 13),),
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
+    ),
+  ),
+);
+
+
+        },
+        style: ElevatedButton.styleFrom(
+          backgroundColor: const Color(0xff012169),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(5),
+          ),
+        ),
+        child: const Text(
+          'Add New Schedule',
+          style: TextStyle(
+            fontSize: 13,
+            fontFamily: 'Roboto-R',
+            color: Colors.white,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+      ),
+    ),
+    const SizedBox(width: 16), // Space between button and search bar
+    SizedBox(
+      width: 226 * scale,
+      height: 32 * scale,
+      child: TextField(
+        decoration: InputDecoration(
+          hintText: '',
+          contentPadding: const EdgeInsets.symmetric(vertical: 10),
+          border: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(5),
+            borderSide: const BorderSide(color: Colors.grey, width: 1),
+          ),
+          focusedBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(5),
+            borderSide: const BorderSide(color: Colors.blue, width: 1),
+          ),
+          prefixIcon: InkWell(
+            onTap: () {
+              print("Search icon tapped");
+            },
+            child: Icon(
+              Icons.search,
+              size: 20 * scale,
+              color: Colors.grey,
+            ),
+          ),
+        ),
+        style: TextStyle(fontSize: 14 * scale),
+      ),
+    ),
+  ],
+),
             const SizedBox(height: 40),
             Row(
               crossAxisAlignment: CrossAxisAlignment.center,
