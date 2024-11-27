@@ -41838,22 +41838,22 @@ A.akE.prototype={
 $0(){A.cc("Search icon tapped")},
 $S:0}
 A.akF.prototype={
-$2(a7,a8){var s,r,q,p,o,n,m,l,k="db_admission_table",j="first_name",i="last_name",h="db_admission_form_handler_table",g="db_admin_table",f=null,e="created_at",d="Roboto-R",c=this.a,b=J.k(c.x,a8),a=A.i(J.k(b.h(0,k),j)),a0=A.i(J.k(b.h(0,k),i)),a1=J.eY(J.k(b.h(0,k),h))?A.i(J.k(J.k(J.k(J.k(b.h(0,k),h),0),g),j))+" "+A.i(J.k(J.k(J.k(J.k(b.h(0,k),h),0),g),i)):"---",a2=J.k(b.h(0,k),"is_complete_view"),a3=J.k(b.h(0,k),"is_all_required_file_uploaded"),a4=J.k(b.h(0,k),"is_paid"),a5=J.k(b.h(0,k),"is_for_assessment"),a6=J.k(b.h(0,k),"is_final_result")
-if(J.k(b.h(0,k),e)!=null){s=A.f0(J.k(b.h(0,k),e))
+$2(a8,a9){var s,r,q,p,o,n,m,l,k="db_admission_table",j="first_name",i="last_name",h="db_admission_form_handler_table",g="db_admin_table",f=null,e="created_at",d="admission_status",c="Roboto-R",b=this.a,a=J.k(b.x,a9),a0=A.i(J.k(a.h(0,k),j)),a1=A.i(J.k(a.h(0,k),i)),a2=J.eY(J.k(a.h(0,k),h))?A.i(J.k(J.k(J.k(J.k(a.h(0,k),h),0),g),j))+" "+A.i(J.k(J.k(J.k(J.k(a.h(0,k),h),0),g),i)):"---",a3=J.k(a.h(0,k),"is_complete_view"),a4=J.k(a.h(0,k),"is_all_required_file_uploaded"),a5=J.k(a.h(0,k),"is_paid"),a6=J.k(a.h(0,k),"is_for_assessment"),a7=J.k(a.h(0,k),"is_final_result")
+if(J.k(a.h(0,k),e)!=null){s=A.f0(J.k(a.h(0,k),e))
 r=A.eM("dd-MM-yyyy HH:mm").eS(s)}else r=""
-q=J.k(b.h(0,k),"admission_status")
-if(a6){c.y=c.pO(q)
-p="RESULTS -"}else{p="ASSESSMENT - "
-if(!a5)if(a4)c.y=c.pO(q)
-else if(a3){c.y=c.pO(q)
-p="PAYMENT - "}else if(a2){c.y=c.pO(q)
-p="REQUIRMENTS - "}else{c.y=c.pO(q)
-p="APPLICATION - "}else c.y=c.pO(q)}o=this.b
+q=J.c(J.k(a.h(0,k),d),"complete")?"pending":J.k(a.h(0,k),d)
+if(a7){b.y=b.pO(q)
+p="RESULTS -"}else if(!a6)if(a5){b.y=b.pO(q)
+p="ASSESSMENT - "}else if(a4){b.y=b.pO(q)
+p="PAYMENT - "}else if(a3){b.y=b.pO(q)
+p="REQUIRMENTS - "}else{b.y=b.pO(q)
+p="APPLICATION - "}else{b.y=b.pO(q)
+p="RESULTS - "}o=this.b
 n=t.p
-m=A.O(A.X(A.a([A.t7(B.a9,new A.akB(c,a8),c.d[a8]),A.m(J.cW(b.h(0,"admission_id")),f,f,f,A.o(f,f,f,f,f,f,f,f,f,f,f,12*o,f,f,f,f,f,!0,f,f,f,f,f,f,f,f),f,f)],n),B.h,B.f,B.e),1)
+m=A.O(A.X(A.a([A.t7(B.a9,new A.akB(b,a9),b.d[a9]),A.m(J.cW(a.h(0,"admission_id")),f,f,f,A.o(f,f,f,f,f,f,f,f,f,f,f,12*o,f,f,f,f,f,!0,f,f,f,f,f,f,f,f),f,f)],n),B.h,B.f,B.e),1)
 l=14*o
-a0=A.O(A.m(a+" "+a0,f,f,f,A.o(f,f,f,f,f,f,f,f,d,f,f,l,f,f,f,f,f,!0,f,f,f,f,f,f,f,f),f,f),3)
-return A.a5(A.a([A.X(A.a([m,a0,A.O(A.m(a1,f,f,f,A.o(f,f,f,f,f,f,f,f,d,f,f,l,f,f,f,f,f,!0,f,f,f,f,f,f,f,f),f,f),2),A.O(A.X(A.a([A.m(p,f,f,f,A.o(f,f,f,f,f,f,f,f,d,f,f,l,f,f,f,f,f,!0,f,f,f,f,f,f,f,f),f,f),A.m(q.toUpperCase(),f,f,f,A.o(f,f,c.y,f,f,f,f,f,d,f,f,l,f,f,f,f,f,!0,f,f,f,f,f,f,f,f),f,f)],n),B.h,B.f,B.e),2),A.O(A.m(r,f,f,f,A.o(f,f,f,f,f,f,f,f,d,f,f,l,f,f,f,f,f,!0,f,f,f,f,f,f,f,f),f,f),1),A.O(A.qq(B.cT,new A.akC(o),new A.akD(c),t.S),1)],n),B.h,B.f,B.e),B.b4],n),B.h,B.f,B.e)},
+a1=A.O(A.m(a0+" "+a1,f,f,f,A.o(f,f,f,f,f,f,f,f,c,f,f,l,f,f,f,f,f,!0,f,f,f,f,f,f,f,f),f,f),3)
+return A.a5(A.a([A.X(A.a([m,a1,A.O(A.m(a2,f,f,f,A.o(f,f,f,f,f,f,f,f,c,f,f,l,f,f,f,f,f,!0,f,f,f,f,f,f,f,f),f,f),2),A.O(A.X(A.a([A.m(p,f,f,f,A.o(f,f,f,f,f,f,f,f,c,f,f,l,f,f,f,f,f,!0,f,f,f,f,f,f,f,f),f,f),A.m(q.toUpperCase(),f,f,f,A.o(f,f,b.y,f,f,f,f,f,c,f,f,l,f,f,f,f,f,!0,f,f,f,f,f,f,f,f),f,f)],n),B.h,B.f,B.e),2),A.O(A.m(r,f,f,f,A.o(f,f,f,f,f,f,f,f,c,f,f,l,f,f,f,f,f,!0,f,f,f,f,f,f,f,f),f,f),1),A.O(A.qq(B.cT,new A.akC(o),new A.akD(b),t.S),1)],n),B.h,B.f,B.e),B.b4],n),B.h,B.f,B.e)},
 $S:49}
 A.akB.prototype={
 $1(a){var s=this.a

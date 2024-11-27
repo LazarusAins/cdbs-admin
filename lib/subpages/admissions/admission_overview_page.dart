@@ -245,7 +245,7 @@ class _AdmissionOverviewPageState extends State<AdmissionOverviewPage> {
                      dateCreated = DateTime.parse(dateCreatedString);
                      formattedDate= formatDate(dateCreated);
                   }
-                  String statusText = request['db_admission_table']['admission_status'];
+                  String statusText = request['db_admission_table']['admission_status']=='complete'?'pending':request['db_admission_table']['admission_status'];
                   String titleText = '';
 
                   if (isResult) {
@@ -268,7 +268,7 @@ class _AdmissionOverviewPageState extends State<AdmissionOverviewPage> {
                             statusColor = _getStatusColor(statusText);
                           }
                         } else {
-                          titleText = 'ASSESSMENT - ';
+                          titleText = 'RESULTS - ';
                           statusColor = _getStatusColor(statusText);
                         }
                       }
