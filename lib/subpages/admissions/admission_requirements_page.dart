@@ -270,6 +270,9 @@ String formatDate(DateTime date) {
                   String dateCreatedString = request['db_admission_table']['created_at'];
                   DateTime dateCreated = DateTime.parse(dateCreatedString);
                   String formattedDate = formatDate(dateCreated);
+                  String stat= request['db_admission_table']['admission_status'];
+                  bool isRequired= request['db_admission_table']['is_all_required_file_uploaded'];
+                  bool isComplete= request['db_admission_table']['is_complete_view'];
             return Column(
               children: [
                 Row(
@@ -311,8 +314,7 @@ String formatDate(DateTime date) {
                     ),
                     Expanded(
                       flex: 2,
-                      child: Text(
-                        request['db_admission_table']['admission_status'].toString().toUpperCase(),
+                      child: Text(!isRequired?stat=='complete' && isComplete?'PENDING':stat.toUpperCase():'COMPLETE',
                         style: TextStyle(fontFamily: 'Roboto-R', fontSize: 14 * scale),
                       ),
                     ),
@@ -340,14 +342,42 @@ String formatDate(DateTime date) {
                           onSelected: (value) async {
                             List<Map<String, dynamic>> members = await ApiService(apiUrl).getFormsDetailsById(request['admission_id'], supabaseUrl, supabaseKey);
                             bool isComplete=checkDocumentRequirements(members[0]['db_admission_table']['level_applying_for'],List<Map<String, dynamic>>.from(
-                    members[0]['db_admission_table']['db_required_documents_table']
-                  ));
+                              members[0]['db_admission_table']['db_required_documents_table']
+                            ));
                             context.read<AdmissionBloc>().add(MarkAsCompleteClicked(isComplete));
                             if(members.isNotEmpty){
                               setState(() {
                                 formDetails=members;
                               _selectedAction = value; // Change the selected action
                             });
+                            if(!isRequired){
+                              try {
+                                          final response = await http.post(
+                                            Uri.parse('$apiUrl/api/admin/update_admission'),
+                                            headers: {
+                                              'Content-Type': 'application/json',
+                                              'supabase-url': supabaseUrl,
+                                              'supabase-key': supabaseKey,
+                                            },
+                                            body: json.encode({
+                                              'admission_id': request['admission_id'],
+                                              'admission_status':'in review',  // Send customer_id in the request body
+                                              'user_id':authState.uid
+                                            }),
+                                          );
+
+                                          if (response.statusCode == 200) {
+                                            final responseBody = jsonDecode(response.body);
+                                          } else {
+                                            // Handle failure
+                                            final responseBody = jsonDecode(response.body);
+                                            print('Error: ${responseBody['error']}');
+                                          }
+                                        } catch (error) {
+                                          // Handle error (e.g., network error)
+                                          print('Error: $error');
+                                        }
+                            }
                             }
                           },
                           itemBuilder: (context) => [
@@ -483,6 +513,7 @@ String formatDate(DateTime date) {
                           'is_all_required_file_uploaded': true,
                           'user_id': userId,
                           'admission_status':'complete',
+                          'is_done': true,
                         }),
                       );
 

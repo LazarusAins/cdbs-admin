@@ -4,10 +4,7 @@ import 'package:intl/intl.dart';
 import 'package:cdbs_admin/bloc/auth/auth_bloc.dart';
 import 'package:cdbs_admin/class/admission_forms.dart';
 import 'package:cdbs_admin/shared/api.dart';
-import 'package:cdbs_admin/subpages/landing_page.dart';
 import 'package:cdbs_admin/subpages/login_page.dart';
-import 'package:cdbs_admin/subpages/page3.dart';
-import 'package:cdbs_admin/subpages/s1.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
@@ -29,7 +26,8 @@ class _AdmissionOverviewPageState extends State<AdmissionOverviewPage> {
   late Stream<List<Map<String, dynamic>>> admissionForms;
   List<Map<String, dynamic>> requests = [];
   List<Map<String, dynamic>> filteredRequest = [];
-
+  
+  Color statusColor = Colors.black;
   @override
   void initState() {
     super.initState();
@@ -42,6 +40,21 @@ class _AdmissionOverviewPageState extends State<AdmissionOverviewPage> {
     final DateFormat formatter = DateFormat('dd-MM-yyyy HH:mm');
     return formatter.format(date);
   }
+
+    Color _getStatusColor(String status) {
+      if (status.contains('complete') || status.contains('passed')) {
+        return const Color(0xFF007A33); // Green for complete
+      } else if (status.contains('in review')) {
+        return const Color(0xFFE4BC34); // Yellow for in-review
+      } else if (status.contains('pending')) {
+        return const Color(0xFFE48934); // Orange for pending
+      }else if (status.contains('failed')) {
+        return const Color(0xFFE15252); // Orange for pending
+      } else {
+        return Colors.black; // Default color
+      }
+    }
+
 
 
   @override
@@ -218,6 +231,12 @@ class _AdmissionOverviewPageState extends State<AdmissionOverviewPage> {
                   final processBy = request['db_admission_table']['db_admission_form_handler_table'].isNotEmpty
     ? '${request['db_admission_table']['db_admission_form_handler_table'][0]['db_admin_table']['first_name']} ${request['db_admission_table']['db_admission_form_handler_table'][0]['db_admin_table']['last_name']}'
     : '---';
+                  bool isComplete = request['db_admission_table']['is_complete_view'];
+                  bool isRequired = request['db_admission_table']['is_all_required_file_uploaded'];
+                  bool isPaid = request['db_admission_table']['is_paid'];
+                  bool isAssess = request['db_admission_table']['is_for_assessment'];
+                  bool isResult = request['db_admission_table']['is_final_result'];
+
                   String dateCreatedString='';
                   DateTime dateCreated;
                   String formattedDate='';
@@ -226,7 +245,33 @@ class _AdmissionOverviewPageState extends State<AdmissionOverviewPage> {
                      dateCreated = DateTime.parse(dateCreatedString);
                      formattedDate= formatDate(dateCreated);
                   }
-                  
+                  String statusText = request['db_admission_table']['admission_status'];
+                  String titleText = '';
+
+                  if (isResult) {
+                        titleText = 'RESULTS -';
+                        statusColor = _getStatusColor(statusText);
+                      } else {
+                        // Start checking other conditions based on is_final_result being false
+                        if (!isAssess) {
+                          if (isPaid) {
+                            titleText = 'PAYMENT - ';
+                            statusColor = _getStatusColor(statusText);
+                          } else if (isRequired) {
+                            titleText = 'REQUIRMENTS - ';
+                            statusColor = _getStatusColor(statusText);
+                          } else if (isComplete) {
+                            titleText = 'REQUIRMENTS - PENDING';
+                            statusColor = _getStatusColor(statusText);
+                          } else {
+                            titleText = 'APPLICATION - ';
+                            statusColor = _getStatusColor(statusText);
+                          }
+                        } else {
+                          titleText = 'ASSESSMENT - ';
+                          statusColor = _getStatusColor(statusText);
+                        }
+                      }
                   return Column(
                     children: [
                       Row(
@@ -266,8 +311,15 @@ class _AdmissionOverviewPageState extends State<AdmissionOverviewPage> {
                           ),
                           Expanded(
                             flex: 2,
-                            child: Text(request['db_admission_table']['admission_status'].toString().toUpperCase(),
-                              style: TextStyle(fontFamily: 'Roboto-R', fontSize: 14 * scale),
+                            child: Row(
+                              children: [
+                                Text(titleText,
+                                  style: TextStyle(fontFamily: 'Roboto-R', fontSize: 14 * scale),
+                                ),
+                                Text(statusText.toUpperCase(),
+                                  style: TextStyle(fontFamily: 'Roboto-R', fontSize: 14 * scale, color: statusColor),
+                                ),
+                              ],
                             ),
                           ),
                           Expanded(

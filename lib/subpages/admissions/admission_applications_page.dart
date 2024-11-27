@@ -309,34 +309,34 @@ String formatDate(DateTime date) {
                                           formDetails=members;
                                           _selectedAction = value; // Change the selected action
                                         });
+                                        if(!request['db_admission_table']['is_complete_view']){
+                                          try {
+                                            final response = await http.post(
+                                              Uri.parse('$apiUrl/api/admin/update_admission'),
+                                              headers: {
+                                                'Content-Type': 'application/json',
+                                                'supabase-url': supabaseUrl,
+                                                'supabase-key': supabaseKey,
+                                              },
+                                              body: json.encode({
+                                                'admission_id': request['admission_id'],
+                                                'admission_status':'in review',  // Send customer_id in the request body
+                                                'user_id':authState.uid
+                                              }),
+                                            );
 
-                                        try {
-                                          final response = await http.post(
-                                            Uri.parse('$apiUrl/api/admin/update_admission'),
-                                            headers: {
-                                              'Content-Type': 'application/json',
-                                              'supabase-url': supabaseUrl,
-                                              'supabase-key': supabaseKey,
-                                            },
-                                            body: json.encode({
-                                              'admission_id': request['admission_id'],
-                                              'admission_status':'in review',  // Send customer_id in the request body
-                                              'user_id':authState.uid
-                                            }),
-                                          );
-
-                                          if (response.statusCode == 200) {
-                                            final responseBody = jsonDecode(response.body);
-                                          } else {
-                                            // Handle failure
-                                            final responseBody = jsonDecode(response.body);
-                                            print('Error: ${responseBody['error']}');
+                                            if (response.statusCode == 200) {
+                                              final responseBody = jsonDecode(response.body);
+                                            } else {
+                                              // Handle failure
+                                              final responseBody = jsonDecode(response.body);
+                                              print('Error: ${responseBody['error']}');
+                                            }
+                                          } catch (error) {
+                                            // Handle error (e.g., network error)
+                                            print('Error: $error');
                                           }
-                                        } catch (error) {
-                                          // Handle error (e.g., network error)
-                                          print('Error: $error');
-                                        }
-                                        
+                                        }  
                                      }
                                 },
                                 itemBuilder: (context) => [

@@ -144,9 +144,10 @@ class _AdmissionPaymentsPage2State extends State<AdmissionPaymentsPage2> {
                                             },
                                             body: json.encode({
                                               'admission_id': myformDetails[0]['db_admission_table']['admission_id'],
-                                              'admission_status':'Complete',  // Send customer_id in the request body
+                                              'admission_status':'complete',  // Send customer_id in the request body
                                               'user_id':widget.userId,
-                                              'is_paid':true
+                                              'is_paid':true,
+                                              'is_done':true
                                             }),
                                           );
 

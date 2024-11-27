@@ -10,6 +10,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:intl/intl.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
 
 class AdmissionPaymentsPage extends StatefulWidget {
   const AdmissionPaymentsPage({super.key});
@@ -249,6 +251,11 @@ String formatDate(DateTime date) {
                   String dateCreatedString = request['db_admission_table']['created_at'];
                   DateTime dateCreated = DateTime.parse(dateCreatedString);
                   String formattedDate = formatDate(dateCreated);
+
+                  String stat= request['db_admission_table']['admission_status'];
+                  bool isRequired= request['db_admission_table']['is_all_required_file_uploaded'];
+                  bool isPaid= request['db_admission_table']['is_paid'];
+
             return Column(
               children: [
                 Row(
@@ -290,8 +297,7 @@ String formatDate(DateTime date) {
                     ),
                     Expanded(
                       flex: 2,
-                      child: Text(
-                        request['db_admission_table']['admission_status'].toString().toUpperCase(),
+                      child: Text(!isPaid?stat=='complete' && isRequired?'PENDING':stat.toUpperCase():'COMPLETE',
                         style: TextStyle(fontFamily: 'Roboto-R', fontSize: 14 * scale),
                       ),
                     ),
@@ -310,11 +316,39 @@ String formatDate(DateTime date) {
                           onSelected: (value) async {
                             List<Map<String, dynamic>> members = await ApiService(apiUrl).getDetailsById(request['admission_id'], supabaseUrl, supabaseKey);
                                      if(members.isNotEmpty){
-                                             
                                         setState(()  {
                                           formDetails=members;
                                           _selectedAction = value; // Change the selected action
                                         });
+
+                                        if(!request['db_admission_table']['is_paid']){
+                                          try {
+                                            final response = await http.post(
+                                              Uri.parse('$apiUrl/api/admin/update_admission'),
+                                              headers: {
+                                                'Content-Type': 'application/json',
+                                                'supabase-url': supabaseUrl,
+                                                'supabase-key': supabaseKey,
+                                              },
+                                              body: json.encode({
+                                                'admission_id': request['admission_id'],
+                                                'admission_status':'in review',  // Send customer_id in the request body
+                                                'user_id':authState.uid
+                                              }),
+                                            );
+
+                                            if (response.statusCode == 200) {
+                                              final responseBody = jsonDecode(response.body);
+                                            } else {
+                                              // Handle failure
+                                              final responseBody = jsonDecode(response.body);
+                                              print('Error: ${responseBody['error']}');
+                                            }
+                                          } catch (error) {
+                                            // Handle error (e.g., network error)
+                                            print('Error: $error');
+                                          }
+                                        }
                                      }
                           },
                           itemBuilder: (context) => [
