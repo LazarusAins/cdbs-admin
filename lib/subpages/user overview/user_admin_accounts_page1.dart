@@ -319,32 +319,32 @@ String formatDate(DateTime date) {
                                 },
                                 itemBuilder: (context) => [
                                   PopupMenuItem(
-                                    value: 1,
+                                    // value: 1,
                                     child: Row(
                                       children: [
-                                        const Icon(Icons.visibility, color: Colors.black),
+                                        const Icon(Icons.visibility, color: Color(0xff909590)),
                                         SizedBox(width: 8 * scale),
-                                        Text("VIEW", style: TextStyle(fontSize: 16 * scale)),
+                                        Text("VIEW", style: TextStyle(fontSize: 16 * scale, color: const Color(0xff909590))),
                                       ],
                                     ),
                                   ),
                                   PopupMenuItem(
-                                    value: 2,
+                                    // value: 2,
                                     child: Row(
                                       children: [
-                                        const Icon(Icons.notifications, color: Colors.black),
+                                        const Icon(Icons.notifications, color: Color(0xff909590)),
                                         SizedBox(width: 8 * scale),
-                                        Text("REMINDER", style: TextStyle(fontSize: 16 * scale)),
+                                        Text("REMINDER", style: TextStyle(fontSize: 16 * scale, color: const Color(0xff909590))),
                                       ],
                                     ),
                                   ),
                                   PopupMenuItem(
-                                    value: 3,
+                                    // value: 3,
                                     child: Row(
                                       children: [
-                                        const Icon(Icons.block, color: Colors.black),
+                                        const Icon(Icons.block, color: Color(0xff909590)),
                                         SizedBox(width: 8 * scale),
-                                        Text("DEACTIVATE", style: TextStyle(fontSize: 16 * scale)),
+                                        Text("DEACTIVATE", style: TextStyle(fontSize: 16 * scale, color: const Color(0xff909590))),
                                       ],
                                     ),
                                   ),

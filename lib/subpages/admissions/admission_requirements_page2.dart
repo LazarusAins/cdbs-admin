@@ -126,7 +126,8 @@ class _AdmissionRequirementsPage2State extends State<AdmissionRequirementsPage2>
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           // Date Submitted
-          Expanded(
+          SizedBox(
+            width: 245,
             child: _buildInfoColumn(
               label: 'Date Created',
               value: formattedDate!,
@@ -638,24 +639,80 @@ bool checkDocumentRequirements(String gradeLevel, List<Map<String, dynamic>> for
                                 // Show success modal
                                 Navigator.of(context).popUntil((route) => route.isFirst);
                                 showDialog(
-                                  context: context,
-                                  builder: (context) => AlertDialog(
-                                    title: const Text("Success"),
-                                    content: const Text("The review has been marked as complete."),
-                                    actions: [
-                                      TextButton(
-                                        onPressed: () {
-                                          isComplete=checkDocumentRequirements(gradeLevel, List<Map<String, dynamic>>.from(
-                    myformDetails[0]['db_admission_table']['db_required_documents_table']
-                  ));
-                                          widget.onNextPressed(isComplete);
-                                          Navigator.of(context).pop(); // Close dialog
-                                        },
-                                        child: const Text("OK"),
-                                      ),
-                                    ],
-                                  ),
-                                );
+  context: context,
+  builder: (BuildContext context) {
+    double scale = MediaQuery.of(context).size.width / 375; // Scale based on screen size
+    return Dialog(
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(8),
+      ),
+      child: Container(
+        width: 349 * scale,
+        height: 272 * scale,
+        padding: const EdgeInsets.all(16),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Text(
+              'Success',
+              style: TextStyle(
+                fontFamily: "Roboto-R",
+                fontSize: 20 * scale,
+              ),
+            ),
+            SizedBox(height: 8 * scale),
+            Text(
+              'The review has been marked as complete.',
+              style: TextStyle(
+                fontFamily: "Roboto-L",
+                fontSize: 13 * scale,
+              ),
+            ),
+            SizedBox(height: 40 * scale),
+            Divider(
+              color: const Color(0xff909590),
+              thickness: 1 * scale,
+              indent: 20 * scale,
+              endIndent: 20 * scale,
+            ),
+            SizedBox(height: 30 * scale),
+            SizedBox(
+              width: 289 * scale,
+              height: 35 * scale,
+              child: ElevatedButton(
+                onPressed: () {
+                  isComplete = checkDocumentRequirements(
+                    gradeLevel,
+                    List<Map<String, dynamic>>.from(
+                      myformDetails[0]['db_admission_table']['db_required_documents_table']
+                    ),
+                  );
+                  widget.onNextPressed(isComplete);
+                  Navigator.of(context).pop(); // Close the modal
+                },
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: const Color(0xff012169),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                ),
+                child: Text(
+                  'OK',
+                  style: TextStyle(
+                    fontSize: 13 * scale,
+                    fontFamily: "Roboto-R",
+                    color: Colors.white,
+                  ),
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  },
+);
+
                               } else {
                                 // Handle failure
                                 final responseBody = jsonDecode(response.body);
