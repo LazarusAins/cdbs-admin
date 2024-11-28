@@ -56,6 +56,45 @@ TextEditingController languageSpokenController = TextEditingController();
 TextEditingController companionController = TextEditingController();
 TextEditingController siblingQuantityController = TextEditingController();
 
+
+
+//father controllers details
+TextEditingController fatherNameController = TextEditingController();
+TextEditingController fatherAgeController = TextEditingController();
+TextEditingController fatherEduAttainController = TextEditingController();
+String? fatherEmploymentStatus;
+TextEditingController fatherEmployedAtController = TextEditingController();
+TextEditingController fatherOfficeAddressController = TextEditingController();
+TextEditingController fatherContactController = TextEditingController();
+TextEditingController fatherWorkPositionController = TextEditingController();
+TextEditingController fatherSalaryScaleController = TextEditingController();
+//mother controllers details
+TextEditingController motherNameController = TextEditingController();
+TextEditingController motherAgeController = TextEditingController();
+TextEditingController motherEduAttainController = TextEditingController();
+String? motherEmploymentStatus;
+TextEditingController motherEmployedAtController = TextEditingController();
+TextEditingController motherOfficeAddressController = TextEditingController();
+TextEditingController motherContactController = TextEditingController();
+TextEditingController motherWorkPositionController = TextEditingController();
+TextEditingController motherSalaryScaleController = TextEditingController();
+//guardian
+TextEditingController guardianNameController = TextEditingController();
+TextEditingController guardianAgeController = TextEditingController();
+TextEditingController guardianEduAttainController = TextEditingController();
+String? guardianEmploymentStatus;
+TextEditingController guardianEmployedAtController = TextEditingController();
+TextEditingController guardianOfficeAddressController = TextEditingController();
+TextEditingController guardianContactController = TextEditingController();
+TextEditingController guardianWorkPositionController = TextEditingController();
+TextEditingController guardianSalaryScaleController = TextEditingController();
+String? guardianRelationTo;
+
+
+String? parentStatus;
+TextEditingController civilWeddingController = TextEditingController();
+TextEditingController churchNameController = TextEditingController();
+
 String selectedGender = '';
 String dropdown1Value = 'Option 1';
 String dropdown2Value = 'Option A';
@@ -254,6 +293,8 @@ void addItemDescription(double scale) {
   void initState() {
     super.initState();
     //fetchLoaRequest();
+    String noSibling = widget.formDetails![0]['db_admission_table']['db_family_background_table'][0]['no_of_siblings'].toString();
+    
     selectedGender =widget.formDetails![0]['db_admission_table']['sex'] ??'';
     fnameController.text=widget.formDetails![0]['db_admission_table']['first_name']??'';
     mnameController.text=widget.formDetails![0]['db_admission_table']['middle_name']??'';
@@ -270,7 +311,10 @@ void addItemDescription(double scale) {
     contactController.text=widget.formDetails![0]['db_admission_table']['contact_no']??'';
     languageSpokenController.text=widget.formDetails![0]['db_admission_table']['language_dialect_spoken']??'';
     companionController.text=widget.formDetails![0]['db_admission_table']['usual_companion_at_home']??'';
-    siblingQuantityController.text=widget.formDetails![0]['db_admission_table']['db_family_background_table'][0]['no_of_siblings'].toString()??'';
+    parentStatus=widget.formDetails![0]['db_admission_table']['db_family_background_table'][0]['parent_status'];
+    civilWeddingController.text=widget.formDetails![0]['db_admission_table']['db_family_background_table'][0]['civil_wedding'];
+    churchNameController.text=widget.formDetails![0]['db_admission_table']['db_family_background_table'][0]['church_name'];
+    siblingQuantityController.text=noSibling == 'null' ?'0':noSibling;
     DateTime dateOfBirth = DateTime.parse(dateController.text);
     DateTime today = DateTime.now();
     int age = today.year - dateOfBirth.year;
@@ -305,6 +349,46 @@ void addItemDescription(double scale) {
     ageController.text=age.toString();
     updateQuantity();
     addItemDescription(1);
+
+
+    if(widget.formDetails![0]['db_admission_table']['db_family_background_table'][0]['db_parent_table'].length>0){
+      for(int i=0; i<widget.formDetails![0]['db_admission_table']['db_family_background_table'][0]['db_parent_table'].length;i++){
+        var parent = widget.formDetails![0]['db_admission_table']['db_family_background_table'][0]['db_parent_table'][i];
+        String fullName='${parent['first_name']} ${parent['last_name']}';
+        DateTime dateOfBirth = DateTime.parse(parent['date_of_birth']);
+        DateTime today = DateTime.now();
+        int age = today.year - dateOfBirth.year;
+        if(parent['relationship_to_child']=='mother'){
+          motherNameController.text = fullName;
+          motherAgeController.text = age.toString();
+          motherEduAttainController.text=parent['educational_attainment'];
+          motherEmploymentStatus = parent['employment_status'];
+          motherEmployedAtController.text = parent['employed_at'];
+          motherOfficeAddressController.text=parent['office_address'];
+          motherContactController.text=parent['contact_no'];
+          motherWorkPositionController.text = parent['job_position'];
+        }else if(parent['relationship_to_child']=='father'){
+          fatherNameController.text = fullName;
+          fatherAgeController.text = age.toString();
+          fatherEduAttainController.text=parent['educational_attainment'];
+          fatherEmploymentStatus = parent['employment_status'];
+          fatherEmployedAtController.text = parent['employed_at'];
+          fatherOfficeAddressController.text=parent['office_address'];
+          fatherContactController.text=parent['contact_no'];
+          fatherWorkPositionController.text = parent['job_position'];
+        }else{
+          guardianNameController.text = fullName;
+          guardianAgeController.text = age.toString();
+          guardianEduAttainController.text=parent['educational_attainment'];
+          guardianEmploymentStatus = parent['employment_status'];
+          guardianEmployedAtController.text = parent['employed_at'];
+          guardianOfficeAddressController.text=parent['office_address'];
+          guardianContactController.text=parent['contact_no'];
+          guardianWorkPositionController.text = parent['job_position'];
+          guardianRelationTo = parent['relationship_to_child'];
+        }
+      }
+    }
   }
 
 
@@ -1449,6 +1533,7 @@ Row(
           width: 600,
           height: 40,
           child: TextField(
+            controller: fatherNameController,
             decoration: InputDecoration(
               border: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(8),
@@ -1473,6 +1558,7 @@ Row(
           width: 120,
           height: 40,
           child: TextField(
+            controller: fatherAgeController,
             decoration: InputDecoration(
               border: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(8),
@@ -1497,6 +1583,7 @@ Row(
           SizedBox(
             height: 40,
             child: TextField(
+              controller: fatherEduAttainController,
               decoration: InputDecoration(
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(8),
@@ -1525,6 +1612,7 @@ Expanded(
       SizedBox(
         height: 40,
         child: DropdownButtonFormField<String>(
+          value: fatherEmploymentStatus,
           items: const [
             DropdownMenuItem(
               value: 'Employed',
@@ -1580,6 +1668,7 @@ Row(
           SizedBox(
             height: 40,
             child: TextField(
+              controller: fatherEmployedAtController,
               decoration: InputDecoration(
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(8),
@@ -1605,6 +1694,7 @@ Row(
           SizedBox(
             height: 40,
             child: TextField(
+              controller: fatherOfficeAddressController,
               decoration: InputDecoration(
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(8),
@@ -1636,6 +1726,7 @@ Row(
           SizedBox(
             height: 40,
             child: TextField(
+              controller: fatherContactController,
               decoration: InputDecoration(
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(8),
@@ -1661,6 +1752,7 @@ Row(
           SizedBox(
             height: 40,
             child: TextField(
+              controller: fatherWorkPositionController,
               decoration: InputDecoration(
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(8),
@@ -1762,6 +1854,7 @@ Row(
           width: 600,
           height: 40,
           child: TextField(
+            controller: motherNameController,
             decoration: InputDecoration(
               border: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(8),
@@ -1786,6 +1879,7 @@ Row(
           width: 120,
           height: 40,
           child: TextField(
+            controller: motherAgeController,
             decoration: InputDecoration(
               border: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(8),
@@ -1810,6 +1904,7 @@ Row(
           SizedBox(
             height: 40,
             child: TextField(
+              controller: motherEduAttainController,
               decoration: InputDecoration(
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(8),
@@ -1838,6 +1933,7 @@ Expanded(
       SizedBox(
         height: 40,
         child: DropdownButtonFormField<String>(
+          value: motherEmploymentStatus,
           items: const [
             DropdownMenuItem(
               value: 'Employed',
@@ -1893,6 +1989,7 @@ Row(
           SizedBox(
             height: 40,
             child: TextField(
+              controller: motherEmployedAtController,
               decoration: InputDecoration(
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(8),
@@ -1918,6 +2015,7 @@ Row(
           SizedBox(
             height: 40,
             child: TextField(
+              controller: motherOfficeAddressController,
               decoration: InputDecoration(
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(8),
@@ -1949,6 +2047,7 @@ Row(
           SizedBox(
             height: 40,
             child: TextField(
+              controller: motherContactController,
               decoration: InputDecoration(
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(8),
@@ -1974,6 +2073,7 @@ Row(
           SizedBox(
             height: 40,
             child: TextField(
+              controller: motherWorkPositionController,
               decoration: InputDecoration(
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(8),
@@ -2196,6 +2296,7 @@ Row(
           width: 600,
           height: 40,
           child: TextField(
+            controller: guardianNameController,
             decoration: InputDecoration(
               border: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(8),
@@ -2220,6 +2321,7 @@ Row(
           width: 120,
           height: 40,
           child: TextField(
+            controller: guardianAgeController,
             decoration: InputDecoration(
               border: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(8),
@@ -2244,6 +2346,7 @@ Row(
           SizedBox(
             height: 40,
             child: TextField(
+              controller: guardianEduAttainController,
               decoration: InputDecoration(
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(8),
@@ -2272,6 +2375,7 @@ Expanded(
       SizedBox(
         height: 40,
         child: DropdownButtonFormField<String>(
+          value: guardianEmploymentStatus,
           items: const [
             DropdownMenuItem(
               value: 'Employed',
@@ -2327,6 +2431,7 @@ Row(
           SizedBox(
             height: 40,
             child: TextField(
+              controller: guardianEmployedAtController,
               decoration: InputDecoration(
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(8),
@@ -2352,6 +2457,7 @@ Row(
           SizedBox(
             height: 40,
             child: TextField(
+              controller: guardianOfficeAddressController,
               decoration: InputDecoration(
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(8),
@@ -2382,7 +2488,7 @@ Row(
           const SizedBox(height: 8),
           SizedBox(
             height: 40,
-            child: TextField(
+            child: TextField(controller: guardianContactController,
               decoration: InputDecoration(
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(8),
@@ -2408,6 +2514,7 @@ Row(
           SizedBox(
             height: 40,
             child: TextField(
+              controller: guardianWorkPositionController,
               decoration: InputDecoration(
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(8),
@@ -2509,21 +2616,22 @@ Row(
           SizedBox(
             height: 40,
             child: DropdownButtonFormField<String>(
+              value: guardianRelationTo,
               items: const [
                 DropdownMenuItem(
-                  value: 'Parent',
+                  value: 'parent',
                   child: Text('Parent'),
                 ),
                 DropdownMenuItem(
-                  value: 'Guardian',
+                  value: 'guardian',
                   child: Text('Guardian'),
                 ),
                 DropdownMenuItem(
-                  value: 'Relative',
+                  value: 'relative',
                   child: Text('Relative'),
                 ),
                 DropdownMenuItem(
-                  value: 'Other',
+                  value: 'other',
                   child: Text('Other'),
                 ),
               ],
@@ -2572,6 +2680,7 @@ Row(
           SizedBox(
             height: 40,
             child: DropdownButtonFormField<String>(
+              value: parentStatus,
               items: const [
                 DropdownMenuItem(
                   value: 'Single',
@@ -2632,6 +2741,7 @@ const SizedBox(height: 16,),
               SizedBox(
             height: 40,
             child: TextField(
+              controller: civilWeddingController,
               decoration: InputDecoration(
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(8),
@@ -2664,6 +2774,7 @@ const SizedBox(height: 16,),
               SizedBox(
             height: 40,
             child: TextField(
+              controller: churchNameController,
               decoration: InputDecoration(
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(8),
