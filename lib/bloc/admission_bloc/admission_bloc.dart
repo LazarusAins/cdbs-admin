@@ -7,6 +7,7 @@ class AdmissionBloc extends Bloc<AdmissionEvent, AdmissionState> {
   AdmissionBloc() : super(AdmissionInitial()) {
     // Registering the event handler
     on<MarkAsCompleteClicked>(_onMarkAsCompleteClicked);
+    on<MarkAsResultPassedClicked>(_onMarkAsResultPassedClicked);
   }
 
   // Event handler for MarkAsCompleteClicked
@@ -15,6 +16,17 @@ class AdmissionBloc extends Bloc<AdmissionEvent, AdmissionState> {
     try {
       // Emit the updated state based on the value of isComplete
       emit(AdmissionStatusUpdated(event.isComplete));
+    } catch (e) {
+      // In case of an error, emit a failure state
+      emit(AdmissionFailure('Failed to update admission status'));
+    }
+  }
+
+  void _onMarkAsResultPassedClicked(
+      MarkAsResultPassedClicked event, Emitter<AdmissionState> emit) {
+    try {
+      // Emit the updated state based on the value of isComplete
+      emit(AdmissionResultUpdated(event.isResult, event.isPassed));
     } catch (e) {
       // In case of an error, emit a failure state
       emit(AdmissionFailure('Failed to update admission status'));
