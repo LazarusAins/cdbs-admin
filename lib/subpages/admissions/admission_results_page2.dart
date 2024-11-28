@@ -119,6 +119,7 @@ class _AdmissionResultsPage2State extends State<AdmissionResultsPage2> {
           // Application Status
 SizedBox(
   width: 300,
+  height: 70,
   child: Column(
     crossAxisAlignment: CrossAxisAlignment.start,
     children: [
@@ -170,14 +171,11 @@ SizedBox(
             ),
           ),
          
-
-
         ],
       ),
-      const SizedBox(height: 4),
       Container(
         height: 1,
-        color: Colors.black, // Outline below the entire row
+        color: const Color(0xff909590), // Outline below the entire row
       ),
     ],
   ),
@@ -199,7 +197,7 @@ Row(
   children: [
     // Date Submitted
     SizedBox(
-      width: 260, // Set the width to 60
+      width: 290, // Set the width to 60
       child: _buildInfoColumn(
         label: 'Date Created',
         value: formattedDate!,

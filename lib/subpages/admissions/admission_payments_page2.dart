@@ -130,7 +130,7 @@ class _AdmissionPaymentsPage2State extends State<AdmissionPaymentsPage2> {
                           if (!_isRedExpanded[i])
                             AnimatedContainer(
                               duration: const Duration(milliseconds: 300),
-                              width: _isGreenExpanded[i] ? 99 : 44,
+                              width: _isGreenExpanded[i] ? 99 : 47,
                               height: 44,
                               child: ElevatedButton(
                                 onPressed: () async {
@@ -191,7 +191,7 @@ class _AdmissionPaymentsPage2State extends State<AdmissionPaymentsPage2> {
                           if (!_isGreenExpanded[i])
                             AnimatedContainer(
                               duration: const Duration(milliseconds: 300),
-                              width: _isRedExpanded[i] ? 99 : 44,
+                              width: _isRedExpanded[i] ? 99 : 47,
                               height: 44,
                               child: ElevatedButton(
                                 onPressed: () {
@@ -244,7 +244,7 @@ class _AdmissionPaymentsPage2State extends State<AdmissionPaymentsPage2> {
                       ),
                       const SizedBox(width: 16),
                       Expanded(
-                        flex: 4,
+                        flex: 3,
                         child: _buildInfoColumn(
                           label: 'Payment Method',
                           value: 'Over the Counter',
@@ -253,13 +253,14 @@ class _AdmissionPaymentsPage2State extends State<AdmissionPaymentsPage2> {
                       ),
                       const SizedBox(width: 16),
                       Expanded(
-                        flex: 2,
+                        flex: 3,
                         child: _buildInfoColumn(
                           label: 'Date Created',
                           value: formattedDate!,
                           scale: scale,
                         ),
                       ),
+                      const SizedBox(width: 16),
                       SizedBox(
                         width: 99,
                         height: 37,

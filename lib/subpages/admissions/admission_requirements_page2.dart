@@ -8,6 +8,7 @@ import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:intl/intl.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
+import 'package:url_launcher/url_launcher.dart';
 
 // Name of your class
 class AdmissionRequirementsPage2 extends StatefulWidget {
@@ -126,7 +127,8 @@ class _AdmissionRequirementsPage2State extends State<AdmissionRequirementsPage2>
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           // Date Submitted
-          Expanded(
+          SizedBox(
+            width: 245,
             child: _buildInfoColumn(
               label: 'Date Created',
               value: formattedDate!,
@@ -441,6 +443,8 @@ Widget _buildImageCard({
     statusColor = Colors.red;
   } // Default is transparent for 'pending'
 
+  bool isPdf = imagePath != null && imagePath.toLowerCase().endsWith('.pdf');
+
   return GestureDetector(
     onTap: () {
       _showImageDialog(imagePath, id!, admissionId!, status!, formRequirements, gradeLevel!);
@@ -479,10 +483,34 @@ Widget _buildImageCard({
                               height: 89,
                               fit: BoxFit.cover,
                               errorBuilder: (context, error, stackTrace) {
-                                return const Center(
-                                  child: Text(
+                                return  Center(
+                                  child:  Column(
+                                    children: [
+                                      const Text(
                                     "Failed to load image",
                                     style: TextStyle(color: Colors.grey),
+                                  ),
+                                  const SizedBox(height: 20),
+                                      ElevatedButton(
+                                        onPressed: () async {
+                                          final Uri url = Uri.parse(imagePath); // Convert string to Uri
+                                                
+                                          if (await canLaunchUrl(url)) {
+                                            await launchUrl(url);
+                                          } else {
+                                            // Handle the error case if the URL can't be launched
+                                            ScaffoldMessenger.of(context).showSnackBar(
+                                              SnackBar(content: Text('Could not open the link')),
+                                            );
+                                          }
+                                      
+                                        },
+                                        child: const Text(
+                                          "Open Link",
+                                          style: TextStyle(color: Colors.white),
+                                        ),
+                                      ),
+                                    ],
                                   ),
                                 );
                               },
@@ -638,24 +666,80 @@ bool checkDocumentRequirements(String gradeLevel, List<Map<String, dynamic>> for
                                 // Show success modal
                                 Navigator.of(context).popUntil((route) => route.isFirst);
                                 showDialog(
-                                  context: context,
-                                  builder: (context) => AlertDialog(
-                                    title: const Text("Success"),
-                                    content: const Text("The review has been marked as complete."),
-                                    actions: [
-                                      TextButton(
-                                        onPressed: () {
-                                          isComplete=checkDocumentRequirements(gradeLevel, List<Map<String, dynamic>>.from(
-                    myformDetails[0]['db_admission_table']['db_required_documents_table']
-                  ));
-                                          widget.onNextPressed(isComplete);
-                                          Navigator.of(context).pop(); // Close dialog
-                                        },
-                                        child: const Text("OK"),
-                                      ),
-                                    ],
-                                  ),
-                                );
+  context: context,
+  builder: (BuildContext context) {
+    double scale = MediaQuery.of(context).size.width / 375; // Scale based on screen size
+    return Dialog(
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(8),
+      ),
+      child: Container(
+        width: 349 * scale,
+        height: 272 * scale,
+        padding: const EdgeInsets.all(16),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Text(
+              'Success',
+              style: TextStyle(
+                fontFamily: "Roboto-R",
+                fontSize: 20 * scale,
+              ),
+            ),
+            SizedBox(height: 8 * scale),
+            Text(
+              'The review has been marked as complete.',
+              style: TextStyle(
+                fontFamily: "Roboto-L",
+                fontSize: 13 * scale,
+              ),
+            ),
+            SizedBox(height: 40 * scale),
+            Divider(
+              color: const Color(0xff909590),
+              thickness: 1 * scale,
+              indent: 20 * scale,
+              endIndent: 20 * scale,
+            ),
+            SizedBox(height: 30 * scale),
+            SizedBox(
+              width: 289 * scale,
+              height: 35 * scale,
+              child: ElevatedButton(
+                onPressed: () {
+                  isComplete = checkDocumentRequirements(
+                    gradeLevel,
+                    List<Map<String, dynamic>>.from(
+                      myformDetails[0]['db_admission_table']['db_required_documents_table']
+                    ),
+                  );
+                  widget.onNextPressed(isComplete);
+                  Navigator.of(context).pop(); // Close the modal
+                },
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: const Color(0xff012169),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                ),
+                child: Text(
+                  'OK',
+                  style: TextStyle(
+                    fontSize: 13 * scale,
+                    fontFamily: "Roboto-R",
+                    color: Colors.white,
+                  ),
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  },
+);
+
                               } else {
                                 // Handle failure
                                 final responseBody = jsonDecode(response.body);

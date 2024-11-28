@@ -368,9 +368,9 @@ String formatDate(DateTime date) {
         // value: 2,
         child: Row(
           children: [
-            const Icon(Icons.notifications, color: Colors.black),
+             const Icon(Icons.notifications, color: Color(0xff909590)),
             SizedBox(width: 8 * scale),
-            Text("REMINDER", style: TextStyle(fontSize: 16 * scale)),
+            Text("REMINDER", style: TextStyle(fontSize: 16 * scale, color: const Color(0xff909590))),
           ],
         ),
       ),
@@ -378,9 +378,9 @@ String formatDate(DateTime date) {
         // value: 3,
         child: Row(
           children: [
-            const Icon(Icons.block, color: Colors.black),
+            const Icon(Icons.block, color: Color(0xff909590)),
             SizedBox(width: 8 * scale),
-            Text("DEACTIVATE", style: TextStyle(fontSize: 16 * scale)),
+            Text("DEACTIVATE", style: TextStyle(fontSize: 16 * scale, color: const Color(0xff909590))),
           ],
         ),
       ),
@@ -528,36 +528,36 @@ void _showViewModal(BuildContext context) {
             children: [
               // Centered Text
               const Center(
-                child: Text(
-                  "",
-                  style: TextStyle(
-                    fontSize: 20,
-                  ),
-                  textAlign: TextAlign.center,
-                ),
+                // child: Text(
+                //   "",
+                //   style: TextStyle(
+                //     fontSize: 20,
+                //   ),
+                //   textAlign: TextAlign.center,
+                // ),
               ),
               // Red X Icon with Circular Outline
               Column(
                 children: [
                   Container(
-                    width: 50,
-                    height: 50,
+                    width: 90,
+                    height: 90,
                     decoration: BoxDecoration(
                       shape: BoxShape.circle,
                       border: Border.all(color: const Color(0XFF012169), width: 2),
                     ),
                     child: const Center(
                       child: Icon(
-                        Icons.close,
+                        Icons.auto_stories_sharp,
                         color: Color(0XFF012169),
-                        size: 28,
+                        size: 40,
                       ),
                     ),
                   ),
-                  const SizedBox(height: 8),
+                  const SizedBox(height: 20),
                   // No Form Submitted Text
                   const Text(
-                    "No form Submitted!",
+                    "No data entry found!",
                     style: TextStyle(
                       fontSize: 20,
                       fontWeight: FontWeight.bold,
