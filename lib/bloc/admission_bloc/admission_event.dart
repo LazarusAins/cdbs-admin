@@ -13,10 +13,12 @@ class MarkAsCompleteClicked extends AdmissionEvent {
 class MarkAsResultPassedClicked extends AdmissionEvent {
   final bool isResult;
   final bool isPassed;
+  final bool isComplete;
 
   // Constructor takes both isResult and isPassed as bool values
   MarkAsResultPassedClicked({
     required this.isResult,  // Whether the result is available (true or false)
     required this.isPassed,  // Whether the person has passed (true or false)
+    required this.isComplete,
   });
 }

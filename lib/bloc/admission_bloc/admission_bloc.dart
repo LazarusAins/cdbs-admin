@@ -26,7 +26,7 @@ class AdmissionBloc extends Bloc<AdmissionEvent, AdmissionState> {
       MarkAsResultPassedClicked event, Emitter<AdmissionState> emit) {
     try {
       // Emit the updated state based on the value of isComplete
-      emit(AdmissionResultUpdated(event.isResult, event.isPassed));
+      emit(AdmissionResultUpdated(event.isResult, event.isPassed, event.isComplete));
     } catch (e) {
       // In case of an error, emit a failure state
       emit(AdmissionFailure('Failed to update admission status'));

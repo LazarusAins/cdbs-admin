@@ -1,7 +1,11 @@
+//RESULTS PAGE1
+
+import 'package:cdbs_admin/bloc/admission_bloc/admission_bloc.dart';
 import 'package:cdbs_admin/bloc/auth/auth_bloc.dart';
 import 'package:cdbs_admin/class/admission_forms.dart';
 import 'package:cdbs_admin/shared/api.dart';
 import 'package:cdbs_admin/subpages/admissions/admission_requirements_page2.dart';
+import 'package:cdbs_admin/subpages/admissions/admission_results_page2.dart';
 import 'package:cdbs_admin/subpages/landing_page.dart';
 import 'package:cdbs_admin/subpages/s1.dart';
 import 'package:cdbs_admin/subpages/s2.dart';
@@ -9,6 +13,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:intl/intl.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
 
 class AdmissionResultsPage extends StatefulWidget {
   const AdmissionResultsPage({super.key});
@@ -25,12 +31,13 @@ List<bool> checkboxStates = List.generate(10, (_) => false);
   List<Map<String, dynamic>> requests = [];
   List<Map<String, dynamic>> filteredRequest = [];
   late ApiService _apiService;
+  List<Map<String, dynamic>>? formDetails;
 
   @override
   void initState() {
     super.initState();
     _apiService = ApiService(apiUrl); // Replace with your actual API URL
-    admissionForms = _apiService.streamAdmissionForms(supabaseUrl, supabaseKey);
+    admissionForms = _apiService.streamAdmissionResult(supabaseUrl, supabaseKey);
     // Initialize the service with your endpoint
   }
 
@@ -118,7 +125,7 @@ String formatDate(DateTime date) {
       ),
 
       if (_selectedAction == 0) _buildDefaultContent(scale), // Default content
-      if (_selectedAction == 1) _buildViewContent(scale), // View content
+      if (_selectedAction == 1) _buildViewContent(scale, formDetails!, authState.uid), // View content
       if (_selectedAction == 2) _buildReminderContent(scale), // Reminder content
       if (_selectedAction == 3) _buildDeactivateContent(scale),
       if (_selectedAction == 4) _buildDeactivateContent(scale),
@@ -284,10 +291,14 @@ String formatDate(DateTime date) {
                         flex: 1,
                         child: PopupMenuButton<int>(
                           icon: const Icon(Icons.more_vert),
-                          onSelected: (value) {
-                            setState(() {
+                          onSelected: (value) async {
+                            List<Map<String, dynamic>> members = await ApiService(apiUrl).getFormsDetailsById(request['admission_id'], supabaseUrl, supabaseKey);
+                            if(members.isNotEmpty){
+                              setState(() {
+                                formDetails=members;
                               _selectedAction = value; // Change the selected action
                             });
+                            }
                           },
                           itemBuilder: (context) => [
                             PopupMenuItem(
@@ -345,74 +356,169 @@ String formatDate(DateTime date) {
   }
 
   // Build content for each action (VIEW, REMINDER, DEACTIVATE)
-  Widget _buildViewContent(double scale) {
-    return Container(
-  padding: const EdgeInsets.all(16),
-  child: Column(
-    children: [
-      // Back button with left arrow and "Back" text
-      Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          TextButton.icon(
-            onPressed: () {
-              setState(() {
-                _selectedAction = 0; // Go back to default content
-              });
-            },
-            icon: const Icon(Icons.arrow_back, color: Colors.black),
-            label: Text(
-              "Back",
-              style: TextStyle(color: Colors.black, fontFamily: 'Roboto-R', fontSize: 12 * scale),
-            ),
-          ),
-          
-          // Two buttons on the right
-          Row(
-            children: [
-              ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: const Color(0xFF012169), // Blue color
-                  fixedSize: Size(178 * scale, 37 * scale), // Button size
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(5), // Border radius
-                  ),
+  Widget _buildViewContent(double scale, List<Map<String, dynamic>> details, int userId) {
+    return BlocConsumer<AdmissionBloc, AdmissionState>(
+      listener: (context, state) {},
+      builder: (context, state) {
+              bool isButtonEnabled = false;
+              bool isResult = false;
+              bool isPassed = false;
+              // Enable button based on the state
+              if (state is AdmissionResultUpdated) {
+                isButtonEnabled = state.isComplete;
+                isResult = state.isResult;
+                isPassed = state.isPassed;
+              }
+        return Container(
+                padding: const EdgeInsets.all(16),
+                child: Column(
+                  children: [
+                    // Back button with left arrow and "Back" text
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        TextButton.icon(
+                          onPressed: () {
+                            setState(() {
+                              _selectedAction = 0; // Go back to default content
+                            });
+                          },
+                          icon: const Icon(Icons.arrow_back, color: Colors.black),
+                          label: Text(
+                            "Back",
+                            style: TextStyle(color: Colors.black, fontFamily: 'Roboto-R', fontSize: 12 * scale),
+                          ),
+                        ),
+                        
+                        // Two buttons on the right
+                        Row(
+                          children: [
+                            ElevatedButton(
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor: const Color(0xFF012169), // Blue color
+                                fixedSize: Size(178 * scale, 37 * scale), // Button size
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(5), // Border radius
+                                ),
+                              ),
+                              onPressed: () {
+                                // Action for first button
+                              },
+                              child: Text(
+                                "Download PDF",
+                                style: TextStyle(color: Colors.white, fontFamily: 'Roboto-R', fontSize: 12 * scale),
+                              ),
+                            ),
+                            const SizedBox(width: 8), // Spacing between buttons
+                            ElevatedButton(
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor: const Color(0xFF007A33), // Green color
+                                fixedSize: Size(178 * scale, 37 * scale), // Button size
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(5), // Border radius
+                                ),
+                              ),
+                              onPressed: isButtonEnabled?() async {
+                                try {
+                                    final response = await http.post(
+                                      Uri.parse('$apiUrl/api/admin/update_admission'),
+                                      headers: {
+                                        'Content-Type': 'application/json',
+                                        'supabase-url': supabaseUrl,
+                                        'supabase-key': supabaseKey,
+                                      },
+                                      body: json.encode({
+                                        'admission_id': details[0]['admission_id'], // Send admission_id in the request body
+                                        'admission_status': "complete",
+                                        'is_result': isResult,
+                                        'is_passed':isPassed,
+                                        'user_id': userId,
+                                        'is_done': true,
+                                      }),
+                                    );
+
+                                    if (response.statusCode == 200) {
+                                      final responseBody = jsonDecode(response.body);
+
+                                      // Show success modal
+                                      showDialog(
+                                        context: context,
+                                        builder: (context) => AlertDialog(
+                                          title: const Text("Success"),
+                                          content: const Text("The review has been marked as complete."),
+                                          actions: [
+                                            TextButton(
+                                              onPressed: () {
+                                                Navigator.of(context).pop(); // Close the dialog
+                                              },
+                                              child: const Text("OK"),
+                                            ),
+                                          ],
+                                        ),
+                                      );
+                                    } else {
+                                      // Handle failure
+                                      final responseBody = jsonDecode(response.body);
+                                      print('Error: ${responseBody['error']}');
+
+                                      // Show failure modal
+                                      showDialog(
+                                        context: context,
+                                        builder: (context) => AlertDialog(
+                                          title: const Text("Error"),
+                                          content: Text("Failed to complete review: ${responseBody['error']}"),
+                                          actions: [
+                                            TextButton(
+                                              onPressed: () {
+                                                Navigator.of(context).pop(); // Close the dialog
+                                              },
+                                              child: const Text("OK"),
+                                            ),
+                                          ],
+                                        ),
+                                      );
+                                    }
+                                  } catch (error) {
+                                    // Handle error (e.g., network error)
+                                    print('Error: $error');
+
+                                    // Show error modal
+                                    showDialog(
+                                      context: context,
+                                      builder: (context) => AlertDialog(
+                                        title: const Text("Error"),
+                                        content: const Text("An unexpected error occurred. Please try again later."),
+                                        actions: [
+                                          TextButton(
+                                            onPressed: () {
+                                              Navigator.of(context).pop(); // Close the dialog
+                                            },
+                                            child: const Text("OK"),
+                                          ),
+                                        ],
+                                      ),
+                                    );
+                                  }
+                              }:null,
+                              child: Text(
+                                "Send Results",
+                                style: TextStyle(color: Colors.white, fontFamily: 'Roboto-R', fontSize: 12 * scale),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
+                    
+                    // Adding AdmissionApplicationsPage2 below the buttons
+                    AdmissionResultsPage2(formDetails: details, onNextPressed: (bool isClicked, bool isResult, bool isPassed) {
+                      context.read<AdmissionBloc>().add(MarkAsResultPassedClicked(isResult: isResult, isPassed: isPassed, isComplete: isClicked));
+                    },userId: userId,),
+                  ],
                 ),
-                onPressed: () {
-                  // Action for first button
-                },
-                child: Text(
-                  "Download PDF",
-                  style: TextStyle(color: Colors.white, fontFamily: 'Roboto-R', fontSize: 12 * scale),
-                ),
-              ),
-              const SizedBox(width: 8), // Spacing between buttons
-              ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: const Color(0xFF007A33), // Green color
-                  fixedSize: Size(178 * scale, 37 * scale), // Button size
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(5), // Border radius
-                  ),
-                ),
-                onPressed: () {
-                  // Action for second button
-                },
-                child: Text(
-                  "Mark as Complete",
-                  style: TextStyle(color: Colors.white, fontFamily: 'Roboto-R', fontSize: 12 * scale),
-                ),
-              ),
-            ],
-          ),
-        ],
-      ),
-      
-      // Adding AdmissionApplicationsPage2 below the buttons
-      const S2Page(),
-    ],
-  ),
-);
+              );
+      }
+    );
 
 
 

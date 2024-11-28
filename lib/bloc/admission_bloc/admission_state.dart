@@ -18,11 +18,13 @@ class AdmissionFailure extends AdmissionState {
 
 
 class AdmissionResultUpdated extends AdmissionState {
+  final bool isComplete;
   final bool isResult;  // Whether the result is available (true or false)
   final bool isPassed;  // Whether the person has passed (true or false)
 
   AdmissionResultUpdated(
      this.isResult,  // The result is available (true or false)
      this.isPassed,  // The result is passed (true or false)
+     this.isComplete
   );
 }
