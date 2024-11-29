@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class AdmissionApplicationsPage2 extends StatefulWidget {
-
+  
   List<Map<String, dynamic>>? formDetails;
   final Function(bool isClicked) onNextPressed;
 
@@ -24,6 +24,13 @@ class _AdmissionApplicationsPage2State
     setState(() {
       if (_currentPage < 5) {
         _currentPage++;
+        if(_currentPage==1){
+          title='Personal Data';
+        }else if(_currentPage==2 || _currentPage==3 || _currentPage==4){
+          title='Family Background';
+        }else{
+          title='Special Concerns';
+        }
       }
     });
   }
@@ -32,11 +39,18 @@ class _AdmissionApplicationsPage2State
     setState(() {
       if (_currentPage > 1) {
         _currentPage--;
+         if(_currentPage==1){
+          title='Personal Data';
+        }else if(_currentPage==2 || _currentPage==3 || _currentPage==4){
+          title='Family Background';
+        }else{
+          title='Special Concerns';
+        }
       }
     });
   }
 
-
+bool isEditable = false;
 
 TextEditingController dateController = TextEditingController();
 TextEditingController fnameController = TextEditingController();
@@ -103,6 +117,8 @@ String dropdown1Value = 'Option 1';
 String dropdown2Value = 'Option A';
 
 int quantityReceived = 0;
+
+String title = 'Personal Data';
 
 List<TextEditingController> nameControllers = [];
 List<TextEditingController> ageControllers = [];
@@ -422,41 +438,47 @@ void addItemDescription(double scale) {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             // Page 1 content
-            if (_currentPage == 1) ...[
-             Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        // Row 1
-        Row(
+
+
+
+            Row(
     mainAxisAlignment: MainAxisAlignment.spaceBetween,
     children: [
-      Text(
-        'Personal Data',
+      Text(title,
         style: TextStyle(
           fontFamily: 'Roboto-R',
           fontSize: 20 * scale,
         ),
       ),
-      ElevatedButton(
-        onPressed: () {
-          // Handle Edit Application action
-        },
-        style: ElevatedButton.styleFrom(
-          backgroundColor: const Color(0xffF5F7FB),
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(12 * scale),
-          ),
-        ),
-        child: Text(
-          'Edit Application',
-          style: TextStyle(
-            fontFamily: 'Roboto-R',
-            fontSize: 13 * scale,
-          ),
-        ),
-      ),
+ElevatedButton(
+  onPressed: () {
+    // Toggle edit mode
+    setState(() {
+      isEditable = true;
+    });
+  },
+  style: ElevatedButton.styleFrom(
+    backgroundColor: const Color(0xffF5F7FB),
+    shape: RoundedRectangleBorder(
+      borderRadius: BorderRadius.circular(12 * scale),
+    ),
+  ),
+  child: Text(
+    isEditable ? 'Save' : 'Edit Application', // Change button text dynamically
+    style: TextStyle(
+      fontFamily: 'Roboto-R',
+      fontSize: 13 * scale,
+    ),
+  ),
+),
     ],
         ),
+            if (_currentPage == 1) ...[
+             Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        // Row 1
+       
         const SizedBox(height: 16),
     
     
@@ -522,6 +544,7 @@ Expanded(
           height: 40,
           child: TextField(
             controller: levelApplyingController,
+            enabled: isEditable, // Disable or enable based on isEditable
             decoration: InputDecoration(
               border: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(8 * scale),
@@ -538,6 +561,7 @@ Expanded(
           height: 40,
           child: TextField(
             controller: schoolYearController,
+            enabled: isEditable, 
             decoration: InputDecoration(
               border: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(8 * scale),
@@ -575,6 +599,7 @@ Expanded(
           height: 40,
           child: TextField(
             controller: fnameController,
+            enabled: isEditable, 
             decoration: InputDecoration(
               border: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(8 * scale),
@@ -590,6 +615,7 @@ Expanded(
           height: 40,
           child: TextField(
             controller: mnameController,
+            enabled: isEditable, 
             decoration: InputDecoration(
               border: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(8 * scale),
@@ -605,6 +631,7 @@ Expanded(
           height: 40,
           child: TextField(
             controller: lnameController,
+            enabled: isEditable, 
             decoration: InputDecoration(
               border: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(8 * scale),
@@ -670,7 +697,8 @@ Expanded(
         height: 40,
         child: TextField(
           controller: dateController, // Use the controller to update the text
-          readOnly: true, // Makes the TextField non-editable, so the calendar triggers the date picker
+          readOnly: true,
+          enabled: isEditable,  // Makes the TextField non-editable, so the calendar triggers the date picker
           decoration: InputDecoration(
             suffixIcon: IconButton(
         icon: const Icon(Icons.calendar_today), // Calendar icon
@@ -705,6 +733,7 @@ Expanded(
           height: 40,
           child: TextField(
             controller: birthPlaceController,
+            enabled: isEditable, 
             decoration: InputDecoration(
               border: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(8 * scale),
@@ -720,6 +749,7 @@ Expanded(
           height: 40,
           child: TextField(
             controller: ageController,
+            enabled: isEditable, 
             decoration: InputDecoration(
               border: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(8 * scale),
@@ -783,52 +813,55 @@ Expanded(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
     
-        Row(
-          children: [
-            Expanded(
-              child: Row(
-                children: [
-                  Radio<String>(
-                    value: 'Male',
-                    groupValue: selectedGender,
-                    onChanged: (value) {
-                      setState(() {
-                        if(selectedGender.toLowerCase()==value!.toLowerCase()){
-                          selectedGender = value;
-                        }
-                      });
-                    },
-                  ),
-                  Text(
-                    'Male',
-                    style: TextStyle(fontSize: 13 * scale),
-                  ),
-                ],
-              ),
-            ),
-            Expanded(
-              child: Row(
-                children: [
-                  Radio<String>(
-                    value: 'Female',
-                    groupValue: selectedGender,
-                    onChanged: (value) {
-                      setState(() {
-                         if(selectedGender.toLowerCase()==value!.toLowerCase()){
-                          selectedGender = value;
-                        }
-                      });
-                    },
-                  ),
-                  Text(
-                    'Female',
-                    style: TextStyle(fontSize: 13 * scale),
-                  ),
-                ],
-              ),
-            ),
-          ],
-        ),
+Row(
+  children: [
+    Expanded(
+      child: Row(
+        children: [
+          Radio<String>(
+            value: 'Male',
+            groupValue: selectedGender,
+            activeColor: const Color(0XFF012169), // Active (selected) color is set to red
+            onChanged: (value) {
+              setState(() {
+                if (selectedGender.toLowerCase() == value!.toLowerCase()) {
+                  selectedGender = value;
+                }
+              });
+            },
+          ),
+          Text(
+            'Male',
+            style: TextStyle(fontSize: 13 * scale),
+          ),
+        ],
+      ),
+    ),
+    Expanded(
+      child: Row(
+        children: [
+          Radio<String>(
+            value: 'Female',
+            groupValue: selectedGender,
+            activeColor: const Color(0XFF012169), // Active (selected) color is set to red
+            onChanged: (value) {
+              setState(() {
+                if (selectedGender.toLowerCase() == value!.toLowerCase()) {
+                  selectedGender = value;
+                }
+              });
+            },
+          ),
+          Text(
+            'Female',
+            style: TextStyle(fontSize: 13 * scale),
+          ),
+        ],
+      ),
+    ),
+  ],
+),
+
       ],
     ),
         ),
@@ -868,6 +901,7 @@ Expanded(
           height: 40,
           child: TextField(
             controller: religionController,
+            enabled: isEditable, 
             decoration: InputDecoration(
               border: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(8 * scale),
@@ -885,6 +919,7 @@ Expanded(
           height: 40,
           child: TextField(
             controller: citizenshipController,
+            enabled: isEditable, 
             decoration: InputDecoration(
               border: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(8 * scale),
@@ -961,6 +996,7 @@ Expanded(
           height: 40,
           child: TextField(
             controller: acrController,
+            enabled: isEditable, 
             decoration: InputDecoration(
               border: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(8 * scale),
@@ -1009,6 +1045,7 @@ Expanded(
           height: 40,
           child: TextField(
             controller: addressController,
+            enabled: isEditable, 
             decoration: InputDecoration(
               border: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(8 * scale),
@@ -1068,6 +1105,7 @@ Expanded(
           height: 40,
           child: TextField(
             controller: postalController,
+            enabled: isEditable, 
             decoration: InputDecoration(
               border: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(8 * scale),
@@ -1083,6 +1121,7 @@ Expanded(
           height: 40,
           child: TextField(
             controller: contactController,
+            enabled: isEditable, 
             decoration: InputDecoration(
               border: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(8 * scale),
@@ -1165,6 +1204,7 @@ Expanded(
           height: 40,
           child: TextField(
             controller: languageSpokenController,
+            enabled: isEditable, 
             decoration: InputDecoration(
               border: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(8 * scale),
@@ -1180,6 +1220,7 @@ Expanded(
           height: 40,
           child: TextField(
             controller: companionController,
+            enabled: isEditable, 
             decoration: InputDecoration(
               border: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(8 * scale),
@@ -1199,7 +1240,9 @@ Expanded(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 ElevatedButton(
-  onPressed: _nextPage, // Switch to the second page
+  onPressed: (){
+    _nextPage();
+  }, // Switch to the second page
   style: ElevatedButton.styleFrom(
     backgroundColor: const Color(0xFF012169), // Button color
     fixedSize: const Size(188, 35), // Width and height
@@ -1281,36 +1324,7 @@ Expanded(
 
 //PAGE 2 CONTENTS
             if (_currentPage == 2) ...[
-              Row(
-    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-    children: [
-      Text(
-        'Family Background',
-        style: TextStyle(
-          fontFamily: 'Roboto-R',
-          fontSize: 20 * scale,
-        ),
-      ),
-      ElevatedButton(
-        onPressed: () {
-          // Handle Edit Application action
-        },
-        style: ElevatedButton.styleFrom(
-          backgroundColor: const Color(0xffF5F7FB),
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(12 * scale),
-          ),
-        ),
-        child: Text(
-          'Edit Application',
-          style: TextStyle(
-            fontFamily: 'Roboto-R',
-            fontSize: 13 * scale,
-          ),
-        ),
-      ),
-    ],
-        ),
+              
         const SizedBox(height: 16),
 
               // 2nd Row - Number of siblings dropdown field
@@ -1340,6 +1354,7 @@ SizedBox(
   height: 40,
   child: TextField(
     controller: siblingQuantityController,
+    enabled: isEditable, 
     keyboardType: TextInputType.number,  // To handle numeric input
     decoration: InputDecoration(
       labelText: "Number of Siblings", // Optional label
@@ -1482,36 +1497,6 @@ Row(
 //PAGE 3 CONTENT
             if (_currentPage == 3) ...[
               // Add content for the third page here
-              Row(
-    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-    children: [
-      Text(
-        'Family Background',
-        style: TextStyle(
-          fontFamily: 'Roboto-R',
-          fontSize: 20 * scale,
-        ),
-      ),
-      ElevatedButton(
-        onPressed: () {
-          // Handle Edit Application action
-        },
-        style: ElevatedButton.styleFrom(
-          backgroundColor: const Color(0xffF5F7FB),
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(12 * scale),
-          ),
-        ),
-        child: Text(
-          'Edit Application',
-          style: TextStyle(
-            fontFamily: 'Roboto-R',
-            fontSize: 13 * scale,
-          ),
-        ),
-      ),
-    ],
-        ),
         Text(
         'Please enter Parents Information',
         style: TextStyle(
@@ -1540,6 +1525,7 @@ Row(
           height: 40,
           child: TextField(
             controller: fatherNameController,
+            enabled: isEditable, 
             decoration: InputDecoration(
               border: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(8),
@@ -1565,6 +1551,7 @@ Row(
           height: 40,
           child: TextField(
             controller: fatherAgeController,
+            enabled: isEditable, 
             decoration: InputDecoration(
               border: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(8),
@@ -1590,6 +1577,7 @@ Row(
             height: 40,
             child: TextField(
               controller: fatherEduAttainController,
+              enabled: isEditable, 
               decoration: InputDecoration(
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(8),
@@ -1675,6 +1663,7 @@ Row(
             height: 40,
             child: TextField(
               controller: fatherEmployedAtController,
+              enabled: isEditable, 
               decoration: InputDecoration(
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(8),
@@ -1701,6 +1690,7 @@ Row(
             height: 40,
             child: TextField(
               controller: fatherOfficeAddressController,
+              enabled: isEditable, 
               decoration: InputDecoration(
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(8),
@@ -1733,6 +1723,7 @@ Row(
             height: 40,
             child: TextField(
               controller: fatherContactController,
+              enabled: isEditable, 
               decoration: InputDecoration(
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(8),
@@ -1759,6 +1750,7 @@ Row(
             height: 40,
             child: TextField(
               controller: fatherWorkPositionController,
+              enabled: isEditable, 
               decoration: InputDecoration(
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(8),
@@ -1870,6 +1862,7 @@ Row(
           height: 40,
           child: TextField(
             controller: motherNameController,
+            enabled: isEditable, 
             decoration: InputDecoration(
               border: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(8),
@@ -1895,6 +1888,7 @@ Row(
           height: 40,
           child: TextField(
             controller: motherAgeController,
+            enabled: isEditable, 
             decoration: InputDecoration(
               border: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(8),
@@ -1920,6 +1914,7 @@ Row(
             height: 40,
             child: TextField(
               controller: motherEduAttainController,
+              enabled: isEditable, 
               decoration: InputDecoration(
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(8),
@@ -2005,6 +2000,7 @@ Row(
             height: 40,
             child: TextField(
               controller: motherEmployedAtController,
+              enabled: isEditable, 
               decoration: InputDecoration(
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(8),
@@ -2031,6 +2027,7 @@ Row(
             height: 40,
             child: TextField(
               controller: motherOfficeAddressController,
+              enabled: isEditable, 
               decoration: InputDecoration(
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(8),
@@ -2063,6 +2060,7 @@ Row(
             height: 40,
             child: TextField(
               controller: motherContactController,
+              enabled: isEditable, 
               decoration: InputDecoration(
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(8),
@@ -2089,6 +2087,7 @@ Row(
             height: 40,
             child: TextField(
               controller: motherWorkPositionController,
+              enabled: isEditable, 
               decoration: InputDecoration(
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(8),
@@ -2263,36 +2262,6 @@ Row(
 //PAGE 4 CONTENT
             if (_currentPage == 4) ...[
               // Add content for the third page here
-              Row(
-    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-    children: [
-      Text(
-        'Family Background',
-        style: TextStyle(
-          fontFamily: 'Roboto-R',
-          fontSize: 20 * scale,
-        ),
-      ),
-      ElevatedButton(
-        onPressed: () {
-          // Handle Edit Application action
-        },
-        style: ElevatedButton.styleFrom(
-          backgroundColor: const Color(0xffF5F7FB),
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(12 * scale),
-          ),
-        ),
-        child: Text(
-          'Edit Application',
-          style: TextStyle(
-            fontFamily: 'Roboto-R',
-            fontSize: 13 * scale,
-          ),
-        ),
-      ),
-    ],
-        ),
         Text(
         'Please enter Guardian Information',
         style: TextStyle(
@@ -2321,6 +2290,7 @@ Row(
           height: 40,
           child: TextField(
             controller: guardianNameController,
+            enabled: isEditable, 
             decoration: InputDecoration(
               border: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(8),
@@ -2346,6 +2316,7 @@ Row(
           height: 40,
           child: TextField(
             controller: guardianAgeController,
+            enabled: isEditable, 
             decoration: InputDecoration(
               border: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(8),
@@ -2371,6 +2342,7 @@ Row(
             height: 40,
             child: TextField(
               controller: guardianEduAttainController,
+              enabled: isEditable, 
               decoration: InputDecoration(
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(8),
@@ -2456,6 +2428,7 @@ Row(
             height: 40,
             child: TextField(
               controller: guardianEmployedAtController,
+              enabled: isEditable, 
               decoration: InputDecoration(
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(8),
@@ -2482,6 +2455,7 @@ Row(
             height: 40,
             child: TextField(
               controller: guardianOfficeAddressController,
+              enabled: isEditable, 
               decoration: InputDecoration(
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(8),
@@ -2513,6 +2487,7 @@ Row(
           SizedBox(
             height: 40,
             child: TextField(controller: guardianContactController,
+            enabled: isEditable, 
               decoration: InputDecoration(
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(8),
@@ -2539,6 +2514,7 @@ Row(
             height: 40,
             child: TextField(
               controller: guardianWorkPositionController,
+              enabled: isEditable, 
               decoration: InputDecoration(
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(8),
@@ -2775,6 +2751,7 @@ const SizedBox(height: 16,),
             height: 40,
             child: TextField(
               controller: civilWeddingController,
+              enabled: isEditable, 
               decoration: InputDecoration(
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(8),
@@ -2808,6 +2785,7 @@ const SizedBox(height: 16,),
             height: 40,
             child: TextField(
               controller: churchNameController,
+              enabled: isEditable, 
               decoration: InputDecoration(
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(8),
@@ -2909,36 +2887,7 @@ Row(
 //PAGE 5 CONTENT
             if (_currentPage == 5) ...[
               // Add content for the third page here
-              Row(
-    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-    children: [
-      Text(
-        'Special Concerns',
-        style: TextStyle(
-          fontFamily: 'Roboto-R',
-          fontSize: 20 * scale,
-        ),
-      ),
-      ElevatedButton(
-        onPressed: () {
-          // Handle Edit Application action
-        },
-        style: ElevatedButton.styleFrom(
-          backgroundColor: const Color(0xffF5F7FB),
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(12 * scale),
-          ),
-        ),
-        child: Text(
-          'Edit Application',
-          style: TextStyle(
-            fontFamily: 'Roboto-R',
-            fontSize: 13 * scale,
-          ),
-        ),
-      ),
-    ],
-        ),
+             
               const SizedBox(height: 16),
 
                   Row(
@@ -2955,6 +2904,7 @@ Row(
               SizedBox(
             height: 40,
             child: TextField(
+              enabled: isEditable, 
               decoration: InputDecoration(
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(8),
@@ -2983,6 +2933,7 @@ Row(
               SizedBox(
             height: 40,
             child: TextField(
+              enabled: isEditable, 
               decoration: InputDecoration(
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(8),
@@ -3012,6 +2963,7 @@ const SizedBox(height: 16),
               SizedBox(
             height: 40,
             child: TextField(
+              enabled: isEditable, 
               decoration: InputDecoration(
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(8),
@@ -3037,6 +2989,7 @@ const SizedBox(width: 8,),
                         SizedBox(
             height: 40,
             child: TextField(
+              enabled: isEditable, 
               decoration: InputDecoration(
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(8),
@@ -3067,6 +3020,7 @@ const SizedBox(height: 16),
               SizedBox(
             height: 40,
             child: TextField(
+              enabled: isEditable, 
               decoration: InputDecoration(
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(8),

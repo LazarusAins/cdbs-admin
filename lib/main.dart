@@ -21,7 +21,6 @@ import 'subpages/admission_applications_page2.dart';*/
 
 
 
-
 void main() async {
   runApp(const MyApp());
 }
@@ -42,6 +41,19 @@ class MyApp extends StatelessWidget {
         title: 'Medicareplus Admin',
         theme: ThemeData.light().copyWith(
           scaffoldBackgroundColor: const Color.fromARGB(255, 249, 249, 252),
+          inputDecorationTheme: InputDecorationTheme(
+            enabledBorder: OutlineInputBorder(
+              borderSide: const BorderSide(color: Colors.grey, width: 1), // Default border color
+              borderRadius: BorderRadius.circular(8),
+            ),
+            focusedBorder: OutlineInputBorder(
+              borderSide: const BorderSide(color: Color(0XFF012169), width: 2), // Active (focused) border color
+              borderRadius: BorderRadius.circular(8),
+            ),
+          ),
+          textSelectionTheme: const TextSelectionThemeData(
+            cursorColor: Color(0XFF012169), // Sets the cursor color to green
+          ),
         ),
         initialRoute: '/',
         routes: {
