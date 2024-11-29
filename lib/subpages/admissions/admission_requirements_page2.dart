@@ -111,32 +111,30 @@ class _AdmissionRequirementsPage2State extends State<AdmissionRequirementsPage2>
 
           // Application Status
           Expanded(
-            flex: 4,
+            flex: 2,
             child: _buildInfoColumn(
               label: 'Application Status',
               value: status!.toUpperCase(),
               scale: scale,
             ),
           ),
+
+        const SizedBox(width: 16),
+      
+      Expanded(
+        flex: 2,
+        child: _buildInfoColumn(
+          label: 'Date Created',
+          value: formattedDate!,
+          scale: scale,
+        ),
+      ),
         ],
       ),
-      const SizedBox(height: 16), // Space between rows
+
 
       // Second Row
-      Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          // Date Submitted
-          SizedBox(
-            width: 245,
-            child: _buildInfoColumn(
-              label: 'Date Created',
-              value: formattedDate!,
-              scale: scale,
-            ),
-          ),
-        ],
-      ),
+
       const SizedBox(height: 80),
       const Divider(),
 
@@ -261,8 +259,8 @@ class _AdmissionRequirementsPage2State extends State<AdmissionRequirementsPage2>
             Text(
               value,
               style: TextStyle(
-                fontSize: 14 * scale,
-                fontFamily: 'Roboto-R',
+                fontSize: 12 * scale,
+                fontFamily: 'Roboto-B',
               ),
             ),
           ],
@@ -500,7 +498,7 @@ Widget _buildImageCard({
                                           } else {
                                             // Handle the error case if the URL can't be launched
                                             ScaffoldMessenger.of(context).showSnackBar(
-                                              SnackBar(content: Text('Could not open the link')),
+                                              const SnackBar(content: Text('Could not open the link')),
                                             );
                                           }
                                       
@@ -667,77 +665,106 @@ bool checkDocumentRequirements(String gradeLevel, List<Map<String, dynamic>> for
                                 Navigator.of(context).popUntil((route) => route.isFirst);
                                 showDialog(
   context: context,
-  builder: (BuildContext context) {
-    double scale = MediaQuery.of(context).size.width / 375; // Scale based on screen size
-    return Dialog(
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(8),
-      ),
-      child: Container(
-        width: 349 * scale,
-        height: 272 * scale,
-        padding: const EdgeInsets.all(16),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Text(
-              'Success',
+  builder: (context) => Dialog(
+    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8.0)),
+    child: SizedBox(
+      width: 349.0,
+      height: 272.0,
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          // Title
+          const Padding(
+            padding: EdgeInsets.only(top: 16.0, bottom: 8.0),
+            child: Text(
+              "Confirmation",
               style: TextStyle(
-                fontFamily: "Roboto-R",
-                fontSize: 20 * scale,
+                fontFamily: 'Roboto',
+                fontSize: 20,
+                fontWeight: FontWeight.bold,
               ),
+              textAlign: TextAlign.center,
             ),
-            SizedBox(height: 8 * scale),
-            Text(
-              'The review has been marked as complete.',
+          ),
+          // Content
+          const Padding(
+            padding: EdgeInsets.symmetric(horizontal: 24.0),
+            child: Text(
+              "Are you sure you want to confirm?",
               style: TextStyle(
-                fontFamily: "Roboto-L",
-                fontSize: 13 * scale,
+                fontFamily: 'Roboto',
+                fontSize: 13,
+                fontWeight: FontWeight.normal,
               ),
+              textAlign: TextAlign.center,
             ),
-            SizedBox(height: 40 * scale),
-            Divider(
-              color: const Color(0xff909590),
-              thickness: 1 * scale,
-              indent: 20 * scale,
-              endIndent: 20 * scale,
-            ),
-            SizedBox(height: 30 * scale),
-            SizedBox(
-              width: 289 * scale,
-              height: 35 * scale,
-              child: ElevatedButton(
-                onPressed: () {
-                  isComplete = checkDocumentRequirements(
-                    gradeLevel,
-                    List<Map<String, dynamic>>.from(
-                      myformDetails[0]['db_admission_table']['db_required_documents_table']
-                    ),
-                  );
-                  widget.onNextPressed(isComplete);
-                  Navigator.of(context).pop(); // Close the modal
-                },
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: const Color(0xff012169),
+          ),
+          const SizedBox(height: 16.0),
+          // Divider
+          const Padding(
+            padding: EdgeInsets.only(left: 20, right: 20),
+            child: Divider(thickness: 1),
+          ),
+          const SizedBox(height: 16.0),
+          // No Button
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 30.0),
+            child: SizedBox(
+              width: 289,
+              height: 35,
+              child: TextButton(
+                style: TextButton.styleFrom(
+                  backgroundColor: const Color(0xffD3D3D3), // No button color
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(8),
                   ),
                 ),
-                child: Text(
-                  'OK',
-                  style: TextStyle(
-                    fontSize: 13 * scale,
-                    fontFamily: "Roboto-R",
-                    color: Colors.white,
-                  ),
+                onPressed: () {
+                  Navigator.of(context).pop(); // Close dialog
+                },
+                child: const Text(
+                  "No",
+                  style: TextStyle(color: Colors.black),
                 ),
               ),
             ),
-          ],
+          ),
+          const SizedBox(height: 12.0), // Spacing between buttons
+          // Yes Button
+          Padding(
+  padding: const EdgeInsets.symmetric(horizontal: 30.0),
+  child: SizedBox(
+    width: 289,
+    height: 35,
+    child: TextButton(
+      style: TextButton.styleFrom(
+        backgroundColor: const Color(0xff012169), // Amber button color
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(8),
         ),
       ),
-    );
-  },
+      onPressed: () {
+        isComplete = checkDocumentRequirements(
+          gradeLevel,
+          List<Map<String, dynamic>>.from(
+            myformDetails[0]['db_admission_table']['db_required_documents_table']
+          ),
+        );
+        widget.onNextPressed(isComplete);
+        Navigator.of(context).pop(); // Close dialog
+      },
+      child: const Text(
+        "Yes",
+        style: TextStyle(color: Colors.white),
+      ),
+    ),
+  ),
+),
+
+        ],
+      ),
+    ),
+  ),
 );
 
                               } else {
@@ -798,130 +825,180 @@ bool checkDocumentRequirements(String gradeLevel, List<Map<String, dynamic>> for
                   ElevatedButton(
                     onPressed: docStatus=='pending'?() {
                       showDialog(
-                        context: context,
-                        builder: (context) {
-                          return AlertDialog(
-                            title: const Text("Reject"),
-                            content: Column(
-                              mainAxisSize: MainAxisSize.min,
-                              children: [
-                                const Text("Please provide a reason for rejection:"),
-                                const SizedBox(height: 10),
-                                TextField(
-                                  controller: rejectController,
-                                  decoration: const InputDecoration(
-                                    border: OutlineInputBorder(),
-                                    hintText: "Enter rejection reason",
+  context: context,
+  builder: (context) {
+    return Dialog(
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8.0)),
+      child: SizedBox(
+        width: 349.0,
+        height: 320.0,
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const Text(
+                    "Reject",
+                    style: TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  const SizedBox(height: 10),
+                  const Text("Please provide a reason for rejection:"),
+                  const SizedBox(height: 10),
+                  TextField(
+                    controller: rejectController,
+                    decoration: const InputDecoration(
+                      border: OutlineInputBorder(),
+                      hintText: "Enter rejection reason",
+                    ),
+                    maxLines: 3,
+                  ),
+                ],
+              ),
+            ),
+            const Padding(
+            padding: EdgeInsets.only(left: 20, right: 20),
+            child: Divider(thickness: 1),
+          ),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+              child: Column(
+                children: [
+                  // Close button on the first row
+                  SizedBox(
+                    width: double.infinity,
+                    height: 35,
+                    child: TextButton(
+                      style: TextButton.styleFrom(
+                        backgroundColor: const Color(0xffD3D3D3),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(8),
+                        ),
+                      ),
+                      onPressed: () {
+                        Navigator.of(context).pop(); // Close dialog
+                      },
+                      child: const Text(
+                        "Close",
+                        style: TextStyle(fontSize: 16, color: Colors.black),
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: 10), // Spacer between the buttons
+                  // Submit button on the second row
+                  SizedBox(
+                    width: double.infinity,
+                    height: 35,
+                    child: ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: const Color(0xff012169),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(8),
+                        ),
+                      ),
+                      onPressed: () async {
+                        // Handle rejection submission logic
+                        try {
+                          final response = await http.post(
+                            Uri.parse('$apiUrl/api/admin/update_required_form'),
+                            headers: {
+                              'Content-Type': 'application/json',
+                              'supabase-url': supabaseUrl,
+                              'supabase-key': supabaseKey,
+                            },
+                            body: json.encode({
+                              'document_status': 'rejected',
+                              'required_doc_id': id,
+                              'reject_reason': rejectController.text,
+                            }),
+                          );
+
+                          if (response.statusCode == 200) {
+                            final responseBody = jsonDecode(response.body);
+                            setState(() {
+                              updateData(admissionId);
+                              checkDocumentRequirements(gradeLevel, List<Map<String, dynamic>>.from(
+                                myformDetails[0]['db_admission_table']['db_required_documents_table']
+                              ));
+                            });
+                            Navigator.of(context).popUntil((route) => route.isFirst);
+                            showDialog(
+                              context: context,
+                              builder: (context) => AlertDialog(
+                                title: const Text("Rejected"),
+                                content: const Text("The review has been marked as rejected."),
+                                actions: [
+                                  TextButton(
+                                    onPressed: () {
+                                      isComplete = checkDocumentRequirements(
+                                        gradeLevel,
+                                        List<Map<String, dynamic>>.from(myformDetails[0]['db_admission_table']['db_required_documents_table']),
+                                      );
+                                      widget.onNextPressed(isComplete);
+                                      Navigator.of(context).pop(); // Close dialog
+                                    },
+                                    child: const Text("OK"),
                                   ),
-                                  maxLines: 3,
+                                ],
+                              ),
+                            );
+                          } else {
+                            final responseBody = jsonDecode(response.body);
+                            print('Error: ${responseBody['error']}');
+                            Navigator.of(context).pop();
+                            showDialog(
+                              context: context,
+                              builder: (context) => AlertDialog(
+                                title: const Text("Error"),
+                                content: Text("Failed to complete review: ${responseBody['error']}"),
+                                actions: [
+                                  TextButton(
+                                    onPressed: () {
+                                      Navigator.of(context).pop(); // Close dialog
+                                    },
+                                    child: const Text("OK"),
+                                  ),
+                                ],
+                              ),
+                            );
+                          }
+                        } catch (error) {
+                          print('Error: $error');
+                          Navigator.of(context).pop();
+                          showDialog(
+                            context: context,
+                            builder: (context) => AlertDialog(
+                              title: const Text("Error"),
+                              content: const Text("An unexpected error occurred. Please try again later."),
+                              actions: [
+                                TextButton(
+                                  onPressed: () {
+                                    Navigator.of(context).pop(); // Close dialog
+                                  },
+                                  child: const Text("OK"),
                                 ),
                               ],
                             ),
-                            actions: [
-                              TextButton(
-                                onPressed: () {
-                                  Navigator.of(context).pop(); // Close dialog
-                                },
-                                child: const Text("Close"),
-                              ),
-                              ElevatedButton(
-                                onPressed: () async {
-                                  // Handle rejection submission
-                                  try {
-                                    final response = await http.post(
-                                      Uri.parse('$apiUrl/api/admin/update_required_form'),
-                                      headers: {
-                                        'Content-Type': 'application/json',
-                                        'supabase-url': supabaseUrl,
-                                        'supabase-key': supabaseKey,
-                                      },
-                                      body: json.encode({
-                                        'document_status': 'rejected',
-                                        'required_doc_id': id,
-                                        'reject_reason': rejectController.text,
-                                      }),
-                                    );
-
-                                    if (response.statusCode == 200) {
-                                      final responseBody = jsonDecode(response.body);
-                                      setState(() {
-                                        updateData(admissionId);
-                                        checkDocumentRequirements(gradeLevel, List<Map<String, dynamic>>.from(
-                    myformDetails[0]['db_admission_table']['db_required_documents_table']
-                  ));
-                                      });
-                                      // Show success modal
-                                      Navigator.of(context).popUntil((route) => route.isFirst);
-                                      showDialog(
-                                        context: context,
-                                        builder: (context) => AlertDialog(
-                                          title: const Text("Rejected"),
-                                          content: const Text("The review has been marked as rejected."),
-                                          actions: [
-                                            TextButton(
-                                              onPressed: () {
-                                              isComplete=checkDocumentRequirements(gradeLevel, List<Map<String, dynamic>>.from(
-                    myformDetails[0]['db_admission_table']['db_required_documents_table']
-                  ));
-                                          widget.onNextPressed(isComplete);
-                                                Navigator.of(context).pop(); // Close dialog
-                                              },
-                                              child: const Text("OK"),
-                                            ),
-                                          ],
-                                        ),
-                                      );
-                                    } else {
-                                      // Handle failure
-                                      final responseBody = jsonDecode(response.body);
-                                      print('Error: ${responseBody['error']}');
-                                      Navigator.of(context).pop();
-                                      showDialog(
-                                        context: context,
-                                        builder: (context) => AlertDialog(
-                                          title: const Text("Error"),
-                                          content: Text("Failed to complete review: ${responseBody['error']}"),
-                                          actions: [
-                                            TextButton(
-                                              onPressed: () {
-                                                Navigator.of(context).pop(); // Close dialog
-                                              },
-                                              child: const Text("OK"),
-                                            ),
-                                          ],
-                                        ),
-                                      );
-                                    }
-                                  } catch (error) {
-                                    // Handle network error
-                                    print('Error: $error');
-                                    Navigator.of(context).pop();
-                                    showDialog(
-                                      context: context,
-                                      builder: (context) => AlertDialog(
-                                        title: const Text("Error"),
-                                        content: const Text("An unexpected error occurred. Please try again later."),
-                                        actions: [
-                                          TextButton(
-                                            onPressed: () {
-                                              Navigator.of(context).pop(); // Close dialog
-                                            },
-                                            child: const Text("OK"),
-                                          ),
-                                        ],
-                                      ),
-                                    );
-                                  }
-                                },
-                                style: ElevatedButton.styleFrom(
-                                  backgroundColor: Colors.red,
-                                ),
-                                child: const Text("Submit"),
-                              ),
-                            ],
                           );
-                        },
-                      );
+                        }
+                      },
+                      child: const Text("Submit", style: TextStyle(fontSize: 16, fontFamily: 'Roboto-R', color: Colors.white)),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  },
+);
                     }:null,
                     style: ElevatedButton.styleFrom(
                       backgroundColor: Colors.red,

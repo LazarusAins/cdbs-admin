@@ -139,9 +139,9 @@ class _AdmissionSchedulesPage2State extends State<AdmissionSchedulesPage2> {
                       ),
                       const SizedBox(width: 16),
                       Expanded(
-                        flex: 2,
+                        flex: 1,
                         child: _buildInfoColumn(
-                          label: 'Status',
+                          label: 'Slots',
                           value: '2/10',
                           scale: scale,
                         ),
@@ -296,7 +296,7 @@ class _AdmissionSchedulesPage2State extends State<AdmissionSchedulesPage2> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Expanded(
-                  flex: 2,
+                  flex: 4,
                   child: _buildInfoColumn(
                     label: 'Application ID',
                     value: admissionSchedule['admission_id'].toString() ?? 'N/A', // Example, adjust according to your data
@@ -305,7 +305,7 @@ class _AdmissionSchedulesPage2State extends State<AdmissionSchedulesPage2> {
                 ),
                 const SizedBox(width: 16),
                 Expanded(
-                  flex: 3,
+                  flex: 10,
                   child: _buildInfoColumn(
                     label: 'Applicant Name',
                     value: '${admissionSchedule['db_admission_table']['first_name']} ${admissionSchedule['db_admission_table']['last_name']}', // Example, adjust according to your data
@@ -314,7 +314,7 @@ class _AdmissionSchedulesPage2State extends State<AdmissionSchedulesPage2> {
                 ),
                 const SizedBox(width: 16),
                 Expanded(
-                  flex: 2,
+                  flex: 4,
                   child: _buildInfoColumn(
                     label: 'Grade Level',
                     value: admissionSchedule['db_admission_table']['level_applying_for'] ?? 'N/A', // Example, adjust according to your data
@@ -323,13 +323,22 @@ class _AdmissionSchedulesPage2State extends State<AdmissionSchedulesPage2> {
                 ),
                 const SizedBox(width: 16),
                 Expanded(
-                  flex: 4,
+                  flex: 6,
                   child: _buildInfoColumn(
                     label: 'Application Status',
                     value: admissionSchedule['db_admission_table']['admission_status'].toUpperCase() ?? 'N/A', // Example, adjust according to your data
                     scale: scale,
                   ),
                 ),
+                const SizedBox(width: 16),
+                                        Expanded(
+                          flex: 6,
+                          child: _buildInfoColumn(
+                            label: 'Date Created',
+                            value: formattedAdmissionDate ?? 'N/A', // Example, adjust according to your data
+                            scale: scale,
+                          ),
+                        ),
                 const SizedBox(width: 16),
                  if(isExamToday(formattedExamDate!))
                  Row(
@@ -451,19 +460,7 @@ class _AdmissionSchedulesPage2State extends State<AdmissionSchedulesPage2> {
                         const SizedBox(height: 16),
               
                         // Third Row (Date Created)
-                        Row(
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: [
-                SizedBox(
-                  width: 220,
-                  child: _buildInfoColumn(
-                    label: 'Date Created',
-                    value: formattedAdmissionDate ?? 'N/A', // Example, adjust according to your data
-                    scale: scale,
-                  ),
-                ),
-              ],
-                        ),
+
                       ],
                     ),
                   );
@@ -525,8 +522,8 @@ class _AdmissionSchedulesPage2State extends State<AdmissionSchedulesPage2> {
             Text(
               value,
               style: TextStyle(
-                fontSize: 11 * scale,
-                fontFamily: 'Roboto-R',
+                fontSize: 12 * scale,
+                fontFamily: 'Roboto-B',
               ),
             ),
           ],

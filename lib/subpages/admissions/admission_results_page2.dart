@@ -85,7 +85,7 @@ class _AdmissionResultsPage2State extends State<AdmissionResultsPage2> {
         children: [
           // Application ID
           Expanded(
-            flex: 2,
+            flex: 3,
             child: _buildInfoColumn(
               label: "Application ID",
               value: applicationId!,
@@ -96,7 +96,7 @@ class _AdmissionResultsPage2State extends State<AdmissionResultsPage2> {
 
           // Applicant Name
           Expanded(
-            flex: 3,
+            flex: 5,
             child: _buildInfoColumn(
               label: 'Applicant Name',
               value: fullName!,
@@ -118,7 +118,7 @@ class _AdmissionResultsPage2State extends State<AdmissionResultsPage2> {
 
           // Application Status
 SizedBox(
-  width: 300,
+  width: 200,
   height: 70,
   child: Column(
     crossAxisAlignment: CrossAxisAlignment.start,
@@ -181,7 +181,16 @@ SizedBox(
   ),
 ),
 
+const SizedBox(width: 16),
 
+Expanded(
+  flex: 3,
+  child: _buildInfoColumn(
+    label: 'Date Created',
+    value: formattedDate!,
+    scale: scale,
+  ),
+),
 
 
 
@@ -192,20 +201,6 @@ const SizedBox(width: 40,),
       const SizedBox(height: 16), // Space between rows
 
       // Second Row
-Row(
-  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-  children: [
-    // Date Submitted
-    SizedBox(
-      width: 290, // Set the width to 60
-      child: _buildInfoColumn(
-        label: 'Date Created',
-        value: formattedDate!,
-        scale: scale,
-      ),
-    ),
-  ],
-),
 
       // const SizedBox(height: 80),
       // const Divider(),
@@ -253,8 +248,8 @@ Row(
             Text(
               value,
               style: TextStyle(
-                fontSize: 14 * scale,
-                fontFamily: 'Roboto-R',
+                fontSize: 12 * scale,
+                fontFamily: 'Roboto-B',
               ),
             ),
           ],

@@ -442,20 +442,99 @@ String formatDate(DateTime date) {
 
                                       // Show success modal
                                       showDialog(
-                                        context: context,
-                                        builder: (context) => AlertDialog(
-                                          title: const Text("Success"),
-                                          content: const Text("The review has been marked as complete."),
-                                          actions: [
-                                            TextButton(
-                                              onPressed: () {
-                                                Navigator.of(context).pop(); // Close the dialog
-                                              },
-                                              child: const Text("OK"),
-                                            ),
-                                          ],
-                                        ),
-                                      );
+  context: context,
+  builder: (context) => Dialog(
+    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8.0)),
+    child: SizedBox(
+      width: 349.0,
+      height: 272.0,
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          // Title
+          const Padding(
+            padding: EdgeInsets.only(top: 16.0, bottom: 8.0),
+            child: Text(
+              "Confirmation",
+              style: TextStyle(
+                fontFamily: 'Roboto',
+                fontSize: 20,
+                fontWeight: FontWeight.bold,
+              ),
+              textAlign: TextAlign.center,
+            ),
+          ),
+          // Content
+          const Padding(
+            padding: EdgeInsets.symmetric(horizontal: 24.0),
+            child: Text(
+              "Are you sure you want to confirm?",
+              style: TextStyle(
+                fontFamily: 'Roboto',
+                fontSize: 13,
+                fontWeight: FontWeight.normal,
+              ),
+              textAlign: TextAlign.center,
+            ),
+          ),
+          const SizedBox(height: 16.0),
+          // Divider
+          const Padding(
+            padding: EdgeInsets.only(left: 20, right: 20),
+            child: Divider(thickness: 1),
+          ),
+          const SizedBox(height: 16.0),
+          // No Button
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 30.0),
+            child: SizedBox(
+              width: 289,
+              height: 35,
+              child: TextButton(
+                style: TextButton.styleFrom(
+                  backgroundColor: const Color(0xffD3D3D3), // No button color
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                ),
+                onPressed: () {
+                  Navigator.of(context).pop(); // Close dialog
+                },
+                child: const Text(
+                  "No",
+                  style: TextStyle(color: Colors.black),
+                ),
+              ),
+            ),
+          ),
+          const SizedBox(height: 12.0), // Spacing between buttons
+          // Yes Button
+          Padding(
+  padding: const EdgeInsets.symmetric(horizontal: 30.0),
+  child: SizedBox(
+    width: 289,
+    height: 35,
+    child: TextButton(
+      style: TextButton.styleFrom(
+        backgroundColor: const Color(0xff012169), // Amber button color
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(8),
+        ),
+      ),
+      onPressed: () {},
+      child: const Text(
+        "Yes",
+        style: TextStyle(color: Colors.white),
+      ),
+    ),
+  ),
+),
+
+        ],
+      ),
+    ),
+  ),
+);
                                     } else {
                                       // Handle failure
                                       final responseBody = jsonDecode(response.body);

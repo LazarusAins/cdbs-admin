@@ -139,8 +139,8 @@ class _UserGuestAccountsPage2State extends State<UserGuestAccountsPage2> {
                     ),
                   ),
                   const SizedBox(width: 16),
-                  Expanded(
-                    flex: 2,
+                  SizedBox(
+                    width: 180,
                     child: _buildInfoColumn(
                       label: 'Grade Level',
                       value: admissionData['level_applying_for'], // Replace with dynamic data if available
@@ -149,7 +149,7 @@ class _UserGuestAccountsPage2State extends State<UserGuestAccountsPage2> {
                   ),
                   const SizedBox(width: 16),
                   Expanded(
-                    flex: 4,
+                    flex: 2,
                     child: _buildInfoColumn(
                       label: 'Application Status',
                       value: admissionData['admission_status'].toUpperCase(), // Replace with dynamic data if available
@@ -157,6 +157,17 @@ class _UserGuestAccountsPage2State extends State<UserGuestAccountsPage2> {
                     ),
                   ),
                   const SizedBox(width: 16),
+
+                Expanded(
+               flex: 2,
+                child: _buildInfoColumn(
+                  label: 'Date Created',
+                  value: formattedDate, // Replace with dynamic data if available
+                  scale: scale,
+                ),
+              ),
+              const SizedBox(width: 16),
+              
                   SizedBox(
                     width: 99,
                     height: 37,
@@ -187,18 +198,7 @@ class _UserGuestAccountsPage2State extends State<UserGuestAccountsPage2> {
               const SizedBox(height: 16),
             
               // Third Row
-              Row(
-                children: [
-                  SizedBox(
-                    width: 240,
-                    child: _buildInfoColumn(
-                      label: 'Date Created',
-                      value: formattedDate, // Replace with dynamic data if available
-                      scale: scale,
-                    ),
-                  ),
-                ],
-              ),
+
             ],
                     ),
                   );
@@ -255,8 +255,8 @@ class _UserGuestAccountsPage2State extends State<UserGuestAccountsPage2> {
             Text(
               value,
               style: TextStyle(
-                fontSize: 14 * scale,
-                fontFamily: 'Roboto-R',
+                fontSize: 12 * scale,
+                fontFamily: 'Roboto-B',
               ),
             ),
           ],

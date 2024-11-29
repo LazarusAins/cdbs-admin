@@ -88,7 +88,7 @@ class _AdmissionPaymentsPage2State extends State<AdmissionPaymentsPage2> {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Expanded(
-                        flex: 2,
+                        flex: 3,
                         child: _buildInfoColumn(
                           label: 'Application ID',
                           value: applicationId!,
@@ -97,7 +97,7 @@ class _AdmissionPaymentsPage2State extends State<AdmissionPaymentsPage2> {
                       ),
                       const SizedBox(width: 16),
                       Expanded(
-                        flex: 3,
+                        flex: 5,
                         child: _buildInfoColumn(
                           label: 'Applicant Name',
                           value: fullName!,
@@ -106,7 +106,7 @@ class _AdmissionPaymentsPage2State extends State<AdmissionPaymentsPage2> {
                       ),
                       const SizedBox(width: 16),
                       Expanded(
-                        flex: 2,
+                        flex: 3,
                         child: _buildInfoColumn(
                           label: 'Grade Level',
                           value: myformDetails[0]['db_admission_table']['level_applying_for'],
@@ -115,7 +115,7 @@ class _AdmissionPaymentsPage2State extends State<AdmissionPaymentsPage2> {
                       ),
                       const SizedBox(width: 16),
                       Expanded(
-                        flex: 4,
+                        flex: 3,
                         child: _buildInfoColumn(
                           label: 'Application Status',
                           value: status!,
@@ -235,7 +235,7 @@ class _AdmissionPaymentsPage2State extends State<AdmissionPaymentsPage2> {
                       ),
                       const SizedBox(width: 16),
                       Expanded(
-                        flex: 2,
+                        flex: 3,
                         child: _buildInfoColumn(
                           label: 'Total Amount',
                           value: '600.00',
@@ -255,7 +255,7 @@ class _AdmissionPaymentsPage2State extends State<AdmissionPaymentsPage2> {
                       Expanded(
                         flex: 3,
                         child: _buildInfoColumn(
-                          label: 'Date Created',
+                          label: 'Date Paid',
                           value: formattedDate!,
                           scale: scale,
                         ),
@@ -321,8 +321,8 @@ class _AdmissionPaymentsPage2State extends State<AdmissionPaymentsPage2> {
             Text(
               value,
               style: TextStyle(
-                fontSize: 11 * scale,
-                fontFamily: 'Roboto-R',
+                fontSize: 12 * scale,
+                fontFamily: 'Roboto-B',
               ),
             ),
           ],
