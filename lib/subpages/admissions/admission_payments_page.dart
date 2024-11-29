@@ -29,6 +29,8 @@ List<bool> checkboxStates = List.generate(10, (_) => false);
   List<Map<String, dynamic>> filteredRequest = [];
   late ApiService _apiService;
   List<Map<String, dynamic>>? formDetails;
+  String statusFilter = '';
+  int activeButtonIndex = -1;
 
   Future<void> fetchFormDetails(int id) async {
     try {
@@ -48,6 +50,12 @@ List<bool> checkboxStates = List.generate(10, (_) => false);
     } catch (e) {
       print("Error fetching form details: $e");
     }
+  }
+
+  void filterByStatus(String status) {
+    setState(() {
+      statusFilter = status; // Update the filter
+    });
   }
 
   @override
@@ -110,8 +118,14 @@ String formatDate(DateTime date) {
                   );
                 }
                 requests = snapshot.data ?? []; // Use the data from the snapshot
-                print(requests);
                 filteredRequest = requests;
+                filteredRequest = statusFilter.isEmpty
+                                            ? requests
+                                            : requests
+                                                .where((request) =>
+                                                    request['db_admission_table']['db_payment_method_table']['payment_method'] ==
+                                                    statusFilter)
+                                                .toList();
 
                 if (snapshot.hasError) {
                   return Center(child: Text('Error: ${snapshot.error}'));
@@ -204,66 +218,113 @@ SizedBox(
     mainAxisAlignment: MainAxisAlignment.spaceBetween,
     children: [
       Expanded(
-        child: Card(
-          elevation: 4,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(8),
-          ),
-          child: Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Center(
-                  child: Text(
-                    "UnionBANK",
-                    style: TextStyle(
-                      fontSize: 16 * scale,
-                      fontWeight: FontWeight.bold,
+        child: GestureDetector(
+          onTap: () {
+                                    setState(() {
+                                      if (activeButtonIndex == 0) {
+                                        // If the button is already active, show all requests
+                                        activeButtonIndex =
+                                            -1; // Reset to inactive state
+                                        statusFilter = '';
+                                        filteredRequest = statusFilter.isEmpty
+                                            ? requests
+                                            : requests
+                                                .where((request) =>
+                                                    request['db_admission_table']['db_payment_method_table']['payment_method'] ==
+                                                    statusFilter)
+                                                .toList();
+                                      } else {
+                                        // Set active button index to the first button and filter by approved status
+                                        activeButtonIndex = 0;
+                                        filterByStatus('UnionBank');
+                                      }
+                                    });
+                                  },
+          child: Card(
+            elevation: 4,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(8),
+            ),
+            child: Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Center(
+                    child: Text(
+                      "UnionBANK",
+                      style: TextStyle(
+                        fontSize: 16 * scale,
+                        fontWeight: FontWeight.bold,
+                      ),
                     ),
                   ),
-                ),
-                const SizedBox(height: 10),
-                Center(
-                  child: Text(
-                    "Card content goes here.",
-                    style: TextStyle(fontSize: 14 * scale),
+                  const SizedBox(height: 10),
+                  Center(
+                    child: Text(
+                      "Union Bank Bills Payment",
+                      style: TextStyle(fontSize: 14 * scale),
+                    ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
           ),
         ),
       ),
       const SizedBox(width: 16),
       Expanded(
-        child: Card(
-          elevation: 4,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(8),
-          ),
-          child: Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Center(
-                  child: Text(
-                    "Cash",
-                    style: TextStyle(
-                      fontSize: 16 * scale,
-                      fontWeight: FontWeight.bold,
+        child: GestureDetector(
+          onTap: () {
+                                    setState(() {
+                                      if (activeButtonIndex == 0) {
+                                        // If the button is already active, show all requests
+                                        activeButtonIndex =
+                                            -1; // Reset to inactive state
+                                        statusFilter = '';
+                                        filteredRequest = statusFilter.isEmpty
+                                            ? requests
+                                            : requests
+                                                .where((request) =>
+                                                    request['db_admission_table']['db_payment_method_table']['payment_method'] ==
+                                                    statusFilter)
+                                                .toList();
+                                      } else {
+                                        // Set active button index to the first button and filter by approved status
+                                        activeButtonIndex = 0;
+                                        filterByStatus('Cash');
+                                        print(filteredRequest.length);
+                                      }
+                                    });
+                                  },
+          child: Card(
+            elevation: 4,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(8),
+            ),
+            child: Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Center(
+                    child: Text(
+                      "Cash",
+                      style: TextStyle(
+                        fontSize: 16 * scale,
+                        fontWeight: FontWeight.bold,
+                      ),
                     ),
                   ),
-                ),
-                const SizedBox(height: 10),
-                Center(
-                  child: Text(
-                    "Card content goes here.",
-                    style: TextStyle(fontSize: 14 * scale),
+                  const SizedBox(height: 10),
+                  Center(
+                    child: Text(
+                      "Over the counter payment",
+                      style: TextStyle(fontSize: 14 * scale),
+                    ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
           ),
         ),
@@ -280,7 +341,7 @@ const SizedBox(height: 40),
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           Expanded(
-            flex: 1,
+            flex: 2,
             child: Text(
               'Application ID',
               style: TextStyle(fontSize: 14 * scale, fontFamily: 'Roboto-L'),
@@ -303,12 +364,19 @@ const SizedBox(height: 40),
           Expanded(
             flex: 2,
             child: Text(
+              'Payment Method',
+              style: TextStyle(fontSize: 14 * scale, fontFamily: 'Roboto-L'),
+            ),
+          ),
+          Expanded(
+            flex: 2,
+            child: Text(
               'Status',
               style: TextStyle(fontSize: 14 * scale, fontFamily: 'Roboto-L'),
             ),
           ),
           Expanded(
-            flex: 1,
+            flex: 2,
             child: Text(
               'Date Created',
               style: TextStyle(fontSize: 14 * scale, fontFamily: 'Roboto-L'),
@@ -335,14 +403,18 @@ const SizedBox(height: 40),
                   String stat= request['db_admission_table']['admission_status'];
                   bool isRequired= request['db_admission_table']['is_all_required_file_uploaded'];
                   bool isPaid= request['db_admission_table']['is_paid'];
-
+                  String paymethod='---';
+                  if(request['db_admission_table']['db_payment_method_table'] != null){
+                     paymethod =request['db_admission_table']['db_payment_method_table']['payment_method'];
+                  }
+                  
             return Column(
               children: [
                 Row(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
                     Expanded(
-                            flex: 1,
+                            flex: 2,
                             child: Row(
                               children: [
                                 Checkbox(
@@ -377,12 +449,18 @@ const SizedBox(height: 40),
                     ),
                     Expanded(
                       flex: 2,
+                      child: Text( paymethod.toUpperCase(),
+                        style: TextStyle(fontFamily: 'Roboto-R', fontSize: 14 * scale),
+                      ),
+                    ),
+                    Expanded(
+                      flex: 2,
                       child: Text(!isPaid?stat=='complete' && isRequired?'PENDING':stat.toUpperCase():'COMPLETE',
                         style: TextStyle(fontFamily: 'Roboto-R', fontSize: 14 * scale),
                       ),
                     ),
                     Expanded(
-                      flex: 1,
+                      flex: 2,
                       child: Text(
                         formattedDate,
                         style: TextStyle(fontFamily: 'Roboto-R', fontSize: 14 * scale),
