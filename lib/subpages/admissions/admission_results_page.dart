@@ -580,7 +580,7 @@ String formatDate(DateTime date) {
                                   }
                               }:null,
                               child: Text(
-                                "Send Results",
+                                "Mark as Complete",
                                 style: TextStyle(color: Colors.white, fontFamily: 'Roboto-R', fontSize: 12 * scale),
                               ),
                             ),

@@ -152,49 +152,126 @@ String formatDate(DateTime date) {
 
 
 
-      Row(
-        mainAxisAlignment: MainAxisAlignment.start,
-        children: [
-          Text(
-            'Payments',
-            style: TextStyle(
-              color: const Color(0xff222222),
-              fontFamily: "Roboto-L",
-              fontSize: 20 * scale,
+Row(
+  mainAxisAlignment: MainAxisAlignment.start,
+  children: [
+    Text(
+      'Payments',
+      style: TextStyle(
+        color: const Color(0xff222222),
+        fontFamily: "Roboto-L",
+        fontSize: 20 * scale,
+      ),
+    ),
+    const Spacer(),
+    SizedBox(
+      width: 226 * scale,
+      height: 32 * scale,
+      child: TextField(
+        decoration: InputDecoration(
+          hintText: '',
+          contentPadding: const EdgeInsets.symmetric(vertical: 10),
+          border: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(5),
+            borderSide: const BorderSide(color: Colors.grey, width: 1),
+          ),
+          focusedBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(5),
+            borderSide: const BorderSide(color: Colors.blue, width: 1),
+          ),
+          prefixIcon: InkWell(
+            onTap: () {
+              print("Search icon tapped");
+            },
+            child: Icon(
+              Icons.search,
+              size: 20 * scale,
+              color: Colors.grey,
             ),
           ),
-          const Spacer(),
-          SizedBox(
-            width: 226 * scale,
-            height: 32 * scale,
-            child: TextField(
-              decoration: InputDecoration(
-                hintText: '',
-                contentPadding: const EdgeInsets.symmetric(vertical: 10),
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(5),
-                  borderSide: const BorderSide(color: Colors.grey, width: 1),
-                ),
-                focusedBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(5),
-                  borderSide: const BorderSide(color: Colors.blue, width: 1),
-                ),
-                prefixIcon: InkWell(
-                  onTap: () {
-                    print("Search icon tapped");
-                  },
-                  child: Icon(
-                    Icons.search,
-                    size: 20 * scale,
-                    color: Colors.grey,
+        ),
+        style: TextStyle(fontSize: 14 * scale),
+      ),
+    ),
+  ],
+),
+const SizedBox(height: 40),
+
+// Add Cards Here
+Row(
+  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+  children: [
+    Expanded(
+      child: Card(
+        elevation: 4,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(8),
+        ),
+        child: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Center(
+                child: Text(
+                  "UnionBANK",
+                  style: TextStyle(
+                    fontSize: 16 * scale,
+                    fontWeight: FontWeight.bold,
                   ),
                 ),
               ),
-              style: TextStyle(fontSize: 14 * scale),
-            ),
+              const SizedBox(height: 10),
+              Center(
+                child: Text(
+                  "Card content goes here.",
+                  style: TextStyle(fontSize: 14 * scale),
+                ),
+              ),
+            ],
           ),
-        ],
+        ),
       ),
+    ),
+    const SizedBox(width: 16),
+    Expanded(
+      child: Card(
+        elevation: 4,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(8),
+        ),
+        child: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Center(
+                child: Text(
+                  "Cash",
+                  style: TextStyle(
+                    fontSize: 16 * scale,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ),
+              const SizedBox(height: 10),
+              Center(
+                child: Text(
+                  "Card content goes here.",
+                  style: TextStyle(fontSize: 14 * scale),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    ),
+  ],
+),
+const SizedBox(height: 40),
+
+      const Divider(color: Colors.grey, thickness: 3),
+
       const SizedBox(height: 40),
       Row(
         crossAxisAlignment: CrossAxisAlignment.center,
@@ -405,8 +482,7 @@ String formatDate(DateTime date) {
       )
     );
   }
-
-  // Build content for each action (VIEW, REMINDER, DEACTIVATE)
+ // Build content for each action (VIEW, REMINDER, DEACTIVATE)
   Widget _buildViewContent(double scale, List<Map<String, dynamic>> details, int userId) {
     return Container(
   padding: const EdgeInsets.all(16),
@@ -500,5 +576,6 @@ String formatDate(DateTime date) {
       // ),
     );
   }
+ 
 }
 
