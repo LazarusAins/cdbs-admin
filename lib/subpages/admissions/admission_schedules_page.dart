@@ -514,7 +514,7 @@ showDialog(
                 Expanded(
                   flex: 2,
                   child: Text(
-                    'EXAM LOCATION',
+                    'MEETING PLACE',
                     style: TextStyle(fontSize: 14 * scale, fontFamily: 'Roboto-L'),
                   ),
                 ),

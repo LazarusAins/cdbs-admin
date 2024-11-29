@@ -636,33 +636,9 @@ bool checkDocumentRequirements(String gradeLevel, List<Map<String, dynamic>> for
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   ElevatedButton(
-                    onPressed:  docStatus=='pending'?() async {
+                    onPressed:  docStatus=='pending'?() {
                             // Handle accept action
-                            try {
-                              final response = await http.post(
-                                Uri.parse('$apiUrl/api/admin/update_required_form'),
-                                headers: {
-                                  'Content-Type': 'application/json',
-                                  'supabase-url': supabaseUrl,
-                                  'supabase-key': supabaseKey,
-                                },
-                                body: json.encode({
-                                  'document_status': 'accepted',
-                                  'required_doc_id': id,
-                                  'reject_reason': '',
-                                }),
-                              );
-
-                              if (response.statusCode == 200) {
-                                final responseBody = jsonDecode(response.body);
-                                setState(() {
-                                  updateData(admissionId);
-                                  checkDocumentRequirements(gradeLevel, List<Map<String, dynamic>>.from(
-                    myformDetails[0]['db_admission_table']['db_required_documents_table']
-                  ));
-                                });
-                                // Show success modal
-                                Navigator.of(context).popUntil((route) => route.isFirst);
+                            
                                 showDialog(
   context: context,
   builder: (context) => Dialog(
@@ -743,29 +719,47 @@ bool checkDocumentRequirements(String gradeLevel, List<Map<String, dynamic>> for
           borderRadius: BorderRadius.circular(8),
         ),
       ),
-      onPressed: () {
-        isComplete = checkDocumentRequirements(
-          gradeLevel,
-          List<Map<String, dynamic>>.from(
-            myformDetails[0]['db_admission_table']['db_required_documents_table']
-          ),
-        );
-        widget.onNextPressed(isComplete);
-        Navigator.of(context).pop(); // Close dialog
-      },
-      child: const Text(
-        "Yes",
-        style: TextStyle(color: Colors.white),
-      ),
-    ),
-  ),
-),
+      onPressed: () async {
+       try {
+                              final response = await http.post(
+                                Uri.parse('$apiUrl/api/admin/update_required_form'),
+                                headers: {
+                                  'Content-Type': 'application/json',
+                                  'supabase-url': supabaseUrl,
+                                  'supabase-key': supabaseKey,
+                                },
+                                body: json.encode({
+                                  'document_status': 'accepted',
+                                  'required_doc_id': id,
+                                  'reject_reason': '',
+                                }),
+                              );
 
-        ],
-      ),
-    ),
-  ),
-);
+                              if (response.statusCode == 200) {
+                                final responseBody = jsonDecode(response.body);
+                                setState(() {
+                                  updateData(admissionId);
+                                  checkDocumentRequirements(gradeLevel, List<Map<String, dynamic>>.from(
+                    myformDetails[0]['db_admission_table']['db_required_documents_table']
+                  ));
+                                });
+                                // Show success modal
+                                Navigator.of(context).popUntil((route) => route.isFirst);
+                                showDialog(
+                                  context: context,
+                                  builder: (context) => AlertDialog(
+                                    title: const Text("Success"),
+                                    content: const Text("Form accepted"),
+                                    actions: [
+                                      TextButton(
+                                        onPressed: () {
+                                          Navigator.of(context).pop(); // Close dialog
+                                        },
+                                        child: const Text("OK"),
+                                      ),
+                                    ],
+                                  ),
+                                );
 
                               } else {
                                 // Handle failure
@@ -807,7 +801,23 @@ bool checkDocumentRequirements(String gradeLevel, List<Map<String, dynamic>> for
                                   ],
                                 ),
                               );
-                            }
+                            } // Close dialog
+      },
+      child: const Text(
+        "Yes",
+        style: TextStyle(color: Colors.white),
+      ),
+    ),
+  ),
+),
+
+        ],
+      ),
+    ),
+  ),
+);
+
+                              
                           }:null,
                     style: ElevatedButton.styleFrom(
                       backgroundColor: Colors.green,
@@ -915,6 +925,8 @@ bool checkDocumentRequirements(String gradeLevel, List<Map<String, dynamic>> for
                               'document_status': 'rejected',
                               'required_doc_id': id,
                               'reject_reason': rejectController.text,
+                              'doc_type_id':myformDetails[0]['db_admission_table']['db_required_documents_table'][0]['requirements_type'],
+                              'user_id':myformDetails[0]['user_id']
                             }),
                           );
 

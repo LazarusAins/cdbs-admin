@@ -27,19 +27,6 @@ class ApiService {
     }
   }
 
-  /*Stream<List<Map<String, dynamic>>> streamAdmissionForms(String supabaseUrl, String supabaseKey) async* {
-    while (true) {
-      try {
-        final members = await fetchAdmissionForms(supabaseUrl, supabaseKey);
-        yield members; // Emit the list of members
-      } catch (e) {
-        print('Error fetching members: $e');
-        yield []; // Emit an empty list on error
-      }
-
-      await Future.delayed(const Duration(seconds: 3)); // Refresh every 10 seconds
-    }
-  }*/
   Stream<List<Map<String, dynamic>>> streamAdmissionForms(String supabaseUrl, String supabaseKey) async* {
   while (true) {
     try {

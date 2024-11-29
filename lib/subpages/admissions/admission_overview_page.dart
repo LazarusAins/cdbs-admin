@@ -254,7 +254,7 @@ class _AdmissionOverviewPageState extends State<AdmissionOverviewPage> {
                   String titleText = '';
 
                   if (isResult) {
-                        titleText = 'RESULTS -';
+                        titleText = 'RESULTS - ';
                         statusColor = _getStatusColor(statusText);
                       } else {
                         // Start checking other conditions based on is_final_result being false
