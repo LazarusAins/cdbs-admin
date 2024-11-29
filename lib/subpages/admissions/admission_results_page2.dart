@@ -114,6 +114,18 @@ class _AdmissionResultsPage2State extends State<AdmissionResultsPage2> {
               scale: scale,
             ),
           ),
+
+          const SizedBox(width: 16),
+
+Expanded(
+  flex: 3,
+  child: _buildInfoColumn(
+    label: 'Date Created',
+    value: formattedDate!,
+    scale: scale,
+  ),
+),
+
           const SizedBox(width: 16),
 
           // Application Status
@@ -181,16 +193,7 @@ SizedBox(
   ),
 ),
 
-const SizedBox(width: 16),
 
-Expanded(
-  flex: 3,
-  child: _buildInfoColumn(
-    label: 'Date Created',
-    value: formattedDate!,
-    scale: scale,
-  ),
-),
 
 
 
