@@ -198,75 +198,78 @@ Row(
 const SizedBox(height: 40),
 
 // Add Cards Here
-Row(
-  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-  children: [
-    Expanded(
-      child: Card(
-        elevation: 4,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(8),
-        ),
-        child: Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Center(
-                child: Text(
-                  "UnionBANK",
-                  style: TextStyle(
-                    fontSize: 16 * scale,
-                    fontWeight: FontWeight.bold,
+SizedBox(
+  width: 800,
+  child: Row(
+    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+    children: [
+      Expanded(
+        child: Card(
+          elevation: 4,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(8),
+          ),
+          child: Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Center(
+                  child: Text(
+                    "UnionBANK",
+                    style: TextStyle(
+                      fontSize: 16 * scale,
+                      fontWeight: FontWeight.bold,
+                    ),
                   ),
                 ),
-              ),
-              const SizedBox(height: 10),
-              Center(
-                child: Text(
-                  "Card content goes here.",
-                  style: TextStyle(fontSize: 14 * scale),
+                const SizedBox(height: 10),
+                Center(
+                  child: Text(
+                    "Card content goes here.",
+                    style: TextStyle(fontSize: 14 * scale),
+                  ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
       ),
-    ),
-    const SizedBox(width: 16),
-    Expanded(
-      child: Card(
-        elevation: 4,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(8),
-        ),
-        child: Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Center(
-                child: Text(
-                  "Cash",
-                  style: TextStyle(
-                    fontSize: 16 * scale,
-                    fontWeight: FontWeight.bold,
+      const SizedBox(width: 16),
+      Expanded(
+        child: Card(
+          elevation: 4,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(8),
+          ),
+          child: Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Center(
+                  child: Text(
+                    "Cash",
+                    style: TextStyle(
+                      fontSize: 16 * scale,
+                      fontWeight: FontWeight.bold,
+                    ),
                   ),
                 ),
-              ),
-              const SizedBox(height: 10),
-              Center(
-                child: Text(
-                  "Card content goes here.",
-                  style: TextStyle(fontSize: 14 * scale),
+                const SizedBox(height: 10),
+                Center(
+                  child: Text(
+                    "Card content goes here.",
+                    style: TextStyle(fontSize: 14 * scale),
+                  ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
       ),
-    ),
-  ],
+    ],
+  ),
 ),
 const SizedBox(height: 40),
 
