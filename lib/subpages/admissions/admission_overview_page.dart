@@ -245,7 +245,12 @@ class _AdmissionOverviewPageState extends State<AdmissionOverviewPage> {
                      dateCreated = DateTime.parse(dateCreatedString);
                      formattedDate= formatDate(dateCreated);
                   }
-                  String statusText = request['db_admission_table']['admission_status']=='complete'?'pending':request['db_admission_table']['admission_status'];
+                  String statusText;
+                  if(isResult){
+                   statusText = request['db_admission_table']['admission_status'];
+                  }else{
+                    statusText = request['db_admission_table']['admission_status']=='complete'?'pending':request['db_admission_table']['admission_status'];
+                  }
                   String titleText = '';
 
                   if (isResult) {

@@ -63,6 +63,7 @@ TextEditingController fatherNameController = TextEditingController();
 TextEditingController fatherAgeController = TextEditingController();
 TextEditingController fatherEduAttainController = TextEditingController();
 String? fatherEmploymentStatus;
+String? fatherSalary;
 TextEditingController fatherEmployedAtController = TextEditingController();
 TextEditingController fatherOfficeAddressController = TextEditingController();
 TextEditingController fatherContactController = TextEditingController();
@@ -73,6 +74,7 @@ TextEditingController motherNameController = TextEditingController();
 TextEditingController motherAgeController = TextEditingController();
 TextEditingController motherEduAttainController = TextEditingController();
 String? motherEmploymentStatus;
+String? motherSalary;
 TextEditingController motherEmployedAtController = TextEditingController();
 TextEditingController motherOfficeAddressController = TextEditingController();
 TextEditingController motherContactController = TextEditingController();
@@ -83,6 +85,7 @@ TextEditingController guardianNameController = TextEditingController();
 TextEditingController guardianAgeController = TextEditingController();
 TextEditingController guardianEduAttainController = TextEditingController();
 String? guardianEmploymentStatus;
+String? guardianSalary;
 TextEditingController guardianEmployedAtController = TextEditingController();
 TextEditingController guardianOfficeAddressController = TextEditingController();
 TextEditingController guardianContactController = TextEditingController();
@@ -367,6 +370,7 @@ void addItemDescription(double scale) {
           motherOfficeAddressController.text=parent['office_address'];
           motherContactController.text=parent['contact_no'];
           motherWorkPositionController.text = parent['job_position'];
+          motherSalary = parent['salary_scale'];
         }else if(parent['relationship_to_child']=='father'){
           fatherNameController.text = fullName;
           fatherAgeController.text = age.toString();
@@ -376,16 +380,18 @@ void addItemDescription(double scale) {
           fatherOfficeAddressController.text=parent['office_address'];
           fatherContactController.text=parent['contact_no'];
           fatherWorkPositionController.text = parent['job_position'];
-        }else{
+          fatherSalary = parent['salary_scale'];
+        }else if(parent['relationship_to_child']=='guardian'){
           guardianNameController.text = fullName;
           guardianAgeController.text = age.toString();
           guardianEduAttainController.text=parent['educational_attainment'];
-          guardianEmploymentStatus = parent['employment_status'];
+          guardianEmploymentStatus = parent['employment_status']??'';
           guardianEmployedAtController.text = parent['employed_at'];
           guardianOfficeAddressController.text=parent['office_address'];
           guardianContactController.text=parent['contact_no'];
           guardianWorkPositionController.text = parent['job_position'];
-          guardianRelationTo = parent['relationship_to_child'];
+          guardianRelationTo = parent['relationship_to_child']??'';
+          guardianSalary = parent['salary_scale'];
         }
       }
     }
@@ -1784,22 +1790,31 @@ Expanded(
       SizedBox(
         height: 40,
         child: DropdownButtonFormField<String>(
+          value: fatherSalary,
           items: const [
             DropdownMenuItem(
-              value: 'Below 20,000',
-              child: Text('Below 20,000'),
+              value: 'PhP 9,999',
+              child: Text('< PhP 9,999'),
             ),
             DropdownMenuItem(
-              value: '20,000 - 50,000',
-              child: Text('20,000 - 50,000'),
+              value: 'PhP 10,000 - 19,999',
+              child: Text('PhP 10,000 - 19,999'),
             ),
             DropdownMenuItem(
-              value: '50,000 - 100,000',
-              child: Text('50,000 - 100,000'),
+              value: 'PhP 20,000 - 39,999',
+              child: Text('PhP 20,000 - 39,999'),
             ),
             DropdownMenuItem(
-              value: 'Above 100,000',
-              child: Text('Above 100,000'),
+              value: 'PhP 40,000 - 69,999',
+              child: Text('PhP 40,000 - 69,999'),
+            ),
+            DropdownMenuItem(
+              value: 'PhP 70,000 - 99,999',
+              child: Text('PhP 70,000 - 99,999'),
+            ),
+            DropdownMenuItem(
+              value: 'PhP 100,000+',
+              child: Text('PhP 100,000+'),
             ),
           ],
           onChanged: (value) {
@@ -2105,22 +2120,31 @@ Expanded(
       SizedBox(
         height: 40,
         child: DropdownButtonFormField<String>(
+          value: motherSalary,
           items: const [
             DropdownMenuItem(
-              value: 'Below 20,000',
-              child: Text('Below 20,000'),
+              value: 'PhP 9,999',
+              child: Text('< PhP 9,999'),
             ),
             DropdownMenuItem(
-              value: '20,000 - 50,000',
-              child: Text('20,000 - 50,000'),
+              value: 'PhP 10,000 - 19,999',
+              child: Text('PhP 10,000 - 19,999'),
             ),
             DropdownMenuItem(
-              value: '50,000 - 100,000',
-              child: Text('50,000 - 100,000'),
+              value: 'PhP 20,000 - 39,999',
+              child: Text('PhP 20,000 - 39,999'),
             ),
             DropdownMenuItem(
-              value: 'Above 100,000',
-              child: Text('Above 100,000'),
+              value: 'PhP 40,000 - 69,999',
+              child: Text('PhP 40,000 - 69,999'),
+            ),
+            DropdownMenuItem(
+              value: 'PhP 70,000 - 99,999',
+              child: Text('PhP 70,000 - 99,999'),
+            ),
+            DropdownMenuItem(
+              value: 'PhP 100,000+',
+              child: Text('PhP 100,000+'),
             ),
           ],
           onChanged: (value) {
@@ -2546,22 +2570,31 @@ Expanded(
       SizedBox(
         height: 40,
         child: DropdownButtonFormField<String>(
+          value: guardianSalary,
           items: const [
             DropdownMenuItem(
-              value: 'Below 20,000',
-              child: Text('Below 20,000'),
+              value: 'PhP 9,999',
+              child: Text('< PhP 9,999'),
             ),
             DropdownMenuItem(
-              value: '20,000 - 50,000',
-              child: Text('20,000 - 50,000'),
+              value: 'PhP 10,000 - 19,999',
+              child: Text('PhP 10,000 - 19,999'),
             ),
             DropdownMenuItem(
-              value: '50,000 - 100,000',
-              child: Text('50,000 - 100,000'),
+              value: 'PhP 20,000 - 39,999',
+              child: Text('PhP 20,000 - 39,999'),
             ),
             DropdownMenuItem(
-              value: 'Above 100,000',
-              child: Text('Above 100,000'),
+              value: 'PhP 40,000 - 69,999',
+              child: Text('PhP 40,000 - 69,999'),
+            ),
+            DropdownMenuItem(
+              value: 'PhP 70,000 - 99,999',
+              child: Text('PhP 70,000 - 99,999'),
+            ),
+            DropdownMenuItem(
+              value: 'PhP 100,000+',
+              child: Text('PhP 100,000+'),
             ),
           ],
           onChanged: (value) {

@@ -461,7 +461,7 @@ String formatDate(DateTime date) {
         borderRadius: BorderRadius.circular(5), // Border radius
       ),
     ),
-    onPressed: isButtonEnabled
+    onPressed: isButtonEnabled && !details[0]['db_admission_table']['is_complete_view']
         ? () async {
             // Perform the action
             try {
@@ -546,7 +546,7 @@ String formatDate(DateTime date) {
           }
         : null,
     child: Text(
-      "Mark as Complete",
+      details[0]['db_admission_table']['is_complete_view']?"Completed":"Mark as Complete",
       style: TextStyle(
         color: Colors.white,
         fontFamily: 'Roboto-R',
