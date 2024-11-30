@@ -9,6 +9,8 @@ import 'package:intl/intl.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:url_launcher/url_launcher.dart';
+import 'dart:html' as html;
+
 
 
 // Name of your class
@@ -492,16 +494,31 @@ Widget _buildImageCard({
                                   const SizedBox(height: 20),
                                       ElevatedButton(
                                         onPressed: () async {
-                                          final Uri url = Uri.parse(imagePath); // Convert string to Uri
+                                          /*final Uri url = Uri.parse(imagePath); // Convert string to Uri
                                                 
-                                          if (await canLaunchUrl(url)) {
-                                            await launch(url.toString());
-                                          } else {
-                                            // Handle the error case if the URL can't be launched
-                                            ScaffoldMessenger.of(context).showSnackBar(
-                                              const SnackBar(content: Text('Could not open the link')),
-                                            );
-                                          }
+                                          try {
+                                              if (Foundation.kIsWeb) {
+                                                // Web-specific launch
+                                                await launchUrl(url);
+                                              } else {
+                                                // Mobile-specific launch (use the older method for mobile platforms)
+                                                await launch(url.toString());
+                                              }
+                                            } catch (e) {
+                                              ScaffoldMessenger.of(context).showSnackBar(
+                                                const SnackBar(content: Text('Could not open the link')),
+                                              );
+                                            }*/
+                                            final String url = imagePath; // Ensure imagePath is a valid URL
+
+                                              // Use the browser's built-in window.open method
+                                              try {
+                                                html.window.open(url, '_blank');  // Open URL in a new tab
+                                              } catch (e) {
+                                                ScaffoldMessenger.of(context).showSnackBar(
+                                                  const SnackBar(content: Text('Could not open the link')),
+                                                );
+                                              }                                            
                                       
                                         },
                                         child: const Text(
