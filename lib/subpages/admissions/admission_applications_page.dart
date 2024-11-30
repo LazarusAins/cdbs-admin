@@ -464,25 +464,7 @@ String formatDate(DateTime date) {
     onPressed: isButtonEnabled && !details[0]['db_admission_table']['is_complete_view']
         ? () async {
             // Perform the action
-            try {
-              final response = await http.post(
-                Uri.parse('$apiUrl/api/admin/update_admission'),
-                headers: {
-                  'Content-Type': 'application/json',
-                  'supabase-url': supabaseUrl,
-                  'supabase-key': supabaseKey,
-                },
-                body: json.encode({
-                  'admission_id': details[0]['admission_id'], // Send admission_id in the request body
-                  'admission_status': "complete",
-                  'is_complete_view': true,
-                  'user_id': userId,
-                  'is_done': true,
-                }),
-              );
-
-              if (response.statusCode == 200) {
-                final responseBody = jsonDecode(response.body);
+            
 
                 // Show success modal
                 showDialog(
@@ -565,20 +547,43 @@ String formatDate(DateTime date) {
           borderRadius: BorderRadius.circular(8),
         ),
       ),
-      onPressed: () {},
-      child: const Text(
-        "Yes",
-        style: TextStyle(color: Colors.white),
-      ),
-    ),
-  ),
-),
+      onPressed: () async {
 
-        ],
-      ),
-    ),
-  ),
-);
+        try {
+              final response = await http.post(
+                Uri.parse('$apiUrl/api/admin/update_admission'),
+                headers: {
+                  'Content-Type': 'application/json',
+                  'supabase-url': supabaseUrl,
+                  'supabase-key': supabaseKey,
+                },
+                body: json.encode({
+                  'admission_id': details[0]['admission_id'], // Send admission_id in the request body
+                  'admission_status': "complete",
+                  'is_complete_view': true,
+                  'user_id': userId,
+                  'is_done': true,
+                }),
+              );
+
+              if (response.statusCode == 200) {
+                final responseBody = jsonDecode(response.body);
+                showDialog(
+                  context: context,
+                  builder: (context) => AlertDialog(
+                    title: const Text("Mark as Complete"),
+                    content: const Text("Application complete"),
+                    actions: [
+                      TextButton(
+                        onPressed: () {
+                          Navigator.of(context).pop(); // Close the dialog
+                        },
+                        child: const Text("OK"),
+                      ),
+                    ],
+                  ),
+                );
+
               } else {
                 // Handle failure
                 final responseBody = jsonDecode(response.body);
@@ -622,6 +627,22 @@ String formatDate(DateTime date) {
                 ),
               );
             }
+
+      },
+      child: const Text(
+        "Yes",
+        style: TextStyle(color: Colors.white),
+      ),
+    ),
+  ),
+),
+
+        ],
+      ),
+    ),
+  ),
+);
+
           }
         : null,
     child: Text(
