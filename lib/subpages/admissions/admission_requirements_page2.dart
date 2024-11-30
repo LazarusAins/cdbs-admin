@@ -10,6 +10,7 @@ import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:url_launcher/url_launcher.dart';
 
+
 // Name of your class
 class AdmissionRequirementsPage2 extends StatefulWidget {
 
@@ -494,7 +495,7 @@ Widget _buildImageCard({
                                           final Uri url = Uri.parse(imagePath); // Convert string to Uri
                                                 
                                           if (await canLaunchUrl(url)) {
-                                            await launchUrl(url);
+                                            await launch(url.toString());
                                           } else {
                                             // Handle the error case if the URL can't be launched
                                             ScaffoldMessenger.of(context).showSnackBar(
