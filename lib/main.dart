@@ -38,7 +38,7 @@ class MyApp extends StatelessWidget {
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
-        title: 'Medicareplus Admin',
+        title: 'Don Bosco Admin',
         theme: ThemeData.light().copyWith(
           scaffoldBackgroundColor: const Color.fromARGB(255, 249, 249, 252),
           inputDecorationTheme: InputDecorationTheme(

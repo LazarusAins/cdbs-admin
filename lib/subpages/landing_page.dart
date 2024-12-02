@@ -298,7 +298,7 @@ Padding(
 
           // Main content area
                     Expanded(
-            child: _getPageContent(),
+            child: _getPageContent(authState.adminType),
           ),
         ],
       );
@@ -697,7 +697,7 @@ return Column(
 
 
     // Function to return the selected page or dropdown option content
-  Widget _getPageContent() {
+  Widget _getPageContent(String adminType) {
     if (_selectedPage == 2) {
       // Show content based on selected dropdown option for Page 5
       switch (_selectedDropdownOption) {
@@ -720,19 +720,36 @@ return Column(
 
     if (_selectedPage == 3) {
       // Show content based on selected dropdown option for Page 5
-      switch (_selectedAdmissionDropdownOption) {
-        case 0:
-          return const AdmissionOverviewPage();
-        case 1:
-          return const AdmissionApplicationsPage();
-        case 2:
-          return const AdmissionRequirementsPage();
-        case 3:
-          return const AdmissionPaymentsPage();
-        case 4:
-          return const AdmissionSchedulesPage();
-        default:
-          return const AdmissionResultsPage();
+      if(adminType !='Admission' && adminType !='Center for Learner Wellness'){
+        switch (_selectedAdmissionDropdownOption) {
+          case 0:
+            return const AdmissionOverviewPage();
+          case 1:
+            return const AdmissionApplicationsPage();
+          case 2:
+            return const AdmissionRequirementsPage();
+          case 3:
+            return const AdmissionPaymentsPage();
+          case 4:
+            return const AdmissionSchedulesPage();
+          default:
+            return const AdmissionResultsPage();
+        }
+      }else{
+        switch (_selectedAdmissionDropdownOption) {
+          case 0:
+            return const AdmissionOverviewPage();
+          case 1:
+            return const AdmissionApplicationsPage();
+          case 2:
+            return const AdmissionRequirementsPage();
+          case 3:
+            return const AdmissionSchedulesPage();
+          case 4:
+            return const AdmissionResultsPage();
+          default:
+            return const AdmissionResultsPage();
+        }
       }
     }
 
