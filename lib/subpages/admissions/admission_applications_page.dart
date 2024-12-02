@@ -139,7 +139,7 @@ String formatDate(DateTime date) {
             ),
 
             if (_selectedAction == 0) _buildDefaultContent(scale), // Default content
-            if (_selectedAction == 1) _buildViewContent(scale, formDetails!, authState.uid), // View content
+            if (_selectedAction == 1) _buildViewContent(scale, formDetails!, authState.uid, authState.adminType), // View content
             if (_selectedAction == 2) _buildReminderContent(scale), // Reminder content
             if (_selectedAction == 3) _buildDeactivateContent(scale),
             if (_selectedAction == 4) _buildDeactivateContent(scale),
@@ -395,7 +395,7 @@ String formatDate(DateTime date) {
   }
 
   // Build content for each action (VIEW, REMINDER, DEACTIVATE)
-  Widget _buildViewContent(double scale, List<Map<String, dynamic>> details, int userId) {
+  Widget _buildViewContent(double scale, List<Map<String, dynamic>> details, int userId, String adminType) {
     return BlocConsumer<AdmissionBloc, AdmissionState>(
       listener: (context, state) {},
       builder: (context, state) {
@@ -451,210 +451,211 @@ String formatDate(DateTime date) {
                 ),
               ),
               const SizedBox(width: 8), // Spacing between buttons
+              if(adminType!='Admission' && adminType!='Center for Learner Wellness')
               SizedBox(
-  height: 40,
-  child: ElevatedButton(
-    style: ElevatedButton.styleFrom(
-      backgroundColor: const Color(0xFF007A33), // Green color
-      fixedSize: Size(178 * scale, 37 * scale), // Button size
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(5), // Border radius
-      ),
-    ),
-    onPressed: isButtonEnabled && !details[0]['db_admission_table']['is_complete_view']
-        ? () async {
-            // Perform the action
-            
-
-                // Show success modal
-                showDialog(
-  context: context,
-  builder: (context) => Dialog(
-    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8.0)),
-    child: SizedBox(
-      width: 349.0,
-      height: 272.0,
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          // Title
-          const Padding(
-            padding: EdgeInsets.only(top: 16.0, bottom: 8.0),
-            child: Text(
-              "Confirmation",
-              style: TextStyle(
-                fontFamily: 'Roboto',
-                fontSize: 20,
-                fontWeight: FontWeight.bold,
-              ),
-              textAlign: TextAlign.center,
-            ),
-          ),
-          // Content
-          const Padding(
-            padding: EdgeInsets.symmetric(horizontal: 24.0),
-            child: Text(
-              "Are you sure you want to mark as complete?",
-              style: TextStyle(
-                fontFamily: 'Roboto',
-                fontSize: 13,
-                fontWeight: FontWeight.normal,
-              ),
-              textAlign: TextAlign.center,
-            ),
-          ),
-          const SizedBox(height: 16.0),
-          // Divider
-          const Padding(
-            padding: EdgeInsets.only(left: 20, right: 20),
-            child: Divider(thickness: 1),
-          ),
-          const SizedBox(height: 16.0),
-          // No Button
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 30.0),
-            child: SizedBox(
-              width: 289,
-              height: 35,
-              child: TextButton(
-                style: TextButton.styleFrom(
-                  backgroundColor: const Color(0xffD3D3D3), // No button color
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(8),
-                  ),
-                ),
-                onPressed: () {
-                  Navigator.of(context).pop(); // Close dialog
-                },
-                child: const Text(
-                  "No",
-                  style: TextStyle(color: Colors.black),
-                ),
-              ),
-            ),
-          ),
-          const SizedBox(height: 12.0), // Spacing between buttons
-          // Yes Button
-          Padding(
-  padding: const EdgeInsets.symmetric(horizontal: 30.0),
-  child: SizedBox(
-    width: 289,
-    height: 35,
-    child: TextButton(
-      style: TextButton.styleFrom(
-        backgroundColor: const Color(0xff012169), // Amber button color
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(8),
-        ),
-      ),
-      onPressed: () async {
-
-        try {
-              final response = await http.post(
-                Uri.parse('$apiUrl/api/admin/update_admission'),
-                headers: {
-                  'Content-Type': 'application/json',
-                  'supabase-url': supabaseUrl,
-                  'supabase-key': supabaseKey,
-                },
-                body: json.encode({
-                  'admission_id': details[0]['admission_id'], // Send admission_id in the request body
-                  'admission_status': "complete",
-                  'is_complete_view': true,
-                  'user_id': userId,
-                  'is_done': true,
-                }),
-              );
-
-              if (response.statusCode == 200) {
-                final responseBody = jsonDecode(response.body);
-                showDialog(
-                  context: context,
-                  builder: (context) => AlertDialog(
-                    title: const Text("Mark as Complete"),
-                    content: const Text("Application complete"),
-                    actions: [
-                      TextButton(
-                        onPressed: () {
-                          Navigator.of(context).pop(); // Close the dialog
-                        },
-                        child: const Text("OK"),
+                    height: 40,
+                    child: ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: const Color(0xFF007A33), // Green color
+                        fixedSize: Size(178 * scale, 37 * scale), // Button size
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(5), // Border radius
+                        ),
                       ),
-                    ],
-                  ),
-                );
+                      onPressed: isButtonEnabled && !details[0]['db_admission_table']['is_complete_view']
+                          ? () async {
+                              // Perform the action
+                              
 
-              } else {
-                // Handle failure
-                final responseBody = jsonDecode(response.body);
-                print('Error: ${responseBody['error']}');
+                                  // Show success modal
+                                  showDialog(
+                    context: context,
+                    builder: (context) => Dialog(
+                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8.0)),
+                      child: SizedBox(
+                        width: 349.0,
+                        height: 272.0,
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            // Title
+                            const Padding(
+                              padding: EdgeInsets.only(top: 16.0, bottom: 8.0),
+                              child: Text(
+                                "Confirmation",
+                                style: TextStyle(
+                                  fontFamily: 'Roboto',
+                                  fontSize: 20,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                                textAlign: TextAlign.center,
+                              ),
+                            ),
+                            // Content
+                            const Padding(
+                              padding: EdgeInsets.symmetric(horizontal: 24.0),
+                              child: Text(
+                                "Are you sure you want to mark as complete?",
+                                style: TextStyle(
+                                  fontFamily: 'Roboto',
+                                  fontSize: 13,
+                                  fontWeight: FontWeight.normal,
+                                ),
+                                textAlign: TextAlign.center,
+                              ),
+                            ),
+                            const SizedBox(height: 16.0),
+                            // Divider
+                            const Padding(
+                              padding: EdgeInsets.only(left: 20, right: 20),
+                              child: Divider(thickness: 1),
+                            ),
+                            const SizedBox(height: 16.0),
+                            // No Button
+                            Padding(
+                              padding: const EdgeInsets.symmetric(horizontal: 30.0),
+                              child: SizedBox(
+                                width: 289,
+                                height: 35,
+                                child: TextButton(
+                                  style: TextButton.styleFrom(
+                                    backgroundColor: const Color(0xffD3D3D3), // No button color
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(8),
+                                    ),
+                                  ),
+                                  onPressed: () {
+                                    Navigator.of(context).pop(); // Close dialog
+                                  },
+                                  child: const Text(
+                                    "No",
+                                    style: TextStyle(color: Colors.black),
+                                  ),
+                                ),
+                              ),
+                            ),
+                            const SizedBox(height: 12.0), // Spacing between buttons
+                            // Yes Button
+                            Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 30.0),
+                    child: SizedBox(
+                      width: 289,
+                      height: 35,
+                      child: TextButton(
+                        style: TextButton.styleFrom(
+                          backgroundColor: const Color(0xff012169), // Amber button color
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(8),
+                          ),
+                        ),
+                        onPressed: () async {
 
-                // Show failure modal
-                showDialog(
-                  context: context,
-                  builder: (context) => AlertDialog(
-                    title: const Text("Error"),
-                    content: Text("Failed to complete review: ${responseBody['error']}"),
-                    actions: [
-                      TextButton(
-                        onPressed: () {
-                          Navigator.of(context).pop(); // Close the dialog
+                          try {
+                                final response = await http.post(
+                                  Uri.parse('$apiUrl/api/admin/update_admission'),
+                                  headers: {
+                                    'Content-Type': 'application/json',
+                                    'supabase-url': supabaseUrl,
+                                    'supabase-key': supabaseKey,
+                                  },
+                                  body: json.encode({
+                                    'admission_id': details[0]['admission_id'], // Send admission_id in the request body
+                                    'admission_status': "complete",
+                                    'is_complete_view': true,
+                                    'user_id': userId,
+                                    'is_done': true,
+                                  }),
+                                );
+
+                                if (response.statusCode == 200) {
+                                  final responseBody = jsonDecode(response.body);
+                                  showDialog(
+                                    context: context,
+                                    builder: (context) => AlertDialog(
+                                      title: const Text("Mark as Complete"),
+                                      content: const Text("Application complete"),
+                                      actions: [
+                                        TextButton(
+                                          onPressed: () {
+                                            Navigator.of(context).pop(); // Close the dialog
+                                          },
+                                          child: const Text("OK"),
+                                        ),
+                                      ],
+                                    ),
+                                  );
+
+                                } else {
+                                  // Handle failure
+                                  final responseBody = jsonDecode(response.body);
+                                  print('Error: ${responseBody['error']}');
+
+                                  // Show failure modal
+                                  showDialog(
+                                    context: context,
+                                    builder: (context) => AlertDialog(
+                                      title: const Text("Error"),
+                                      content: Text("Failed to complete review: ${responseBody['error']}"),
+                                      actions: [
+                                        TextButton(
+                                          onPressed: () {
+                                            Navigator.of(context).pop(); // Close the dialog
+                                          },
+                                          child: const Text("OK"),
+                                        ),
+                                      ],
+                                    ),
+                                  );
+                                }
+                              } catch (error) {
+                                // Handle error (e.g., network error)
+                                print('Error: $error');
+
+                                // Show error modal
+                                showDialog(
+                                  context: context,
+                                  builder: (context) => AlertDialog(
+                                    title: const Text("Error"),
+                                    content: const Text("An unexpected error occurred. Please try again later."),
+                                    actions: [
+                                      TextButton(
+                                        onPressed: () {
+                                          Navigator.of(context).pop(); // Close the dialog
+                                        },
+                                        child: const Text("OK"),
+                                      ),
+                                    ],
+                                  ),
+                                );
+                              }
+
                         },
-                        child: const Text("OK"),
+                        child: const Text(
+                          "Yes",
+                          style: TextStyle(color: Colors.white),
+                        ),
                       ),
-                    ],
-                  ),
-                );
-              }
-            } catch (error) {
-              // Handle error (e.g., network error)
-              print('Error: $error');
-
-              // Show error modal
-              showDialog(
-                context: context,
-                builder: (context) => AlertDialog(
-                  title: const Text("Error"),
-                  content: const Text("An unexpected error occurred. Please try again later."),
-                  actions: [
-                    TextButton(
-                      onPressed: () {
-                        Navigator.of(context).pop(); // Close the dialog
-                      },
-                      child: const Text("OK"),
                     ),
-                  ],
-                ),
-              );
-            }
+                  ),
 
-      },
-      child: const Text(
-        "Yes",
-        style: TextStyle(color: Colors.white),
-      ),
-    ),
-  ),
-),
+                          ],
+                        ),
+                      ),
+                    ),
+                  );
 
-        ],
-      ),
-    ),
-  ),
-);
-
-          }
-        : null,
-    child: Text(
-      details[0]['db_admission_table']['is_complete_view']?"Completed":"Mark as Complete",
-      style: TextStyle(
-        color: Colors.white,
-        fontFamily: 'Roboto-R',
-        fontSize: 12 * scale,
-      ),
-    ),
-  ),
-),
+                            }
+                          : null,
+                      child: Text(
+                        details[0]['db_admission_table']['is_complete_view']?"Completed":"Mark as Complete",
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontFamily: 'Roboto-R',
+                          fontSize: 12 * scale,
+                        ),
+                      ),
+                    ),
+                  ),
 
             ],
           ),
@@ -664,7 +665,7 @@ String formatDate(DateTime date) {
       // Adding AdmissionApplicationsPage2 below the buttons
        AdmissionApplicationsPage2(formDetails: details, onNextPressed: (bool isClicked) {
          context.read<AdmissionBloc>().add(MarkAsCompleteClicked(isClicked));
-       },),
+       },adminType:  adminType),
     ],
   ),
 );

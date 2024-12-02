@@ -8,8 +8,9 @@ class AdmissionApplicationsPage2 extends StatefulWidget {
   
   List<Map<String, dynamic>>? formDetails;
   final Function(bool isClicked) onNextPressed;
+  String adminType;
 
-  AdmissionApplicationsPage2({super.key, required this.formDetails, required this.onNextPressed});
+  AdmissionApplicationsPage2({super.key, required this.formDetails, required this.onNextPressed, required this.adminType});
 
   @override
   State<AdmissionApplicationsPage2> createState() =>
@@ -440,39 +441,39 @@ void addItemDescription(double scale) {
             // Page 1 content
 
 
-
+            if(widget.adminType!='Admission' && widget.adminType!='Center for Learner Wellness')
             Row(
-    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-    children: [
-      Text(title,
-        style: TextStyle(
-          fontFamily: 'Roboto-R',
-          fontSize: 20 * scale,
-        ),
-      ),
-ElevatedButton(
-  onPressed: () {
-    // Toggle edit mode
-    setState(() {
-      isEditable = true;
-    });
-  },
-  style: ElevatedButton.styleFrom(
-    backgroundColor: const Color(0xffF5F7FB),
-    shape: RoundedRectangleBorder(
-      borderRadius: BorderRadius.circular(12 * scale),
-    ),
-  ),
-  child: Text(
-    isEditable ? 'Save' : 'Edit Application', // Change button text dynamically
-    style: TextStyle(
-      fontFamily: 'Roboto-R',
-      fontSize: 13 * scale,
-    ),
-  ),
-),
-    ],
-        ),
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                  Text(title,
+                    style: TextStyle(
+                      fontFamily: 'Roboto-R',
+                      fontSize: 20 * scale,
+                    ),
+                  ),
+                  ElevatedButton(
+                    onPressed: () {
+                      // Toggle edit mode
+                      setState(() {
+                        isEditable = true;
+                      });
+                    },
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: const Color(0xffF5F7FB),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(12 * scale),
+                      ),
+                    ),
+                    child: Text(
+                      isEditable ? 'Save' : 'Edit Application', // Change button text dynamically
+                      style: TextStyle(
+                        fontFamily: 'Roboto-R',
+                        fontSize: 13 * scale,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
             if (_currentPage == 1) ...[
              Column(
       crossAxisAlignment: CrossAxisAlignment.start,

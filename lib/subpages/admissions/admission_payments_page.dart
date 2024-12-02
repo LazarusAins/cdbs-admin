@@ -252,7 +252,7 @@ SizedBox(
                 children: [
                   Center(
                     child: Text(
-                      "UnionBANK",
+                      "UnionBank",
                       style: TextStyle(
                         fontSize: 16 * scale,
                         fontWeight: FontWeight.bold,
@@ -262,7 +262,7 @@ SizedBox(
                   const SizedBox(height: 10),
                   Center(
                     child: Text(
-                      "Union Bank Bills Payment",
+                      "UnionBank Bills Payment",
                       style: TextStyle(fontSize: 14 * scale),
                     ),
                   ),
@@ -449,7 +449,7 @@ const SizedBox(height: 40),
                     ),
                     Expanded(
                       flex: 2,
-                      child: Text( paymethod.toUpperCase(),
+                      child: Text( paymethod,
                         style: TextStyle(fontFamily: 'Roboto-R', fontSize: 14 * scale),
                       ),
                     ),
@@ -510,9 +510,10 @@ const SizedBox(height: 40),
                                      }
                           },
                           itemBuilder: (context) => [
-                            PopupMenuItem(
+                                if(authState.adminType!='Registrar')
+                                  PopupMenuItem(
                                     value: 1,
-                                    child: Row(
+                                    child:  Row(
                                       children: [
                                         const Icon(Icons.visibility, color: Colors.black),
                                         SizedBox(width: 8 * scale),

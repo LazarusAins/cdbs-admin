@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:cdbs_admin/bloc/auth/auth_bloc.dart';
 import 'package:cdbs_admin/subpages/page1.dart';
 import 'package:cdbs_admin/subpages/page2.dart';
 import 'package:cdbs_admin/subpages/page3.dart';
@@ -198,8 +199,7 @@ class _HomePageState extends State<HomePage> {
                                         ],
                                       ),
                                     ),
-                                    isExpanded: isExpanded[
-                                        index], // Use this for expansion state
+                                    isExpanded: isExpanded[index], // Use this for expansion state
                                   ),
                                 ],
                                 // Remove the onExpansionChanged callback
@@ -210,14 +210,12 @@ class _HomePageState extends State<HomePage> {
                             return MouseRegion(
                               onEnter: (_) {
                                 setState(() {
-                                  isHovered[index] =
-                                      false; // Disable hover effect
+                                  isHovered[index] = false; // Disable hover effect
                                 });
                               },
                               onExit: (_) {
                                 setState(() {
-                                  isHovered[index] =
-                                      false; // Disable hover effect
+                                  isHovered[index] = false; // Disable hover effect
                                 });
                               },
                               child: GestureDetector(
@@ -328,8 +326,9 @@ class _HomePageState extends State<HomePage> {
                                               const Color(0xFF990000),
                                           backgroundColor: Colors.white,
                                         ),
-                                        onPressed: () =>
-                                            Navigator.of(context).pop(false),
+                                        onPressed: (){
+                                          Navigator.of(context).pop(false);
+                                        },
                                         child: Text('Cancel',
                                             style: TextStyle(
                                                 fontSize: 14 * scale)),
@@ -340,8 +339,10 @@ class _HomePageState extends State<HomePage> {
                                               const Color(0xFF990000),
                                           backgroundColor: Colors.white,
                                         ),
-                                        onPressed: () =>
-                                            Navigator.of(context).pop(true),
+                                        onPressed: () {
+                                          context.read<AuthBloc>().add(AuthLogoutRequested());
+                                          Navigator.of(context).pop(true);
+                                        },
                                         child: Text('Logout',
                                             style: TextStyle(
                                                 fontSize: 14 * scale)),

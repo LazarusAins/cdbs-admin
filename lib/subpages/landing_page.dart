@@ -463,99 +463,124 @@ return Column(
  Widget _buildAdmissionDropdownMenu(int index, String text, IconData icon, double scale) {
   bool isSelected = _selectedPage == index;
   bool isDropdownOpen = _openDropdownIndex == index;
-  List<String> dropdownOptions = ["Overview", "Applications", "Requirements", "Payments", "Schedules", "Results"];
-
-  return Column(
-    children: [
-      GestureDetector(
-        onTap: () {
-          setState(() {
-            _selectedPage = index;
-            _openDropdownIndex  = _isAdmissionDropdownOpen ? -1: index; // Toggle dropdown visibility
-          });
-        },
-        child: Padding(
-          padding: const EdgeInsets.only(left: 30, right: 30),
-          child: Container(
-            width: MediaQuery.of(context).size.width * 0.2,
-            padding: const EdgeInsets.symmetric(vertical: 10),
-            decoration: BoxDecoration(
-              color: isSelected ? const Color(0xff012169) : Colors.transparent,
-              borderRadius: isSelected ? BorderRadius.circular(8) : BorderRadius.zero,
-            ),
-            child: Padding(
-              padding: const EdgeInsets.only(left: 20),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Icon(
-                icon,
-                color: isSelected ? Colors.white : Colors.black,
-                size: 24 * scale, // Make the icon size scalable
+   List<String> dropdownOptions = [];
+  return BlocConsumer<AuthBloc, AuthState>(
+        listener: (context, state) {
+          if (state is AuthInitial) {
+            Navigator.pushAndRemoveUntil(
+              context,
+              MaterialPageRoute(
+                builder: (context) => const LoginPage(),
               ),
-                  const SizedBox(width: 8), 
-                  Expanded(
-                    child: Text(
-                      text,
-                      style: TextStyle(
-                        fontFamily: 'Roboto-R', // Main item font
-                        fontSize: 16 * scale,
-                        color: isSelected ? Colors.white : Colors.black,
-                        fontWeight: FontWeight.w500,
+              (route) => false,
+            );
+          }
+        },
+        builder: (context, authState) {
+          if (authState is AuthSuccess) {
+            if(authState.adminType=='Admin' || authState.adminType=='Principal' || authState.adminType=='IT' || authState.adminType=='Sisters'){
+              dropdownOptions = ["Overview", "Applications", "Requirements", "Payments", "Schedules", "Results"];
+            }else if(authState.adminType=='Cashier'){
+              dropdownOptions = ["Payments"];
+            }else if(authState.adminType=='Registrar'){
+              dropdownOptions = ["Overview", "Applications", "Requirements", "Payments", "Schedules"];
+            }else if(authState.adminType=='Admission' || authState.adminType=='Center for Learner Wellness'){
+              dropdownOptions = ["Overview", "Applications", "Requirements", "Schedules", "Results"];
+            }
+            return Column(
+                    children: [
+                      GestureDetector(
+                        onTap: () {
+                          setState(() {
+                            _selectedPage = index;
+                            _openDropdownIndex  = _isAdmissionDropdownOpen ? -1: index; // Toggle dropdown visibility
+                          });
+                        },
+                        child: Padding(
+                          padding: const EdgeInsets.only(left: 30, right: 30),
+                          child: Container(
+                            width: MediaQuery.of(context).size.width * 0.2,
+                            padding: const EdgeInsets.symmetric(vertical: 10),
+                            decoration: BoxDecoration(
+                              color: isSelected ? const Color(0xff012169) : Colors.transparent,
+                              borderRadius: isSelected ? BorderRadius.circular(8) : BorderRadius.zero,
+                            ),
+                            child: Padding(
+                              padding: const EdgeInsets.only(left: 20),
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Icon(
+                                icon,
+                                color: isSelected ? Colors.white : Colors.black,
+                                size: 24 * scale, // Make the icon size scalable
+                              ),
+                                  const SizedBox(width: 8), 
+                                  Expanded(
+                                    child: Text(
+                                      text,
+                                      style: TextStyle(
+                                        fontFamily: 'Roboto-R', // Main item font
+                                        fontSize: 16 * scale,
+                                        color: isSelected ? Colors.white : Colors.black,
+                                        fontWeight: FontWeight.w500,
+                                      ),
+                                    ),
+                                  ),
+                                  Padding(
+                                    padding: const EdgeInsets.only(right: 20),
+                                    child: Icon(
+                                      _isAdmissionDropdownOpen ? Icons.arrow_drop_up : Icons.arrow_drop_down,
+                                      color: isSelected ? Colors.white : Colors.black,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                      // Dropdown options
+                      if (isDropdownOpen)
+                        Padding(
+                          padding: const EdgeInsets.only(left: 30, right: 30),
+                          child: Column(
+                            children: List.generate(dropdownOptions.length, (i) {
+                              return GestureDetector(
+                  onTap: () {
+                    setState(() {
+                      _selectedAdmissionDropdownOption = i;
+                    });
+                  },
+                  child: Padding(
+                    padding: const EdgeInsets.only(left: 30, right: 30),
+                    child: Container(
+                      width: MediaQuery.of(context).size.width * 0.2,
+                      padding: const EdgeInsets.only(left: 40, top: 10, bottom: 10),
+                      child: Text(
+                        dropdownOptions[i],
+                        style: TextStyle(
+                          fontFamily: 'Roboto-R', // Dropdown options font
+                          fontSize: 16 * scale,
+                          color: _selectedAdmissionDropdownOption == i
+                              ? const Color(0xff012169)
+                              : const Color.fromARGB(118, 0, 0, 0),
+                          fontWeight: _selectedAdmissionDropdownOption == i
+                              ? FontWeight.bold
+                              : FontWeight.normal, // Set to bold if selected
+                        ),
                       ),
                     ),
                   ),
-                  Padding(
-                    padding: const EdgeInsets.only(right: 20),
-                    child: Icon(
-                      _isAdmissionDropdownOpen ? Icons.arrow_drop_up : Icons.arrow_drop_down,
-                      color: isSelected ? Colors.white : Colors.black,
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ),
-        ),
-      ),
-      // Dropdown options
-      if (isDropdownOpen)
-        Padding(
-          padding: const EdgeInsets.only(left: 30, right: 30),
-          child: Column(
-            children: List.generate(dropdownOptions.length, (i) {
-              return GestureDetector(
-  onTap: () {
-    setState(() {
-      _selectedAdmissionDropdownOption = i;
-    });
-  },
-  child: Padding(
-    padding: const EdgeInsets.only(left: 30, right: 30),
-    child: Container(
-      width: MediaQuery.of(context).size.width * 0.2,
-      padding: const EdgeInsets.only(left: 40, top: 10, bottom: 10),
-      child: Text(
-        dropdownOptions[i],
-        style: TextStyle(
-          fontFamily: 'Roboto-R', // Dropdown options font
-          fontSize: 16 * scale,
-          color: _selectedAdmissionDropdownOption == i
-              ? const Color(0xff012169)
-              : const Color.fromARGB(118, 0, 0, 0),
-          fontWeight: _selectedAdmissionDropdownOption == i
-              ? FontWeight.bold
-              : FontWeight.normal, // Set to bold if selected
-        ),
-      ),
-    ),
-  ),
-);
-
+                );
             }),
           ),
         ),
     ],
+  );
+          }
+          return Container();
+        }
   );
 }
 
