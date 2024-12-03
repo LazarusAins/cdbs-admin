@@ -45653,7 +45653,7 @@ q=this.b
 p=20*q
 o=12*q
 n=t.p
-m=A.Y(A.a([A.qy("assets/assets/Logo.png",j,50*q,j),A.S(j,j,10*q),A.a_(A.a([A.o("Welcome back!",j,j,j,A.r(j,j,B.hy,j,j,j,j,j,"Roboto-B",j,j,p,j,j,B.b1,j,j,!0,j,j,j,j,j,j,j,j),j,j,j),A.o("Good morning wonderful person!",j,j,j,A.r(j,j,B.hy,j,j,j,j,j,"Varela-R",j,j,o,j,j,j,j,j,!0,j,j,j,j,j,j,j,j),j,j,j)],n),B.q,B.f,B.bj)],n),B.h,B.f,B.e,j)
+m=A.Y(A.a([A.qy("assets/Logo.png",j,50*q,j),A.S(j,j,10*q),A.a_(A.a([A.o("Welcome back!",j,j,j,A.r(j,j,B.hy,j,j,j,j,j,"Roboto-B",j,j,p,j,j,B.b1,j,j,!0,j,j,j,j,j,j,j,j),j,j,j),A.o("Good morning wonderful person!",j,j,j,A.r(j,j,B.hy,j,j,j,j,j,"Varela-R",j,j,o,j,j,j,j,j,!0,j,j,j,j,j,j,j,j),j,j,j)],n),B.q,B.f,B.bj)],n),B.h,B.f,B.e,j)
 o=A.o("ADMIN MANAGEMENT",j,j,j,A.r(j,j,B.hy,j,j,j,j,j,"Poppins-L",j,j,o,j,j,j,j,j,!0,j,j,j,j,j,j,j,j),j,j,j)
 l=this.a
 p=A.H(A.aLA(A.a([A.S(j,40*q,j),l.NI(0,"Dashboard",B.Ia,q),A.S(j,p,j),l.NI(1,"Inquiry Forms",B.Ii,q),A.S(j,p,j),l.a7h(2,"User Overview",B.Ic,q),A.S(j,p,j),l.a7f(3,"Admissions",B.oY,q),A.S(j,p,j),l.a7u(4,"Pre-Enrollment",B.oY,q)],n),j,j,!1),1)
@@ -45801,11 +45801,11 @@ $S:24}
 A.axa.prototype={
 $2(a6,a7){var s,r,q,p,o,n,m,l,k,j,i,h,g,f,e,d,c,b,a,a0,a1,a2,a3=null,a4="Roboto-R",a5="Password"
 if(a7 instanceof A.fJ)return B.b6
-s=A.OR(A.qy("Background.jpg",B.e8,a3,a3),0.2)
+s=A.OR(A.qy("assets/Background.jpg",B.e8,a3,a3),0.2)
 r=this.a
 q=this.b
 p=293*q
-p=A.qy("Logo.png",a3,p,p)
+p=A.qy("assets/Logo.png",a3,p,p)
 o=A.S(a3,30*q,a3)
 n=388*q
 m=11*q
@@ -99055,7 +99055,7 @@ B.jH=new A.z7(0,"polite")
 B.bq=new A.KK(0,"polite")
 B.jI=new A.z7(1,"assertive")
 B.n7=new A.KK(1,"assertive")
-B.C7=new A.tO("assets/assets/Background.jpg",null,null)
+B.C7=new A.tO("assets/Background.jpg",null,null)
 B.C=A.a(s([]),t.s)
 B.n=new A.Ep(1,"downstream")
 B.ai=new A.h3(-1,-1,B.n,!1,-1,-1)
