@@ -24,7 +24,7 @@ class AdmissionResultsPage extends StatefulWidget {
 }
 
 class _AdmissionResultsPageState extends State<AdmissionResultsPage> {
-List<bool> checkboxStates = List.generate(10, (_) => false);
+//List<bool> checkboxStates = List.generate(10, (_) => false);
 
   int _selectedAction = 0; // 0: Default, 1: View, 2: Reminder, 3: Deactivate
   late Stream<List<Map<String, dynamic>>> admissionForms;
@@ -229,7 +229,7 @@ String formatDate(DateTime date) {
                   final processBy = request['db_admission_table']['db_admission_form_handler_table'].isNotEmpty
     ? '${request['db_admission_table']['db_admission_form_handler_table'][0]['db_admin_table']['first_name']} ${request['db_admission_table']['db_admission_form_handler_table'][0]['db_admin_table']['last_name']}'
     : '---';
-
+                  List<bool> checkboxStates = List.generate(filteredRequest.length, (_) => false);
                   String dateCreatedString = request['db_admission_table']['created_at'];
                   DateTime dateCreated = DateTime.parse(dateCreatedString);
                   String formattedDate = formatDate(dateCreated);

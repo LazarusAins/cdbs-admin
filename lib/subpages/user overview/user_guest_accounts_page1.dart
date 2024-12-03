@@ -21,7 +21,7 @@ class UserGuestAccountsPage1 extends StatefulWidget {
 
 
 class _UserGuestAccountsPage1State extends State<UserGuestAccountsPage1> {
-  List<bool> checkboxStates = List.generate(10, (_) => false);
+  //List<bool> checkboxStates = List.generate(10, (_) => false);
 
     int _selectedAction = 0; // 0: Default, 1: View, 2: Reminder, 3: Deactivate
   late Stream<List<Map<String, dynamic>>> admissionForms;
@@ -98,7 +98,7 @@ String formatDate(DateTime date) {
                 }
                 requests = snapshot.data ?? []; // Use the data from the snapshot
                 filteredRequest = requests;
-
+                List<bool> checkboxStates = List.generate(filteredRequest.length, (_) => false);
                 if (snapshot.hasError) {
                   return Center(child: Text('Error: ${snapshot.error}'));
                 }

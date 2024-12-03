@@ -19,7 +19,7 @@ class AdmissionOverviewPage extends StatefulWidget {
 
 
 class _AdmissionOverviewPageState extends State<AdmissionOverviewPage> {
-  List<bool> checkboxStates = List.generate(10, (_) => false);
+  
   late ApiService _apiService;
   // Variable to track current action
   int _selectedAction = 0; // 0: Default, 1: View, 2: Reminder, 3: Deactivate
@@ -236,7 +236,7 @@ class _AdmissionOverviewPageState extends State<AdmissionOverviewPage> {
                   bool isPaid = request['db_admission_table']['is_paid'];
                   bool isAssess = request['db_admission_table']['is_for_assessment'];
                   bool isResult = request['db_admission_table']['is_final_result'];
-
+                  List<bool> checkboxStates = List.generate(filteredRequest.length, (_) => false);
                   String dateCreatedString='';
                   DateTime dateCreated;
                   String formattedDate='';

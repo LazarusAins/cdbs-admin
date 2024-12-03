@@ -23,7 +23,7 @@ class AdmissionSchedulesPage extends StatefulWidget {
 
 
 class _AdmissionSchedulesPageState extends State<AdmissionSchedulesPage> {
-  List<bool> checkboxStates = List.generate(10, (_) => false);
+  //List<bool> checkboxStates = List.generate(10, (_) => false);
   late ApiService _apiService;
   // Variable to track current action
   int _selectedAction = 0; // 0: Default, 1: View, 2: Reminder, 3: Deactivate
@@ -122,7 +122,7 @@ void dispose() {
                 }
                 requests = snapshot.data ?? []; // Use the data from the snapshot
                 filteredRequest = requests;
-
+                List<bool> checkboxStates = List.generate(filteredRequest.length, (_) => false);
                 if (snapshot.hasError) {
                   return Center(child: Text('Error: ${snapshot.error}'));
                 }
