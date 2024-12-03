@@ -369,6 +369,13 @@ const SizedBox(height: 40),
             ),
           ),
           Expanded(
+            flex: 3,
+            child: Text(
+              'Reference No',
+              style: TextStyle(fontSize: 14 * scale, fontFamily: 'Roboto-L'),
+            ),
+          ),
+          Expanded(
             flex: 2,
             child: Text(
               'Status',
@@ -448,8 +455,14 @@ const SizedBox(height: 40),
                       ),
                     ),
                     Expanded(
-                      flex: 2,
+                      flex: 3,
                       child: Text( paymethod,
+                        style: TextStyle(fontFamily: 'Roboto-R', fontSize: 14 * scale),
+                      ),
+                    ),
+                    Expanded(
+                      flex: 2,
+                      child: Text( request['reference_no'] ?? '',
                         style: TextStyle(fontFamily: 'Roboto-R', fontSize: 14 * scale),
                       ),
                     ),
