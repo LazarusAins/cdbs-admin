@@ -82,7 +82,7 @@ class _LoginPageState extends State<LoginPage> {
           Opacity(
             opacity: 0.2,
             child: Image.asset(
-              'background.jpg', // Replace with your image asset path
+              'Background.jpg', // Replace with your image asset path
               fit: BoxFit.cover,
             ),
           ),
@@ -94,7 +94,7 @@ class _LoginPageState extends State<LoginPage> {
                 children: [
                   // Logo Image
                   Image.asset(
-                    'logo.png', // Replace with your logo asset path
+                    'Logo.png', // Replace with your logo asset path
                     width: 293 * scale,
                     height: 293 * scale,
                   ),

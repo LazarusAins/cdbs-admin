@@ -45801,11 +45801,11 @@ $S:24}
 A.axa.prototype={
 $2(a6,a7){var s,r,q,p,o,n,m,l,k,j,i,h,g,f,e,d,c,b,a,a0,a1,a2,a3=null,a4="Roboto-R",a5="Password"
 if(a7 instanceof A.fJ)return B.b6
-s=A.OR(A.qy("background.jpg",B.e8,a3,a3),0.2)
+s=A.OR(A.qy("Background.jpg",B.e8,a3,a3),0.2)
 r=this.a
 q=this.b
 p=293*q
-p=A.qy("logo.png",a3,p,p)
+p=A.qy("Logo.png",a3,p,p)
 o=A.S(a3,30*q,a3)
 n=388*q
 m=11*q
