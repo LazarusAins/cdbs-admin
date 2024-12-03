@@ -570,20 +570,90 @@ String formatDate(DateTime date) {
                                 if (response.statusCode == 200) {
                                   final responseBody = jsonDecode(response.body);
                                   showDialog(
-                                    context: context,
-                                    builder: (context) => AlertDialog(
-                                      title: const Text("Mark as Complete"),
-                                      content: const Text("Application complete"),
-                                      actions: [
-                                        TextButton(
-                                          onPressed: () {
-                                            Navigator.of(context).pop(); // Close the dialog
-                                          },
-                                          child: const Text("OK"),
-                                        ),
-                                      ],
-                                    ),
-                                  );
+  context: context,
+  builder: (BuildContext context) {
+    return Dialog(
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(10),
+      ),
+      child: Container(
+        width: 349,
+        height: 272,
+        padding: const EdgeInsets.all(16),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            // Centered Text
+            const Center(
+              // child: Text(
+              //   "",
+              //   style: TextStyle(
+              //     fontSize: 20,
+              //   ),
+              //   textAlign: TextAlign.center,
+              // ),
+            ),
+            // Red X Icon with Circular Outline
+            Column(
+              children: [
+                Container(
+                  width: 90,
+                  height: 90,
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    border: Border.all(color: const Color(0XFF012169), width: 2),
+                  ),
+                  child: const Center(
+                    child: Icon(
+                      Icons.check,
+                      color: Color(0XFF012169),
+                      size: 40,
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 20),
+                // No Form Submitted Text
+                const Text(
+                  "Application Completed",
+                  style: TextStyle(
+                    fontSize: 20,
+                    fontWeight: FontWeight.bold,
+                  ),
+                  textAlign: TextAlign.center,
+                ),
+              ],
+            ),
+            // Divider
+            const Divider(
+              thickness: 1,
+              color: Colors.grey,
+            ),
+            // Close Button
+            Align(
+              alignment: Alignment.bottomCenter,
+              child: ElevatedButton(
+                onPressed: () {
+                  Navigator.of(context).popUntil((route) => route.isFirst);
+                },
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: const Color(0xff012169), // Button color
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                  minimumSize: const Size(double.infinity, 50), // Expand width and set height
+                ),
+                child: const Text(
+                  "Close",
+                  style: TextStyle(fontSize: 16, color: Colors.white),
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  },
+);
 
                                 } else {
                                   // Handle failure
