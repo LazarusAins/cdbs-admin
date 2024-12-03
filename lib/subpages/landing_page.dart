@@ -84,7 +84,7 @@ class _LandingPageState extends State<LandingPage> {
             width: MediaQuery.of(context).size.width * 0.2,
             decoration: BoxDecoration(
               image: DecorationImage(
-                image: const AssetImage('assets/Background.jpg'),
+                image: const AssetImage('assets/assets/Background.jpg'),
                 fit: BoxFit.cover,
                 colorFilter: ColorFilter.mode(
                   Colors.black.withOpacity(0.4),
@@ -103,7 +103,7 @@ class _LandingPageState extends State<LandingPage> {
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
                       Image.asset(
-                        'assets/Logo.png',
+                        'assets/assets/Logo.png',
                         height: 50 * scale,
                       ),
                       SizedBox(width: 10 * scale),
