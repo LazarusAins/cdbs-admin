@@ -764,20 +764,90 @@ bool checkDocumentRequirements(String gradeLevel, List<Map<String, dynamic>> for
                                 // Show success modal
                                 Navigator.of(context).popUntil((route) => route.isFirst);
                                 showDialog(
-                                  context: context,
-                                  builder: (context) => AlertDialog(
-                                    title: const Text("Success"),
-                                    content: const Text("Form accepted"),
-                                    actions: [
-                                      TextButton(
-                                        onPressed: () {
-                                          Navigator.of(context).pop(); // Close dialog
-                                        },
-                                        child: const Text("OK"),
-                                      ),
-                                    ],
-                                  ),
-                                );
+    context: context,
+    builder: (BuildContext context) {
+      return Dialog(
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(10),
+        ),
+        child: Container(
+          width: 349,
+          height: 272,
+          padding: const EdgeInsets.all(16),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              // Centered Text
+              const Center(
+                // child: Text(
+                //   "",
+                //   style: TextStyle(
+                //     fontSize: 20,
+                //   ),
+                //   textAlign: TextAlign.center,
+                // ),
+              ),
+              // Red X Icon with Circular Outline
+              Column(
+                children: [
+                  Container(
+                    width: 90,
+                    height: 90,
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      border: Border.all(color: const Color(0XFF012169), width: 2),
+                    ),
+                    child: const Center(
+                      child: Icon(
+                        Icons.check,
+                        color: Color(0XFF012169),
+                        size: 40,
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: 20),
+                  // No Form Submitted Text
+                  const Text(
+                    "Attached Documents has beeen Accepted!",
+                    style: TextStyle(
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold,
+                    ),
+                    textAlign: TextAlign.center,
+                  ),
+                ],
+              ),
+              // Divider
+              const Divider(
+                thickness: 1,
+                color: Colors.grey,
+              ),
+              // Close Button
+              Align(
+                alignment: Alignment.bottomCenter,
+                child: ElevatedButton(
+                  onPressed: () {
+                    Navigator.of(context).pop(); // Close the modal
+                  },
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: const Color(0xff012169), // Button color
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                    minimumSize: const Size(double.infinity, 50), // Expand width and set height
+                  ),
+                  child: const Text(
+                    "Close",
+                    style: TextStyle(fontSize: 16, color: Colors.white),
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+      );
+    },
+  );
 
                               } else {
                                 // Handle failure
@@ -838,7 +908,7 @@ bool checkDocumentRequirements(String gradeLevel, List<Map<String, dynamic>> for
                               
                           }:null,
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.green,
+                      backgroundColor: const Color(0xff007937),
                       padding: const EdgeInsets.symmetric(horizontal: 30),
                       shape: const RoundedRectangleBorder(
                         borderRadius: BorderRadius.only(
@@ -847,7 +917,7 @@ bool checkDocumentRequirements(String gradeLevel, List<Map<String, dynamic>> for
                         ),
                       ),
                     ),
-                    child: const Text('Accept'),
+                    child: const Text('Accept', style: TextStyle(color: Colors.white),),
                   ),
                   const SizedBox(width: 2),
                   ElevatedButton(
@@ -958,25 +1028,110 @@ bool checkDocumentRequirements(String gradeLevel, List<Map<String, dynamic>> for
                             });
                             Navigator.of(context).popUntil((route) => route.isFirst);
                             showDialog(
-                              context: context,
-                              builder: (context) => AlertDialog(
-                                title: const Text("Rejected"),
-                                content: const Text("The review has been marked as rejected."),
-                                actions: [
-                                  TextButton(
-                                    onPressed: () {
-                                      isComplete = checkDocumentRequirements(
-                                        gradeLevel,
-                                        List<Map<String, dynamic>>.from(myformDetails[0]['db_admission_table']['db_required_documents_table']),
-                                      );
-                                      widget.onNextPressed(isComplete);
-                                      Navigator.of(context).pop(); // Close dialog
-                                    },
-                                    child: const Text("OK"),
-                                  ),
-                                ],
-                              ),
-                            );
+    context: context,
+    builder: (BuildContext context) {
+      return Dialog(
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(10),
+        ),
+        child: Container(
+          width: 349,
+          height: 272,
+          padding: const EdgeInsets.all(16),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              // Centered Text
+              const Center(
+                // child: Text(
+                //   "",
+                //   style: TextStyle(
+                //     fontSize: 20,
+                //   ),
+                //   textAlign: TextAlign.center,
+                // ),
+              ),
+              // Red X Icon with Circular Outline
+              Column(
+                children: [
+                  Container(
+                    width: 90,
+                    height: 90,
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      border: Border.all(color: const Color(0XFF012169), width: 2),
+                    ),
+                    child: const Center(
+                      child: Icon(
+                        Icons.check,
+                        color: Color(0XFF012169),
+                        size: 40,
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: 20),
+                  // No Form Submitted Text
+                  const Text(
+                    "Attached Documents has beeen Rejected!",
+                    style: TextStyle(
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold,
+                    ),
+                    textAlign: TextAlign.center,
+                  ),
+                ],
+              ),
+              // Divider
+              const Divider(
+                thickness: 1,
+                color: Colors.grey,
+              ),
+              // Close Button
+              Align(
+                alignment: Alignment.bottomCenter,
+                child: ElevatedButton(
+                  onPressed: () {
+                    Navigator.of(context).pop(); // Close the modal
+                  },
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: const Color(0xff012169), // Button color
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                    minimumSize: const Size(double.infinity, 50), // Expand width and set height
+                  ),
+                  child: const Text(
+                    "Close",
+                    style: TextStyle(fontSize: 16, color: Colors.white),
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+      );
+    },
+  );
+                            // showDialog(
+                            //   context: context,
+                            //   builder: (context) => AlertDialog(
+                            //     title: const Text("Rejected"),
+                            //     content: const Text("The review has been marked as rejected."),
+                            //     actions: [
+                            //       TextButton(
+                            //         onPressed: () {
+                            //           isComplete = checkDocumentRequirements(
+                            //             gradeLevel,
+                            //             List<Map<String, dynamic>>.from(myformDetails[0]['db_admission_table']['db_required_documents_table']),
+                            //           );
+                            //           widget.onNextPressed(isComplete);
+                            //           Navigator.of(context).pop(); // Close dialog
+                            //         },
+                            //         child: const Text("OK"),
+                            //       ),
+                            //     ],
+                            //   ),
+                            // );
                           } else {
                             final responseBody = jsonDecode(response.body);
                             print('Error: ${responseBody['error']}');
@@ -1000,21 +1155,91 @@ bool checkDocumentRequirements(String gradeLevel, List<Map<String, dynamic>> for
                         } catch (error) {
                           print('Error: $error');
                           Navigator.of(context).pop();
-                          showDialog(
-                            context: context,
-                            builder: (context) => AlertDialog(
-                              title: const Text("Error"),
-                              content: const Text("An unexpected error occurred. Please try again later."),
-                              actions: [
-                                TextButton(
-                                  onPressed: () {
-                                    Navigator.of(context).pop(); // Close dialog
-                                  },
-                                  child: const Text("OK"),
-                                ),
-                              ],
-                            ),
-                          );
+  //                         showDialog(
+  //   context: context,
+  //   builder: (BuildContext context) {
+  //     return Dialog(
+  //       shape: RoundedRectangleBorder(
+  //         borderRadius: BorderRadius.circular(10),
+  //       ),
+  //       child: Container(
+  //         width: 349,
+  //         height: 272,
+  //         padding: const EdgeInsets.all(16),
+  //         child: Column(
+  //           mainAxisAlignment: MainAxisAlignment.spaceBetween,
+  //           children: [
+  //             // Centered Text
+  //             const Center(
+  //               // child: Text(
+  //               //   "",
+  //               //   style: TextStyle(
+  //               //     fontSize: 20,
+  //               //   ),
+  //               //   textAlign: TextAlign.center,
+  //               // ),
+  //             ),
+  //             // Red X Icon with Circular Outline
+  //             Column(
+  //               children: [
+  //                 Container(
+  //                   width: 90,
+  //                   height: 90,
+  //                   decoration: BoxDecoration(
+  //                     shape: BoxShape.circle,
+  //                     border: Border.all(color: const Color(0XFF012169), width: 2),
+  //                   ),
+  //                   child: const Center(
+  //                     child: Icon(
+  //                       Icons.check,
+  //                       color: Color(0XFF012169),
+  //                       size: 40,
+  //                     ),
+  //                   ),
+  //                 ),
+  //                 const SizedBox(height: 20),
+  //                 // No Form Submitted Text
+  //                 const Text(
+  //                   "Attached Documents has beeen Rejected!",
+  //                   style: TextStyle(
+  //                     fontSize: 20,
+  //                     fontWeight: FontWeight.bold,
+  //                   ),
+  //                   textAlign: TextAlign.center,
+  //                 ),
+  //               ],
+  //             ),
+  //             // Divider
+  //             const Divider(
+  //               thickness: 1,
+  //               color: Colors.grey,
+  //             ),
+  //             // Close Button
+  //             Align(
+  //               alignment: Alignment.bottomCenter,
+  //               child: ElevatedButton(
+  //                 onPressed: () {
+  //                   Navigator.of(context).pop(); // Close the modal
+  //                 },
+  //                 style: ElevatedButton.styleFrom(
+  //                   backgroundColor: const Color(0xff012169), // Button color
+  //                   shape: RoundedRectangleBorder(
+  //                     borderRadius: BorderRadius.circular(8),
+  //                   ),
+  //                   minimumSize: const Size(double.infinity, 50), // Expand width and set height
+  //                 ),
+  //                 child: const Text(
+  //                   "Close",
+  //                   style: TextStyle(fontSize: 16, color: Colors.white),
+  //                 ),
+  //               ),
+  //             ),
+  //           ],
+  //         ),
+  //       ),
+  //     );
+  //   },
+  // );
                         }
                       },
                       child: const Text("Submit", style: TextStyle(fontSize: 16, fontFamily: 'Roboto-R', color: Colors.white)),
@@ -1031,7 +1256,7 @@ bool checkDocumentRequirements(String gradeLevel, List<Map<String, dynamic>> for
 );
                     }:null,
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.red,
+                      backgroundColor: const Color(0xffC8102E),
                       padding: const EdgeInsets.symmetric(horizontal: 30),
                       shape: const RoundedRectangleBorder(
                         borderRadius: BorderRadius.only(
@@ -1040,7 +1265,7 @@ bool checkDocumentRequirements(String gradeLevel, List<Map<String, dynamic>> for
                         ),
                       ),
                     ),
-                    child: const Text('Reject'),
+                    child: const Text('Reject', style: TextStyle(color: Colors.white),),
                   ),
                 ],
               ),
