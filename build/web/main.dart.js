@@ -7972,8 +7972,9 @@ SP:function SP(a,b,c,d){var _=this
 _.d=a
 _.e=b
 _.f=c
-_.z=_.y=_.x=_.w=_.r=null
-_.as=d
+_.w=_.r=!1
+_.as=_.Q=_.z=_.y=_.x=null
+_.ax=d
 _.c=_.a=null},
 aot:function aot(a,b,c){this.a=a
 this.b=b
@@ -44391,59 +44392,62 @@ $S:0}
 A.yK.prototype={
 Z(){return A.b_Q()}}
 A.SP.prototype={
-aa(){var s,r,q=this,p="db_admission_table",o="payment_date"
+aa(){var s,r,q=this,p="db_admission_table",o="admission_status",n="payment_date"
 q.ap()
 s=q.a.c
-q.as=s
-q.r=J.h(J.h(J.h(s,0),p),"admission_form_id")
-q.w=A.j(J.h(J.h(J.h(q.as,0),p),"first_name"))+" "+A.j(J.h(J.h(J.h(q.as,0),p),"last_name"))
-q.x=J.h(J.h(J.h(q.as,0),p),"admission_status")
-if(J.h(J.h(J.h(q.as,0),p),o)!=null){s=J.h(J.h(J.h(q.as,0),p),o)
-q.y=s
+q.ax=s
+q.x=J.h(J.h(J.h(s,0),p),"admission_form_id")
+q.y=A.j(J.h(J.h(J.h(q.ax,0),p),"first_name"))+" "+A.j(J.h(J.h(J.h(q.ax,0),p),"last_name"))
+q.z=J.h(J.h(J.h(q.ax,0),p),o)
+if(J.h(J.h(J.h(q.ax,0),p),n)!=null){s=J.h(J.h(J.h(q.ax,0),p),n)
+q.Q=s
 s.toString
 r=A.f7(s)
-q.z=A.f6("dd-MM-yyyy HH:mm").f0(r)}else q.z="---"},
+q.as=A.f6("dd-MM-yyyy HH:mm").f0(r)}else q.as="---"
+if(J.h(J.h(J.h(q.ax,0),p),"is_paid"))q.r=!0
+else if(J.c(J.h(J.h(J.h(q.ax,0),p),o),"rejected"))q.w=!0
+else q.w=q.r=!1},
 l1(a){return this.aw0(a)},
 aw0(a){var s=0,r=A.K(t.H),q=this
 var $async$l1=A.D(function(b,c){if(b===1)return A.H(c,r)
 while(true)switch(s){case 0:s=2
 return A.G(new A.eR("https://donboscoapi.vercel.app").nt(a,u.y,u.I),$async$l1)
-case 2:q.as=c
+case 2:q.ax=c
 return A.I(null,r)}})
 return A.J($async$l1,r)},
-F(a1){var s,r,q,p,o,n,m,l,k,j,i,h,g,f=this,e=null,d=t.w,c=A.a3(a1,e,d).w,b=A.a3(a1,e,d).w.a.a/400,a=c.a.b/800,a0=b<a?b:a
-d=t.p
-c=A.a([B.ct],d)
-for(s=f.f,r=f.d,q=f.e,p=0;p<J.bk(f.as);++p){o=new A.aP(8,8)
-n=f.r
-n.toString
-n=f.mc("Application ID",a0,n)
-m=f.w
+F(a){var s,r,q,p,o,n,m,l,k,j,i,h=this,g=null,f=t.w,e=A.a3(a,g,f).w,d=A.a3(a,g,f).w.a.a/400,c=e.a.b/800,b=d<c?d:c
+f=t.p
+e=A.a([B.ct],f)
+for(s=h.f,r=0;r<J.bk(h.ax);++r){q=new A.aP(8,8)
+p=h.x
+p.toString
+p=h.mc("Application ID",b,p)
+o=h.y
+o.toString
+o=h.mc("Applicant Name",b,o)
+n=h.mc("Grade Level",b,J.h(J.h(J.h(h.ax,0),"db_admission_table"),"level_applying_for"))
+m=h.z
 m.toString
-m=f.mc("Applicant Name",a0,m)
-l=f.mc("Grade Level",a0,J.h(J.h(J.h(f.as,0),"db_admission_table"),"level_applying_for"))
-k=f.x
-k.toString
-k=f.mc("Application Status",a0,k)
-j=A.a([],d)
-if(!q[p]){i=r[p]?99:47
-h=new A.aP(10,10)
-j.push(A.tP(A.bv(B.p4,new A.aot(f,a1,p),A.ce(e,e,B.iF,e,e,e,e,e,e,e,e,e,e,B.aU,e,new A.aH(new A.cb(h,h,h,h),B.l),e,e,e,e)),e,B.ab,e,B.bB,e,44,i))}if(!r[p])j.push(B.m9)
-if(!r[p]){i=q[p]?99:47
-h=new A.aP(10,10)
-j.push(A.tP(A.bv(B.p2,new A.aou(f,p),A.ce(e,e,B.fR,e,e,e,e,e,e,e,e,e,e,B.aU,e,new A.aH(new A.cb(h,h,h,h),B.l),e,e,e,e)),e,B.ab,e,B.bB,e,44,i))}n=A.Y(A.a([new A.eB(3,B.bt,n,e),B.a7,new A.eB(5,B.bt,m,e),B.a7,new A.eB(3,B.bt,l,e),B.a7,new A.eB(3,B.bt,k,e),B.a7,A.Y(j,B.h,B.aA,B.e,e)],d),B.h,B.a0,B.e,e)
-m=f.mc("Payment Type",a0,"Application Fee")
-l=f.mc("Total Amount",a0,"600.00")
-k=f.mc("Payment Method",a0,"Over the Counter")
-j=f.z
-j.toString
-j=f.mc("Date Paid",a0,j)
-i=s[p]
-h=i?e:new A.aov()
-g=new A.aP(5,5)
-g=A.ce(e,e,B.Q,e,e,e,e,e,e,e,e,e,e,B.aU,e,new A.aH(new A.cb(g,g,g,g),B.l),e,e,e,e)
-i=i?B.aM:B.o
-c.push(A.aD(e,A.Z(A.a([n,B.R,A.Y(A.a([new A.eB(3,B.bt,m,e),B.a7,new A.eB(3,B.bt,l,e),B.a7,new A.eB(3,B.bt,k,e),B.a7,new A.eB(3,B.bt,j,e),B.a7,new A.cf(99,37,A.bv(A.o("Invoice",e,e,e,new A.p(!0,i,e,e,e,e,14,B.b2,e,e,e,e,e,e,e,e,e,e,e,e,e,e,e,e,e,e),e,e,e),h,g),e)],d),B.h,B.a0,B.e,e)],d),B.h,B.f,B.e),B.m,e,e,new A.ci(B.fn,e,e,new A.cb(o,o,o,o),e,e,B.as),e,e,B.hX,B.Y,e,e,e))}return A.aD(e,A.Z(c,B.h,B.f,B.e),B.m,e,e,e,e,e,e,B.hZ,e,e,e)},
+m=h.mc("Application Status",b,m)
+l=A.a([],f)
+if(!h.w){k=h.r?99:47
+j=new A.aP(10,10)
+l.push(A.tP(A.bv(B.p4,new A.aot(h,a,r),A.ce(g,g,B.iF,g,g,g,g,g,g,g,g,g,g,B.aU,g,new A.aH(new A.cb(j,j,j,j),B.l),g,g,g,g)),g,B.ab,g,B.bB,g,44,k))}if(!h.r)l.push(B.m9)
+if(!h.r){k=h.w?99:47
+j=new A.aP(10,10)
+l.push(A.tP(A.bv(B.p2,new A.aou(h,r),A.ce(g,g,B.fR,g,g,g,g,g,g,g,g,g,g,B.aU,g,new A.aH(new A.cb(j,j,j,j),B.l),g,g,g,g)),g,B.ab,g,B.bB,g,44,k))}p=A.Y(A.a([new A.eB(3,B.bt,p,g),B.a7,new A.eB(5,B.bt,o,g),B.a7,new A.eB(3,B.bt,n,g),B.a7,new A.eB(3,B.bt,m,g),B.a7,A.Y(l,B.h,B.aA,B.e,g)],f),B.h,B.a0,B.e,g)
+o=h.mc("Payment Type",b,"Application Fee")
+n=h.mc("Total Amount",b,"600.00")
+m=h.mc("Payment Method",b,"Over the Counter")
+l=h.as
+l.toString
+l=h.mc("Date Paid",b,l)
+k=s[r]
+j=k?g:new A.aov()
+i=new A.aP(5,5)
+i=A.ce(g,g,B.Q,g,g,g,g,g,g,g,g,g,g,B.aU,g,new A.aH(new A.cb(i,i,i,i),B.l),g,g,g,g)
+k=k?B.aM:B.o
+e.push(A.aD(g,A.Z(A.a([p,B.R,A.Y(A.a([new A.eB(3,B.bt,o,g),B.a7,new A.eB(3,B.bt,n,g),B.a7,new A.eB(3,B.bt,m,g),B.a7,new A.eB(3,B.bt,l,g),B.a7,new A.cf(99,37,A.bv(A.o("Invoice",g,g,g,new A.p(!0,k,g,g,g,g,14,B.b2,g,g,g,g,g,g,g,g,g,g,g,g,g,g,g,g,g,g),g,g,g),j,i),g)],f),B.h,B.a0,B.e,g)],f),B.h,B.f,B.e),B.m,g,g,new A.ci(B.fn,g,g,new A.cb(q,q,q,q),g,g,B.as),g,g,B.hX,B.Y,g,g,g))}return A.aD(g,A.Z(e,B.h,B.f,B.e),B.m,g,g,g,g,g,g,B.hZ,g,g,g)},
 mc(a,b,c){var s=null,r=t.p
 return A.Z(A.a([A.Y(A.a([A.o(a,s,s,s,A.r(s,s,s,s,s,s,s,s,"Roboto-R",s,s,11*b,s,s,s,s,s,!0,s,s,s,s,s,s,s,s),s,s,s),B.hd,A.o(c,s,s,s,A.r(s,s,s,s,s,s,s,s,"Roboto-B",s,s,12*b,s,s,s,s,s,!0,s,s,s,s,s,s,s,s),s,s,s)],r),B.h,B.f,B.e,s),B.hf,A.aD(s,s,B.m,B.a4,s,s,s,1,s,s,s,s,s)],r),B.q,B.f,B.e)}}
 A.aot.prototype={
@@ -44484,12 +44488,12 @@ i=A.aq(["Content-Type","application/json","supabase-url",u.y,"supabase-key",u.I]
 h=o.a
 g=t.z
 s=6
-return A.G(A.hf(k,B.P.dX(A.aq(["admission_id",J.h(J.h(J.h(h.as,0),"db_admission_table"),"admission_id"),"admission_status","complete","user_id",h.a.e,"is_paid",!0,"is_done",!0],j,g)),i),$async$$0)
+return A.G(A.hf(k,B.P.dX(A.aq(["admission_id",J.h(J.h(J.h(h.ax,0),"db_admission_table"),"admission_id"),"admission_status","complete","user_id",h.a.e,"is_paid",!0,"is_done",!0],j,g)),i),$async$$0)
 case 6:n=b
 if(n.b===200){k=n
 B.P.dV(0,A.cX(A.cW(k.e).c.a.h(0,"charset")).b4(0,k.w),null)
 J.dS(A.h0(e,!1,d),new A.kK(!1))
-h.l1(J.h(J.h(J.h(h.as,0),"db_admission_table"),"admission_id"))
+h.l1(J.h(J.h(J.h(h.ax,0),"db_admission_table"),"admission_id"))
 h.I(new A.aoj(h,o.c))
 A.dx(null,null,!0,null,new A.aok(),e,null,!0,g)}else{d=n
 m=B.P.dV(0,A.cX(A.cW(d.e).c.a.h(0,"charset")).b4(0,d.w),null)
@@ -44511,10 +44515,10 @@ case 1:return A.H(p,r)}})
 return A.J($async$$0,r)},
 $S:8}
 A.aoj.prototype={
-$0(){var s=this.a,r=this.b
-s.d[r]=!0
-s.e[r]=!1
-s.f[r]=!1},
+$0(){var s=this.a
+s.r=!0
+s.w=!1
+s.f[this.b]=!1},
 $S:0}
 A.aok.prototype={
 $1(a){var s=null,r=A.a1(10),q=t.p
@@ -44545,10 +44549,10 @@ $0(){var s=this.a
 s.I(new A.aor(s,this.b))},
 $S:0}
 A.aor.prototype={
-$0(){var s=this.a,r=this.b
-s.e[r]=!0
-s.d[r]=!1
-s.f[r]=!0},
+$0(){var s=this.a
+s.w=!0
+s.r=!1
+s.f[this.b]=!0},
 $S:0}
 A.aov.prototype={
 $0(){},

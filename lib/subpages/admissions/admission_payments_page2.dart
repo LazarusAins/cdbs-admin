@@ -25,6 +25,9 @@ class _AdmissionPaymentsPage2State extends State<AdmissionPaymentsPage2> {
   final List<bool> _isRedExpanded = List.generate(2, (_) => false);
   final List<bool> _isInvoiceDisabled = List.generate(2, (_) => false);
 
+  bool isGreenExpanded=false;
+  bool isRedExpanded=false;
+
   String? applicationId;
   String? fullName;
   String? status;
@@ -47,6 +50,17 @@ class _AdmissionPaymentsPage2State extends State<AdmissionPaymentsPage2> {
       formattedDate = formatDate(dateCreated);
     }else{
       formattedDate='---';
+    }
+
+    if(myformDetails[0]['db_admission_table']['is_paid']){
+      isGreenExpanded=true;
+    }else{
+      if(myformDetails[0]['db_admission_table']['admission_status']=='rejected'){
+        isRedExpanded=true;
+      }else{
+        isGreenExpanded=false;
+        isRedExpanded=false;
+      }
     }
   }
 
@@ -130,10 +144,10 @@ class _AdmissionPaymentsPage2State extends State<AdmissionPaymentsPage2> {
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           // Green Check Button
-                          if (!_isRedExpanded[i])
+                          if (!isRedExpanded)
                             AnimatedContainer(
                               duration: const Duration(milliseconds: 300),
-                              width: _isGreenExpanded[i] ? 99 : 47,
+                              width: isGreenExpanded ? 99 : 47,
                               height: 44,
                               child: ElevatedButton(
                                 onPressed: () async {
@@ -256,8 +270,8 @@ class _AdmissionPaymentsPage2State extends State<AdmissionPaymentsPage2> {
                                                                                 context.read<AdmissionBloc>().add(IsLoadingClicked(false));
                                                                                 updateData(myformDetails[0]['db_admission_table']['admission_id']);
                                                                                   setState(() {
-                                                                                    _isGreenExpanded[i] = true;
-                                                                                    _isRedExpanded[i] = false;
+                                                                                    isGreenExpanded = true;
+                                                                                    isRedExpanded = false;
                                                                                     _isInvoiceDisabled[i] = false; // Enable invoice button
                                                                                   });
                                                                                 showDialog(
@@ -421,21 +435,21 @@ class _AdmissionPaymentsPage2State extends State<AdmissionPaymentsPage2> {
                             ),
 
                           // Space between buttons
-                          if (!_isGreenExpanded[i])
+                          if (!isGreenExpanded)
                             const SizedBox(width: 2),
 
                           // Red X Button
-                          if (!_isGreenExpanded[i])
+                          if (!isGreenExpanded)
                             AnimatedContainer(
                               duration: const Duration(milliseconds: 300),
-                              width: _isRedExpanded[i] ? 99 : 47,
+                              width: isRedExpanded ? 99 : 47,
                               height: 44,
                               child: ElevatedButton(
                                 onPressed: () {
 
                                   setState(() {
-                                    _isRedExpanded[i] = true;
-                                    _isGreenExpanded[i] = false;
+                                    isRedExpanded = true;
+                                    isGreenExpanded = false;
                                     _isInvoiceDisabled[i] = true; // Disable invoice button
                                   });
                                 },
