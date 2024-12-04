@@ -28,3 +28,17 @@ class AdmissionResultUpdated extends AdmissionState {
      this.isComplete
   );
 }
+
+
+class AdmissionIsLoading extends AdmissionState {
+  final bool isLoading;
+
+  AdmissionIsLoading(this.isLoading);
+}
+
+
+class AdmissionRemarksIsLoading extends AdmissionState {
+  final bool isLoading;
+
+  AdmissionRemarksIsLoading(this.isLoading);
+}

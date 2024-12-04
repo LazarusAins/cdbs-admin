@@ -22,3 +22,21 @@ class MarkAsResultPassedClicked extends AdmissionEvent {
     required this.isComplete,
   });
 }
+
+
+
+class IsLoadingClicked extends AdmissionEvent {
+  final bool isLoading;
+
+  // Constructor takes a bool to specify the desired status (true or false)
+  IsLoadingClicked(this.isLoading);
+}
+
+
+
+class RemarksIsLoadingClicked extends AdmissionEvent {
+  final bool isLoading;
+
+  // Constructor takes a bool to specify the desired status (true or false)
+  RemarksIsLoadingClicked(this.isLoading);
+}

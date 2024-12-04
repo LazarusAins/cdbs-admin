@@ -486,47 +486,61 @@ class _AdmissionOverviewPageState extends State<AdmissionOverviewPage> {
 
 
    List<Map<String, dynamic>> sortRequests(List<Map<String, dynamic>> requests) {
-    // Sort based on the conditions you outlined
-    requests.sort((a, b) {
-      bool isCompleteA = a['db_admission_table']['is_complete_view'];
-      bool isRequiredA = a['db_admission_table']['is_all_required_file_uploaded'];
-      bool isPaidA = a['db_admission_table']['is_paid'];
-      bool isAssessA = a['db_admission_table']['is_for_assessment'];
-      bool isResultA = a['db_admission_table']['is_final_result'];
+  // Sort based on the conditions you outlined
+  requests.sort((a, b) {
+    // Check for pending admission status
+    String admissionStatusA = a['db_admission_table']['admission_status'] ?? '';
+    String admissionStatusB = b['db_admission_table']['admission_status'] ?? '';
 
-      bool isCompleteB = b['db_admission_table']['is_complete_view'];
-      bool isRequiredB = b['db_admission_table']['is_all_required_file_uploaded'];
-      bool isPaidB = b['db_admission_table']['is_paid'];
-      bool isAssessB = b['db_admission_table']['is_for_assessment'];
-      bool isResultB = b['db_admission_table']['is_final_result'];
-
-      // Custom sorting order based on the conditions
-      int sortOrderA = _getSortOrder(isCompleteA, isRequiredA, isPaidA, isAssessA, isResultA);
-      int sortOrderB = _getSortOrder(isCompleteB, isRequiredB, isPaidB, isAssessB, isResultB);
-
-      return sortOrderA.compareTo(sortOrderB);  // Ascending order based on the calculated sort order
-    });
-
-    return requests;
-  }
-
-  // Helper function to calculate sort order based on boolean flags
-  int _getSortOrder(bool isComplete, bool isRequired, bool isPaid, bool isAssess, bool isResult) {
-    if (!isComplete) {
-      return 1; // First group: !isComplete
-    } else if (isComplete && !isRequired) {
-      return 2; // Second group: isComplete && !isRequired
-    } else if (isComplete && isRequired && !isPaid) {
-      return 3; // Third group: isComplete && isRequired && !isPaid
-    } else if (isComplete && isRequired && isPaid && !isAssess) {
-      return 4; // Fourth group: isComplete && isRequired && isPaid && !isAssess
-    } else if (isComplete && isRequired && isPaid && isAssess && !isResult) {
-      return 5; // Fifth group: isComplete && isRequired && isPaid && isAssess && !isResult
-    } else if (isResult) {
-      return 6; // Last group: isResult
-    } else {
-      return 0; // Default case, in case all conditions are met
+    // If admission status is 'pending', it should come first
+    if (admissionStatusA == 'pending' && admissionStatusB != 'pending') {
+      return -1; // 'a' should come before 'b'
+    } else if (admissionStatusB == 'pending' && admissionStatusA != 'pending') {
+      return 1; // 'b' should come before 'a'
     }
+
+    // Extracting other flags from the nested db_admission_table structure
+    bool isCompleteA = a['db_admission_table']['is_complete_view'];
+    bool isRequiredA = a['db_admission_table']['is_all_required_file_uploaded'];
+    bool isPaidA = a['db_admission_table']['is_paid'];
+    bool isAssessA = a['db_admission_table']['is_for_assessment'];
+    bool isResultA = a['db_admission_table']['is_final_result'];
+
+    bool isCompleteB = b['db_admission_table']['is_complete_view'];
+    bool isRequiredB = b['db_admission_table']['is_all_required_file_uploaded'];
+    bool isPaidB = b['db_admission_table']['is_paid'];
+    bool isAssessB = b['db_admission_table']['is_for_assessment'];
+    bool isResultB = b['db_admission_table']['is_final_result'];
+
+    // Custom sorting order based on the conditions
+    int sortOrderA = _getSortOrder(isCompleteA, isRequiredA, isPaidA, isAssessA, isResultA);
+    int sortOrderB = _getSortOrder(isCompleteB, isRequiredB, isPaidB, isAssessB, isResultB);
+
+    // Return comparison based on the custom sort order
+    return sortOrderA.compareTo(sortOrderB);  // Ascending order based on the calculated sort order
+  });
+
+  return requests;
+}
+
+// Helper function to calculate sort order based on boolean flags
+int _getSortOrder(bool isComplete, bool isRequired, bool isPaid, bool isAssess, bool isResult) {
+  if (!isComplete) {
+    return 1; // First group: !isComplete
+  } else if (isComplete && !isRequired) {
+    return 2; // Second group: isComplete && !isRequired
+  } else if (isComplete && isRequired && !isPaid) {
+    return 3; // Third group: isComplete && isRequired && !isPaid
+  } else if (isComplete && isRequired && isPaid && !isAssess) {
+    return 4; // Fourth group: isComplete && isRequired && isPaid && !isAssess
+  } else if (isComplete && isRequired && isPaid && isAssess && !isResult) {
+    return 5; // Fifth group: isComplete && isRequired && isPaid && isAssess && !isResult
+  } else if (isResult) {
+    return 6; // Last group: isResult
+  } else {
+    return 0; // Default case, in case all conditions are met
   }
+}
+
 }
 
