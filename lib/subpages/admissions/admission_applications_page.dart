@@ -70,6 +70,20 @@ class _AdmissionApplicationsPageState extends State<AdmissionApplicationsPage> {
         .join(' '); // Join the words back into a single string with spaces
   }
 
+  Color _getStatusColor(String status) {
+      if (status.contains('complete') || status.contains('passed')) {
+        return const Color(0xFF007A33); // Green for complete
+      } else if (status.contains('in review')) {
+        return const Color(0xFFFFA500); // Yellow for in-review
+      } else if (status.contains('pending')) {
+        return const Color(0xFFB6B6B6); // Orange for pending
+      }else if (status.contains('failed')) {
+        return const Color(0xFFE15252); // Orange for pending
+      } else {
+        return Colors.black; // Default color
+      }
+    }
+
   
 String formatDate(DateTime date) {
     final DateFormat formatter = DateFormat('dd-MM-yyyy HH:mm');
@@ -301,7 +315,8 @@ String formatDate(DateTime date) {
                           Expanded(
                             flex: 2,
                             child: Text(!request['db_admission_table']['is_complete_view']?request['db_admission_table']['admission_status'].toString().toUpperCase():"COMPLETE",
-                              style: TextStyle(fontFamily: 'Roboto-R', fontSize: 14 * scale),
+                              style: TextStyle(fontFamily: 'Roboto-R', fontSize: 14 * scale, 
+                              color: request['db_admission_table']['is_complete_view']?const Color(0xFF007A33):_getStatusColor(request['db_admission_table']['admission_status'])),
                             ),
                           ),
                           Expanded(

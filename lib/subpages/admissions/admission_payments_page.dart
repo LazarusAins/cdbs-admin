@@ -83,6 +83,21 @@ String formatDate(DateTime date) {
     return formatter.format(date);
   }
 
+
+  Color _getStatusColor(String status) {
+      if (status.contains('complete') || status.contains('passed')) {
+        return const Color(0xFF007A33); // Green for complete
+      } else if (status.contains('in review')) {
+        return const Color(0xFFFFA500); // Yellow for in-review
+      } else if (status.contains('pending')) {
+        return const Color(0xFFB6B6B6); // Orange for pending
+      }else if (status.contains('failed')) {
+        return const Color(0xFFE15252); // Orange for pending
+      } else {
+        return Colors.black; // Default color
+      }
+    }
+
   @override
   Widget build(BuildContext context) {
     double screenHeight = MediaQuery.of(context).size.height;
@@ -480,7 +495,8 @@ const SizedBox(height: 40),
                     Expanded(
                       flex: 2,
                       child: Text(!isPaid?stat=='complete' && isRequired?'PENDING':stat.toUpperCase():'COMPLETE',
-                        style: TextStyle(fontFamily: 'Roboto-R', fontSize: 14 * scale),
+                        style: TextStyle(fontFamily: 'Roboto-R', fontSize: 14 * scale,
+                        color: isPaid?const Color(0xFF007A33):_getStatusColor(request['db_admission_table']['admission_status'])),
                       ),
                     ),
                     Expanded(
