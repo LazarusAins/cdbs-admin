@@ -49,6 +49,17 @@ class _AdmissionSchedulesPageState extends State<AdmissionSchedulesPage> {
   return formatter.format(localDate);
   }
 
+  String capitalizeEachWord(String input) {
+    if (input.isEmpty) return input; // Check if the input is empty
+    
+    // Split the input into words, capitalize each word, and join them back
+    return input
+        .split(' ') // Split the input string into a list of words
+        .map((word) => word.isNotEmpty
+            ? word[0].toUpperCase() + word.substring(1).toLowerCase() // Capitalize each word
+            : word) // Handle empty words
+        .join(' '); // Join the words back into a single string with spaces
+  }
 
   String formatTime(String time) {
   // Parse the time string into a DateTime object. 

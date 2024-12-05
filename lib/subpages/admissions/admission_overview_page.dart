@@ -36,6 +36,21 @@ class _AdmissionOverviewPageState extends State<AdmissionOverviewPage> {
     // Initialize the service with your endpoint
   }
 
+
+  String capitalizeEachWord(String input) {
+    if (input.isEmpty) return input; // Check if the input is empty
+    
+    // Split the input into words, capitalize each word, and join them back
+    return input
+        .split(' ') // Split the input string into a list of words
+        .map((word) => word.isNotEmpty
+            ? word[0].toUpperCase() + word.substring(1).toLowerCase() // Capitalize each word
+            : word) // Handle empty words
+        .join(' '); // Join the words back into a single string with spaces
+  }
+
+
+
   String formatDate(DateTime date) {
     final DateFormat formatter = DateFormat('dd-MM-yyyy HH:mm');
     return formatter.format(date);
@@ -45,9 +60,9 @@ class _AdmissionOverviewPageState extends State<AdmissionOverviewPage> {
       if (status.contains('complete') || status.contains('passed')) {
         return const Color(0xFF007A33); // Green for complete
       } else if (status.contains('in review')) {
-        return const Color(0xFFE4BC34); // Yellow for in-review
+        return const Color(0xFFFFA500); // Yellow for in-review
       } else if (status.contains('pending')) {
-        return const Color(0xFFE48934); // Orange for pending
+        return const Color(0xFFB6B6B6); // Orange for pending
       }else if (status.contains('failed')) {
         return const Color(0xFFE15252); // Orange for pending
       } else {
@@ -227,7 +242,7 @@ class _AdmissionOverviewPageState extends State<AdmissionOverviewPage> {
                 itemCount: filteredRequest.length,
                 itemBuilder: (context, index) {
                   final request = filteredRequest[index];
-                  final fullName = '${request['db_admission_table']['first_name']} ${request['db_admission_table']['last_name']}';
+                  final fullName = '${capitalizeEachWord(request['db_admission_table']['first_name'])} ${capitalizeEachWord(request['db_admission_table']['last_name'])}';
                   final processBy = request['db_admission_table']['db_admission_form_handler_table'].isNotEmpty
     ? '${request['db_admission_table']['db_admission_form_handler_table'][0]['db_admin_table']['first_name']} ${request['db_admission_table']['db_admission_form_handler_table'][0]['db_admin_table']['last_name']}'
     : '---';

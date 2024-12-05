@@ -38,6 +38,18 @@ class _AdmissionRequirementsPageState extends State<AdmissionRequirementsPage> {
     // Initialize the service with your endpoint
   }
 
+  String capitalizeEachWord(String input) {
+    if (input.isEmpty) return input; // Check if the input is empty
+    
+    // Split the input into words, capitalize each word, and join them back
+    return input
+        .split(' ') // Split the input string into a list of words
+        .map((word) => word.isNotEmpty
+            ? word[0].toUpperCase() + word.substring(1).toLowerCase() // Capitalize each word
+            : word) // Handle empty words
+        .join(' '); // Join the words back into a single string with spaces
+  }
+
   
 String formatDate(DateTime date) {
     final DateFormat formatter = DateFormat('dd-MM-yyyy HH:mm');
@@ -131,7 +143,7 @@ String formatDate(DateTime date) {
                   );
                 }
                 requests = snapshot.data ?? []; // Use the data from the snapshot
-                filteredRequest = requests;
+                filteredRequest = sortRequests(requests);
 
                 if (snapshot.hasError) {
                   return Center(child: Text('Error: ${snapshot.error}'));
@@ -263,7 +275,7 @@ String formatDate(DateTime date) {
                 itemCount: filteredRequest.length,
                 itemBuilder: (context, index) {
                   final request = filteredRequest[index];
-                  final fullName = '${request['db_admission_table']['first_name']} ${request['db_admission_table']['last_name']}';
+                  final fullName = '${capitalizeEachWord(request['db_admission_table']['first_name'])} ${capitalizeEachWord(request['db_admission_table']['last_name'])}';
                   final processBy = request['db_admission_table']['db_admission_form_handler_table'].isNotEmpty
     ? '${request['db_admission_table']['db_admission_form_handler_table'][0]['db_admin_table']['first_name']} ${request['db_admission_table']['db_admission_form_handler_table'][0]['db_admin_table']['last_name']}'
     : '---';
@@ -849,5 +861,58 @@ String formatDate(DateTime date) {
       // ),
     );
   }
+
+  List<Map<String, dynamic>> sortRequests(List<Map<String, dynamic>> requests) {
+  requests.sort((a, b) {
+    // Extract the admission statuses
+    String admissionStatusA = a['db_admission_table']['admission_status'] ?? '';
+    String admissionStatusB = b['db_admission_table']['admission_status'] ?? '';
+
+    // Extract the is_complete_view flag
+    bool isCompleteA = a['db_admission_table']['is_all_required_file_uploaded'];
+    bool isCompleteB = b['db_admission_table']['is_all_required_file_uploaded'];
+
+    // 1. First, check for 'pending' - it should come first.
+    if (admissionStatusA == 'pending' && admissionStatusB != 'pending' && !isCompleteA) {
+      return -1; // 'a' (pending) should come before 'b'
+    } else if (admissionStatusB == 'pending' && admissionStatusA != 'pending' && !isCompleteB) {
+      return 1; // 'b' (pending) should come before 'a'
+    }
+
+    // 2. Next, check for 'in review' - it should come after 'pending', but before other statuses.
+    if (admissionStatusA == 'in review' && admissionStatusB != 'pending' && admissionStatusB != 'in review') {
+      return -1; // 'a' (in review) should come before 'b'
+    } else if (admissionStatusB == 'in review' && admissionStatusA != 'pending' && admissionStatusA != 'in review') {
+      return 1; // 'b' (in review) should come before 'a'
+    }
+
+    // 3. If one of the statuses is 'pending' or 'in review' and its is_complete_view is true, push it to the end.
+    // However, we only do this after sorting 'pending' and 'in review'.
+    if ((admissionStatusA == 'pending' || admissionStatusA == 'in review') && isCompleteA) {
+      return 1; // 'a' (pending/in review with complete) should go after 'b'
+    } else if ((admissionStatusB == 'pending' || admissionStatusB == 'in review') && isCompleteB) {
+      return -1; // 'b' (pending/in review with complete) should go after 'a'
+    }
+
+    // 4. Now, use _getSortOrder to compare other statuses based on is_complete_view
+    // This will be applied to statuses that are neither 'pending' nor 'in review'.
+    int sortOrderA = _getSortOrder(isCompleteA);
+    int sortOrderB = _getSortOrder(isCompleteB);
+
+    // 5. If both are neither 'pending' nor 'in review', compare them using _getSortOrder.
+    return sortOrderA.compareTo(sortOrderB);
+  });
+
+  return requests;
+}
+
+// Helper function to calculate sort order based on boolean flags (this can be expanded for more flags)
+int _getSortOrder(bool isComplete) {
+  if (!isComplete) {
+    return 0; // First group: incomplete statuses will come first.
+  } else {
+    return 1; // Second group: complete statuses will come later.
+  }
+}
 }
 
