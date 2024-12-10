@@ -5,13 +5,15 @@ import 'package:intl/intl.dart';
 import 'package:cdbs_admin/bloc/auth/auth_bloc.dart';
 import 'package:cdbs_admin/class/admission_forms.dart';
 import 'package:cdbs_admin/shared/api.dart';
-import 'package:cdbs_admin/subpages/landing_page.dart';
+//import 'package:cdbs_admin/subpages/landing_page.dart';
 import 'package:cdbs_admin/subpages/login_page.dart';
-import 'package:cdbs_admin/subpages/page3.dart';
-import 'package:cdbs_admin/subpages/s1.dart';
+//import 'package:cdbs_admin/subpages/page3.dart';
+//import 'package:cdbs_admin/subpages/s1.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
 
 class AdmissionSchedulesPage extends StatefulWidget {
   const AdmissionSchedulesPage({super.key});
@@ -31,9 +33,14 @@ class _AdmissionSchedulesPageState extends State<AdmissionSchedulesPage> {
   List<Map<String, dynamic>> requests = [];
   List<Map<String, dynamic>> filteredRequest = [];
   List<Map<String, dynamic>>? formDetails;
-
   
-
+  TextEditingController dateController = TextEditingController();
+  TextEditingController startTimeController = TextEditingController();
+  TextEditingController endTimeController = TextEditingController();
+  TextEditingController locationController = TextEditingController();
+  TextEditingController gradeController = TextEditingController();
+  TextEditingController slotController = TextEditingController();
+    
   @override
   void initState() {
     super.initState();
@@ -41,6 +48,17 @@ class _AdmissionSchedulesPageState extends State<AdmissionSchedulesPage> {
     admissionForms = _apiService.streamSchedule(supabaseUrl, supabaseKey);
     // Initialize the service with your endpoint
   }
+
+  String convertTimeTo24HourFormat(String time12HourFormat) {
+  // Parse the 12-hour time format string into a DateTime object
+    DateFormat inputFormat = DateFormat("hh:mm a");
+    DateTime dateTime = inputFormat.parse(time12HourFormat);
+
+    // Format the DateTime object into a 24-hour time format (HH:mm:ss)
+    DateFormat outputFormat = DateFormat("HH:mm:ss");
+    return outputFormat.format(dateTime);
+  }
+
 
   String formatDate(DateTime date) {
     final DateTime localDate = date.toLocal(); // Converts to local time zone
@@ -83,9 +101,6 @@ class _AdmissionSchedulesPageState extends State<AdmissionSchedulesPage> {
     double widthScale = screenWidth / baseWidth;
     double heightScale = screenHeight / baseHeight;
     double scale = widthScale < heightScale ? widthScale : heightScale;
-    TextEditingController dateController = TextEditingController();
-    TextEditingController startTimeController = TextEditingController();
-    TextEditingController endTimeController = TextEditingController();
 
 
 
@@ -322,15 +337,16 @@ showDialog(
             ),
             const SizedBox(height: 8),
             TextField(
-  decoration: InputDecoration(
-    border: OutlineInputBorder(
-      borderRadius: BorderRadius.circular(5),
-    ),
-  ),
-  onChanged: (value) {
-    // Handle text input
-  },
-),
+              controller: locationController,
+              decoration: InputDecoration(
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(5),
+                ),
+              ),
+              onChanged: (value) {
+                // Handle text input
+              },
+            ),
 
             const SizedBox(height: 16),
             // Second Row of Dropdowns
@@ -369,6 +385,9 @@ showDialog(
         .toList(),
         onChanged: (value) {
           // Handle change
+          setState(() {
+            gradeController.text=value!;
+          });
         },
         decoration: InputDecoration(
           border: OutlineInputBorder(
@@ -391,15 +410,16 @@ showDialog(
                       ),
                       const SizedBox(height: 8),
                       TextField(
-  decoration: InputDecoration(
-    border: OutlineInputBorder(
-      borderRadius: BorderRadius.circular(5),
-    ),
-  ),
-  onChanged: (value) {
-    // Handle text input
-  },
-),
+                        controller: slotController,
+                        decoration: InputDecoration(
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(5),
+                          ),
+                        ),
+                        onChanged: (value) {
+                          // Handle text input
+                        },
+                      ),
 
                     ],
                   ),
@@ -413,8 +433,46 @@ showDialog(
                 width: 289,
                 height: 35,
                 child: ElevatedButton(
-                  onPressed: () {
-                    // Handle submit action
+                  onPressed: () async {
+                    //String timeStart=convertTimeTo24HourFormat(startTimeController.text);
+                    //String timeEnd=convertTimeTo24HourFormat(endTimeController.text);
+                    bool isValid =validateAndConvertTime(startTimeController.text, endTimeController.text);
+                    print(isValid);
+                    if(isValid){
+                      showMessageDialog(context, 'Invalid time range: Start and end times must be between 08:00 AM and 05:00 PM, with the start time before the end time.', isValid);
+                    }else{
+                      try {
+                      final response = await http.post(Uri.parse('$apiUrl/api/admin/create_exam_schedule'),
+                                              headers: {
+                                                'Content-Type': 'application/json',
+                                                'supabase-url': supabaseUrl,
+                                                'supabase-key': supabaseKey,
+                                              },
+                                              body: json.encode({
+                                                'exam_date': dateController.text,
+                                                'start_time':startTimeController.text,  // Send customer_id in the request body
+                                                'end_time':endTimeController.text,
+                                                'location':locationController.text,
+                                                'grade_level':gradeController.text,
+                                                'slots':slotController.text
+                                              }),
+                                            );
+
+                                            if (response.statusCode == 200) {
+                                              final responseBody = jsonDecode(response.body);
+                                              Navigator.of(context).popUntil((route) => route.isFirst);
+                                              showMessageDialog(context, 'The exam schedule has been successfully created.', isValid);
+                                            } else {
+                                              // Handle failure
+                                              final responseBody = jsonDecode(response.body);
+                                              print('Error: ${responseBody['error']}');
+                                            }
+                                          } catch (error) {
+                                            // Handle error (e.g., network error)
+                                            print('Error: $error');
+                                          }
+                    }
+                    
                   },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: const Color(0xff012169),
@@ -434,6 +492,14 @@ showDialog(
                 height: 35,
                 child: ElevatedButton(
                   onPressed: () {
+                    setState(() {
+                      dateController.text='';
+                      startTimeController.text='';
+                      endTimeController.text='';
+                      locationController.text='';
+                      gradeController.text='';
+                      slotController.text='';
+                    });
                     Navigator.of(context).pop(); // Close the modal
                   },
                   style: ElevatedButton.styleFrom(
@@ -776,5 +842,149 @@ Widget _buildViewContent(double scale, List<Map<String, dynamic>> details, int u
       // ),
     );
   }
+
+  bool isValidWorkingHourRange(DateTime start, DateTime end) {
+  // Define working hours as 08:00 AM to 05:00 PM (17:00)
+  const int workingStartHour = 8;
+  const int workingEndHour = 17;
+
+  // Compare only time (ignore date)
+  if (start.hour < workingStartHour || start.hour >= workingEndHour) {
+    return false; // Start time is outside working hours
+  }
+
+  if (end.hour < workingStartHour || (end.hour > workingEndHour || (end.hour == workingEndHour && end.minute > 0))) {
+    return false; // End time is outside working hours
+  }
+
+  // Ensure that the start time is strictly before the end time
+  if (start.isAtSameMomentAs(end) || start.isAfter(end)) {
+    return false; // Start time must be before the end time
+  }
+
+  return true; // The time range is valid
+}
+
+bool validateAndConvertTime(String startTime12Hour, String endTime12Hour) {
+  try {
+    // Parse times in 12-hour format
+    DateTime startTime = DateFormat("hh:mm a").parse(startTime12Hour);
+    DateTime endTime = DateFormat("hh:mm a").parse(endTime12Hour);
+
+    
+    // Rebuild times on the same arbitrary date (e.g., 2024-01-01) to normalize comparisons
+    DateTime workingStartTime = DateTime(2024, 12, 13, startTime.hour, startTime.minute);
+    DateTime workingEndTime = DateTime(2024, 12, 13, endTime.hour, endTime.minute);
+
+    // Validate the time range
+    if (!isValidWorkingHourRange(workingStartTime, workingEndTime)) {
+      
+      return true; // Invalid time range
+      
+    }
+
+    // Convert to 24-hour format for additional processing or debugging if needed
+    String start24 = DateFormat("HH:mm").format(workingStartTime);
+    String end24 = DateFormat("HH:mm").format(workingEndTime);
+
+    print("Converted Start Time: $start24, End Time: $end24");
+
+    return false; // Valid time range
+  } catch (e) {
+    DateTime startTime = DateFormat("hh:mm a").parse(startTime12Hour);
+    DateTime endTime = DateFormat("hh:mm a").parse(endTime12Hour);
+    print(startTime);
+    print(endTime);
+    return true; // Error in parsing or validation
+  }
+}
+
+
+void showMessageDialog(BuildContext context, String message, bool isValid) {
+  showDialog(
+    context: context,
+    builder: (BuildContext context) {
+      return Dialog(
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(10),
+        ),
+        child: Container(
+          width: 349,
+          height: 272,
+          padding: const EdgeInsets.all(16),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              // Centered Text
+              const Center(
+                // child: Text(
+                //   "",
+                //   style: TextStyle(
+                //     fontSize: 20,
+                //   ),
+                //   textAlign: TextAlign.center,
+                // ),
+              ),
+              // Red X Icon with Circular Outline
+              Column(
+                children: [
+                  Container(
+                    width: 90,
+                    height: 90,
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      border: Border.all(color: isValid ? Colors.red: const Color(0XFF012169), width: 2),
+                    ),
+                    child:  Center(
+                      child: Icon(
+                        isValid?Icons.close_rounded:Icons.check_rounded,
+                        color: isValid ? Colors.red: const Color(0XFF012169),
+                        size: 40,
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: 20),
+                  // Success Message Text
+                  Text(message,
+                    style: const TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold,
+                    ),
+                    textAlign: TextAlign.center,
+                  ),
+                ],
+              ),
+              // Divider
+              const Divider(
+                thickness: 1,
+                color: Colors.grey,
+              ),
+              // Close Button
+              Align(
+                alignment: Alignment.bottomCenter,
+                child: ElevatedButton(
+                  onPressed: () {
+                    Navigator.of(context).pop(); // Close the modal
+                  },
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: const Color(0xff012169), // Button color
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                    minimumSize: const Size(double.infinity, 50), // Expand width and set height
+                  ),
+                  child: const Text(
+                    "Close",
+                    style: TextStyle(fontSize: 16, color: Colors.white),
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+      );
+    },
+  );
+}
 }
 

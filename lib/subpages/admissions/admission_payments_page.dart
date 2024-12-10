@@ -374,7 +374,7 @@ const SizedBox(height: 40),
             ),
           ),
           Expanded(
-            flex: 3,
+            flex: 2,
             child: Text(
               'Applicant Name',
               style: TextStyle(fontSize: 14 * scale, fontFamily: 'Roboto-L'),
@@ -395,7 +395,7 @@ const SizedBox(height: 40),
             ),
           ),
           Expanded(
-            flex: 3,
+            flex: 2,
             child: Text(
               'Reference No',
               style: TextStyle(fontSize: 14 * scale, fontFamily: 'Roboto-L'),
@@ -460,14 +460,14 @@ const SizedBox(height: 40),
                                   activeColor: const Color(0XFF012169), // Set the active color to pink
                                 ),
                                 Text(
-                                  request['admission_id'].toString(),
+                                  request['db_admission_table']['admission_form_id'].toString(),
                                   style: TextStyle(fontSize: 12 * scale),
                                 ),
                               ],
                             ),
                           ),
                     Expanded(
-                      flex: 3,
+                      flex: 2,
                       child: Text(
                         fullName,
                         style: TextStyle(fontFamily: 'Roboto-R', fontSize: 14 * scale),
@@ -481,7 +481,7 @@ const SizedBox(height: 40),
                       ),
                     ),
                     Expanded(
-                      flex: 3,
+                      flex: 2,
                       child: Text( paymethod,
                         style: TextStyle(fontFamily: 'Roboto-R', fontSize: 14 * scale),
                       ),

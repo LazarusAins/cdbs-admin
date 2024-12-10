@@ -246,14 +246,14 @@ String formatDate(DateTime date) {
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           Expanded(
-            flex: 1,
+            flex: 2,
             child: Text(
               'Application ID',
               style: TextStyle(fontSize: 14 * scale, fontFamily: 'Roboto-L'),
             ),
           ),
           Expanded(
-            flex: 3,
+            flex: 2,
             child: Text(
               'Applicant Name',
               style: TextStyle(fontSize: 14 * scale, fontFamily: 'Roboto-L'),
@@ -306,7 +306,7 @@ String formatDate(DateTime date) {
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
                     Expanded(
-                            flex: 1,
+                            flex: 2,
                             child: Row(
                               children: [
                                 Checkbox(
@@ -319,14 +319,14 @@ String formatDate(DateTime date) {
                                   activeColor: const Color(0XFF012169), // Set the active color to pink
                                 ),
                                 Text(
-                                  request['admission_id'].toString(),
+                                  request['db_admission_table']['admission_form_id'].toString(),
                                   style: TextStyle(fontSize: 12 * scale),
                                 ),
                               ],
                             ),
                           ),
                     Expanded(
-                      flex: 3,
+                      flex: 2,
                       child: Text(
                         fullName,
                         style: TextStyle(fontFamily: 'Roboto-R', fontSize: 14 * scale),

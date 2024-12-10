@@ -224,14 +224,14 @@ String formatDate(DateTime date) {
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 Expanded(
-                  flex: 1,
+                  flex: 2,
                   child: Text(
                     'Application ID',
                     style: TextStyle(fontSize: 14 * scale, fontFamily: 'Roboto-L'),
                   ),
                 ),
                 Expanded(
-                  flex: 3,
+                  flex: 2,
                   child: Text(
                     'Applicant Name',
                     style: TextStyle(fontSize: 14 * scale, fontFamily: 'Roboto-L'),
@@ -281,7 +281,7 @@ String formatDate(DateTime date) {
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
                           Expanded(
-                            flex: 1,
+                            flex: 2,
                             child: Row(
                               children: [
                                 Checkbox(
@@ -294,14 +294,14 @@ String formatDate(DateTime date) {
                                   activeColor: const Color(0XFF012169), // Set the active color to pink
                                 ),
                                 Text(
-                                  request['admission_id'].toString(),
+                                  request['db_admission_table']['admission_form_id'].toString(),
                                   style: TextStyle(fontSize: 12 * scale),
                                 ),
                               ],
                             ),
                           ),
                           Expanded(
-                            flex: 3,
+                            flex: 2,
                             child: Text(fullName,
                               style: TextStyle(fontFamily: 'Roboto-R', fontSize: 14 * scale),
                             ),
@@ -615,6 +615,7 @@ String formatDate(DateTime date) {
                                                                               if (response.statusCode == 200) {
                                                                                 final responseBody = jsonDecode(response.body);
                                                                                 context.read<AdmissionBloc>().add(IsLoadingClicked(false));
+                                                                                // ignore: use_build_context_synchronously
                                                                                 showDialog(
                                                                                   context: context,
                                                                                   builder: (BuildContext context) {
@@ -706,6 +707,7 @@ String formatDate(DateTime date) {
                                                                                 print('Error: ${responseBody['error']}');
                                   
                                                                                 // Show failure modal
+                                                                                // ignore: use_build_context_synchronously
                                                                                 showDialog(
                                                                                   context: context,
                                                                                   builder: (context) => AlertDialog(
