@@ -31,6 +31,8 @@ class _AdmissionPaymentsPageState extends State<AdmissionPaymentsPage> {
   List<Map<String, dynamic>>? formDetails;
   String statusFilter = '';
   int activeButtonIndex = -1;
+  final TextEditingController searchController = TextEditingController();
+  String searchQuery = '';
 
   Future<void> fetchFormDetails(int id) async {
     try {
@@ -55,6 +57,12 @@ class _AdmissionPaymentsPageState extends State<AdmissionPaymentsPage> {
   void filterByStatus(String status) {
     setState(() {
       statusFilter = status; // Update the filter
+    });
+  }
+
+  void _onSearchChanged(String value) {
+    setState(() {
+      searchQuery = value.toLowerCase();
     });
   }
 
@@ -153,6 +161,12 @@ String formatDate(DateTime date) {
                                                     statusFilter)
                                                 .toList();
 
+                filteredRequest = filteredRequest.where((request) {
+                        final formId = request['db_admission_table']['admission_form_id']?.toLowerCase() ?? '';
+                        return formId.contains(searchQuery);
+                      
+                    }).toList();
+
                 if (snapshot.hasError) {
                   return Center(child: Text('Error: ${snapshot.error}'));
                 }
@@ -208,6 +222,7 @@ Row(
       width: 226 * scale,
       height: 32 * scale,
       child: TextField(
+        controller: searchController,
         decoration: InputDecoration(
           hintText: '',
           contentPadding: const EdgeInsets.symmetric(vertical: 10),
@@ -230,6 +245,7 @@ Row(
             ),
           ),
         ),
+        onChanged: _onSearchChanged,
         style: TextStyle(fontSize: 14 * scale),
       ),
     ),

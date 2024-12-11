@@ -26,6 +26,8 @@ class _AdmissionOverviewPageState extends State<AdmissionOverviewPage> {
   late Stream<List<Map<String, dynamic>>> admissionForms;
   List<Map<String, dynamic>> requests = [];
   List<Map<String, dynamic>> filteredRequest = [];
+  final TextEditingController searchController = TextEditingController();
+  String searchQuery = '';
   
   Color statusColor = Colors.black;
   @override
@@ -34,6 +36,12 @@ class _AdmissionOverviewPageState extends State<AdmissionOverviewPage> {
     _apiService = ApiService(apiUrl); // Replace with your actual API URL
     admissionForms = _apiService.streamAdmissionForms(supabaseUrl, supabaseKey);
     // Initialize the service with your endpoint
+  }
+
+  void _onSearchChanged(String value) {
+    setState(() {
+      searchQuery = value.toLowerCase();
+    });
   }
 
 
@@ -119,6 +127,11 @@ class _AdmissionOverviewPageState extends State<AdmissionOverviewPage> {
                 }
                 requests = snapshot.data ?? []; // Use the data from the snapshot
                 filteredRequest = sortRequests(requests);
+                 filteredRequest = filteredRequest.where((request) {
+                        final formId = request['db_admission_table']['admission_form_id']?.toLowerCase() ?? '';
+                        return formId.contains(searchQuery);
+                      
+                    }).toList();
                 if (snapshot.hasError) {
                   return Center(child: Text('Error: ${snapshot.error}'));
                 }
@@ -167,6 +180,7 @@ class _AdmissionOverviewPageState extends State<AdmissionOverviewPage> {
                   width: 226 * scale,
                   height: 32 * scale,
                   child: TextField(
+                    controller: searchController,
                     decoration: InputDecoration(
                       hintText: '',
                       contentPadding: const EdgeInsets.symmetric(vertical: 10),
@@ -189,6 +203,7 @@ class _AdmissionOverviewPageState extends State<AdmissionOverviewPage> {
                         ),
                       ),
                     ),
+                    onChanged: _onSearchChanged,
                     style: TextStyle(fontSize: 14 * scale),
                   ),
                 ),

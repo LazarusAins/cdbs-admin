@@ -29,6 +29,8 @@ class _AdmissionRequirementsPageState extends State<AdmissionRequirementsPage> {
   List<Map<String, dynamic>> filteredRequest = [];
   late ApiService _apiService;
   List<Map<String, dynamic>>? formDetails;
+  final TextEditingController searchController = TextEditingController();
+  String searchQuery = '';
 
   @override
   void initState() {
@@ -111,6 +113,12 @@ String formatDate(DateTime date) {
     return true;
   }
 
+  void _onSearchChanged(String value) {
+    setState(() {
+      searchQuery = value.toLowerCase();
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     double screenHeight = MediaQuery.of(context).size.height;
@@ -158,7 +166,11 @@ String formatDate(DateTime date) {
                 }
                 requests = snapshot.data ?? []; // Use the data from the snapshot
                 filteredRequest = sortRequests(requests);
-
+                filteredRequest = filteredRequest.where((request) {
+                        final formId = request['db_admission_table']['admission_form_id']?.toLowerCase() ?? '';
+                        return formId.contains(searchQuery);
+                      
+                    }).toList();
                 if (snapshot.hasError) {
                   return Center(child: Text('Error: ${snapshot.error}'));
                 }
@@ -214,6 +226,7 @@ String formatDate(DateTime date) {
             width: 226 * scale,
             height: 32 * scale,
             child: TextField(
+              controller: searchController,
               decoration: InputDecoration(
                 hintText: '',
                 contentPadding: const EdgeInsets.symmetric(vertical: 10),
@@ -236,6 +249,7 @@ String formatDate(DateTime date) {
                   ),
                 ),
               ),
+              onChanged: _onSearchChanged,
               style: TextStyle(fontSize: 14 * scale),
             ),
           ),
