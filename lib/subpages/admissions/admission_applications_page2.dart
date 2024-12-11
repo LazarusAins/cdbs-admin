@@ -2701,8 +2701,8 @@ Row(
                   child: Text('Married'),
                 ),
                 DropdownMenuItem(
-                  value: 'Divorced',
-                  child: Text('Divorced'),
+                  value: 'Seperated',
+                  child: Text('Seperated'),
                 ),
                 DropdownMenuItem(
                   value: 'Widowed',
