@@ -626,7 +626,7 @@ showDialog(
                 Expanded(
                   flex: 1,
                   child: Text(
-                    'ADMIN ID',
+                    '',
                     style: TextStyle(fontSize: 14 * scale, fontFamily: 'Roboto-L'),
                   ),
                 ),
@@ -708,10 +708,10 @@ showDialog(
                                   },
                                   activeColor: const Color(0XFF012169), // Set the active color to pink
                                 ),
-                                Text(
+                               /* Text(
                                   request['admin_id'].toString(),
                                   style: TextStyle(fontSize: 12 * scale),
-                                ),
+                                ),*/
                               ],
                             ),
                           ),

@@ -155,625 +155,85 @@ class _AdmissionRequirementsPage2State extends State<AdmissionRequirementsPage2>
       const SizedBox(height: 40), // Space before images
 
       // Row of Images
+      Wrap(
+        alignment: WrapAlignment.start,
+        spacing: 20,
+        runSpacing: 20,
+        children: [
 
-       SizedBox(
-        width: 1100,
-        child:Row(
-          children: [
-            Expanded(
-              flex: 3,
-              child: Text('Document Type',
-              style: TextStyle(fontSize: 14 * scale, fontFamily: 'Roboto-L')),
-            ),
-            const SizedBox(width: 40),
-            Expanded(
-              flex: 2,
-              child: Text('View Documents',
-              style: TextStyle(fontSize: 14 * scale, fontFamily: 'Roboto-L')),
-            ),
-            const SizedBox(width: 40),
-            Expanded(
-              flex: 2,
-              child: Text('Status',
-              style: TextStyle(fontSize: 14 * scale, fontFamily: 'Roboto-L')),
-            ),
-            const SizedBox(width: 40),
-            Expanded(
-              flex: 2,
-              child: Text('Actions',
-              style: TextStyle(fontSize: 14 * scale, fontFamily: 'Roboto-L')),
-            ),
-            
-          ],
-        )
-      ),
-
-      SizedBox(
-        width: 1100,
-        height: 400,
-        child: ListView.builder(
-          itemCount: myformDetails[0]['db_admission_table']['db_required_documents_table'].length,
-          itemBuilder: (context, index) {
-            var document = myformDetails[0]['db_admission_table']['db_required_documents_table'];
-            String gradeLevel = myformDetails[0]['db_admission_table']['level_applying_for'];
-            String originalUrl = document[index]['document_url'].substring(2, document[index]['document_url'].length - 2);
-            String encodedUrl = Uri.encodeFull(originalUrl);
-            return Column(
-              children: [
-                const SizedBox(height: 10),
-                Row(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    Expanded(
-                            flex: 3,
-                            child: Text(
-                              document[index]['db_requirement_type_table']['doc_type'],
-                              style: TextStyle(fontFamily: 'Roboto-R', fontSize: 14 * scale),
-                            ),
-                          ),
-                          const SizedBox(width: 40),
-                    Expanded(
-                      flex: 2,
-                      child: ElevatedButton(
-                        onPressed: () async { // Ensure imagePath is a valid URL
-                      
-                                // Use the browser's built-in window.open method
-                                try {
-                                  html.window.open(encodedUrl, '_blank'); // Open URL in a new tab
-                                } catch (e) {
-                                  ScaffoldMessenger.of(context).showSnackBar(
-                                    const SnackBar(
-                                        content: Text('Could not open the link')),
-                                  );
-                                }
-                              },
-                              style: ElevatedButton.styleFrom(
-                                backgroundColor: const Color(0xff012169),
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(5),
-                                ),
-                              ),
-                              child: const Text(
-                                "Open Link",
-                                style: TextStyle(color: Colors.white),
-                              ),
-                            ),
-                    ),
-                    const SizedBox(width: 40),
-                    Expanded(
-                      flex: 2,
-                      child:Text(
-                              document[index]['document_status'].toUpperCase(),
-                              style: TextStyle(fontFamily: 'Roboto-R', fontSize: 14 * scale),
-                            )
-                    ),
-                    const SizedBox(width: 40),
-                    Expanded(
-                      flex: 2,
-                      child:Row(
-                        children: [
-                          ElevatedButton(
-                    onPressed: document[index]['document_status']=='pending'? () {
-                            // Handle accept action
-                            
-                showDialog(
-                              context: context,
-                              builder: (context) => Dialog(
-                                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8.0)),
-                                child: SizedBox(
-                                  width: 349.0,
-                                  height: 272.0,
-                                  child: Column(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: [
-                                      // Title
-                                      const Padding(
-                                        padding: EdgeInsets.only(top: 16.0, bottom: 8.0),
-                                        child: Text(
-                                          "Confirmation",
-                                          style: TextStyle(
-                                            fontFamily: 'Roboto',
-                                            fontSize: 20,
-                                            fontWeight: FontWeight.bold,
-                                          ),
-                                          textAlign: TextAlign.center,
-                                        ),
-                                      ),
-                                      // Content
-                                      const Padding(
-                                        padding: EdgeInsets.symmetric(horizontal: 24.0),
-                                        child: Text(
-                                          "Are you sure you want to confirm?",
-                                          style: TextStyle(
-                                            fontFamily: 'Roboto',
-                                            fontSize: 13,
-                                            fontWeight: FontWeight.normal,
-                                          ),
-                                          textAlign: TextAlign.center,
-                                        ),
-                                      ),
-                                      const SizedBox(height: 16.0),
-                                      // Divider
-                                      const Padding(
-                                        padding: EdgeInsets.only(left: 20, right: 20),
-                                        child: Divider(thickness: 1),
-                                      ),
-                                      const SizedBox(height: 16.0),
-                                      // No Button
-                                      Padding(
-                                        padding: const EdgeInsets.symmetric(horizontal: 30.0),
-                                        child: SizedBox(
-                                          width: 289,
-                                          height: 35,
-                                          child: TextButton(
-                                            style: TextButton.styleFrom(
-                                              backgroundColor: const Color(0xffD3D3D3), // No button color
-                                              shape: RoundedRectangleBorder(
-                                                borderRadius: BorderRadius.circular(8),
-                                              ),
-                                            ),
-                                            onPressed: () {
-                                              Navigator.of(context).pop(); // Close dialog
-                                            },
-                                            child: const Text(
-                                              "No",
-                                              style: TextStyle(color: Colors.black),
-                                            ),
-                                          ),
-                                        ),
-                                      ),
-                                      const SizedBox(height: 12.0), // Spacing between buttons
-                                      // Yes Button
-                                      Padding(
-                                          padding: const EdgeInsets.symmetric(horizontal: 30.0),
-                                          child: SizedBox(
-                                            width: 289,
-                                            height: 35,
-                                            child: TextButton(
-                                              style: TextButton.styleFrom(
-                                                backgroundColor: const Color(0xff012169), // Amber button color
-                                                shape: RoundedRectangleBorder(
-                                                  borderRadius: BorderRadius.circular(8),
-                                                ),
-                                              ),
-                                              onPressed: () async {
-                                              try {
-                                                                      final response = await http.post(
-                                                                        Uri.parse('$apiUrl/api/admin/update_required_form'),
-                                                                        headers: {
-                                                                          'Content-Type': 'application/json',
-                                                                          'supabase-url': supabaseUrl,
-                                                                          'supabase-key': supabaseKey,
-                                                                        },
-                                                                        body: json.encode({
-                                                                          'document_status': 'accepted',
-                                                                          'required_doc_id': document[index]['required_doc_id'],
-                                                                          'reject_reason': '',
-                                                                        }),
-                                                                      );
-
-                                                                      if (response.statusCode == 200) {
-                                                                        final responseBody = jsonDecode(response.body);
-                                                                        setState(() {
-                                                                          updateData(document[index]['admission_id']);
-                                                                          checkDocumentRequirements(gradeLevel, List<Map<String, dynamic>>.from(
-                                                            myformDetails[0]['db_admission_table']['db_required_documents_table']
-                                                          ));
-                                                                        });
-                                                                        // Show success modal
-                                                                        Navigator.of(context).popUntil((route) => route.isFirst);
-                                                                        showDialog(
-                                            context: context,
-                                            builder: (BuildContext context) {
-                                              return Dialog(
-                                                shape: RoundedRectangleBorder(
-                                                  borderRadius: BorderRadius.circular(10),
-                                                ),
-                                                child: Container(
-                                                  width: 349,
-                                                  height: 272,
-                                                  padding: const EdgeInsets.all(16),
-                                                  child: Column(
-                                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                                    children: [
-                                                      // Centered Text
-                                                      const Center(
-                                                        // child: Text(
-                                                        //   "",
-                                                        //   style: TextStyle(
-                                                        //     fontSize: 20,
-                                                        //   ),
-                                                        //   textAlign: TextAlign.center,
-                                                        // ),
-                                                      ),
-                                                      // Red X Icon with Circular Outline
-                                                      Column(
-                                                        children: [
-                                                          Container(
-                                                            width: 90,
-                                                            height: 90,
-                                                            decoration: BoxDecoration(
-                                                              shape: BoxShape.circle,
-                                                              border: Border.all(color: const Color(0XFF012169), width: 2),
-                                                            ),
-                                                            child: const Center(
-                                                              child: Icon(
-                                                                Icons.check,
-                                                                color: Color(0XFF012169),
-                                                                size: 40,
-                                                              ),
-                                                            ),
-                                                          ),
-                                                          const SizedBox(height: 20),
-                                                          // No Form Submitted Text
-                                                          const Text(
-                                                            "Attached Documents has beeen Accepted!",
-                                                            style: TextStyle(
-                                                              fontSize: 20,
-                                                              fontWeight: FontWeight.bold,
-                                                            ),
-                                                            textAlign: TextAlign.center,
-                                                          ),
-                                                        ],
-                                                      ),
-                                                      // Divider
-                                                      const Divider(
-                                                        thickness: 1,
-                                                        color: Colors.grey,
-                                                      ),
-                                                      // Close Button
-                                                      Align(
-                                                        alignment: Alignment.bottomCenter,
-                                                        child: ElevatedButton(
-                                                          onPressed: () {
-                                                            Navigator.of(context).pop(); // Close the modal
-                                                          },
-                                                          style: ElevatedButton.styleFrom(
-                                                            backgroundColor: const Color(0xff012169), // Button color
-                                                            shape: RoundedRectangleBorder(
-                                                              borderRadius: BorderRadius.circular(8),
-                                                            ),
-                                                            minimumSize: const Size(double.infinity, 50), // Expand width and set height
-                                                          ),
-                                                          child: const Text(
-                                                            "Close",
-                                                            style: TextStyle(fontSize: 16, color: Colors.white),
-                                                          ),
-                                                        ),
-                                                      ),
-                                                    ],
-                                                  ),
-                                                ),
-                                              );
-                                            },
-                                          );
-
-                                          } else {
-                                            // Handle failure
-                                            final responseBody = jsonDecode(response.body);
-                                            print('Error: ${responseBody['error']}');
-                                            Navigator.of(context).pop();
-                                            showDialog(
-                                              context: context,
-                                              builder: (context) => AlertDialog(
-                                                title: const Text("Error"),
-                                                content: Text("Failed to complete review: ${responseBody['error']}"),
-                                                actions: [
-                                                  TextButton(
-                                                    onPressed: () {
-                                                      Navigator.of(context).pop(); // Close dialog
-                                                    },
-                                                    child: const Text("OK"),
-                                                  ),
-                                                ],
-                                              ),
-                                            );
-                                          }
-                                        } catch (error) {
-                                          // Handle network error
-                                          print('Error: $error');
-                                          Navigator.of(context).pop();
-                                          showDialog(
-                                            context: context,
-                                            builder: (context) => AlertDialog(
-                                              title: const Text("Error"),
-                                              content: const Text("An unexpected error occurred. Please try again later."),
-                                              actions: [
-                                                TextButton(
-                                                  onPressed: () {
-                                                    Navigator.of(context).pop(); // Close dialog
-                                                  },
-                                                  child: const Text("OK"),
-                                                ),
-                                              ],
-                                            ),
-                                          );
-                                        } // Close dialog
-                  },
-                  child: const Text(
-                    "Yes",
-                    style: TextStyle(color: Colors.white),
+          if (myformDetails.isNotEmpty)
+            ...myformDetails[0]['db_admission_table']['db_required_documents_table']
+                .map<Widget>((document) {
+              // Check if the document has a document_url
+              if (document != null && document['document_url'] != null) {
+                String originalUrl = document['document_url'].substring(2, document['document_url'].length - 2);
+                String encodedUrl = Uri.encodeFull(originalUrl);
+                docStatus=document['document_status'];
+                return _buildImageCard(
+                  imagePath: encodedUrl, // Use document_url
+                  id:document['required_doc_id'],
+                  status: docStatus,
+                  label:  document['db_requirement_type_table']['doc_type'], // Default label if not provided
+                  scale: scale,
+                  setState: setState,
+                  admissionId: document['admission_id'],
+                  formRequirements: List<Map<String, dynamic>>.from(
+                    myformDetails[0]['db_admission_table']['db_required_documents_table']
                   ),
-                ),
-              ),
-            ),
-
-                    ],
+                  gradeLevel: myformDetails[0]['db_admission_table']['level_applying_for']
+                );
+              } else {
+                // If no document_url is provided, show a placeholder
+                return _buildImageCard(
+                  label:  'Image is not Available', // Display document name
+                  id:document['required_doc_id'],
+                  status: docStatus,
+                  scale: scale,
+                  isPlaceholder: true,
+                  isDashedLine: true, // Dashed border for placeholder
+                  setState: setState,
+                  admissionId: document['admission_id'],
+                  formRequirements: List<Map<String, dynamic>>.from(
+                    myformDetails[0]['db_admission_table']['db_required_documents_table']
                   ),
-                ),
-              ),
-            );
-
-                              
-                          }:null,
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: const Color(0xff007937),
-                      padding: const EdgeInsets.symmetric(horizontal: 30),
-                      shape: const RoundedRectangleBorder(
-                        borderRadius: BorderRadius.only(
-                          topLeft: Radius.circular(10),
-                          bottomLeft: Radius.circular(10),
-                        ),
-                      ),
-                    ),
-                    child: const Text('Accept', style: TextStyle(color: Colors.white),),
-                  ),
-
-
-                  const SizedBox(width: 2),
-                  ElevatedButton(
-                    onPressed: document[index]['document_status']=='pending'?() {
-                      showDialog(
-  context: context,
-  builder: (context) {
-    return Dialog(
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8.0)),
-      child: SizedBox(
-        width: 349.0,
-        height: 320.0,
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Padding(
-              padding: const EdgeInsets.all(16.0),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  const Text(
-                    "Reject",
-                    style: TextStyle(
-                      fontSize: 18,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                  const SizedBox(height: 10),
-                  const Text("Please provide a reason for rejection:"),
-                  const SizedBox(height: 10),
-                  TextField(
-                    controller: rejectController,
-                    decoration: const InputDecoration(
-                      border: OutlineInputBorder(),
-                      hintText: "Enter rejection reason",
-                    ),
-                    maxLines: 3,
-                  ),
-                ],
-              ),
-            ),
-            const Padding(
-            padding: EdgeInsets.only(left: 20, right: 20),
-            child: Divider(thickness: 1),
+                  gradeLevel: myformDetails[0]['db_admission_table']['level_applying_for']
+                );
+              }
+            }).toList(),
+         /* _buildImageCard(
+            imagePath: 'assets/q4.jpg',
+            label: '*Birth Certificate (PSA Copy)',
+            scale: scale,
           ),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
-              child: Column(
-                children: [
-                  // Close button on the first row
-                  SizedBox(
-                    width: double.infinity,
-                    height: 35,
-                    child: TextButton(
-                      style: TextButton.styleFrom(
-                        backgroundColor: const Color(0xffD3D3D3),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(8),
-                        ),
-                      ),
-                      onPressed: () {
-                        Navigator.of(context).pop(); // Close dialog
-                      },
-                      child: const Text(
-                        "Close",
-                        style: TextStyle(fontSize: 16, color: Colors.black),
-                      ),
-                    ),
-                  ),
-                  const SizedBox(height: 10), // Spacer between the buttons
-                  // Submit button on the second row
-                  SizedBox(
-                    width: double.infinity,
-                    height: 35,
-                    child: ElevatedButton(
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: const Color(0xff012169),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(8),
-                        ),
-                      ),
-                      onPressed: () async {
-                        // Handle rejection submission logic
-                        try {
-                          final response = await http.post(
-                            Uri.parse('$apiUrl/api/admin/update_required_form'),
-                            headers: {
-                              'Content-Type': 'application/json',
-                              'supabase-url': supabaseUrl,
-                              'supabase-key': supabaseKey,
-                            },
-                            body: json.encode({
-                              'document_status': 'rejected',
-                              'required_doc_id': document[index]['required_doc_id'],
-                              'reject_reason': rejectController.text,
-                              'doc_type_id':document[index]['requirements_type'],
-                              'user_id':myformDetails[0]['user_id']
-                            }),
-                          );
-
-                          if (response.statusCode == 200) {
-                            final responseBody = jsonDecode(response.body);
-                            setState(() {
-                              updateData(document[index]['admission_id']);
-                              checkDocumentRequirements(gradeLevel, List<Map<String, dynamic>>.from(
-                                myformDetails[0]['db_admission_table']['db_required_documents_table']
-                              ));
-                            });
-                            Navigator.of(context).popUntil((route) => route.isFirst);
-                            showDialog(
-    context: context,
-    builder: (BuildContext context) {
-      return Dialog(
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(10),
-        ),
-        child: Container(
-          width: 349,
-          height: 272,
-          padding: const EdgeInsets.all(16),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              // Centered Text
-              const Center(
-                // child: Text(
-                //   "",
-                //   style: TextStyle(
-                //     fontSize: 20,
-                //   ),
-                //   textAlign: TextAlign.center,
-                // ),
-              ),
-              // Red X Icon with Circular Outline
-              Column(
-                children: [
-                  Container(
-                    width: 90,
-                    height: 90,
-                    decoration: BoxDecoration(
-                      shape: BoxShape.circle,
-                      border: Border.all(color: const Color(0XFF012169), width: 2),
-                    ),
-                    child: const Center(
-                      child: Icon(
-                        Icons.check,
-                        color: Color(0XFF012169),
-                        size: 40,
-                      ),
-                    ),
-                  ),
-                  const SizedBox(height: 20),
-                  // No Form Submitted Text
-                  const Text(
-                    "Attached Documents has beeen Rejected!",
-                    style: TextStyle(
-                      fontSize: 20,
-                      fontWeight: FontWeight.bold,
-                    ),
-                    textAlign: TextAlign.center,
-                  ),
-                ],
-              ),
-              // Divider
-              const Divider(
-                thickness: 1,
-                color: Colors.grey,
-              ),
-              // Close Button
-              Align(
-                alignment: Alignment.bottomCenter,
-                child: ElevatedButton(
-                  onPressed: () {
-                    Navigator.of(context).pop(); // Close the modal
-                  },
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: const Color(0xff012169), // Button color
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(8),
-                    ),
-                    minimumSize: const Size(double.infinity, 50), // Expand width and set height
-                  ),
-                  child: const Text(
-                    "Close",
-                    style: TextStyle(fontSize: 16, color: Colors.white),
-                  ),
-                ),
-              ),
-            ],
+          _buildImageCard(
+            imagePath: 'assets/q2.jpg',
+            label: '*Recent ID Photo',
+            scale: scale,
           ),
-        ),
-      );
-    },
-  );
-                          } else {
-                            final responseBody = jsonDecode(response.body);
-                            print('Error: ${responseBody['error']}');
-                            Navigator.of(context).pop();
-                            showDialog(
-                              context: context,
-                              builder: (context) => AlertDialog(
-                                title: const Text("Error"),
-                                content: Text("Failed to complete review: ${responseBody['error']}"),
-                                actions: [
-                                  TextButton(
-                                    onPressed: () {
-                                      Navigator.of(context).pop(); // Close dialog
-                                    },
-                                    child: const Text("OK"),
-                                  ),
-                                ],
-                              ),
-                            );
-                          }
-                        } catch (error) {
-                          print('Error: $error');
-                          Navigator.of(context).pop();
-                        }
-                      },
-                      child: const Text("Submit", style: TextStyle(fontSize: 16, fontFamily: 'Roboto-R', color: Colors.white)),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ],
-        ),
+          _buildImageCard(
+            imagePath: 'assets/q3.jpg',
+            label: '*Parent Questionnaire',
+            scale: scale,
+          ),
+          _buildImageCard(
+            imagePath: 'assets/q4.jpg',
+            label: 'Baptismal Certificate',
+            scale: scale,
+          ),
+          _buildImageCard(
+            label: 'First Communion Certificate',
+            scale: scale,
+            isPlaceholder: true,
+            isDashedLine: true, // Dashed border for placeholder
+          ),
+          _buildImageCard(
+            label: 'Parent’s Marriage Certificate',
+            scale: scale,
+            isPlaceholder: true,
+            isDashedLine: true, // Dashed border for placeholder
+          ),*/
+        ],
       ),
-    );
-  },
-);
-                    }:null,
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: const Color(0xffC8102E),
-                      padding: const EdgeInsets.symmetric(horizontal: 30),
-                      shape: const RoundedRectangleBorder(
-                        borderRadius: BorderRadius.only(
-                          topRight: Radius.circular(10),
-                          bottomRight: Radius.circular(10),
-                        ),
-                      ),
-                    ),
-                    child: const Text('Reject', style: TextStyle(color: Colors.white),),
-                  )
-                        ],
-                      )
-                    )
-                  ]
-                ),
-                const Divider(color: Colors.grey, thickness: 1),
-              ]
-            );
-          }
-        ),
-      )
     ],
   ),
 );
@@ -817,6 +277,150 @@ class _AdmissionRequirementsPage2State extends State<AdmissionRequirementsPage2>
     );
   }
 
+  // Helper method to create image cards
+ /* Widget _buildImageCard({
+    String? imagePath,
+    required String label,
+    required double scale,
+    bool isPlaceholder = false,
+    bool isDashedLine = false,
+  }) {
+    return GestureDetector(
+      onTap: () => _showImageDialog(imagePath), // Open dialog on tap
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          SizedBox(
+            width: 158,
+            height: 89,
+            child: isDashedLine
+                ? CustomPaint(
+                    painter: DashedBorderPainter(),
+                    child: Center(
+                      child: isPlaceholder
+                          ? Text(
+                              "No Image",
+                              style: TextStyle(
+                                fontSize: 10 * scale,
+                                color: Colors.grey,
+                              ),
+                            )
+                          : null,
+                    ),
+                  )
+                : ClipRRect(
+                    borderRadius: BorderRadius.circular(5), // Image radius
+                    child: Image.asset(
+                      imagePath!,
+                      width: 158,
+                      height: 89,
+                      fit: BoxFit.cover,
+                    ),
+                  ),
+          ),
+          const SizedBox(height: 8), // Space between image and text
+          Text(
+            label,
+            style: TextStyle(
+              fontSize: 11 * scale,
+              fontFamily: 'Roboto-R',
+            ),
+            textAlign: TextAlign.left, // Align text to the left
+          ),
+        ],
+      ),
+    );
+  }*/
+
+ /* Widget _buildImageCard({
+  String? imagePath,
+  int? id,
+  int? admissionId,
+  String? status,
+  required String label,
+  required double scale,
+  bool isPlaceholder = false,
+  bool isDashedLine = false,
+  required StateSetter setState
+}) {
+  return GestureDetector(
+    onTap: () {
+      _showImageDialog(imagePath, id!, admissionId!);
+      print(imagePath);
+    }, // Open dialog on tap
+    child: Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        SizedBox(
+          width: 158,
+          height: 89,
+          child: isDashedLine
+              ? CustomPaint(
+                  painter: DashedBorderPainter(),
+                  child: Center(
+                    child: isPlaceholder
+                        ? Text(
+                            "No Image",
+                            style: TextStyle(
+                              fontSize: 10 * scale,
+                              color: Colors.grey,
+                            ),
+                          )
+                        : null,
+                  ),
+                )
+              : ClipRRect(
+                  borderRadius: BorderRadius.circular(5), // Image radius
+                  child: imagePath != null
+                      ? Image.network(
+                          imagePath,
+                          width: 158,
+                          height: 89,
+                          fit: BoxFit.cover,
+                          errorBuilder: (context, error, stackTrace) {
+                            return const Center(
+                              child: Text(
+                                "Failed to load image",
+                                style: TextStyle(color: Colors.grey),
+                              ),
+                            );
+                          },
+                        )
+                      : Center(
+                          child: Text(
+                            "No Image",
+                            style: TextStyle(
+                              fontSize: 10 * scale,
+                              color: Colors.grey,
+                            ),
+                          ),
+                        ),
+                ),
+        ),
+        const SizedBox(height: 8), // Space between image and text
+        Column(
+          children: [
+            Text(
+              label,
+              style: TextStyle(
+                fontSize: 11 * scale,
+                fontFamily: 'Roboto-R',
+              ),
+              textAlign: TextAlign.left, // Align text to the left
+            ),
+            Text(status!!='pending'?status.toUpperCase():'',
+              style: TextStyle(
+                fontSize: 11 * scale,
+                fontFamily: 'Roboto-R',
+              ),
+              textAlign: TextAlign.left, // Align text to the left
+            )
+          ],
+        ),
+      ],
+    ),
+  );
+}*/
 
 
 Widget _buildImageCard({
@@ -1508,6 +1112,26 @@ bool checkDocumentRequirements(String gradeLevel, List<Map<String, dynamic>> for
       );
     },
   );
+                            // showDialog(
+                            //   context: context,
+                            //   builder: (context) => AlertDialog(
+                            //     title: const Text("Rejected"),
+                            //     content: const Text("The review has been marked as rejected."),
+                            //     actions: [
+                            //       TextButton(
+                            //         onPressed: () {
+                            //           isComplete = checkDocumentRequirements(
+                            //             gradeLevel,
+                            //             List<Map<String, dynamic>>.from(myformDetails[0]['db_admission_table']['db_required_documents_table']),
+                            //           );
+                            //           widget.onNextPressed(isComplete);
+                            //           Navigator.of(context).pop(); // Close dialog
+                            //         },
+                            //         child: const Text("OK"),
+                            //       ),
+                            //     ],
+                            //   ),
+                            // );
                           } else {
                             final responseBody = jsonDecode(response.body);
                             print('Error: ${responseBody['error']}');
@@ -1531,6 +1155,91 @@ bool checkDocumentRequirements(String gradeLevel, List<Map<String, dynamic>> for
                         } catch (error) {
                           print('Error: $error');
                           Navigator.of(context).pop();
+  //                         showDialog(
+  //   context: context,
+  //   builder: (BuildContext context) {
+  //     return Dialog(
+  //       shape: RoundedRectangleBorder(
+  //         borderRadius: BorderRadius.circular(10),
+  //       ),
+  //       child: Container(
+  //         width: 349,
+  //         height: 272,
+  //         padding: const EdgeInsets.all(16),
+  //         child: Column(
+  //           mainAxisAlignment: MainAxisAlignment.spaceBetween,
+  //           children: [
+  //             // Centered Text
+  //             const Center(
+  //               // child: Text(
+  //               //   "",
+  //               //   style: TextStyle(
+  //               //     fontSize: 20,
+  //               //   ),
+  //               //   textAlign: TextAlign.center,
+  //               // ),
+  //             ),
+  //             // Red X Icon with Circular Outline
+  //             Column(
+  //               children: [
+  //                 Container(
+  //                   width: 90,
+  //                   height: 90,
+  //                   decoration: BoxDecoration(
+  //                     shape: BoxShape.circle,
+  //                     border: Border.all(color: const Color(0XFF012169), width: 2),
+  //                   ),
+  //                   child: const Center(
+  //                     child: Icon(
+  //                       Icons.check,
+  //                       color: Color(0XFF012169),
+  //                       size: 40,
+  //                     ),
+  //                   ),
+  //                 ),
+  //                 const SizedBox(height: 20),
+  //                 // No Form Submitted Text
+  //                 const Text(
+  //                   "Attached Documents has beeen Rejected!",
+  //                   style: TextStyle(
+  //                     fontSize: 20,
+  //                     fontWeight: FontWeight.bold,
+  //                   ),
+  //                   textAlign: TextAlign.center,
+  //                 ),
+  //               ],
+  //             ),
+  //             // Divider
+  //             const Divider(
+  //               thickness: 1,
+  //               color: Colors.grey,
+  //             ),
+  //             // Close Button
+  //             Align(
+  //               alignment: Alignment.bottomCenter,
+  //               child: ElevatedButton(
+  //                 onPressed: () {
+  //                   Navigator.of(context).pop(); // Close the modal
+  //                 },
+  //                 style: ElevatedButton.styleFrom(
+  //                   backgroundColor: const Color(0xff012169), // Button color
+  //                   shape: RoundedRectangleBorder(
+  //                     borderRadius: BorderRadius.circular(8),
+  //                   ),
+  //                   minimumSize: const Size(double.infinity, 50), // Expand width and set height
+  //                 ),
+  //                 child: const Text(
+  //                   "Close",
+  //                   style: TextStyle(fontSize: 16, color: Colors.white),
+  //                 ),
+  //               ),
+  //             ),
+  //           ],
+  //         ),
+  //       ),
+  //     );
+  //   },
+  // );
                         }
                       },
                       child: const Text("Submit", style: TextStyle(fontSize: 16, fontFamily: 'Roboto-R', color: Colors.white)),
