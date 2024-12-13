@@ -362,7 +362,7 @@ SizedBox(
                   SizedBox(height: 10 * scale),
 
                   // Sign Up Button
-                  SizedBox(
+                 /* SizedBox(
                     width: 388 * scale,
                     height: 35 * scale,
                     child: ElevatedButton(
@@ -382,7 +382,7 @@ SizedBox(
                         ),
                       ),
                     ),
-                  ),
+                  ),*/
                 ],
               ),
             ),
