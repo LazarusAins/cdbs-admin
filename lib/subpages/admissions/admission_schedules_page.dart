@@ -167,7 +167,7 @@ void dispose() {
                   style: TextStyle(
                     color: const Color(0xff222222),
                     fontFamily: "Roboto-R",
-                    fontSize: 32 * scale,
+                    fontSize: 34 * scale,
                   ),
                 ),
               ],
@@ -192,7 +192,7 @@ Row(
       style: TextStyle(
         color: const Color(0xff222222),
         fontFamily: "Roboto-L",
-        fontSize: 20 * scale,
+        fontSize: 22 * scale,
       ),
     ),
     const Spacer(),
@@ -218,7 +218,7 @@ showDialog(
             const Text(
               'New Schedule Form',
               style: TextStyle(
-                fontSize: 20,
+                fontSize: 22,
                 fontFamily: "Roboto-R",
                 fontWeight: FontWeight.normal,
               ),
@@ -565,7 +565,7 @@ showDialog(
             ),
           ),
         ),
-        style: TextStyle(fontSize: 14 * scale),
+        style: TextStyle(fontSize: 16 * scale),
       ),
     ),
   ],
@@ -578,42 +578,42 @@ showDialog(
                   flex: 1,
                   child: Text(
                     'EXAM DATE',
-                    style: TextStyle(fontSize: 14 * scale, fontFamily: 'Roboto-L'),
+                    style: TextStyle(fontSize: 16 * scale, fontFamily: 'Roboto-L'),
                   ),
                 ),
                 Expanded(
                   flex: 2,
                   child: Text(
                     'EXAM TIME',
-                    style: TextStyle(fontSize: 14 * scale, fontFamily: 'Roboto-L'),
+                    style: TextStyle(fontSize: 16 * scale, fontFamily: 'Roboto-L'),
                   ),
                 ),
                 Expanded(
                   flex: 2,
                   child: Text(
                     'MEETING PLACE',
-                    style: TextStyle(fontSize: 14 * scale, fontFamily: 'Roboto-L'),
+                    style: TextStyle(fontSize: 16 * scale, fontFamily: 'Roboto-L'),
                   ),
                 ),
                 Expanded(
                   flex: 2,
                   child: Text(
                     'GRADE LEVEL',
-                    style: TextStyle(fontSize: 14 * scale, fontFamily: 'Roboto-L'),
+                    style: TextStyle(fontSize: 16 * scale, fontFamily: 'Roboto-L'),
                   ),
                 ),
                 Expanded(
                   flex: 2,
                   child: Text(
                     'SLOTS',
-                    style: TextStyle(fontSize: 14 * scale, fontFamily: 'Roboto-L'),
+                    style: TextStyle(fontSize: 16 * scale, fontFamily: 'Roboto-L'),
                   ),
                 ),
                 Expanded(
                   flex: 2,
                   child: Text(
                     'Date Created',
-                    style: TextStyle(fontSize: 14 * scale, fontFamily: 'Roboto-L'),
+                    style: TextStyle(fontSize: 16 * scale, fontFamily: 'Roboto-L'),
                   ),
                 ),
                 const Expanded(flex: 1, child: SizedBox.shrink()),
@@ -646,7 +646,7 @@ showDialog(
                             child: Row(
                               children: [
                                 Text(formattedExamDate,
-                                  style: TextStyle(fontSize: 12 * scale),
+                                  style: TextStyle(fontSize: 16 * scale),
                                 ),
                               ],
                             ),
@@ -654,31 +654,31 @@ showDialog(
                           Expanded(
                             flex: 2,
                             child: Text('$startTime - $endTime',
-                              style: TextStyle(fontFamily: 'Roboto-R', fontSize: 14 * scale),
+                              style: TextStyle(fontFamily: 'Roboto-R', fontSize: 16 * scale),
                             ),
                           ),
                           Expanded(
                             flex: 2,
                             child: Text(request['location'],
-                              style: TextStyle(fontFamily: 'Roboto-R', fontSize: 14 * scale),
+                              style: TextStyle(fontFamily: 'Roboto-R', fontSize: 16 * scale),
                             ),
                           ),
                           Expanded(
                             flex: 2,
                             child: Text(request['grade_level'].toUpperCase(),
-                              style: TextStyle(fontFamily: 'Roboto-R', fontSize: 14 * scale),
+                              style: TextStyle(fontFamily: 'Roboto-R', fontSize: 16 * scale),
                             ),
                           ),
                           Expanded(
                             flex: 2,
                             child: Text(request['reservation_count']==request['slots']?'FULL':'${request['reservation_count']}/${request['slots']}',
-                              style: TextStyle(fontFamily: 'Roboto-R', fontSize: 14 * scale),
+                              style: TextStyle(fontFamily: 'Roboto-R', fontSize: 16 * scale),
                             ),
                           ),
                           Expanded(
                             flex: 2,
                             child: Text(formattedDate,
-                              style: TextStyle(fontFamily: 'Roboto-R', fontSize: 14 * scale),
+                              style: TextStyle(fontFamily: 'Roboto-R', fontSize: 16 * scale),
                             ),
                           ),
                             // Other table cells...
@@ -770,7 +770,7 @@ Widget _buildViewContent(double scale, List<Map<String, dynamic>> details, int u
             icon: const Icon(Icons.arrow_back, color: Colors.black),
             label: Text(
               "Back",
-              style: TextStyle(color: Colors.black, fontFamily: 'Roboto-R', fontSize: 12 * scale),
+              style: TextStyle(color: Colors.black, fontFamily: 'Roboto-R', fontSize: 14 * scale),
             ),
           ),
 
@@ -796,7 +796,7 @@ Widget _buildViewContent(double scale, List<Map<String, dynamic>> details, int u
         children: [
           Text(
             'REMINDER content goes here.',
-            style: TextStyle(fontSize: 18 * scale),
+            style: TextStyle(fontSize: 20 * scale),
           ),
           ElevatedButton(
             onPressed: () {
@@ -818,7 +818,7 @@ Widget _buildViewContent(double scale, List<Map<String, dynamic>> details, int u
         children: [
           Text(
             'DEACTIVATE content goes here.',
-            style: TextStyle(fontSize: 18 * scale),
+            style: TextStyle(fontSize: 20 * scale),
           ),
           ElevatedButton(
             onPressed: () {
@@ -838,7 +838,7 @@ Widget _buildViewContent(double scale, List<Map<String, dynamic>> details, int u
       // padding: const EdgeInsets.all(16),
       // child: Text(
       //   '',
-      //   style: TextStyle(fontSize: 18 * scale),
+      //   style: TextStyle(fontSize: 20 * scale),
       // ),
     );
   }
@@ -920,7 +920,7 @@ void showMessageDialog(BuildContext context, String message, bool isValid) {
                 // child: Text(
                 //   "",
                 //   style: TextStyle(
-                //     fontSize: 20,
+                //     fontSize: 22,
                 //   ),
                 //   textAlign: TextAlign.center,
                 // ),

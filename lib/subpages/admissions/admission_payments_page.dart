@@ -185,7 +185,7 @@ String formatDate(DateTime date) {
             style: TextStyle(
               color: const Color(0xff222222),
               fontFamily: "Roboto-R",
-              fontSize: 32 * scale,
+              fontSize: 34 * scale,
             ),
           ),
         ],
@@ -214,7 +214,7 @@ Row(
       style: TextStyle(
         color: const Color(0xff222222),
         fontFamily: "Roboto-L",
-        fontSize: 20 * scale,
+        fontSize: 22 * scale,
       ),
     ),
     const Spacer(),
@@ -246,7 +246,7 @@ Row(
           ),
         ),
         onChanged: _onSearchChanged,
-        style: TextStyle(fontSize: 14 * scale),
+        style: TextStyle(fontSize: 16 * scale),
       ),
     ),
   ],
@@ -305,7 +305,7 @@ SizedBox(
                   Center(
                     child: Text(
                       "UnionBank Bills Payment",
-                      style: TextStyle(fontSize: 14 * scale),
+                      style: TextStyle(fontSize: 16 * scale),
                     ),
                   ),
                 ],
@@ -362,7 +362,7 @@ SizedBox(
                   Center(
                     child: Text(
                       "Over the counter payment",
-                      style: TextStyle(fontSize: 14 * scale),
+                      style: TextStyle(fontSize: 16 * scale),
                     ),
                   ),
                 ],
@@ -386,49 +386,49 @@ const SizedBox(height: 40),
             flex: 2,
             child: Text(
               'Application ID',
-              style: TextStyle(fontSize: 14 * scale, fontFamily: 'Roboto-L'),
+              style: TextStyle(fontSize: 16 * scale, fontFamily: 'Roboto-L'),
             ),
           ),
           Expanded(
             flex: 2,
             child: Text(
               'Applicant Name',
-              style: TextStyle(fontSize: 14 * scale, fontFamily: 'Roboto-L'),
+              style: TextStyle(fontSize: 16 * scale, fontFamily: 'Roboto-L'),
             ),
           ),
           Expanded(
             flex: 2,
             child: Text(
               'Handled By',
-              style: TextStyle(fontSize: 14 * scale, fontFamily: 'Roboto-L'),
+              style: TextStyle(fontSize: 16 * scale, fontFamily: 'Roboto-L'),
             ),
           ),
           Expanded(
             flex: 2,
             child: Text(
               'Payment Method',
-              style: TextStyle(fontSize: 14 * scale, fontFamily: 'Roboto-L'),
+              style: TextStyle(fontSize: 16 * scale, fontFamily: 'Roboto-L'),
             ),
           ),
           Expanded(
             flex: 2,
             child: Text(
               'Reference No',
-              style: TextStyle(fontSize: 14 * scale, fontFamily: 'Roboto-L'),
+              style: TextStyle(fontSize: 16 * scale, fontFamily: 'Roboto-L'),
             ),
           ),
           Expanded(
             flex: 2,
             child: Text(
               'Status',
-              style: TextStyle(fontSize: 14 * scale, fontFamily: 'Roboto-L'),
+              style: TextStyle(fontSize: 16 * scale, fontFamily: 'Roboto-L'),
             ),
           ),
           Expanded(
             flex: 2,
             child: Text(
               'Date Created',
-              style: TextStyle(fontSize: 14 * scale, fontFamily: 'Roboto-L'),
+              style: TextStyle(fontSize: 16 * scale, fontFamily: 'Roboto-L'),
             ),
           ),
           const Expanded(flex: 1, child: SizedBox.shrink()),
@@ -477,7 +477,7 @@ const SizedBox(height: 40),
                                 ),
                                 Text(
                                   request['db_admission_table']['admission_form_id'].toString(),
-                                  style: TextStyle(fontSize: 12 * scale),
+                                  style: TextStyle(fontSize: 16 * scale),
                                 ),
                               ],
                             ),
@@ -486,32 +486,32 @@ const SizedBox(height: 40),
                       flex: 2,
                       child: Text(
                         fullName,
-                        style: TextStyle(fontFamily: 'Roboto-R', fontSize: 14 * scale),
+                        style: TextStyle(fontFamily: 'Roboto-R', fontSize: 16 * scale),
                       ),
                     ),
                     Expanded(
                       flex: 2,
                       child: Text(
                         processBy,
-                        style: TextStyle(fontFamily: 'Roboto-R', fontSize: 14 * scale),
+                        style: TextStyle(fontFamily: 'Roboto-R', fontSize: 16 * scale),
                       ),
                     ),
                     Expanded(
                       flex: 2,
                       child: Text( paymethod,
-                        style: TextStyle(fontFamily: 'Roboto-R', fontSize: 14 * scale),
+                        style: TextStyle(fontFamily: 'Roboto-R', fontSize: 16 * scale),
                       ),
                     ),
                     Expanded(
                       flex: 2,
                       child: Text( request['reference_no'] ?? '',
-                        style: TextStyle(fontFamily: 'Roboto-R', fontSize: 14 * scale),
+                        style: TextStyle(fontFamily: 'Roboto-R', fontSize: 16 * scale),
                       ),
                     ),
                     Expanded(
                       flex: 2,
                       child: Text(!isPaid?stat=='complete' && isRequired?'PENDING':stat.toUpperCase():'COMPLETE',
-                        style: TextStyle(fontFamily: 'Roboto-R', fontSize: 14 * scale,
+                        style: TextStyle(fontFamily: 'Roboto-R', fontSize: 16 * scale,
                         color: isPaid?const Color(0xFF007A33):_getStatusColor(request['db_admission_table']['admission_status'])),
                       ),
                     ),
@@ -519,7 +519,7 @@ const SizedBox(height: 40),
                       flex: 2,
                       child: Text(
                         formattedDate,
-                        style: TextStyle(fontFamily: 'Roboto-R', fontSize: 14 * scale),
+                        style: TextStyle(fontFamily: 'Roboto-R', fontSize: 16 * scale),
                       ),
                     ),
                       // Other table cells...
@@ -639,7 +639,7 @@ const SizedBox(height: 40),
             icon: const Icon(Icons.arrow_back, color: Colors.black),
             label: Text(
               "Back",
-              style: TextStyle(color: Colors.black, fontFamily: 'Roboto-R', fontSize: 12 * scale),
+              style: TextStyle(color: Colors.black, fontFamily: 'Roboto-R', fontSize: 14 * scale),
             ),
           ),
         ],
@@ -668,7 +668,7 @@ const SizedBox(height: 40),
         children: [
           Text(
             'REMINDER content goes here.',
-            style: TextStyle(fontSize: 18 * scale),
+            style: TextStyle(fontSize: 20 * scale),
           ),
           ElevatedButton(
             onPressed: () {
@@ -690,7 +690,7 @@ const SizedBox(height: 40),
         children: [
           Text(
             'DEACTIVATE content goes here.',
-            style: TextStyle(fontSize: 18 * scale),
+            style: TextStyle(fontSize: 20 * scale),
           ),
           ElevatedButton(
             onPressed: () {
@@ -710,7 +710,7 @@ const SizedBox(height: 40),
       // padding: const EdgeInsets.all(16),
       // child: Text(
       //   '',
-      //   style: TextStyle(fontSize: 18 * scale),
+      //   style: TextStyle(fontSize: 20 * scale),
       // ),
     );
   }

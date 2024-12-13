@@ -131,7 +131,7 @@ String formatDate(DateTime date) {
                   style: TextStyle(
                     color: const Color(0xff222222),
                     fontFamily: "Roboto-R",
-                    fontSize: 32 * scale,
+                    fontSize: 34 * scale,
                   ),
                 ),
               ],
@@ -149,7 +149,7 @@ String formatDate(DateTime date) {
                   style: TextStyle(
                     color: const Color(0xff222222),
                     fontFamily: "Roboto-L",
-                    fontSize: 20 * scale,
+                    fontSize: 22 * scale,
                   ),
                 ),
                 const Spacer(),
@@ -177,7 +177,7 @@ showDialog(
               const Text(
                 'Add New User',
                 style: TextStyle(
-                  fontSize: 20,
+                  fontSize: 22,
                   fontFamily: "Roboto-R",
                   fontWeight: FontWeight.normal,
                 ),
@@ -203,7 +203,7 @@ showDialog(
                   ]),
                   labelStyle: const TextStyle(
                     color: Color(0xff13322b),
-                    fontSize: 14,
+                    fontSize: 16,
                     ),
                     controller: fnameController,
                     isNumeric: false,
@@ -234,11 +234,13 @@ showDialog(
                   ]),
                   labelStyle: const TextStyle(
                     color: Color(0xff13322b),
-                    fontSize: 14,
+                    fontSize: 16,
                     ),
                     controller: mnameController,
                     isNumeric: false,
                     validator: (value) {
+                      return null;
+                    
                     }),
           ],
                 ),
@@ -261,7 +263,7 @@ showDialog(
                   ]),
                   labelStyle: const TextStyle(
                     color: Color(0xff13322b),
-                    fontSize: 14,
+                    fontSize: 16,
                     ),
                     controller: lnameController,
                     isNumeric: false,
@@ -299,7 +301,7 @@ showDialog(
                             ]),
                             labelStyle: const TextStyle(
                               color: Color(0xff13322b),
-                              fontSize: 14,
+                              fontSize: 16,
                               ),
                               controller: emailController,
                               isNumeric: false,
@@ -331,7 +333,7 @@ showDialog(
                             ]),
                             labelStyle: const TextStyle(
                               color: Color(0xff13322b),
-                              fontSize: 14,
+                              fontSize: 16,
                               ),
                               controller: passwordController,
                               isNumeric: false,
@@ -392,7 +394,7 @@ showDialog(
                           borderRadius: BorderRadius.circular(5),
                         ),
                       ),
-                      hint: Text('Select Admin Role'),
+                      hint: const Text('Select Admin Role'),
                     ),
                         ],
                       ),
@@ -459,7 +461,7 @@ showDialog(
                             ]),
                             labelStyle: const TextStyle(
                               color: Color(0xff13322b),
-                              fontSize: 14,
+                              fontSize: 16,
                               ),
                               controller: contactController,
                               isNumeric: true,
@@ -614,7 +616,7 @@ showDialog(
                         ),
                       ),
                     ),
-                    style: TextStyle(fontSize: 14 * scale),
+                    style: TextStyle(fontSize: 16 * scale),
                   ),
                 ),
               ],
@@ -623,21 +625,21 @@ showDialog(
             Row(
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                Expanded(
-                  flex: 1,
-                  child: Text(
-                    '',
-                    style: TextStyle(fontSize: 14 * scale, fontFamily: 'Roboto-L'),
-                  ),
-                ),
+                // Expanded(
+                //   flex: 1,
+                //   child: Text(
+                //     '',
+                //     style: TextStyle(fontSize: 16 * scale, fontFamily: 'Roboto-L'),
+                //   ),
+                // ),
 
-                const SizedBox(width: 40,),
+                // const SizedBox(width: 40,),
 
                 Expanded(
                   flex: 3,
                   child: Text(
                     'NAME',
-                    style: TextStyle(fontSize: 14 * scale, fontFamily: 'Roboto-L'),
+                    style: TextStyle(fontSize: 16 * scale, fontFamily: 'Roboto-L'),
                   ),
                 ),
 
@@ -647,7 +649,7 @@ showDialog(
                   flex: 3,
                   child: Text(
                     'EMAIL',
-                    style: TextStyle(fontSize: 14 * scale, fontFamily: 'Roboto-L'),
+                    style: TextStyle(fontSize: 16 * scale, fontFamily: 'Roboto-L'),
                   ),
                 ),
 
@@ -657,17 +659,17 @@ showDialog(
                   flex: 2,
                   child: Text(
                     'ROLE',
-                    style: TextStyle(fontSize: 14 * scale, fontFamily: 'Roboto-L'),
+                    style: TextStyle(fontSize: 16 * scale, fontFamily: 'Roboto-L'),
                   ),
                 ),
 
                 const SizedBox(width: 40,),
 
                 Expanded(
-                  flex: 2,
+                  flex: 3,
                   child: Text(
                     'DEPARTMENT',
-                    style: TextStyle(fontSize: 14 * scale, fontFamily: 'Roboto-L'),
+                    style: TextStyle(fontSize: 16 * scale, fontFamily: 'Roboto-L'),
                   ),
                 ),
 
@@ -695,8 +697,31 @@ showDialog(
                       Row(
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
+                          // Expanded(
+                          //   flex: 1,
+                          //   child: Row(
+                          //     children: [
+                          //       Checkbox(
+                          //         value: checkboxStates[index],
+                          //         onChanged: (value) {
+                          //           setState(() {
+                          //             checkboxStates[index] = value ?? false;
+                          //           });
+                          //         },
+                          //         activeColor: const Color(0XFF012169), // Set the active color to pink
+                          //       ),
+                          //      /* Text(
+                          //         request['admin_id'].toString(),
+                          //         style: TextStyle(fontSize: 14 * scale),
+                          //       ),*/
+                          //     ],
+                          //   ),
+                          // ),
+
+                          // const SizedBox(width: 40,),
+
                           Expanded(
-                            flex: 1,
+                            flex: 3,
                             child: Row(
                               children: [
                                 Checkbox(
@@ -708,21 +733,11 @@ showDialog(
                                   },
                                   activeColor: const Color(0XFF012169), // Set the active color to pink
                                 ),
-                               /* Text(
-                                  request['admin_id'].toString(),
-                                  style: TextStyle(fontSize: 12 * scale),
-                                ),*/
+                                Text(
+                                  fullName,
+                                  style: TextStyle(fontFamily: 'Roboto-R', fontSize: 16 * scale),
+                                ),
                               ],
-                            ),
-                          ),
-
-                          const SizedBox(width: 40,),
-
-                          Expanded(
-                            flex: 3,
-                            child: Text(
-                              fullName,
-                              style: TextStyle(fontFamily: 'Roboto-R', fontSize: 14 * scale),
                             ),
                           ),
 
@@ -732,7 +747,7 @@ showDialog(
                             flex: 3,
                             child: Text(
                               request['email_address'],
-                              style: TextStyle(fontFamily: 'Roboto-R', fontSize: 14 * scale),
+                              style: TextStyle(fontFamily: 'Roboto-R', fontSize: 16 * scale),
                             ),
                           ),
 
@@ -742,17 +757,17 @@ showDialog(
                             flex: 2,
                             child: Text(
                               request['db_admin_type']['admin_type'],
-                              style: TextStyle(fontFamily: 'Roboto-R', fontSize: 14 * scale),
+                              style: TextStyle(fontFamily: 'Roboto-R', fontSize: 16 * scale),
                             ),
                           ),
 
                           const SizedBox(width: 40,),
 
                           Expanded(
-                            flex: 2,
+                            flex: 3,
                             child: Text(
                               request['db_admin_department']['department'],
-                              style: TextStyle(fontFamily: 'Roboto-R', fontSize: 14 * scale),
+                              style: TextStyle(fontFamily: 'Roboto-R', fontSize: 16 * scale),
                             ),
                           ),
 
@@ -774,7 +789,7 @@ showDialog(
                                       children: [
                                         const Icon(Icons.visibility, color: Color(0xff909590)),
                                         SizedBox(width: 8 * scale),
-                                        Text("VIEW", style: TextStyle(fontSize: 16 * scale, color: const Color(0xff909590))),
+                                        Text("VIEW", style: TextStyle(fontSize: 18 * scale, color: const Color(0xff909590))),
                                       ],
                                     ),
                                   ),
@@ -784,7 +799,7 @@ showDialog(
                                       children: [
                                         const Icon(Icons.notifications, color: Color(0xff909590)),
                                         SizedBox(width: 8 * scale),
-                                        Text("REMINDER", style: TextStyle(fontSize: 16 * scale, color: const Color(0xff909590))),
+                                        Text("REMINDER", style: TextStyle(fontSize: 18 * scale, color: const Color(0xff909590))),
                                       ],
                                     ),
                                   ),
@@ -794,7 +809,7 @@ showDialog(
                                       children: [
                                         const Icon(Icons.block, color: Color(0xff909590)),
                                         SizedBox(width: 8 * scale),
-                                        Text("DEACTIVATE", style: TextStyle(fontSize: 16 * scale, color: const Color(0xff909590))),
+                                        Text("DEACTIVATE", style: TextStyle(fontSize: 18 * scale, color: const Color(0xff909590))),
                                       ],
                                     ),
                                   ),
@@ -849,7 +864,7 @@ return Container();
         children: [
           Text(
             'REMINDER content goes here.',
-            style: TextStyle(fontSize: 18 * scale),
+            style: TextStyle(fontSize: 20 * scale),
           ),
           ElevatedButton(
             onPressed: () {
@@ -871,7 +886,7 @@ return Container();
         children: [
           Text(
             'DEACTIVATE content goes here.',
-            style: TextStyle(fontSize: 18 * scale),
+            style: TextStyle(fontSize: 20 * scale),
           ),
           ElevatedButton(
             onPressed: () {
@@ -891,7 +906,7 @@ return Container();
       // padding: const EdgeInsets.all(16),
       // child: Text(
       //   '',
-      //   style: TextStyle(fontSize: 18 * scale),
+      //   style: TextStyle(fontSize: 20 * scale),
       // ),
     );
   }
@@ -917,7 +932,7 @@ return Container();
                 // child: Text(
                 //   "",
                 //   style: TextStyle(
-                //     fontSize: 20,
+                //     fontSize: 22,
                 //   ),
                 //   textAlign: TextAlign.center,
                 // ),
@@ -944,7 +959,7 @@ return Container();
                   // Success Message Text
                   Text(message,
                     style: const TextStyle(
-                      fontSize: 16,
+                      fontSize: 18,
                       fontWeight: FontWeight.bold,
                     ),
                     textAlign: TextAlign.center,
@@ -972,7 +987,7 @@ return Container();
                   ),
                   child: const Text(
                     "Close",
-                    style: TextStyle(fontSize: 16, color: Colors.white),
+                    style: TextStyle(fontSize: 18, color: Colors.white),
                   ),
                 ),
               ),

@@ -117,7 +117,7 @@ String formatDate(DateTime date) {
                   style: TextStyle(
                     color: const Color(0xff222222),
                     fontFamily: "Roboto-R",
-                    fontSize: 32 * scale,
+                    fontSize: 34 * scale,
                   ),
                 ),
               ],
@@ -143,7 +143,7 @@ String formatDate(DateTime date) {
                   style: TextStyle(
                     color: const Color(0xff222222),
                     fontFamily: "Roboto-L",
-                    fontSize: 20 * scale,
+                    fontSize: 32 * scale,
                   ),
                 ),
                 const Spacer(),
@@ -173,7 +173,7 @@ String formatDate(DateTime date) {
                         ),
                       ),
                     ),
-                    style: TextStyle(fontSize: 14 * scale),
+                    style: TextStyle(fontSize: 16 * scale),
                   ),
                 ),
               ],
@@ -186,7 +186,7 @@ String formatDate(DateTime date) {
                   flex: 3,
                   child: Text(
                     'NAME',
-                    style: TextStyle(fontSize: 14 * scale, fontFamily: 'Roboto-L'),
+                    style: TextStyle(fontSize: 16 * scale, fontFamily: 'Roboto-L'),
                   ),
                 ),
 
@@ -196,7 +196,7 @@ String formatDate(DateTime date) {
                   flex: 2,
                   child: Text(
                     'CONTACT NO.',
-                    style: TextStyle(fontSize: 14 * scale, fontFamily: 'Roboto-L'),
+                    style: TextStyle(fontSize: 16 * scale, fontFamily: 'Roboto-L'),
                   ),
                 ),
 
@@ -206,7 +206,7 @@ String formatDate(DateTime date) {
                   flex: 3,
                   child: Text(
                     'EMAIL',
-                    style: TextStyle(fontSize: 14 * scale, fontFamily: 'Roboto-L'),
+                    style: TextStyle(fontSize: 16 * scale, fontFamily: 'Roboto-L'),
                   ),
                 ),
 
@@ -216,7 +216,7 @@ String formatDate(DateTime date) {
                   flex: 2,
                   child: Text(
                     'STATUS',
-                    style: TextStyle(fontSize: 14 * scale, fontFamily: 'Roboto-L'),
+                    style: TextStyle(fontSize: 16 * scale, fontFamily: 'Roboto-L'),
                   ),
                 ),
 
@@ -226,7 +226,7 @@ String formatDate(DateTime date) {
                   flex: 2,
                   child: Text(
                     'LAST LOGIN DATE',
-                    style: TextStyle(fontSize: 14 * scale, fontFamily: 'Roboto-L'),
+                    style: TextStyle(fontSize: 16 * scale, fontFamily: 'Roboto-L'),
                   ),
                 ),
 
@@ -278,7 +278,7 @@ String formatDate(DateTime date) {
                                 ),
                                 Text(
                                   fullName,
-                                  style: TextStyle(fontSize: 12 * scale),
+                                  style: TextStyle(fontSize: 16 * scale),
                                 ),
                               ],
                             ),
@@ -290,7 +290,7 @@ String formatDate(DateTime date) {
                           Expanded(
                             flex: 2,
                             child: Text(request['contact_no'],
-                              style: TextStyle(fontFamily: 'Roboto-R', fontSize: 14 * scale),
+                              style: TextStyle(fontFamily: 'Roboto-R', fontSize: 16 * scale),
                             ),
                           ),
 
@@ -299,7 +299,7 @@ String formatDate(DateTime date) {
                           Expanded(
                             flex: 3,
                             child: Text(request['email_address'],
-                              style: TextStyle(fontFamily: 'Roboto-R', fontSize: 14 * scale),
+                              style: TextStyle(fontFamily: 'Roboto-R', fontSize: 16 * scale),
                             ),
                           ),
 
@@ -308,7 +308,7 @@ String formatDate(DateTime date) {
                           Expanded(
                             flex: 2,
                             child: Text(today==loginDate?'ACTIVE':"INACTIVE",
-                              style: TextStyle(fontFamily: 'Roboto-R', fontSize: 14 * scale),
+                              style: TextStyle(fontFamily: 'Roboto-R', fontSize: 16 * scale),
                             ),
                           ),
 
@@ -318,7 +318,7 @@ String formatDate(DateTime date) {
                             flex: 2,
                             child: Text(
                               formattedDate ??"",
-                              style: TextStyle(fontFamily: 'Roboto-R', fontSize: 14 * scale),
+                              style: TextStyle(fontFamily: 'Roboto-R', fontSize: 16 * scale),
                             ),
                           ),
 
@@ -360,7 +360,7 @@ String formatDate(DateTime date) {
           children: [
             const Icon(Icons.visibility, color: Colors.black),
             SizedBox(width: 8 * scale),
-            Text("VIEW", style: TextStyle(fontSize: 16 * scale)),
+            Text("VIEW", style: TextStyle(fontSize: 18 * scale)),
           ],
         ),
       ),
@@ -370,7 +370,7 @@ String formatDate(DateTime date) {
           children: [
              const Icon(Icons.notifications, color: Color(0xff909590)),
             SizedBox(width: 8 * scale),
-            Text("REMINDER", style: TextStyle(fontSize: 16 * scale, color: const Color(0xff909590))),
+            Text("REMINDER", style: TextStyle(fontSize: 18 * scale, color: const Color(0xff909590))),
           ],
         ),
       ),
@@ -380,7 +380,7 @@ String formatDate(DateTime date) {
           children: [
             const Icon(Icons.block, color: Color(0xff909590)),
             SizedBox(width: 8 * scale),
-            Text("DEACTIVATE", style: TextStyle(fontSize: 16 * scale, color: const Color(0xff909590))),
+            Text("DEACTIVATE", style: TextStyle(fontSize: 18 * scale, color: const Color(0xff909590))),
           ],
         ),
       ),
@@ -438,7 +438,7 @@ return Container();
             icon: const Icon(Icons.arrow_back, color: Colors.black),
             label: Text(
               "Back",
-              style: TextStyle(color: Colors.black, fontFamily: 'Roboto-R', fontSize: 12 * scale),
+              style: TextStyle(color: Colors.black, fontFamily: 'Roboto-R', fontSize: 14 * scale),
             ),
           ),
         ],
@@ -460,7 +460,7 @@ return Container();
         children: [
           Text(
             'REMINDER content goes here.',
-            style: TextStyle(fontSize: 18 * scale),
+            style: TextStyle(fontSize: 20 * scale),
           ),
           ElevatedButton(
             onPressed: () {
@@ -482,7 +482,7 @@ return Container();
         children: [
           Text(
             'DEACTIVATE content goes here.',
-            style: TextStyle(fontSize: 18 * scale),
+            style: TextStyle(fontSize: 20 * scale),
           ),
           ElevatedButton(
             onPressed: () {
@@ -502,7 +502,7 @@ return Container();
       // padding: const EdgeInsets.all(16),
       // child: Text(
       //   '',
-      //   style: TextStyle(fontSize: 18 * scale),
+      //   style: TextStyle(fontSize: 20 * scale),
       // ),
     );
   }
@@ -531,7 +531,7 @@ void _showViewModal(BuildContext context) {
                 // child: Text(
                 //   "",
                 //   style: TextStyle(
-                //     fontSize: 20,
+                //     fontSize: 32,
                 //   ),
                 //   textAlign: TextAlign.center,
                 // ),
@@ -559,7 +559,7 @@ void _showViewModal(BuildContext context) {
                   const Text(
                     "No data entry found!",
                     style: TextStyle(
-                      fontSize: 20,
+                      fontSize: 30,
                       fontWeight: FontWeight.bold,
                     ),
                     textAlign: TextAlign.center,
@@ -617,16 +617,16 @@ void _showViewModal(BuildContext context) {
               child: Text(
             title,
             style: const TextStyle(
-                fontSize: 16,
+                fontSize: 18,
                 fontWeight: FontWeight.w700,
                 color: Color(0xff13322b)),
           )),
           content: Text(message,
-              style: const TextStyle(fontSize: 16, color: Color(0xff13322b))),
+              style: const TextStyle(fontSize: 18, color: Color(0xff13322b))),
           actions: <Widget>[
             TextButton(
               child: const Text("OK",
-                  style: TextStyle(fontSize: 16, color: Color(0xff13322b))),
+                  style: TextStyle(fontSize: 18, color: Color(0xff13322b))),
               onPressed: () {
                 Navigator.of(context).pop();
               },

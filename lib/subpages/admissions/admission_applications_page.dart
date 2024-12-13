@@ -170,7 +170,7 @@ String formatDate(DateTime date) {
                   style: TextStyle(
                     color: const Color(0xff222222),
                     fontFamily: "Roboto-R",
-                    fontSize: 32 * scale,
+                    fontSize: 34 * scale,
                   ),
                 ),
               ],
@@ -199,7 +199,7 @@ String formatDate(DateTime date) {
                   style: TextStyle(
                     color: const Color(0xff222222),
                     fontFamily: "Roboto-L",
-                    fontSize: 20 * scale,
+                    fontSize: 22 * scale,
                   ),
                 ),
                 const Spacer(),
@@ -231,7 +231,7 @@ String formatDate(DateTime date) {
                       ),
                     ),
                     onChanged: _onSearchChanged,
-                    style: TextStyle(fontSize: 14 * scale),
+                    style: TextStyle(fontSize: 16 * scale),
                   ),
                 ),
               ],
@@ -244,35 +244,35 @@ String formatDate(DateTime date) {
                   flex: 2,
                   child: Text(
                     'Application ID',
-                    style: TextStyle(fontSize: 14 * scale, fontFamily: 'Roboto-L'),
+                    style: TextStyle(fontSize: 16 * scale, fontFamily: 'Roboto-L'),
                   ),
                 ),
                 Expanded(
                   flex: 2,
                   child: Text(
                     'Applicant Name',
-                    style: TextStyle(fontSize: 14 * scale, fontFamily: 'Roboto-L'),
+                    style: TextStyle(fontSize: 16 * scale, fontFamily: 'Roboto-L'),
                   ),
                 ),
                 Expanded(
                   flex: 2,
                   child: Text(
                     'Handled By',
-                    style: TextStyle(fontSize: 14 * scale, fontFamily: 'Roboto-L'),
+                    style: TextStyle(fontSize: 16 * scale, fontFamily: 'Roboto-L'),
                   ),
                 ),
                 Expanded(
                   flex: 2,
                   child: Text(
                     'Status',
-                    style: TextStyle(fontSize: 14 * scale, fontFamily: 'Roboto-L'),
+                    style: TextStyle(fontSize: 16 * scale, fontFamily: 'Roboto-L'),
                   ),
                 ),
                 Expanded(
-                  flex: 1,
+                  flex: 2,
                   child: Text(
                     'Date Created',
-                    style: TextStyle(fontSize: 14 * scale, fontFamily: 'Roboto-L'),
+                    style: TextStyle(fontSize: 16 * scale, fontFamily: 'Roboto-L'),
                   ),
                 ),
                 const Expanded(flex: 1, child: SizedBox.shrink()),
@@ -312,7 +312,7 @@ String formatDate(DateTime date) {
                                 ),
                                 Text(
                                   request['db_admission_table']['admission_form_id'].toString(),
-                                  style: TextStyle(fontSize: 12 * scale),
+                                  style: TextStyle(fontSize: 16 * scale),
                                 ),
                               ],
                             ),
@@ -320,26 +320,26 @@ String formatDate(DateTime date) {
                           Expanded(
                             flex: 2,
                             child: Text(fullName,
-                              style: TextStyle(fontFamily: 'Roboto-R', fontSize: 14 * scale),
+                              style: TextStyle(fontFamily: 'Roboto-R', fontSize: 16 * scale),
                             ),
                           ),
                           Expanded(
                             flex: 2,
                             child: Text(processBy,
-                              style: TextStyle(fontFamily: 'Roboto-R', fontSize: 14 * scale),
+                              style: TextStyle(fontFamily: 'Roboto-R', fontSize: 16 * scale),
                             ),
                           ),
                           Expanded(
                             flex: 2,
                             child: Text(!request['db_admission_table']['is_complete_view']?request['db_admission_table']['admission_status'].toString().toUpperCase():"COMPLETE",
-                              style: TextStyle(fontFamily: 'Roboto-R', fontSize: 14 * scale, 
+                              style: TextStyle(fontFamily: 'Roboto-R', fontSize: 16 * scale, 
                               color: request['db_admission_table']['is_complete_view']?const Color(0xFF007A33):_getStatusColor(request['db_admission_table']['admission_status'])),
                             ),
                           ),
                           Expanded(
-                            flex: 1,
+                            flex: 2,
                             child: Text(formattedDate,
-                              style: TextStyle(fontFamily: 'Roboto-R', fontSize: 14 * scale),
+                              style: TextStyle(fontFamily: 'Roboto-R', fontSize: 16 * scale),
                             ),
                           ),
                             // Other table cells...
@@ -443,7 +443,7 @@ String formatDate(DateTime date) {
   // Build content for each action (VIEW, REMINDER, DEACTIVATE)
   Widget _buildViewContent(double scale, List<Map<String, dynamic>> details, int userId, String adminType) {
     
-    bool _isLoading = false;
+    bool isLoading = false;
     return BlocConsumer<AdmissionBloc, AdmissionState>(
       listener: (context, state) {},
       builder: (context, state) {
@@ -471,7 +471,7 @@ String formatDate(DateTime date) {
             icon: const Icon(Icons.arrow_back, color: Colors.black),
             label: Text(
               "Back",
-              style: TextStyle(color: Colors.black, fontFamily: 'Roboto-R', fontSize: 12 * scale),
+              style: TextStyle(color: Colors.black, fontFamily: 'Roboto-R', fontSize: 14 * scale),
             ),
           ),
           
@@ -494,7 +494,7 @@ String formatDate(DateTime date) {
                   },
                   child: Text(
                     "Download PDF",
-                    style: TextStyle(color: Colors.white, fontFamily: 'Roboto-R', fontSize: 12 * scale),
+                    style: TextStyle(color: Colors.white, fontFamily: 'Roboto-R', fontSize: 14 * scale),
                   ),
                 ),
               ),
@@ -525,12 +525,12 @@ String formatDate(DateTime date) {
                                     builder: (context, state) {
                                        // Enable button based on the state
                                               if (state is AdmissionIsLoading) {
-                                                _isLoading = state.isLoading;
+                                                isLoading = state.isLoading;
                                               }
                                       return SizedBox(
                                                                       width: 349.0,
                                                                       height: 272.0,
-                                                                      child: _isLoading
+                                                                      child: isLoading
                                                               ? const CustomSpinner(
                                                                   color:
                                                                       Color(0xff13322b), // Change the spinner color if needed
@@ -545,7 +545,7 @@ String formatDate(DateTime date) {
                                                                               "Confirmation",
                                                                               style: TextStyle(
                                                                                 fontFamily: 'Roboto',
-                                                                                fontSize: 20,
+                                                                                fontSize: 22,
                                                                                 fontWeight: FontWeight.bold,
                                                                               ),
                                                                               textAlign: TextAlign.center,
@@ -652,7 +652,7 @@ String formatDate(DateTime date) {
                                                                                               // child: Text(
                                                                                               //   "",
                                                                                               //   style: TextStyle(
-                                                                                              //     fontSize: 20,
+                                                                                              //     fontSize: 22,
                                                                                               //   ),
                                                                                               //   textAlign: TextAlign.center,
                                                                                               // ),
@@ -680,7 +680,7 @@ String formatDate(DateTime date) {
                                                                                                 const Text(
                                                                                                   "Application Completed",
                                                                                                   style: TextStyle(
-                                                                                                    fontSize: 20,
+                                                                                                    fontSize: 22,
                                                                                                     fontWeight: FontWeight.bold,
                                                                                                   ),
                                                                                                   textAlign: TextAlign.center,
@@ -787,7 +787,7 @@ String formatDate(DateTime date) {
                         style: TextStyle(
                           color: Colors.white,
                           fontFamily: 'Roboto-R',
-                          fontSize: 12 * scale,
+                          fontSize: 14 * scale,
                         ),
                       ),
                     ),
@@ -819,7 +819,7 @@ String formatDate(DateTime date) {
         children: [
           Text(
             'REMINDER content goes here.',
-            style: TextStyle(fontSize: 18 * scale),
+            style: TextStyle(fontSize: 20 * scale),
           ),
           ElevatedButton(
             onPressed: () {
@@ -841,7 +841,7 @@ String formatDate(DateTime date) {
         children: [
           Text(
             'DEACTIVATE content goes here.',
-            style: TextStyle(fontSize: 18 * scale),
+            style: TextStyle(fontSize: 20 * scale),
           ),
           ElevatedButton(
             onPressed: () {
@@ -861,7 +861,7 @@ String formatDate(DateTime date) {
       // padding: const EdgeInsets.all(16),
       // child: Text(
       //   '',
-      //   style: TextStyle(fontSize: 18 * scale),
+      //   style: TextStyle(fontSize: 20 * scale),
       // ),
     );
   }
