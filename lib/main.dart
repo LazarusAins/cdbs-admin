@@ -23,19 +23,7 @@ import 'subpages/admission_applications_page2.dart';*/
 
 
 void main() async {
-  await clearOldPreferences();
   runApp(const MyApp());
-}
-
-
-Future<void> clearOldPreferences() async {
-  final prefs = await SharedPreferences.getInstance();
-  
-  // Optional: Debug log to inspect stored data
-  print("Current SharedPreferences: ${prefs.getKeys().toString()}");
-
-  // Clear all stored data
-  await prefs.clear();
 }
 
 
