@@ -25,10 +25,21 @@ import 'subpages/admission_applications_page2.dart';*/
 void main() async {
   try {
     final prefs = await SharedPreferences.getInstance();
-    // Check or initialize prefs
+
+    // Debugging: Check which value is null
+    print("UID: ${prefs.getInt('uid')}");
+    print("AdminType: ${prefs.getString('adminType')}");
+    print("DepartmentId: ${prefs.getInt('departmentId')}");
+    print("FirstName: ${prefs.getString('firstName')}");
+    print("MiddleName: ${prefs.getString('middleName')}");
+    print("LastName: ${prefs.getString('lastName')}");
+    print("Email: ${prefs.getString('email')}");
+    print("Department: ${prefs.getString('department')}");
+    
   } catch (e) {
     print("Error initializing preferences: $e");
   }
+
   runApp(const MyApp());
   
 }
