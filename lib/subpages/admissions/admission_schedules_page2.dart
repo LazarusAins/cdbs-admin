@@ -123,7 +123,7 @@ class _AdmissionSchedulesPage2State extends State<AdmissionSchedulesPage2> {
                       Expanded(
                         flex: 2,
                         child: _buildInfoColumn(
-                          label: 'Exam Location',
+                          label: 'Meeting Place',
                           value: widget.formDetails![0]['location'],
                           scale: scale,
                         ),
