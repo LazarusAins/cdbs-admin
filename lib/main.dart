@@ -23,7 +23,14 @@ import 'subpages/admission_applications_page2.dart';*/
 
 
 void main() async {
+  try {
+    final prefs = await SharedPreferences.getInstance();
+    // Check or initialize prefs
+  } catch (e) {
+    print("Error initializing preferences: $e");
+  }
   runApp(const MyApp());
+  
 }
 
 
