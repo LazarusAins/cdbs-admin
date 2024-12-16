@@ -28,7 +28,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     );
   }
 
-  void _checkSession() async {
+  /*void _checkSession() async {
     try {
       final prefs = await SharedPreferences.getInstance();
       final uid = prefs.getInt('uid');
@@ -63,7 +63,59 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     } catch (e) {
       emit(AuthFailure('Failed to check session: $e'));
     }
+  }*/
+
+  void _checkSession() async {
+  try {
+    final prefs = await SharedPreferences.getInstance();
+    final uid = prefs.getInt('uid');
+    final adminType = prefs.getString('adminType');
+    final departmentId = prefs.getInt('departmentId');
+    final firstName = prefs.getString('firstName');
+    final middleName = prefs.getString('middleName');
+    final lastName = prefs.getString('lastName');
+    final email = prefs.getString('email');
+    final department = prefs.getString('department');
+
+    // Check if all values are null
+    if (uid == null &&
+        adminType == null &&
+        departmentId == null &&
+        firstName == null &&
+        middleName == null &&
+        lastName == null &&
+        email == null &&
+        department == null) {
+      // Clear SharedPreferences if all values are null
+      await prefs.clear();
+      emit(AuthInitial());
+    } else if (uid != null &&
+        adminType != null &&
+        departmentId != null &&
+        firstName != null &&
+        middleName != null &&
+        lastName != null &&
+        email != null &&
+        department != null) {
+      // Emit AuthSuccess if all required values are present
+      emit(AuthSuccess(
+          uid: uid,
+          adminType: adminType,
+          departmentId: departmentId,
+          firstName: firstName,
+          middleName: middleName,
+          lastName: lastName,
+          email: email,
+          department: department));
+    } else {
+      // Emit AuthInitial for incomplete data
+      emit(AuthInitial());
+    }
+  } catch (e) {
+    emit(AuthFailure('Failed to check session: $e'));
   }
+}
+
 
   @override
   void onChange(Change<AuthState> change) {
