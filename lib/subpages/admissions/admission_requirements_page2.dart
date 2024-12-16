@@ -18,8 +18,9 @@ class AdmissionRequirementsPage2 extends StatefulWidget {
 
   List<Map<String, dynamic>>? formDetails;
   final Function(bool isClicked) onNextPressed;
+  int userId;
 
-  AdmissionRequirementsPage2({super.key, required this.formDetails, required this.onNextPressed});
+  AdmissionRequirementsPage2({super.key, required this.formDetails, required this.onNextPressed,required this.userId});
 
   @override
   State<AdmissionRequirementsPage2> createState() =>
@@ -50,8 +51,54 @@ class _AdmissionRequirementsPage2State extends State<AdmissionRequirementsPage2>
     formattedDate = formatDate(dateCreated);
   }
 
-  Future<void> updateData(int admissionId) async  {
-    myformDetails = await ApiService(apiUrl).getFormsDetailsById(admissionId, supabaseUrl, supabaseKey);
+  Future<void> updateData(int admissionId) async {
+    myformDetails = await ApiService(apiUrl)
+        .getFormsDetailsById(admissionId, supabaseUrl, supabaseKey);
+    bool isDone = checkDocumentRequirements(
+        myformDetails[0]['db_admission_table']['level_applying_for'],
+        List<Map<String, dynamic>>.from(myformDetails[0]['db_admission_table']
+            ['db_required_documents_table']));
+    if (isDone) {
+      try {
+        final response = await http.post(
+          Uri.parse('$apiUrl/api/admin/update_admission'),
+          headers: {
+            'Content-Type': 'application/json',
+            'supabase-url': supabaseUrl,
+            'supabase-key': supabaseKey,
+          },
+          body: json.encode({
+            'admission_id': myformDetails[0]
+                ['admission_id'], // Send admission_id in the request body
+            'is_all_required_file_uploaded': true,
+            'user_id': widget.userId,
+            'admission_status': 'pending',
+            'is_done': true,
+          }),
+        );
+      } catch (error) {
+        // Handle error (e.g., network error)
+        print('Error: $error');
+
+        // Show error modal
+        showDialog(
+          context: context,
+          builder: (context) => AlertDialog(
+            title: const Text("Error"),
+            content: const Text(
+                "An unexpected error occurred. Please try again later."),
+            actions: [
+              TextButton(
+                onPressed: () {
+                  Navigator.of(context).pop(); // Close the dialog
+                },
+                child: const Text("OK"),
+              ),
+            ],
+          ),
+        );
+      }
+    }
   }
 
   String formatDate(DateTime date) {
@@ -359,9 +406,10 @@ class _AdmissionRequirementsPage2State extends State<AdmissionRequirementsPage2>
                                                                         final responseBody = jsonDecode(response.body);
                                                                         setState(() {
                                                                           updateData(document[index]['admission_id']);
-                                                                          checkDocumentRequirements(gradeLevel, List<Map<String, dynamic>>.from(
-                                                            myformDetails[0]['db_admission_table']['db_required_documents_table']
+                                                                          bool isDone=checkDocumentRequirements(gradeLevel, List<Map<String, dynamic>>.from(
+                                                            document
                                                           ));
+                                                          print(isDone);
                                                                         });
                                                                         // Show success modal
                                                                         Navigator.of(context).popUntil((route) => route.isFirst);
@@ -971,6 +1019,7 @@ Widget _buildImageCard({
 }
 
 bool checkDocumentRequirements(String gradeLevel, List<Map<String, dynamic>> formRequirements) {
+
     // Define the list of required doc_ids based on the grade level
     List<int> requiredDocIds;
 

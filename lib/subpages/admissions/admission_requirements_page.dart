@@ -533,7 +533,7 @@ String formatDate(DateTime date) {
                 ),
               ),
               const SizedBox(width: 8), // Spacing between buttons
-              ElevatedButton(
+              /*ElevatedButton(
                 style: ElevatedButton.styleFrom(
                   backgroundColor: const Color(0xFF007A33), // Green color
                   fixedSize: Size(178 * scale, 37 * scale), // Button size
@@ -810,7 +810,7 @@ String formatDate(DateTime date) {
                   "Mark as Complete",
                   style: TextStyle(color: Colors.white, fontFamily: 'Roboto-R', fontSize: 14 * scale),
                 ),
-              ),
+              )*/
             ],
           ),
         ],
@@ -821,7 +821,7 @@ String formatDate(DateTime date) {
       // Adding AdmissionApplicationsPage2 below the buttons
        AdmissionRequirementsPage2(formDetails: details, onNextPressed: (bool isClicked) {
          context.read<AdmissionBloc>().add(MarkAsCompleteClicked(isClicked));
-       },),
+       },userId: userId,),
     ],
   ),
 );
