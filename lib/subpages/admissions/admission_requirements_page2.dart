@@ -196,7 +196,10 @@ class _AdmissionRequirementsPage2State extends State<AdmissionRequirementsPage2>
           itemBuilder: (context, index) {
             var document = myformDetails[0]['db_admission_table']['db_required_documents_table'];
             String gradeLevel = myformDetails[0]['db_admission_table']['level_applying_for'];
-            String originalUrl = document[index]['document_url'].substring(2, document[index]['document_url'].length - 2);
+            String originalUrl='';
+            if(document[index]['document_url']!=null){
+             originalUrl = document[index]['document_url'].substring(2, document[index]['document_url'].length - 2);
+            }
             String encodedUrl = Uri.encodeFull(originalUrl);
             return Column(
               children: [
@@ -215,7 +218,7 @@ class _AdmissionRequirementsPage2State extends State<AdmissionRequirementsPage2>
                     Expanded(
                       flex: 2,
                       child: ElevatedButton(
-                        onPressed: () async { // Ensure imagePath is a valid URL
+                        onPressed: document[index]['document_url']!=null? () async { // Ensure imagePath is a valid URL
                       
                                 // Use the browser's built-in window.open method
                                 try {
@@ -226,7 +229,7 @@ class _AdmissionRequirementsPage2State extends State<AdmissionRequirementsPage2>
                                         content: Text('Could not open the link')),
                                   );
                                 }
-                              },
+                              }:null,
                               style: ElevatedButton.styleFrom(
                                 backgroundColor: const Color(0xff012169),
                                 shape: RoundedRectangleBorder(

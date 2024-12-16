@@ -43807,7 +43807,8 @@ l=n.h(o,"document_status")
 if(J.c(m,r)&&J.c(l,"accepted")){q=!0
 break}}b.length===i||(0,A.T)(b);++p}if(!q)return!1}return!0}}
 A.amY.prototype={
-$2(a,b){var s,r="db_admission_table",q="document_url",p=null,o="Roboto-R",n="document_status",m=this.a,l=J.f(J.f(J.f(m.z,0),r),"db_required_documents_table"),k=J.f(J.f(J.f(m.z,0),r),"level_applying_for"),j=J.ao(l),i=A.Iq(B.is,J.aQY(J.f(j.h(l,b),q),2,J.aGB(J.bj(J.f(j.h(l,b),q)),2)),B.at,!1),h=14*this.b,g=A.C(A.m(J.f(J.f(j.h(l,b),"db_requirement_type_table"),"doc_type"),p,p,p,A.r(p,p,p,p,p,p,p,p,o,p,p,h,p,p,p,p,p,!0,p,p,p,p,p,p,p,p),p,p,p),3),f=A.C(A.bk(B.XA,new A.amV(i,a),A.bX(p,p,B.D,p,p,p,p,p,p,p,p,p,p,p,p,new A.aA(A.a_(5),B.l),p,p,p,p)),2)
+$2(a,b){var s,r="db_admission_table",q="document_url",p=null,o="Roboto-R",n="document_status",m=this.a,l=J.f(J.f(J.f(m.z,0),r),"db_required_documents_table"),k=J.f(J.f(J.f(m.z,0),r),"level_applying_for"),j=J.ao(l),i=A.Iq(B.is,J.f(j.h(l,b),q)!=null?J.aQY(J.f(j.h(l,b),q),2,J.aGB(J.bj(J.f(j.h(l,b),q)),2)):"",B.at,!1),h=14*this.b,g=A.C(A.m(J.f(J.f(j.h(l,b),"db_requirement_type_table"),"doc_type"),p,p,p,A.r(p,p,p,p,p,p,p,p,o,p,p,h,p,p,p,p,p,!0,p,p,p,p,p,p,p,p),p,p,p),3),f=J.f(j.h(l,b),q)!=null?new A.amV(i,a):p
+f=A.C(A.bk(B.XA,f,A.bX(p,p,B.D,p,p,p,p,p,p,p,p,p,p,p,p,new A.aA(A.a_(5),B.l),p,p,p,p)),2)
 h=A.C(A.m(J.a19(J.f(j.h(l,b),n)),p,p,p,A.r(p,p,p,p,p,p,p,p,o,p,p,h,p,p,p,p,p,!0,p,p,p,p,p,p,p,p),p,p,p),2)
 s=J.c(J.f(j.h(l,b),n),"pending")?new A.amW(m,a,l,b,k):p
 s=A.bk(B.X8,s,A.bX(p,p,B.EI,p,p,p,p,p,p,p,p,p,p,B.aK,p,B.Pg,p,p,p,p))
