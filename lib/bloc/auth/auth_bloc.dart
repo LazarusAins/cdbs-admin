@@ -112,7 +112,9 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
       emit(AuthInitial());
     }
   } catch (e) {
-    emit(AuthFailure('Failed to check session: $e'));
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.clear();
+    emit(AuthFailure('Failed1 to check session: $e'));
   }
 }
 
