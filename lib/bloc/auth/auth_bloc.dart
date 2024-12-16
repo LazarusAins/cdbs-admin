@@ -180,7 +180,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
         emit(AuthFailure('Error: ${response.statusCode}'));
       }
     } catch (e) {
-      emit(AuthFailure(e.toString()));
+      emit(AuthFailure('1 ${e.toString()}'));
     }
   }
 

@@ -301,7 +301,7 @@ SizedBox(
                     height: 35 * scale,
                     child: ElevatedButton(
                       onPressed: (){
-                        _validateCredentials();
+                        //_validateCredentials();
                         context.read<AuthBloc>().add(
                               AuthLoginRequested(
                                 email: _emailController.text.trim(),
