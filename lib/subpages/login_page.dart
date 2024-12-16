@@ -49,7 +49,6 @@ class _LoginPageState extends State<LoginPage> {
         listener: (context, state) {
           // TODO: implement listener
           if (state is AuthFailure) {
-            context.read<AuthBloc>().add(AuthLogoutRequested());
             ScaffoldMessenger.of(context).showSnackBar(
               SnackBar(
                 content: Text(state.error),
