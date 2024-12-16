@@ -154,7 +154,7 @@ class _AdmissionOverviewPageState extends State<AdmissionOverviewPage> {
                   style: TextStyle(
                     color: const Color(0xff222222),
                     fontFamily: "Roboto-R",
-                    fontSize: 32 * scale,
+                    fontSize: 34 * scale,
                   ),
                 ),
               ],
@@ -172,7 +172,7 @@ class _AdmissionOverviewPageState extends State<AdmissionOverviewPage> {
                   style: TextStyle(
                     color: const Color(0xff222222),
                     fontFamily: "Roboto-L",
-                    fontSize: 20 * scale,
+                    fontSize: 22 * scale,
                   ),
                 ),
                 const Spacer(),
@@ -204,7 +204,7 @@ class _AdmissionOverviewPageState extends State<AdmissionOverviewPage> {
                       ),
                     ),
                     onChanged: _onSearchChanged,
-                    style: TextStyle(fontSize: 14 * scale),
+                    style: TextStyle(fontSize: 16 * scale),
                   ),
                 ),
               ],
@@ -214,38 +214,38 @@ class _AdmissionOverviewPageState extends State<AdmissionOverviewPage> {
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 Expanded(
-                  flex: 2,
+                  flex: 1,
                   child: Text(
                     'Application ID',
-                    style: TextStyle(fontSize: 14 * scale, fontFamily: 'Roboto-L'),
+                    style: TextStyle(fontSize: 16 * scale, fontFamily: 'Roboto-L'),
                   ),
                 ),
                 Expanded(
                   flex: 2,
                   child: Text(
                     'Applicant Name',
-                    style: TextStyle(fontSize: 14 * scale, fontFamily: 'Roboto-L'),
+                    style: TextStyle(fontSize: 16 * scale, fontFamily: 'Roboto-L'),
                   ),
                 ),
                 Expanded(
                   flex: 2,
                   child: Text(
                     'Handled By',
-                    style: TextStyle(fontSize: 14 * scale, fontFamily: 'Roboto-L'),
+                    style: TextStyle(fontSize: 16 * scale, fontFamily: 'Roboto-L'),
                   ),
                 ),
                 Expanded(
                   flex: 2,
                   child: Text(
                     'Status',
-                    style: TextStyle(fontSize: 14 * scale, fontFamily: 'Roboto-L'),
+                    style: TextStyle(fontSize: 16 * scale, fontFamily: 'Roboto-L'),
                   ),
                 ),
                 Expanded(
                   flex: 1,
                   child: Text(
                     'Date Created',
-                    style: TextStyle(fontSize: 14 * scale, fontFamily: 'Roboto-L'),
+                    style: TextStyle(fontSize: 16 * scale, fontFamily: 'Roboto-L'),
                   ),
                 ),
                 const Expanded(flex: 1, child: SizedBox.shrink()),
@@ -313,7 +313,7 @@ class _AdmissionOverviewPageState extends State<AdmissionOverviewPage> {
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
                           Expanded(
-                            flex: 2,
+                            flex: 1,
                             child: Row(
                               children: [
                                 Checkbox(
@@ -327,7 +327,7 @@ class _AdmissionOverviewPageState extends State<AdmissionOverviewPage> {
                                 ),
                                 Text(
                                   request['db_admission_table']['admission_form_id'].toString(),
-                                  style: TextStyle(fontSize: 12 * scale),
+                                  style: TextStyle(fontSize: 16 * scale),
                                 ),
                               ],
                             ),
@@ -335,13 +335,13 @@ class _AdmissionOverviewPageState extends State<AdmissionOverviewPage> {
                           Expanded(
                             flex: 2,
                             child: Text(fullName,
-                              style: TextStyle(fontFamily: 'Roboto-R', fontSize: 14 * scale),
+                              style: TextStyle(fontFamily: 'Roboto-R', fontSize: 16 * scale),
                             ),
                           ),
                           Expanded(
                             flex: 2,
                             child: Text(processBy ?? '---',
-                              style: TextStyle(fontFamily: 'Roboto-R', fontSize: 14 * scale),
+                              style: TextStyle(fontFamily: 'Roboto-R', fontSize: 16 * scale),
                             ),
                           ),
                           Expanded(
@@ -349,10 +349,10 @@ class _AdmissionOverviewPageState extends State<AdmissionOverviewPage> {
                             child: Row(
                               children: [
                                 Text(titleText,
-                                  style: TextStyle(fontFamily: 'Roboto-R', fontSize: 14 * scale),
+                                  style: TextStyle(fontFamily: 'Roboto-R', fontSize: 16 * scale),
                                 ),
                                 Text(statusText.toUpperCase(),
-                                  style: TextStyle(fontFamily: 'Roboto-R', fontSize: 14 * scale, color: statusColor),
+                                  style: TextStyle(fontFamily: 'Roboto-R', fontSize: 16 * scale, color: statusColor),
                                 ),
                               ],
                             ),
@@ -360,7 +360,7 @@ class _AdmissionOverviewPageState extends State<AdmissionOverviewPage> {
                           Expanded(
                             flex: 1,
                             child: Text(formattedDate,
-                              style: TextStyle(fontFamily: 'Roboto-R', fontSize: 14 * scale),
+                              style: TextStyle(fontFamily: 'Roboto-R', fontSize: 16 * scale),
                             ),
                           ),
                             // Other table cells...
@@ -380,7 +380,7 @@ class _AdmissionOverviewPageState extends State<AdmissionOverviewPage> {
                                       children: [
                                         const Icon(Icons.visibility, color: Color(0xff909590)),
                                         SizedBox(width: 8 * scale),
-                                        Text("VIEW", style: TextStyle(fontSize: 16 * scale, color: const Color(0xff909590))),
+                                        Text("VIEW", style: TextStyle(fontSize: 18 * scale, color: const Color(0xff909590))),
                                       ],
                                     ),
                                   ),
@@ -390,7 +390,7 @@ class _AdmissionOverviewPageState extends State<AdmissionOverviewPage> {
                                       children: [
                                         const Icon(Icons.notifications, color: Color(0xff909590)),
                                         SizedBox(width: 8 * scale),
-                                        Text("REMINDER", style: TextStyle(fontSize: 16 * scale, color: const Color(0xff909590))),
+                                        Text("REMINDER", style: TextStyle(fontSize: 18 * scale, color: const Color(0xff909590))),
                                       ],
                                     ),
                                   ),
@@ -400,7 +400,7 @@ class _AdmissionOverviewPageState extends State<AdmissionOverviewPage> {
                                       children: [
                                         const Icon(Icons.block, color: Color(0xff909590)),
                                         SizedBox(width: 8 * scale),
-                                        Text("DEACTIVATE", style: TextStyle(fontSize: 16 * scale, color: const Color(0xff909590))),
+                                        Text("DEACTIVATE", style: TextStyle(fontSize: 18 * scale, color: const Color(0xff909590))),
                                       ],
                                     ),
                                   ),
@@ -447,7 +447,7 @@ class _AdmissionOverviewPageState extends State<AdmissionOverviewPage> {
             icon: const Icon(Icons.arrow_back, color: Colors.black),
             label: Text(
               "Back",
-              style: TextStyle(color: Colors.black, fontFamily: 'Roboto-R', fontSize: 12 * scale),
+              style: TextStyle(color: Colors.black, fontFamily: 'Roboto-R', fontSize: 14 * scale),
             ),
           ),
         ],
@@ -467,7 +467,7 @@ class _AdmissionOverviewPageState extends State<AdmissionOverviewPage> {
         children: [
           Text(
             'REMINDER content goes here.',
-            style: TextStyle(fontSize: 18 * scale),
+            style: TextStyle(fontSize: 20 * scale),
           ),
           ElevatedButton(
             onPressed: () {
@@ -489,7 +489,7 @@ class _AdmissionOverviewPageState extends State<AdmissionOverviewPage> {
         children: [
           Text(
             'DEACTIVATE content goes here.',
-            style: TextStyle(fontSize: 18 * scale),
+            style: TextStyle(fontSize: 20 * scale),
           ),
           ElevatedButton(
             onPressed: () {
@@ -509,7 +509,7 @@ class _AdmissionOverviewPageState extends State<AdmissionOverviewPage> {
       // padding: const EdgeInsets.all(16),
       // child: Text(
       //   '',
-      //   style: TextStyle(fontSize: 18 * scale),
+      //   style: TextStyle(fontSize: 20 * scale),
       // ),
     );
   }
