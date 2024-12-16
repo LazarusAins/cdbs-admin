@@ -8,6 +8,7 @@ import 'package:cdbs_admin/subpages/s1.dart';*/
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'dart:html' as html;
 /*import 'subpages/home_page.dart';
 import 'subpages/login_page.dart';
 import 'subpages/forgot_password.dart';
@@ -20,27 +21,29 @@ import 'subpages/admission_applications_page2.dart';*/
 //       home: LoginPage(),
 //     ));
 
-
+void clearWebCache() {
+  try {
+    // Clear browser's localStorage
+    html.window.localStorage.clear();
+    print("Browser cache cleared successfully.");
+  } catch (e) {
+    print("Failed to clear browser cache: $e");
+  }
+}
 
 void main() async {
   try {
     final prefs = await SharedPreferences.getInstance();
-
-    // Debugging: Check which value is null
-    print("UID: ${prefs.getInt('uid')}");
-    print("AdminType: ${prefs.getString('adminType')}");
-    print("DepartmentId: ${prefs.getInt('departmentId')}");
-    print("FirstName: ${prefs.getString('firstName')}");
-    print("MiddleName: ${prefs.getString('middleName')}");
-    print("LastName: ${prefs.getString('lastName')}");
-    print("Email: ${prefs.getString('email')}");
-    print("Department: ${prefs.getString('department')}");
-    
+    // Your app initialization logic
+    runApp(const MyApp());
   } catch (e) {
     print("Error initializing preferences: $e");
-  }
 
-  runApp(const MyApp());
+    // Attempt to clear cache and reload the app
+    clearWebCache(); // Call this if using Flutter Web
+    await Future.delayed(Duration(seconds: 1)); // Give some time to clear
+    runApp(const MyApp());
+  }
   
 }
 
