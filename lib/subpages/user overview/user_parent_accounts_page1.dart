@@ -69,7 +69,7 @@ String formatDate(DateTime date) {
             return const Center(
               // Center the spinner when loading
               child: SpinKitCircle(
-                color: Color(0xff13322B), // Change the color as needed
+                color: Color(0xff012169), // Change the color as needed
                 size: 50.0, // Adjust size as needed
               ),
             );
@@ -81,7 +81,7 @@ String formatDate(DateTime date) {
                   return const Center(
               // Center the spinner when loading
                     child: SpinKitCircle(
-                      color: Color(0xff13322B), // Change the color as needed
+                      color: Color(0xff012169), // Change the color as needed
                       size: 50.0, // Adjust size as needed
                     ),
                   );
