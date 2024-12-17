@@ -102,9 +102,15 @@ class _AdmissionRequirementsPage2State extends State<AdmissionRequirementsPage2>
   }
 
   String formatDate(DateTime date) {
-    final DateFormat formatter = DateFormat('dd-MM-yyyy HH:mm');
-    return formatter.format(date);
-  }
+  // Convert the UTC date to local time
+  DateTime localDate = date.toLocal();
+
+  // Create a DateFormat object to format the date
+  final DateFormat formatter = DateFormat('dd-MM-yyyy HH:mm');
+
+  // Return the formatted date in local time
+  return formatter.format(localDate);
+}
 
   @override
   Widget build(BuildContext context) {
