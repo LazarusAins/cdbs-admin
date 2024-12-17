@@ -997,7 +997,7 @@ Row(
           height: 40,
           child: TextField(
             controller: acrController,
-            enabled: isEditable, 
+            enabled: false, 
             decoration: InputDecoration(
               border: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(8 * scale),
@@ -1046,7 +1046,7 @@ Row(
           height: 40,
           child: TextField(
             controller: addressController,
-            enabled: isEditable, 
+            enabled: false, 
             decoration: InputDecoration(
               border: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(8 * scale),
@@ -1106,7 +1106,7 @@ Row(
           height: 40,
           child: TextField(
             controller: postalController,
-            enabled: isEditable, 
+            enabled: false, 
             decoration: InputDecoration(
               border: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(8 * scale),
@@ -1122,7 +1122,7 @@ Row(
           height: 40,
           child: TextField(
             controller: contactController,
-            enabled: isEditable, 
+            enabled: false, 
             decoration: InputDecoration(
               border: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(8 * scale),
@@ -1205,7 +1205,7 @@ Row(
           height: 40,
           child: TextField(
             controller: languageSpokenController,
-            enabled: isEditable, 
+            enabled: false, 
             decoration: InputDecoration(
               border: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(8 * scale),
@@ -1221,7 +1221,7 @@ Row(
           height: 40,
           child: TextField(
             controller: companionController,
-            enabled: isEditable, 
+            enabled: false, 
             decoration: InputDecoration(
               border: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(8 * scale),
@@ -1355,7 +1355,7 @@ SizedBox(
   height: 40,
   child: TextField(
     controller: siblingQuantityController,
-    enabled: isEditable, 
+    enabled: false, 
     keyboardType: TextInputType.number,  // To handle numeric input
     decoration: InputDecoration(
       labelText: "Number of Siblings", // Optional label
@@ -1526,7 +1526,7 @@ Row(
           height: 40,
           child: TextField(
             controller: fatherNameController,
-            enabled: isEditable, 
+            enabled: false, 
             decoration: InputDecoration(
               border: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(8),
@@ -1552,7 +1552,7 @@ Row(
           height: 40,
           child: TextField(
             controller: fatherAgeController,
-            enabled: isEditable, 
+            enabled: false, 
             decoration: InputDecoration(
               border: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(8),
@@ -1578,7 +1578,7 @@ Row(
             height: 40,
             child: TextField(
               controller: fatherEduAttainController,
-              enabled: isEditable, 
+              enabled: false, 
               decoration: InputDecoration(
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(8),
@@ -1626,9 +1626,9 @@ Expanded(
               child: Text('Student'),
             ),
           ],
-          onChanged: (value) {
-            // Handle selection change
-          },
+          onChanged: null,
+          // onChanged: (value) {
+          // },
           decoration: InputDecoration(
             border: OutlineInputBorder(
               borderRadius: BorderRadius.circular(8),
@@ -1664,7 +1664,7 @@ Row(
             height: 40,
             child: TextField(
               controller: fatherEmployedAtController,
-              enabled: isEditable, 
+              enabled: false, 
               decoration: InputDecoration(
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(8),
@@ -1691,7 +1691,7 @@ Row(
             height: 40,
             child: TextField(
               controller: fatherOfficeAddressController,
-              enabled: isEditable, 
+              enabled: false, 
               decoration: InputDecoration(
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(8),
@@ -1724,7 +1724,7 @@ Row(
             height: 40,
             child: TextField(
               controller: fatherContactController,
-              enabled: isEditable, 
+              enabled: false, 
               decoration: InputDecoration(
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(8),
@@ -1751,7 +1751,7 @@ Row(
             height: 40,
             child: TextField(
               controller: fatherWorkPositionController,
-              enabled: isEditable, 
+              enabled: false, 
               decoration: InputDecoration(
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(8),
@@ -1810,9 +1810,9 @@ Expanded(
               child: Text('PhP 100,000+'),
             ),
           ],
-          onChanged: (value) {
-            // Handle the selected value here
-          },
+          onChanged: null,
+          // onChanged: (value) {
+          // },
           decoration: InputDecoration(
             border: OutlineInputBorder(
               borderRadius: BorderRadius.circular(8),
@@ -1863,7 +1863,7 @@ Row(
           height: 40,
           child: TextField(
             controller: motherNameController,
-            enabled: isEditable, 
+            enabled: false, 
             decoration: InputDecoration(
               border: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(8),
@@ -1889,7 +1889,7 @@ Row(
           height: 40,
           child: TextField(
             controller: motherAgeController,
-            enabled: isEditable, 
+            enabled: false, 
             decoration: InputDecoration(
               border: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(8),
@@ -1915,7 +1915,7 @@ Row(
             height: 40,
             child: TextField(
               controller: motherEduAttainController,
-              enabled: isEditable, 
+              enabled: false, 
               decoration: InputDecoration(
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(8),
@@ -1963,9 +1963,9 @@ Expanded(
               child: Text('Student'),
             ),
           ],
-          onChanged: (value) {
-            // Handle selection change
-          },
+          onChanged: null,
+          // onChanged: (value) {
+          // },
           decoration: InputDecoration(
             border: OutlineInputBorder(
               borderRadius: BorderRadius.circular(8),
@@ -2001,7 +2001,7 @@ Row(
             height: 40,
             child: TextField(
               controller: motherEmployedAtController,
-              enabled: isEditable, 
+              enabled: false, 
               decoration: InputDecoration(
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(8),
@@ -2028,7 +2028,7 @@ Row(
             height: 40,
             child: TextField(
               controller: motherOfficeAddressController,
-              enabled: isEditable, 
+              enabled: false, 
               decoration: InputDecoration(
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(8),
@@ -2061,7 +2061,7 @@ Row(
             height: 40,
             child: TextField(
               controller: motherContactController,
-              enabled: isEditable, 
+              enabled: false, 
               decoration: InputDecoration(
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(8),
@@ -2088,7 +2088,7 @@ Row(
             height: 40,
             child: TextField(
               controller: motherWorkPositionController,
-              enabled: isEditable, 
+              enabled: false, 
               decoration: InputDecoration(
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(8),
@@ -2151,9 +2151,9 @@ Expanded(
               child: Text('PhP 100,000+'),
             ),
           ],
-          onChanged: (value) {
-            // Handle the selected value here
-          },
+          onChanged: null,
+          // onChanged: (value) {
+          // },
           decoration: InputDecoration(
             border: OutlineInputBorder(
               borderRadius: BorderRadius.circular(8),
@@ -2295,7 +2295,7 @@ Row(
           height: 40,
           child: TextField(
             controller: guardianNameController,
-            enabled: isEditable, 
+            enabled: false, 
             decoration: InputDecoration(
               border: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(8),
@@ -2321,7 +2321,7 @@ Row(
           height: 40,
           child: TextField(
             controller: guardianAgeController,
-            enabled: isEditable, 
+            enabled: false, 
             decoration: InputDecoration(
               border: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(8),
@@ -2347,7 +2347,7 @@ Row(
             height: 40,
             child: TextField(
               controller: guardianEduAttainController,
-              enabled: isEditable, 
+              enabled: false, 
               decoration: InputDecoration(
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(8),
@@ -2395,9 +2395,9 @@ Expanded(
               child: Text('Student'),
             ),
           ],
-          onChanged: (value) {
-            // Handle selection change
-          },
+          onChanged: null,
+          // onChanged: (value) {
+          // },
           decoration: InputDecoration(
             border: OutlineInputBorder(
               borderRadius: BorderRadius.circular(8),
@@ -2433,7 +2433,7 @@ Row(
             height: 40,
             child: TextField(
               controller: guardianEmployedAtController,
-              enabled: isEditable, 
+              enabled: false, 
               decoration: InputDecoration(
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(8),
@@ -2460,7 +2460,7 @@ Row(
             height: 40,
             child: TextField(
               controller: guardianOfficeAddressController,
-              enabled: isEditable, 
+              enabled: false, 
               decoration: InputDecoration(
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(8),
@@ -2492,7 +2492,7 @@ Row(
           SizedBox(
             height: 40,
             child: TextField(controller: guardianContactController,
-            enabled: isEditable, 
+            enabled: false, 
               decoration: InputDecoration(
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(8),
@@ -2519,7 +2519,7 @@ Row(
             height: 40,
             child: TextField(
               controller: guardianWorkPositionController,
-              enabled: isEditable, 
+              enabled: false, 
               decoration: InputDecoration(
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(8),
@@ -2578,9 +2578,9 @@ Expanded(
               child: Text('PhP 100,000+'),
             ),
           ],
-          onChanged: (value) {
-            // Handle the selected value here
-          },
+          onChanged: null,
+          // onChanged: (value) {
+          // },
           decoration: InputDecoration(
             border: OutlineInputBorder(
               borderRadius: BorderRadius.circular(8),
@@ -2649,9 +2649,9 @@ Row(
                   child: Text('Other'),
                 ),
               ],
-              onChanged: (value) {
-                // Handle selection change
-              },
+              onChanged: null,
+          // onChanged: (value) {
+          // },
               decoration: InputDecoration(
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(8),
@@ -2717,9 +2717,9 @@ Row(
                   child: Text('Not Married'),
                 ),
               ],
-              onChanged: (value) {
-                // Handle selection change
-              },
+              onChanged: null,
+          // onChanged: (value) {
+          // },
               decoration: InputDecoration(
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(8),
@@ -2760,7 +2760,7 @@ const SizedBox(height: 16,),
             height: 40,
             child: TextField(
               controller: civilWeddingController,
-              enabled: isEditable, 
+              enabled: false, 
               decoration: InputDecoration(
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(8),
@@ -2794,7 +2794,7 @@ const SizedBox(height: 16,),
             height: 40,
             child: TextField(
               controller: churchNameController,
-              enabled: isEditable, 
+              enabled: false, 
               decoration: InputDecoration(
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(8),
@@ -2913,7 +2913,7 @@ Row(
               SizedBox(
             height: 40,
             child: TextField(
-              enabled: isEditable, 
+              enabled: false, 
               decoration: InputDecoration(
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(8),
@@ -2942,7 +2942,7 @@ Row(
               SizedBox(
             height: 40,
             child: TextField(
-              enabled: isEditable, 
+              enabled: false, 
               decoration: InputDecoration(
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(8),
@@ -2972,7 +2972,7 @@ const SizedBox(height: 16),
               SizedBox(
             height: 40,
             child: TextField(
-              enabled: isEditable, 
+              enabled: false, 
               decoration: InputDecoration(
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(8),
@@ -2998,7 +2998,7 @@ const SizedBox(width: 8,),
                         SizedBox(
             height: 40,
             child: TextField(
-              enabled: isEditable, 
+              enabled: false, 
               decoration: InputDecoration(
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(8),
@@ -3029,7 +3029,7 @@ const SizedBox(height: 16),
               SizedBox(
             height: 40,
             child: TextField(
-              enabled: isEditable, 
+              enabled: false, 
               decoration: InputDecoration(
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(8),
