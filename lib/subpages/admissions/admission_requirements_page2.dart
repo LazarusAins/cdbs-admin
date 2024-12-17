@@ -1094,7 +1094,7 @@ bool checkDocumentRequirements(String gradeLevel, List<Map<String, dynamic>> for
                       height: 50.0,
                       child: Center(
                         child: SpinKitCircle(
-                          color: Color(0xff13322B), // Customize color
+                          color: Color(0xff012169), // Customize color
                           size: 50.0,
                         ),
                       ),

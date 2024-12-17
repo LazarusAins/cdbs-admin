@@ -129,7 +129,7 @@ void dispose() {
             return const Center(
               // Center the spinner when loading
               child: SpinKitCircle(
-                color: Color(0xff13322B), // Change the color as needed
+                color: Color(0xff012169), // Change the color as needed
                 size: 50.0, // Adjust size as needed
               ),
             );
@@ -141,7 +141,7 @@ void dispose() {
                   return const Center(
               // Center the spinner when loading
                     child: SpinKitCircle(
-                      color: Color(0xff13322B), // Change the color as needed
+                      color: Color(0xff012169), // Change the color as needed
                       size: 50.0, // Adjust size as needed
                     ),
                   );
@@ -336,17 +336,20 @@ showDialog(
               style: TextStyle(fontSize: 11),
             ),
             const SizedBox(height: 8),
-            TextField(
-              controller: locationController,
-              decoration: InputDecoration(
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(5),
-                ),
-              ),
-              onChanged: (value) {
-                // Handle text input
-              },
-            ),
+TextField(
+  controller: locationController,
+  decoration: InputDecoration(
+    hintText: "Lobby", // Placeholder text
+    border: OutlineInputBorder(
+      borderRadius: BorderRadius.circular(5),
+    ),
+  ),
+  enabled: false, // Disable the TextField
+  onChanged: (value) {
+    // Handle text input (won't be called when disabled)
+  },
+),
+
 
             const SizedBox(height: 16),
             // Second Row of Dropdowns
