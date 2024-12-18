@@ -40,6 +40,7 @@ class _AdmissionSchedulesPageState extends State<AdmissionSchedulesPage> {
   TextEditingController locationController = TextEditingController();
   TextEditingController gradeController = TextEditingController();
   TextEditingController slotController = TextEditingController();
+  TextEditingController cancelController = TextEditingController();
     
   @override
   void initState() {
@@ -366,20 +367,12 @@ TextField(
       const SizedBox(height: 8),
       DropdownButtonFormField<String>(
         items: [
-          'Pre-Kinder',
-          'Kinder',
+          'Pre-Kinder & Kinder',
           'Grade 1',
           'Grade 2',
           'Grade 3',
-          'Grade 4',
-          'Grade 5',
-          'Grade 6',
-          'Grade 7',
-          'Grade 8',
-          'Grade 9',
-          'Grade 10',
-          'Grade 11',
-          'Grade 12',
+          'Grade 4 - 6',
+          'Grade 7 - 12',
         ]
         .map((grade) => DropdownMenuItem(
               value: grade,
@@ -440,7 +433,7 @@ TextField(
                     //String timeStart=convertTimeTo24HourFormat(startTimeController.text);
                     //String timeEnd=convertTimeTo24HourFormat(endTimeController.text);
                     bool isValid =validateAndConvertTime(startTimeController.text, endTimeController.text);
-                    print(isValid);
+                    //print(isValid);
                     if(isValid){
                       showMessageDialog(context, 'Invalid time range: Start and end times must be between 08:00 AM and 05:00 PM, with the start time before the end time.', isValid);
                     }else{
@@ -455,7 +448,7 @@ TextField(
                                                 'exam_date': dateController.text,
                                                 'start_time':startTimeController.text,  // Send customer_id in the request body
                                                 'end_time':endTimeController.text,
-                                                'location':locationController.text,
+                                                'location':'Lobby',
                                                 'grade_level':gradeController.text,
                                                 'slots':slotController.text
                                               }),
@@ -720,16 +713,236 @@ TextField(
                                       ],
                                     ),
                                   ),
-                                  PopupMenuItem(
-                                    // value: 3,
-                                    child: Row(
-                                      children: [
-                                        const Icon(Icons.block, color: Color(0xff909590)),
-                                        SizedBox(width: 8 * scale),
-                                        Text("DEACTIVATE", style: TextStyle(fontSize: 16 * scale, color: const Color(0xff909590))),
-                                      ],
-                                    ),
-                                  ),
+                                 PopupMenuItem(
+  child: InkWell(
+    onTap: () {
+      showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return Dialog(
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(8.0),
+            ),
+            child: SizedBox(
+              width: 349.0,
+              height: 320.0,
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  // Top Section with Heading and TextField
+                  Padding(
+                    padding: const EdgeInsets.all(16.0),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        // Text(
+                        //   "CANCEL",
+                        //   style: TextStyle(
+                        //     fontSize: 18,
+                        //     fontWeight: FontWeight.bold,
+                        //   ),
+                        // ),
+                        const SizedBox(height: 10),
+                        const Text("Please provide a reason for cancellation:"),
+                        const SizedBox(height: 10),
+                        TextField(
+                          controller: cancelController,
+                          decoration: const InputDecoration(
+                            border: OutlineInputBorder(),
+                            hintText: "Enter cancellation reason: ",
+                          ),
+                          maxLines: 3,
+                        ),
+                      ],
+                    ),
+                  ),
+                  // Divider
+                  const Padding(
+                    padding: EdgeInsets.only(left: 20, right: 20),
+                    child: Divider(thickness: 1),
+                  ),
+                  // Bottom Section with Buttons
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+                    child: Column(
+                      children: [
+                        // Close Button
+                        SizedBox(
+                          width: double.infinity,
+                          height: 35,
+                          child: TextButton(
+                            style: TextButton.styleFrom(
+                              backgroundColor: const Color(0xffD3D3D3),
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(8),
+                              ),
+                            ),
+                            onPressed: () {
+                              Navigator.of(context).pop(); // Close dialog
+                            },
+                            child: const Text(
+                              "Close",
+                              style: TextStyle(fontSize: 16, color: Colors.black),
+                            ),
+                          ),
+                        ),
+                        const SizedBox(height: 10),
+                        // Submit Button
+                        SizedBox(
+                          width: double.infinity,
+                          height: 35,
+                          child: ElevatedButton(
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: const Color(0xff012169),
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(8),
+                              ),
+                            ),
+                            onPressed: () async {
+                              try {
+                      final response = await http.post(Uri.parse('$apiUrl/api/admin/cancel_exam_schedule'),
+                                              headers: {
+                                                'Content-Type': 'application/json',
+                                                'supabase-url': supabaseUrl,
+                                                'supabase-key': supabaseKey,
+                                              },
+                                              body: json.encode({
+                                                'schedule_id': request['schedule_id'],
+                                                'cancel_reason':cancelController.text
+                                              }),
+                                            );
+
+                                            if (response.statusCode == 200) {
+                                              final responseBody = jsonDecode(response.body);
+                                              Navigator.of(context).popUntil((route) => route.isFirst);
+                                              showDialog(
+                                context: context,
+                                builder: (BuildContext context) {
+                                  return Dialog(
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(10),
+        ),
+        child: Container(
+          width: 349,
+          height: 272,
+          padding: const EdgeInsets.all(16),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              // Centered Text
+              const Center(
+                // child: Text(
+                //   "",
+                //   style: TextStyle(
+                //     fontSize: 20,
+                //   ),
+                //   textAlign: TextAlign.center,
+                // ),
+              ),
+              // Red X Icon with Circular Outline
+              Column(
+                children: [
+                  Container(
+                    width: 90,
+                    height: 90,
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      border: Border.all(color: const Color(0XFF012169), width: 2),
+                    ),
+                    child: const Center(
+                      child: Icon(
+                        Icons.check,
+                        color: Color(0XFF012169),
+                        size: 40,
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: 20),
+                  // No Form Submitted Text
+                  const Text(
+                    "Successfully cancelled!",
+                    style: TextStyle(
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold,
+                    ),
+                    textAlign: TextAlign.center,
+                  ),
+                ],
+              ),
+              // Divider
+              const Divider(
+                thickness: 1,
+                color: Colors.grey,
+              ),
+              // Close Button
+              Align(
+                alignment: Alignment.bottomCenter,
+                child: ElevatedButton(
+                  onPressed: () {
+                    Navigator.of(context).pop(); // Close the modal
+                  },
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: const Color(0xff012169), // Button color
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                    minimumSize: const Size(double.infinity, 50), // Expand width and set height
+                  ),
+                  child: const Text(
+                    "Close",
+                    style: TextStyle(fontSize: 16, color: Colors.white),
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+      );
+                                },
+                              );
+                                            } else {
+                                              // Handle failure
+                                              final responseBody = jsonDecode(response.body);
+                                              print('Error: ${responseBody['error']}');
+                                            }
+                                          } catch (error) {
+                                            // Handle error (e.g., network error)
+                                            print('Error: $error');
+                                          }
+                             
+                              
+                            },
+                            child: const Text(
+                              "Submit",
+                              style: TextStyle(fontSize: 16, color: Colors.white),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          );
+        },
+      );
+    },
+    child: Row(
+      children: [
+        const Icon(Icons.block, color: Colors.black),
+        SizedBox(width: 8 * scale),
+        Text(
+          "CANCEL",
+          style: TextStyle(fontSize: 16 * scale, color: Colors.black),
+        ),
+      ],
+    ),
+  ),
+),
+
+
+
                                 ],
                               ),
                             ),

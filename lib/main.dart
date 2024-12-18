@@ -41,7 +41,7 @@ void main() async {
 
     // Attempt to clear cache and reload the app
     clearWebCache(); // Call this if using Flutter Web
-    await Future.delayed(Duration(seconds: 1)); // Give some time to clear
+    await Future.delayed(const Duration(seconds: 1)); // Give some time to clear
     runApp(const MyApp());
   }
   

@@ -380,7 +380,7 @@ String formatDate(DateTime date) {
           children: [
             const Icon(Icons.block, color: Color(0xff909590)),
             SizedBox(width: 8 * scale),
-            Text("DEACTIVATE", style: TextStyle(fontSize: 18 * scale, color: const Color(0xff909590))),
+            Text("CANCEL", style: TextStyle(fontSize: 18 * scale, color: const Color(0xff909590))),
           ],
         ),
       ),
