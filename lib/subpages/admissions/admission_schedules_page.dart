@@ -712,16 +712,209 @@ TextField(
                                       ],
                                     ),
                                   ),
-                                  PopupMenuItem(
-                                    // value: 3,
-                                    child: Row(
-                                      children: [
-                                        const Icon(Icons.block, color: Color(0xff909590)),
-                                        SizedBox(width: 8 * scale),
-                                        Text("CANCEL", style: TextStyle(fontSize: 16 * scale, color: const Color(0xff909590))),
-                                      ],
-                                    ),
-                                  ),
+                                 PopupMenuItem(
+  child: InkWell(
+    onTap: () {
+      showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return Dialog(
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(8.0),
+            ),
+            child: SizedBox(
+              width: 349.0,
+              height: 320.0,
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  // Top Section with Heading and TextField
+                  const Padding(
+                    padding: EdgeInsets.all(16.0),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        // Text(
+                        //   "CANCEL",
+                        //   style: TextStyle(
+                        //     fontSize: 18,
+                        //     fontWeight: FontWeight.bold,
+                        //   ),
+                        // ),
+                        SizedBox(height: 10),
+                        Text("Please provide a reason for cancellation:"),
+                        SizedBox(height: 10),
+                        TextField(
+                          decoration: InputDecoration(
+                            border: OutlineInputBorder(),
+                            hintText: "Enter cancellation reason: ",
+                          ),
+                          maxLines: 3,
+                        ),
+                      ],
+                    ),
+                  ),
+                  // Divider
+                  const Padding(
+                    padding: EdgeInsets.only(left: 20, right: 20),
+                    child: Divider(thickness: 1),
+                  ),
+                  // Bottom Section with Buttons
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+                    child: Column(
+                      children: [
+                        // Close Button
+                        SizedBox(
+                          width: double.infinity,
+                          height: 35,
+                          child: TextButton(
+                            style: TextButton.styleFrom(
+                              backgroundColor: const Color(0xffD3D3D3),
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(8),
+                              ),
+                            ),
+                            onPressed: () {
+                              Navigator.of(context).pop(); // Close dialog
+                            },
+                            child: const Text(
+                              "Close",
+                              style: TextStyle(fontSize: 16, color: Colors.black),
+                            ),
+                          ),
+                        ),
+                        const SizedBox(height: 10),
+                        // Submit Button
+                        SizedBox(
+                          width: double.infinity,
+                          height: 35,
+                          child: ElevatedButton(
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: const Color(0xff012169),
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(8),
+                              ),
+                            ),
+                            onPressed: () {
+                              Navigator.of(context).pop(); // Close the current dialog
+                              showDialog(
+                                context: context,
+                                builder: (BuildContext context) {
+                                  return Dialog(
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(10),
+        ),
+        child: Container(
+          width: 349,
+          height: 272,
+          padding: const EdgeInsets.all(16),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              // Centered Text
+              const Center(
+                // child: Text(
+                //   "",
+                //   style: TextStyle(
+                //     fontSize: 20,
+                //   ),
+                //   textAlign: TextAlign.center,
+                // ),
+              ),
+              // Red X Icon with Circular Outline
+              Column(
+                children: [
+                  Container(
+                    width: 90,
+                    height: 90,
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      border: Border.all(color: const Color(0XFF012169), width: 2),
+                    ),
+                    child: const Center(
+                      child: Icon(
+                        Icons.check,
+                        color: Color(0XFF012169),
+                        size: 40,
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: 20),
+                  // No Form Submitted Text
+                  const Text(
+                    "Successfully cancelled!",
+                    style: TextStyle(
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold,
+                    ),
+                    textAlign: TextAlign.center,
+                  ),
+                ],
+              ),
+              // Divider
+              const Divider(
+                thickness: 1,
+                color: Colors.grey,
+              ),
+              // Close Button
+              Align(
+                alignment: Alignment.bottomCenter,
+                child: ElevatedButton(
+                  onPressed: () {
+                    Navigator.of(context).pop(); // Close the modal
+                  },
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: const Color(0xff012169), // Button color
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                    minimumSize: const Size(double.infinity, 50), // Expand width and set height
+                  ),
+                  child: const Text(
+                    "Close",
+                    style: TextStyle(fontSize: 16, color: Colors.white),
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+      );
+                                },
+                              );
+                            },
+                            child: const Text(
+                              "Submit",
+                              style: TextStyle(fontSize: 16, color: Colors.white),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          );
+        },
+      );
+    },
+    child: Row(
+      children: [
+        const Icon(Icons.block, color: Colors.black),
+        SizedBox(width: 8 * scale),
+        Text(
+          "CANCEL",
+          style: TextStyle(fontSize: 16 * scale, color: Colors.black),
+        ),
+      ],
+    ),
+  ),
+),
+
+
+
                                 ],
                               ),
                             ),
