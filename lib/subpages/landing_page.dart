@@ -7,6 +7,7 @@ import 'package:cdbs_admin/subpages/admissions/admission_payments_page.dart';
 import 'package:cdbs_admin/subpages/admissions/admission_requirements_page.dart';
 import 'package:cdbs_admin/subpages/admissions/admission_results_page.dart';
 import 'package:cdbs_admin/subpages/admissions/admission_schedules_page.dart';
+import 'package:cdbs_admin/subpages/admissions/admission_slots_page1.dart';
 import 'package:cdbs_admin/subpages/login_page.dart';
 import 'package:cdbs_admin/subpages/page6.dart';
 import 'package:cdbs_admin/subpages/s1.dart';
@@ -479,13 +480,13 @@ return Column(
         builder: (context, authState) {
           if (authState is AuthSuccess) {
             if(authState.adminType=='Admin' || authState.adminType=='Principal' || authState.adminType=='IT' || authState.adminType=='Sisters'){
-              dropdownOptions = ["Overview", "Applications", "Requirements", "Payments", "Schedules", "Results"];
+              dropdownOptions = ["Slots", "Overview", "Applications", "Requirements", "Payments", "Schedules", "Results"];
             }else if(authState.adminType=='Cashier'){
               dropdownOptions = ["Payments"];
             }else if(authState.adminType=='Registrar'){
               dropdownOptions = ["Overview", "Applications", "Requirements", "Payments", "Schedules"];
             }else if(authState.adminType=='Admission' || authState.adminType=='Center for Learner Wellness'){
-              dropdownOptions = ["Overview", "Applications", "Requirements", "Schedules", "Results"];
+              dropdownOptions = ["Slots", "Overview", "Applications", "Requirements", "Schedules", "Results"];
             }
             return Column(
                     children: [
@@ -723,14 +724,16 @@ return Column(
       if(adminType !='Admission' && adminType !='Center for Learner Wellness'){
         switch (_selectedAdmissionDropdownOption) {
           case 0:
-            return const AdmissionOverviewPage();
+            return const AdmissionSlotsPage1();
           case 1:
-            return const AdmissionApplicationsPage();
+            return const AdmissionOverviewPage();
           case 2:
-            return const AdmissionRequirementsPage();
+            return const AdmissionApplicationsPage();
           case 3:
-            return const AdmissionPaymentsPage();
+            return const AdmissionRequirementsPage();
           case 4:
+            return const AdmissionPaymentsPage();
+          case 5:
             return const AdmissionSchedulesPage();
           default:
             return const AdmissionResultsPage();
@@ -738,14 +741,16 @@ return Column(
       }else{
         switch (_selectedAdmissionDropdownOption) {
           case 0:
-            return const AdmissionOverviewPage();
+            return const AdmissionSlotsPage1();
           case 1:
-            return const AdmissionApplicationsPage();
+            return const AdmissionOverviewPage();
           case 2:
-            return const AdmissionRequirementsPage();
+            return const AdmissionApplicationsPage();
           case 3:
-            return const AdmissionSchedulesPage();
+            return const AdmissionRequirementsPage();
           case 4:
+            return const AdmissionSchedulesPage();
+          case 5:
             return const AdmissionResultsPage();
           default:
             return const AdmissionResultsPage();
