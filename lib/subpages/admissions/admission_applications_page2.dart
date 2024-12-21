@@ -1,8 +1,12 @@
 //WHOLE APPLICANTIONS PAGE2
 
 import 'package:cdbs_admin/bloc/admission_bloc/admission_bloc.dart';
+import 'package:cdbs_admin/services/ggx_connection.dart';
+import 'package:cdbs_admin/shared/api.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
 
 class AdmissionApplicationsPage2 extends StatefulWidget {
   
@@ -134,7 +138,96 @@ List<Widget> siblings = [];
   late TextEditingController schoolBis;
 
 
-  
+String? districtName;
+String? city;
+String? province;
+var address;
+var parts;
+final GgxApi ggx = GgxApi();
+
+Future<void> fetchDistrictName(String districtId) async {
+    final apiUrl = '$ggxUrl/locations/districts/$districtId';
+    var jwt = ggx.generateJwt();
+    try {
+      var response = await http.get(Uri.parse(apiUrl),
+      headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer $jwt',
+        },
+      );
+
+      if (response.statusCode == 200) {
+        final data = json.decode(response.body);
+        setState(() {
+          districtName = data['data'][0]['name'];
+        });
+      } else {
+        setState(() {
+          districtName = 'Error: ${response.reasonPhrase}';
+        });
+      }
+    } catch (e) {
+      setState(() {
+        districtName = 'Error: $e';
+      });
+    }
+  }
+
+  Future<void> fetchCityName(String cityId) async {
+    final apiUrl = '$ggxUrl/locations/cities/$cityId';
+    var jwt = ggx.generateJwt();
+    try {
+      var response = await http.get(Uri.parse(apiUrl),
+      headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer $jwt',
+        },
+      );
+
+      if (response.statusCode == 200) {
+        final data = json.decode(response.body);
+        setState(() {
+          city = data['data'][0]['name'];
+        });
+      } else {
+        setState(() {
+          city = 'Error: ${response.reasonPhrase}';
+        });
+      }
+    } catch (e) {
+      setState(() {
+        city = 'Error: $e';
+      });
+    }
+  }
+
+  Future<void> fetchProvinceName(String provinceId) async {
+    final apiUrl = '$ggxUrl/locations/provinces/$provinceId';
+    var jwt = ggx.generateJwt();
+    try {
+      var response = await http.get(Uri.parse(apiUrl),
+      headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer $jwt',
+        },
+      );
+
+      if (response.statusCode == 200) {
+        final data = json.decode(response.body);
+        setState(() {
+          province = data['data'][0]['name'];
+        });
+      } else {
+        setState(() {
+          province = 'Error: ${response.reasonPhrase}';
+        });
+      }
+    } catch (e) {
+      setState(() {
+        province = 'Error: $e';
+      });
+    }
+  }
 
 void addItemDescription(double scale) {
     // Ensure descriptionControllers list length matches quantityReceived
@@ -313,6 +406,18 @@ void addItemDescription(double scale) {
   void initState() {
     super.initState();
     //fetchLoaRequest();
+    address = widget.formDetails![0]['db_admission_table']['address'] as String;
+    parts = address.split('|');
+    if (parts.isNotEmpty) {
+      final districtId = parts[1];
+      final cityId = parts[2]; // Extract the first number (13817)
+      final provinceId = parts[3];
+      fetchDistrictName(districtId);
+      fetchCityName(cityId);
+      fetchProvinceName(provinceId);
+    }
+
+
      String noSibling = widget.formDetails![0]['db_admission_table']['db_family_background_table'][0]['no_of_siblings'].toString();
     
      selectedGender =widget.formDetails![0]['db_admission_table']['sex'] ??'';
@@ -326,7 +431,7 @@ void addItemDescription(double scale) {
      religionController.text=widget.formDetails![0]['db_admission_table']['religion']??'';
      citizenshipController.text=widget.formDetails![0]['db_admission_table']['citizenship']??'';
      acrController.text=widget.formDetails![0]['db_admission_table']['acr_number']??'';
-     addressController.text=widget.formDetails![0]['db_admission_table']['address']??'';
+     
      postalController.text=widget.formDetails![0]['db_admission_table']['zip_postal_code']??'';
      contactController.text=widget.formDetails![0]['db_admission_table']['contact_no']??'';
      languageSpokenController.text=widget.formDetails![0]['db_admission_table']['language_dialect_spoken']??'';
@@ -428,8 +533,7 @@ void addItemDescription(double scale) {
     double scale = widthScale < heightScale ? widthScale : heightScale;
 
 
-
-
+   addressController.text='${parts[0]}, $districtName, $city, $province';
 
 
     return SingleChildScrollView(

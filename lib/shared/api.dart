@@ -3,3 +3,10 @@ const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZS
 
 
 const apiUrl = 'https://donboscoapi.vercel.app';
+
+
+
+
+const ggxUrl = 'https://api.quadx.xyz/v2';
+const secretKey = 'db678f169d5b5f3c80e5332b84014f30';
+const ggxApiKey = '1843091664d91b2a30c4';

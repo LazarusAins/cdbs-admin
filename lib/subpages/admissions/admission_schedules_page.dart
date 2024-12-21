@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'package:cdbs_admin/bloc/admission_bloc/admission_bloc.dart';
 import 'package:cdbs_admin/subpages/admissions/admission_schedules_page2.dart';
+import 'package:cdbs_admin/widget/multiselect_dialog.dart';
 import 'package:intl/intl.dart';
 import 'package:cdbs_admin/bloc/auth/auth_bloc.dart';
 import 'package:cdbs_admin/class/admission_forms.dart';
@@ -41,6 +42,25 @@ class _AdmissionSchedulesPageState extends State<AdmissionSchedulesPage> {
   TextEditingController gradeController = TextEditingController();
   TextEditingController slotController = TextEditingController();
   TextEditingController cancelController = TextEditingController();
+
+  final List<String> grades = [
+    'Pre-Kinder',
+    'Kinder',
+    'Grade 1',
+    'Grade 2',
+    'Grade 3',
+    'Grade 4',
+    'Grade 5',
+    'Grade 6',
+    'Grade 7',
+    'Grade 8',
+    'Grade 9',
+    'Grade 10',
+    'Grade 11',
+    'Grade 12'
+  ];
+
+  List<String> selectedGrades = [];
     
   @override
   void initState() {
@@ -365,7 +385,7 @@ TextField(
         style: TextStyle(fontSize: 11),
       ),
       const SizedBox(height: 8),
-      DropdownButtonFormField<String>(
+      /*DropdownButtonFormField<String>(
         items: [
           'Pre-Kinder & Kinder',
           'Grade 1',
@@ -390,7 +410,34 @@ TextField(
             borderRadius: BorderRadius.circular(5),
           ),
         ),
-      ),
+      ),*/
+      GestureDetector(
+              onTap: () async {
+                final List<String>? result = await showDialog(
+                  context: context,
+                  builder: (context) => MultiSelectDialog(
+                    items: grades,
+                    selectedItems: selectedGrades,
+                  ),
+                );
+                if (result != null) {
+                  setState(() {
+                    selectedGrades = result;
+                    selectedGrades.sort((a, b) => grades.indexOf(a).compareTo(grades.indexOf(b)));
+                    gradeController.text = selectedGrades.join(', ');
+                  });
+                }
+              },
+              child: AbsorbPointer(
+                child: TextFormField(
+                  controller: gradeController,
+                  decoration: const InputDecoration(
+                    hintText: 'Select Grades',
+                    border: OutlineInputBorder(),
+                  ),
+                ),
+              ),
+            )
     ],
   ),
 ),
