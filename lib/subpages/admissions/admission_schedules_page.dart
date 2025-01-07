@@ -1178,17 +1178,6 @@ void showMessageDialog(BuildContext context, String message, bool isValid) {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              // Centered Text
-              const Center(
-                // child: Text(
-                //   "",
-                //   style: TextStyle(
-                //     fontSize: 22,
-                //   ),
-                //   textAlign: TextAlign.center,
-                // ),
-              ),
-              // Red X Icon with Circular Outline
               Column(
                 children: [
                   Container(

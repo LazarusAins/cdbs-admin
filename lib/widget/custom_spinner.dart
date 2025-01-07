@@ -4,7 +4,7 @@ import 'package:flutter_spinkit/flutter_spinkit.dart'; // Don't forget to add th
 class CustomSpinner extends StatelessWidget {
   const CustomSpinner({
     super.key,
-    this.color = const Color(0xff13322b), // Default color for the spinner
+    this.color = const Color(0xff012169), // Default color for the spinner
     this.size = 50.0, // Default size for the spinner
   });
 

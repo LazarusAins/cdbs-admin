@@ -38,7 +38,6 @@ void main() async {
     runApp(const MyApp());
   } catch (e) {
     print("Error initializing preferences: $e");
-
     // Attempt to clear cache and reload the app
     clearWebCache(); // Call this if using Flutter Web
     await Future.delayed(const Duration(seconds: 1)); // Give some time to clear
