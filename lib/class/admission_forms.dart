@@ -326,6 +326,44 @@ Future<List<Map<String, dynamic>>> fetchSchedule(String supabaseUrl, String supa
 
 
 
+  //GRADE SLOT
+Future<List<Map<String, dynamic>>> fetchGradeSlot(String supabaseUrl, String supabaseKey) async {
+    final response = await http.get(
+      Uri.parse('$apiUrl/api/admin/get_grade_slot'),
+      headers: {
+        "supabase-url": supabaseUrl,
+        "supabase-key": supabaseKey,
+      },
+    );
+
+    if (response.statusCode == 200) {
+      final Map<String, dynamic> data = json.decode(response.body);
+      
+      // Ensure the type safety by converting to List<Map<String, dynamic>>
+      return List<Map<String, dynamic>>.from(data['grade_slots'] ?? []);
+      
+    } else {
+      throw Exception('Failed to form data');
+    }
+  }
+
+
+  Stream<List<Map<String, dynamic>>> streamGradeSlot(String supabaseUrl, String supabaseKey) async* {
+    while (true) {
+      try {
+        final members = await fetchGradeSlot(supabaseUrl, supabaseKey);
+        yield members; // Emit the list of members
+      } catch (e) {
+        print('Error fetching members: $e');
+        yield []; // Emit an empty list on error
+      }
+
+      await Future.delayed(const Duration(seconds: 3)); // Refresh every 10 seconds
+    }
+  }
+
+
+
 
 //ALL SCHED
   Future<List<Map<String, dynamic>>> fetchScheduleById(int scheduleId, String supabaseUrl, String supabaseKey) async {
