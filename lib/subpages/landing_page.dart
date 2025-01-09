@@ -721,8 +721,7 @@ return Column(
 
     if (_selectedPage == 3) {
       // Show content based on selected dropdown option for Page 5
-      print(adminType);
-     /* if(adminType !='Admission' && adminType !='Center for Learner Wellness'){
+      if(adminType !='Admission' && adminType !='Center for Learner Wellness'){
         switch (_selectedAdmissionDropdownOption) {
           case 0:
             return const AdmissionSlotsPage1();
@@ -738,21 +737,6 @@ return Column(
             return const AdmissionSchedulesPage();
           default:
             return const AdmissionResultsPage();
-        }
-      }else*/ if(adminType=='Registrar'){
-        switch (_selectedAdmissionDropdownOption) {
-          case 0:
-            return const AdmissionOverviewPage();
-          case 1:
-            return const AdmissionApplicationsPage();
-          case 2:
-            return const AdmissionRequirementsPage();
-          case 3:
-            return const AdmissionPaymentsPage();
-          case 4:
-            return const AdmissionSchedulesPage();
-          default:
-            return const AdmissionOverviewPage();
         }
       }else{
         switch (_selectedAdmissionDropdownOption) {

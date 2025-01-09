@@ -297,10 +297,6 @@ class _AdmissionSlotsPage1State extends State<AdmissionSlotsPage1> {
                                                           context.read<AdmissionBloc>().add(IsLoadingClicked(false));
                                                           Navigator.of(context).popUntil((route) => route.isFirst);
                                                           showMessageDialog(context, 'New slot created', false);
-                                                          setState(() {
-                                                            slotController.text='';
-                                                            gradeController.text='';
-                                                          });
                                                         } else {
                                                           // Handle failure
                                                           final responseBody = jsonDecode(response.body);
@@ -308,10 +304,6 @@ class _AdmissionSlotsPage1State extends State<AdmissionSlotsPage1> {
                                                           context.read<AdmissionBloc>().add(IsLoadingClicked(false));
                                                           Navigator.of(context).popUntil((route) => route.isFirst);
                                                           showMessageDialog(context, 'Error slot not created', true);
-                                                          setState(() {
-                                                            slotController.text='';
-                                                            gradeController.text='';
-                                                          });
                                                         }
                                                       } catch (error) {
                                                         // Handle error (e.g., network error)
@@ -319,10 +311,6 @@ class _AdmissionSlotsPage1State extends State<AdmissionSlotsPage1> {
                                                         context.read<AdmissionBloc>().add(IsLoadingClicked(false));
                                                         Navigator.of(context).popUntil((route) => route.isFirst);
                                                         showMessageDialog(context, 'Error in connection', true);
-                                                          setState(() {
-                                                            slotController.text='';
-                                                            gradeController.text='';
-                                                          });
                                                       }
                                                     },
                                                     style: ElevatedButton.styleFrom( backgroundColor:const Color(0xff012169),
@@ -630,10 +618,6 @@ class _AdmissionSlotsPage1State extends State<AdmissionSlotsPage1> {
                                                           context.read<AdmissionBloc>().add(IsLoadingClicked(false));
                                                           Navigator.of(context).popUntil((route) => route.isFirst);
                                                           showMessageDialog(context, 'Slot is now updated', false);
-                                                          setState(() {
-                                                            slotController.text='';
-                                                            gradeController.text='';
-                                                          });
                                                         } else {
                                                           // Handle failure
                                                           final responseBody = jsonDecode(response.body);
@@ -641,10 +625,6 @@ class _AdmissionSlotsPage1State extends State<AdmissionSlotsPage1> {
                                                           context.read<AdmissionBloc>().add(IsLoadingClicked(false));
                                                           Navigator.of(context).popUntil((route) => route.isFirst);
                                                           showMessageDialog(context, 'Error slot not updated', true);
-                                                          setState(() {
-                                                            slotController.text='';
-                                                            gradeController.text='';
-                                                          });
                                                         }
                                                       } catch (error) {
                                                         // Handle error (e.g., network error)
@@ -652,10 +632,6 @@ class _AdmissionSlotsPage1State extends State<AdmissionSlotsPage1> {
                                                         context.read<AdmissionBloc>().add(IsLoadingClicked(false));
                                                         Navigator.of(context).popUntil((route) => route.isFirst);
                                                         showMessageDialog(context, 'Error in connection', true);
-                                                          setState(() {
-                                                            slotController.text='';
-                                                            gradeController.text='';
-                                                          });
                                                       }
                                                     },
                                                     style: ElevatedButton.styleFrom( backgroundColor:const Color(0xff012169),
@@ -716,6 +692,279 @@ class _AdmissionSlotsPage1State extends State<AdmissionSlotsPage1> {
                         );
                                       break;
 
+                                      case 2:
+                                      showDialog(
+                                        context: context,
+                                        builder: (context) => Dialog(
+                                          shape: RoundedRectangleBorder(
+                                            borderRadius: BorderRadius.circular(5),
+                                          ),
+                                          child: BlocConsumer<AdmissionBloc, AdmissionState>(
+                                            listener: (context, state) {},
+                                            builder: (context, state) {
+                                              if (state is AdmissionIsLoading) {
+                                                isLoading = state.isLoading;
+                                              }
+                                              return SizedBox(
+                                                width: 500,
+                                                height: 350,
+                                                child: isLoading
+                                                    ? const CustomSpinner(
+                                                        color: Color(
+                                                            0xff13322b), // Change the spinner color if needed
+                                                        size:
+                                                            60.0, // Change the size of the spinner if needed
+                                                      )
+                                                    : Padding(
+                                                        padding: const EdgeInsets.all(16.0),
+                                                        child: Column(
+                                                          crossAxisAlignment: CrossAxisAlignment.center,
+                                                          mainAxisAlignment: MainAxisAlignment.center,
+                                                          children: [
+                                                            const Text(
+                                                              'Delete grade slot?',
+                                                              style: TextStyle(
+                                                                fontSize: 22,
+                                                                fontFamily: "Roboto-R",
+                                                                fontWeight: FontWeight.normal,
+                                                              ),
+                                                            ),
+                                                            const SizedBox(height: 35),
+                                                            Center(
+                                                              child: SizedBox(
+                                                                width: 289,
+                                                                height: 35,
+                                                                child: ElevatedButton(
+                                                                  onPressed: () async {
+                                                                    context.read<AdmissionBloc>().add(IsLoadingClicked(true));
+                                                                    try {
+                                                                      final response =await http.post(Uri.parse('$apiUrl/api/admin/delete_slot'),
+                                                                        headers: {
+                                                                          'Content-Type':'application/json',
+                                                                          'supabase-url': supabaseUrl,
+                                                                          'supabase-key': supabaseKey,
+                                                                        },
+                                                                        body: json.encode({
+                                                                          'level_applying':request['level_applying'],
+                                                                          'slot_id':request['slot_id']
+                                                                        }),
+                                                                      );
+
+                                                                      if (response.statusCode == 200) {
+                                                                        final responseBody = jsonDecode(response.body);
+                                                                        context.read<AdmissionBloc>().add(IsLoadingClicked(false));
+                                                                        Navigator.of(context).popUntil((route) => route.isFirst);
+                                                                        showMessageDialog(context, 'Slot is now deleted', false);
+                                                                      } else {
+                                                                        // Handle failure
+                                                                        final responseBody = jsonDecode(response.body);
+                                                                        print('Error: ${responseBody['error']}');
+                                                                        context.read<AdmissionBloc>().add(IsLoadingClicked(false));
+                                                                        Navigator.of(context).popUntil((route) => route.isFirst);
+                                                                        showMessageDialog(context, 'This slot is associated with an admission record and cannot be deleted.', true);
+                                                                      }
+                                                                    } catch (error) {
+                                                                      // Handle error (e.g., network error)
+                                                                      print('Error: $error');
+                                                                      context.read<AdmissionBloc>().add(IsLoadingClicked(false));
+                                                                      Navigator.of(context).popUntil((route) => route.isFirst);
+                                                                      showMessageDialog(context, 'Error in connection', true);
+                                                                    }
+                                                                  },
+                                                                  style: ElevatedButton.styleFrom( backgroundColor:const Color(0xff012169),
+                                                                    shape:RoundedRectangleBorder(
+                                                                      borderRadius:BorderRadius.circular(5),
+                                                                    ),
+                                                                  ),
+                                                                  child: const Text('Delete',
+                                                                    style: TextStyle(
+                                                                        color: Colors.white,
+                                                                        fontFamily:'Roboto-R',
+                                                                        fontSize: 13),
+                                                                  ),
+                                                                ),
+                                                              ),
+                                                            ),
+                                                            const SizedBox(height: 8),
+                                                            // Cancel Button
+                                                            Center(
+                                                              child: SizedBox(
+                                                                width: 289,
+                                                                height: 35,
+                                                                child: ElevatedButton(
+                                                                  onPressed: () {
+                                                                    setState(() {
+                                                                      gradeController.text = '';
+                                                                      slotController.text = '';
+                                                                    });
+                                                                    Navigator.of(context).pop(); // Close the modal
+                                                                  },
+                                                                  style: ElevatedButton
+                                                                      .styleFrom(
+                                                                    backgroundColor:
+                                                                        const Color(
+                                                                            0xffD3D3D3),
+                                                                    shape: RoundedRectangleBorder(
+                                                                      borderRadius: BorderRadius.circular(5),
+                                                                    ),
+                                                                  ),
+                                                                  child: const Text(
+                                                                    'Cancel',
+                                                                    style: TextStyle(
+                                                                        color: Colors.black,
+                                                                        fontFamily:
+                                                                            'Roboto-R',
+                                                                        fontSize: 13),
+                                                                  ),
+                                                                ),
+                                                              ),
+                                                            ),
+                                                          ],
+                                                        ),
+                                                      ),
+                                              );
+                                            },
+                                          ),
+                                        ),
+                                      );
+                                      break;
+
+                                      case 3:
+                                      showDialog(
+                                        context: context,
+                                        builder: (context) => Dialog(
+                                          shape: RoundedRectangleBorder(
+                                            borderRadius: BorderRadius.circular(5),
+                                          ),
+                                          child: BlocConsumer<AdmissionBloc, AdmissionState>(
+                                            listener: (context, state) {},
+                                            builder: (context, state) {
+                                              if (state is AdmissionIsLoading) {
+                                                isLoading = state.isLoading;
+                                              }
+                                              return SizedBox(
+                                                width: 500,
+                                                height: 350,
+                                                child: isLoading
+                                                    ? const CustomSpinner(
+                                                        color: Color(
+                                                            0xff13322b), // Change the spinner color if needed
+                                                        size:
+                                                            60.0, // Change the size of the spinner if needed
+                                                      )
+                                                    : Padding(
+                                                        padding: const EdgeInsets.all(16.0),
+                                                        child: Column(
+                                                          crossAxisAlignment: CrossAxisAlignment.center,
+                                                          mainAxisAlignment: MainAxisAlignment.center,
+                                                          children: [
+                                                            const Text(
+                                                              'Close grade slot?',
+                                                              style: TextStyle(
+                                                                fontSize: 22,
+                                                                fontFamily: "Roboto-R",
+                                                                fontWeight: FontWeight.normal,
+                                                              ),
+                                                            ),
+                                                            const SizedBox(height: 35),
+                                                            Center(
+                                                              child: SizedBox(
+                                                                width: 289,
+                                                                height: 35,
+                                                                child: ElevatedButton(
+                                                                  onPressed: () async {
+                                                                    context.read<AdmissionBloc>().add(IsLoadingClicked(true));
+                                                                    try {
+                                                                      final response =await http.post(Uri.parse('$apiUrl/api/admin/update_slot'),
+                                                                        headers: {
+                                                                          'Content-Type':'application/json',
+                                                                          'supabase-url': supabaseUrl,
+                                                                          'supabase-key': supabaseKey,
+                                                                        },
+                                                                        body: json.encode({
+                                                                          'slot_status':'closed',
+                                                                          'slot_id':request['slot_id']
+                                                                        }),
+                                                                      );
+
+                                                                      if (response.statusCode == 200) {
+                                                                        final responseBody = jsonDecode(response.body);
+                                                                        context.read<AdmissionBloc>().add(IsLoadingClicked(false));
+                                                                        Navigator.of(context).popUntil((route) => route.isFirst);
+                                                                        showMessageDialog(context, 'Slot is now closed', false);
+                                                                      } else {
+                                                                        // Handle failure
+                                                                        final responseBody = jsonDecode(response.body);
+                                                                        print('Error: ${responseBody['error']}');
+                                                                        context.read<AdmissionBloc>().add(IsLoadingClicked(false));
+                                                                        Navigator.of(context).popUntil((route) => route.isFirst);
+                                                                        showMessageDialog(context, 'This slot is closed already', true);
+                                                                      }
+                                                                    } catch (error) {
+                                                                      // Handle error (e.g., network error)
+                                                                      print('Error: $error');
+                                                                      context.read<AdmissionBloc>().add(IsLoadingClicked(false));
+                                                                      Navigator.of(context).popUntil((route) => route.isFirst);
+                                                                      showMessageDialog(context, 'Error in connection', true);
+                                                                    }
+                                                                  },
+                                                                  style: ElevatedButton.styleFrom( backgroundColor:const Color(0xff012169),
+                                                                    shape:RoundedRectangleBorder(
+                                                                      borderRadius:BorderRadius.circular(5),
+                                                                    ),
+                                                                  ),
+                                                                  child: const Text('Close',
+                                                                    style: TextStyle(
+                                                                        color: Colors.white,
+                                                                        fontFamily:'Roboto-R',
+                                                                        fontSize: 13),
+                                                                  ),
+                                                                ),
+                                                              ),
+                                                            ),
+                                                            const SizedBox(height: 8),
+                                                            // Cancel Button
+                                                            Center(
+                                                              child: SizedBox(
+                                                                width: 289,
+                                                                height: 35,
+                                                                child: ElevatedButton(
+                                                                  onPressed: () {
+                                                                    setState(() {
+                                                                      gradeController.text = '';
+                                                                      slotController.text = '';
+                                                                    });
+                                                                    Navigator.of(context).pop(); // Close the modal
+                                                                  },
+                                                                  style: ElevatedButton
+                                                                      .styleFrom(
+                                                                    backgroundColor:
+                                                                        const Color(
+                                                                            0xffD3D3D3),
+                                                                    shape: RoundedRectangleBorder(
+                                                                      borderRadius: BorderRadius.circular(5),
+                                                                    ),
+                                                                  ),
+                                                                  child: const Text(
+                                                                    'Cancel',
+                                                                    style: TextStyle(
+                                                                        color: Colors.black,
+                                                                        fontFamily:
+                                                                            'Roboto-R',
+                                                                        fontSize: 13),
+                                                                  ),
+                                                                ),
+                                                              ),
+                                                            ),
+                                                          ],
+                                                        ),
+                                                      ),
+                                              );
+                                            },
+                                          ),
+                                        ),
+                                      );
+                                      break;
                                   }
                                 },
                                 itemBuilder: (context) => [
@@ -730,22 +979,22 @@ class _AdmissionSlotsPage1State extends State<AdmissionSlotsPage1> {
                                     ),
                                   ),
                                   PopupMenuItem(
-                                    // value: 2,
+                                    value: 2,
                                     child: Row(
                                       children: [
-                                        const Icon(Icons.delete, color: Color(0xff909590)),
+                                        const Icon(Icons.delete, color: Color(0xff000000)),
                                         SizedBox(width: 8 * scale),
-                                        Text("DELETE", style: TextStyle(fontSize: 18 * scale, color: const Color(0xff909590))),
+                                        Text("DELETE", style: TextStyle(fontSize: 18 * scale, color: const Color(0xff000000))),
                                       ],
                                     ),
                                   ),
                                   PopupMenuItem(
-                                    // value: 3,
+                                    value: 3,
                                     child: Row(
                                       children: [
-                                        const Icon(Icons.block, color: Color(0xff909590)),
+                                        const Icon(Icons.block, color: Color(0xff000000)),
                                         SizedBox(width: 8 * scale),
-                                        Text("CLOSED", style: TextStyle(fontSize: 18 * scale, color: const Color(0xff909590))),
+                                        Text("CLOSED", style: TextStyle(fontSize: 18 * scale, color: const Color(0xff000000))),
                                       ],
                                     ),
                                   ),
