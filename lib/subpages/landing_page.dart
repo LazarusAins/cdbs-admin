@@ -302,9 +302,7 @@ Padding(
                       onPressed: () {
                         Navigator.of(context).pop(); // Close the modal
                         // Add your "Yes" action here
-                        context
-                                      .read<AuthBloc>()
-                                      .add(AuthLogoutRequested());
+                        context.read<AuthBloc>().add(AuthLogoutRequested());
                       },
                       style: ElevatedButton.styleFrom(
                         backgroundColor: const Color(0xff012169),
@@ -776,7 +774,7 @@ return Column(
 
     if (_selectedPage == 3) {
       // Show content based on selected dropdown option for Page 5
-      if(adminType !='Admission' && adminType !='Center for Learner Wellness'){
+      if(adminType =='Registrar' || adminType =='Admin' || adminType=='Sisters' || adminType=='Principal' || adminType=='IT'){
         switch (_selectedAdmissionDropdownOption) {
           case 0:
             return const AdmissionSlotsPage1();
@@ -792,6 +790,13 @@ return Column(
             return const AdmissionSchedulesPage();
           default:
             return const AdmissionResultsPage();
+        }
+      }else if(adminType =='Cashier'){
+        switch (_selectedAdmissionDropdownOption) {
+          case 0:
+            return const AdmissionPaymentsPage();
+          default:
+            return const AdmissionPaymentsPage();
         }
       }else{
         switch (_selectedAdmissionDropdownOption) {

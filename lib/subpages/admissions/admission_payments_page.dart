@@ -106,7 +106,7 @@ String formatDate(DateTime date) {
         return const Color(0xFFFFA500); // Yellow for in-review
       } else if (status.contains('pending')) {
         return const Color(0xFFB6B6B6); // Orange for pending
-      }else if (status.contains('failed')) {
+      }else if (status.contains('rejected')) {
         return const Color(0xFFE15252); // Orange for pending
       } else {
         return Colors.black; // Default color
@@ -540,8 +540,8 @@ const SizedBox(height: 40),
                                           formDetails=members;
                                           _selectedAction = value; // Change the selected action
                                         });
-
-                                        if(!request['db_admission_table']['is_paid']){
+                                        bool isPaid = request['db_admission_table']['is_paid']??false;
+                                        if(!isPaid){
                                           try {
                                             final response = await http.post(
                                               Uri.parse('$apiUrl/api/admin/update_admission'),
