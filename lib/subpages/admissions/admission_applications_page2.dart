@@ -8,6 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
+import 'dart:html' as html;
 
 class AdmissionApplicationsPage2 extends StatefulWidget {
   
@@ -60,6 +61,9 @@ bool isEditable = false;
 bool isLastPage = false;
 bool isLoading = false;
 
+String originalUrl = '';
+String encodedUrl='';
+
 TextEditingController dateController = TextEditingController();
 TextEditingController fnameController = TextEditingController();
 TextEditingController mnameController = TextEditingController();
@@ -78,6 +82,12 @@ TextEditingController languageSpokenController = TextEditingController();
 TextEditingController companionController = TextEditingController();
 TextEditingController siblingQuantityController = TextEditingController();
 
+
+//special concern
+TextEditingController specialConcernController = TextEditingController();
+TextEditingController mdpConditionController = TextEditingController();
+TextEditingController medicationController = TextEditingController();
+TextEditingController interventionController = TextEditingController();
 
 
 //father controllers details
@@ -286,7 +296,7 @@ void addItemDescription(double scale) {
                             ),
                             const SizedBox(height: 8),
                             SizedBox(
-                              width: 600,
+                              width: 400,
                               height: 40,
                               child: TextField(
                                 controller: name,
@@ -408,7 +418,6 @@ void addItemDescription(double scale) {
   @override
   void initState() {
     super.initState();
-    //fetchLoaRequest();
     address = widget.formDetails![0]['db_admission_table']['address'] as String;
     parts = address.split('|');
     if (parts.isNotEmpty) {
@@ -447,6 +456,19 @@ void addItemDescription(double scale) {
      DateTime today = DateTime.now();
      int age = today.year - dateOfBirth.year;
 
+    if(widget.formDetails![0]['db_admission_table']['db_special_concerns_table'].isNotEmpty){
+       specialConcernController.text=widget.formDetails![0]['db_admission_table']['db_special_concerns_table'][0]['special_concern'] ?? '';
+      mdpConditionController.text=widget.formDetails![0]['db_admission_table']['db_special_concerns_table'][0]['medical_condition'] ?? '';
+      medicationController.text=widget.formDetails![0]['db_admission_table']['db_special_concerns_table'][0]['medication'] ?? '';
+      interventionController.text=widget.formDetails![0]['db_admission_table']['db_special_concerns_table'][0]['intervention'] ?? '';
+      if (widget.formDetails![0]['db_admission_table']['db_special_concerns_table'][0]['supporting_documents'] != null) {
+                    originalUrl = widget.formDetails![0]['db_admission_table']['db_special_concerns_table'][0]['supporting_documents'].substring(
+                        2, widget.formDetails![0]['db_admission_table']['db_special_concerns_table'][0]['supporting_documents'].length - 2);
+                        encodedUrl = Uri.encodeFull(originalUrl);
+                  }
+    }
+    
+
     for(int i=0; i<widget.formDetails![0]['db_admission_table']['db_family_background_table'][0]['db_sibling_table'].length;i++){
       var sibling = widget.formDetails![0]['db_admission_table']['db_family_background_table'][0]['db_sibling_table'][i];
       String sdate=sibling['sibling_bday'];
@@ -476,7 +498,7 @@ void addItemDescription(double scale) {
     }
     ageController.text=age.toString();
     updateQuantity();
-    addItemDescription(1);
+    addItemDescription(widget.formDetails![0]['db_admission_table']['db_family_background_table'][0]['db_sibling_table'].length);
 
 
     if(widget.formDetails![0]['db_admission_table']['db_family_background_table'][0]['db_parent_table'].length>0){
@@ -1765,7 +1787,7 @@ SizedBox(
     ),
     onChanged: (String value) {
       updateQuantity();
-      addItemDescription(scale);
+      addItemDescription(double.parse(siblingQuantityController.text));
     },
   ),
 ),
@@ -3320,7 +3342,8 @@ Row(
               SizedBox(
             height: 40,
             child: TextField(
-              enabled: false, 
+              enabled: false,
+              controller: specialConcernController,
               decoration: InputDecoration(
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(8),
@@ -3349,7 +3372,8 @@ Row(
               SizedBox(
             height: 40,
             child: TextField(
-              enabled: false, 
+              enabled: false,
+              controller: mdpConditionController, 
               decoration: InputDecoration(
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(8),
@@ -3379,7 +3403,8 @@ const SizedBox(height: 16),
               SizedBox(
             height: 40,
             child: TextField(
-              enabled: false, 
+              enabled: false,
+              controller: medicationController, 
               decoration: InputDecoration(
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(8),
@@ -3406,6 +3431,7 @@ const SizedBox(width: 8,),
             height: 40,
             child: TextField(
               enabled: false, 
+              controller: interventionController,
               decoration: InputDecoration(
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(8),
@@ -3435,14 +3461,43 @@ const SizedBox(height: 16),
               const SizedBox(height: 8),
               SizedBox(
             height: 40,
-            child: TextField(
+            child: /*TextField(
               enabled: false, 
               decoration: InputDecoration(
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(8),
                 ),
               ),
-            ),
+            */ElevatedButton(
+                              onPressed: widget.formDetails![0]['db_admission_table']['db_special_concerns_table'][0]['supporting_documents'] != null
+                                  ? () async {
+                                      // Ensure imagePath is a valid URL
+
+                                      // Use the browser's built-in window.open method
+                                      try {
+                                        html.window.open(encodedUrl,
+                                            '_blank'); // Open URL in a new tab
+                                      } catch (e) {
+                                        ScaffoldMessenger.of(context)
+                                            .showSnackBar(
+                                          const SnackBar(
+                                              content: Text(
+                                                  'Could not open the link')),
+                                        );
+                                      }
+                                    }
+                                  : null,
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor: const Color(0xff012169),
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(5),
+                                ),
+                              ),
+                              child: const Text(
+                                "Open Link",
+                                style: TextStyle(color: Colors.white),
+                              ),
+                            )
           ),
             ],
           ),
