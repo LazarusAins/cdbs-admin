@@ -45195,6 +45195,27 @@ break
 case 8:case 4:return A.J(null,r)
 case 1:return A.I(p,r)}})
 return A.K($async$iI,r)},
+zk(a){return this.aip(a)},
+aip(a){var s=0,r=A.L(t.H),q=1,p,o,n,m,l
+var $async$zk=A.H(function(b,c){if(b===1){p=c
+s=q}while(true)switch(s){case 0:q=3
+s=6
+return A.N(A.aWY().awu(!0,A.a(["pdf"],t.s),B.Ib),$async$zk)
+case 6:o=c
+q=1
+s=5
+break
+case 3:q=2
+l=p
+n=A.a9(l)
+A.ba("Error picking files: "+A.j(n))
+s=5
+break
+case 2:s=1
+break
+case 5:return A.J(null,r)
+case 1:return A.I(p,r)}})
+return A.K($async$zk,r)},
 Fu(a){return this.aaZ(a)},
 aaZ(a){var s=0,r=A.L(t.H3),q,p,o
 var $async$Fu=A.H(function(b,c){if(b===1)return A.I(c,r)
@@ -45335,27 +45356,6 @@ if(n.h(o,k)!=null){m=J.c(n.h(o,k),"doc_id")
 l=n.h(o,"document_status")
 if(J.d(m,r)&&J.d(l,"accepted")){q=!0
 break}}b.length===i||(0,A.W)(b);++p}if(!q)return!1}return!0},
-zk(a){return this.aip(a)},
-aip(a){var s=0,r=A.L(t.H),q=1,p,o,n,m,l
-var $async$zk=A.H(function(b,c){if(b===1){p=c
-s=q}while(true)switch(s){case 0:q=3
-s=6
-return A.N(A.aWY().awu(!0,A.a(["pdf"],t.s),B.Ib),$async$zk)
-case 6:o=c
-q=1
-s=5
-break
-case 3:q=2
-l=p
-n=A.a9(l)
-A.ba("Error picking files: "+A.j(n))
-s=5
-break
-case 2:s=1
-break
-case 5:return A.J(null,r)
-case 1:return A.I(p,r)}})
-return A.K($async$zk,r)},
 a1f(a,b,c){var s=null,r={}
 r.a=!1
 A.cg(s,s,!1,s,new A.aoS(r,this,b),a,s,!0,t.z)},

@@ -13,7 +13,6 @@ import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:intl/intl.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
-import 'package:url_launcher/url_launcher.dart';
 import 'dart:html' as html;
 import 'package:http_parser/http_parser.dart';
 
@@ -111,6 +110,27 @@ class _AdmissionRequirementsPage2State
       }
     }
   }
+
+  Future<void> _pickFiles(StateSetter setState) async {
+  try {
+    final result = await FilePicker.platform.pickFiles(
+      allowMultiple: true,
+      type: FileType.custom,
+      allowedExtensions: ['pdf'], // Allow only PDF files
+    );
+    if (result != null && result.files.isNotEmpty) {
+      setState(() {
+        _selectedFiles = result.files; // Assign selected files
+      });
+    } else {
+      setState(() {
+        _selectedFiles = null; // Allow _selectedFiles to be empty
+      });
+    }
+  } catch (e) {
+    print('Error picking files: $e');
+  }
+}
 
   String formatDate(DateTime date) {
     // Convert the UTC date to local time
@@ -2193,26 +2213,7 @@ String? _getMimeType(String extension) {
     );
   }
 
-  Future<void> _pickFiles(StateSetter setState) async {
-  try {
-    final result = await FilePicker.platform.pickFiles(
-      allowMultiple: true,
-      type: FileType.custom,
-      allowedExtensions: ['pdf'], // Allow only PDF files
-    );
-    if (result != null && result.files.isNotEmpty) {
-      setState(() {
-        _selectedFiles = result.files; // Assign selected files
-      });
-    } else {
-      setState(() {
-        _selectedFiles = null; // Allow _selectedFiles to be empty
-      });
-    }
-  } catch (e) {
-    print('Error picking files: $e');
-  }
-}
+  
 void showUploadDialog(
       BuildContext context, final request, StateSetter setState) {
     bool _isLoading = false;
