@@ -2254,7 +2254,7 @@ void showUploadDialog(
             backgroundColor: const Color(0xffffffff),
             content: SizedBox(
                                                           width: 349.0,
-                                                          height: 272.0,
+                                                          height: _selectedFiles.isEmpty?272.0:300,
                                                           child: _isLoading
                                                               ? const CustomSpinner(
                                                                   color: Color(
@@ -2292,30 +2292,64 @@ void showUploadDialog(
                                                                     ),
                                                                     // Content
                                                                      Padding(
-                                                                      padding: const EdgeInsets.symmetric(
-                                                                          horizontal:
-                                                                              24.0),
-                                                                      child:
-                                                                          SizedBox(
-                                                                            width: 200,
-                                                                            height: 40,
-                                                                            child: ElevatedButton(
-                                                                              onPressed: () {
-                                                                                _pickFiles(setState);
-                                                                              },
-                                                                              style: ElevatedButton.styleFrom(
-                                                                                shape: RoundedRectangleBorder(
-                                                                                  borderRadius: BorderRadius.circular(5),
-                                                                                ),
-                                                                                backgroundColor: const Color(0xff012169),
-                                                                              ),
-                                                                              child: const Text(
-                                                                                'Select File',
-                                                                                style: TextStyle(color: Color(0xffffffff)),
-                                                                              ),
-                                                                            ),
-                                                                          ),
-                                                                    ),
+  padding: const EdgeInsets.symmetric(horizontal: 24.0),
+  child: Column(
+    children: [
+      SizedBox(
+        width: 200,
+        height: 40,
+        child: ElevatedButton(
+          onPressed: _selectedFiles.isEmpty? () {
+            _pickFiles(setState);  // Open the file picker
+          }:null,
+          style: ElevatedButton.styleFrom(
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(5),
+            ),
+            backgroundColor: _selectedFiles.isEmpty?const Color(0xff012169): Color(0xffD3D3D3),
+          ),
+          child:  Text(
+            'Select File',
+            style: TextStyle(color: _selectedFiles.isEmpty?const Color(0xffffffff):const Color(0xff000000)),
+          ),
+        ),
+      ),
+
+      // Only show files if _selectedFiles is not empty
+      if (_selectedFiles.isNotEmpty) const SizedBox(height: 30),
+
+      // Iterate over the selected files and display each with a delete button
+      if (_selectedFiles.isNotEmpty)
+        ..._selectedFiles.map((file) {
+          return Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              // Display file name
+              Text(
+                file.name,
+                style: const TextStyle(color: Color(0xff13322b)),
+              ),
+              
+              // Delete icon
+              IconButton(
+                icon: const Icon(
+                  Icons.delete,
+                  color: Color(0xff13322b),
+                ),
+                onPressed: () {
+                  // Remove the file from the list
+                  setState(() {
+                    _selectedFiles =[];
+                  });
+                },
+              ),
+            ],
+          );
+        }).toList(),
+    ],
+  ),
+),
+
                                                                     const SizedBox(
                                                                         height:
                                                                             16.0),
@@ -2358,6 +2392,7 @@ void showUploadDialog(
                                                                           ),
                                                                           onPressed:
                                                                               () {
+                                                                                _selectedFiles=[];
                                                                             Navigator.of(context).pop(); // Close dialog
                                                                           },
                                                                           child:
@@ -2388,14 +2423,14 @@ void showUploadDialog(
                                                                             TextButton(
                                                                           style:
                                                                               TextButton.styleFrom(
-                                                                            backgroundColor:
-                                                                                const Color(0xff012169), // Amber button color
+                                                                            backgroundColor:_selectedFiles.isNotEmpty?
+                                                                                const Color(0xff012169):  Color(0xffD3D3D3), // Amber button color
                                                                             shape:
                                                                                 RoundedRectangleBorder(
                                                                               borderRadius: BorderRadius.circular(8),
                                                                             ),
                                                                           ),
-                                                                          onPressed: () async {
+                                                                          onPressed: _selectedFiles.isNotEmpty? () async {
                                                                              try{
                                                                                 if(_selectedFiles.isEmpty){
                                                                                   _showMessage('Please select a recommendation file to upload', "Error: File upload is required");
@@ -2432,12 +2467,12 @@ void showUploadDialog(
                                                                               }catch(error){
                                                                                 _showMessage('Connection timeout', "Error: File upload failed");
                                                                               }
-                                                                          },
+                                                                          }:null,
                                                                           child:
-                                                                              const Text(
+                                                                               Text(
                                                                             "Upload",
                                                                             style:
-                                                                                TextStyle(color: Colors.white),
+                                                                                TextStyle(color: _selectedFiles.isNotEmpty? Colors.white:const Color(0xff000000)),
                                                                           ),
                                                                         ),
                                                                       ),
