@@ -46,7 +46,7 @@ class _AdmissionRequirementsPage2State
   String? docStatus;
   bool isLoading = false;
   List<Map<String, dynamic>> myformDetails = [];
-  List<PlatformFile>? _selectedFiles;
+  List<PlatformFile> _selectedFiles =[];
 
   @override
   void initState() {
@@ -118,7 +118,7 @@ class _AdmissionRequirementsPage2State
       });
     } else {
       setState(() {
-        _selectedFiles = null; // Allow _selectedFiles to be empty
+        _selectedFiles = []; // Allow _selectedFiles to be empty
       });
     }
   } catch (e) {
@@ -138,7 +138,103 @@ class _AdmissionRequirementsPage2State
   }
 
 
-  
+  Future<Uint8List> _getFileBytes(PlatformFile file) async {
+    final reader = html.FileReader();
+    final completer = Completer<Uint8List>();
+
+    // Create a Blob from the file's bytes
+    final blob = html.Blob(
+        [file.bytes]); // Assuming 'file.bytes' gives you the byte data
+
+    reader.readAsArrayBuffer(blob);
+    reader.onLoadEnd.listen((e) {
+      completer.complete(reader.result as Uint8List);
+    });
+
+    return completer.future;
+  }
+
+  Future<bool> _uploadRecommendation(
+  String requirementsType,
+  String admissionId,
+  String bucketName,
+  String requiredDocId,
+) async {
+  try {
+    var request = http.MultipartRequest(
+      'POST',
+      Uri.parse('$apiUrl/api/admin/upload_requirements'),
+    );
+
+    request.headers.addAll({
+      'supabase-url': supabaseUrl,
+      'supabase-key': supabaseKey,
+    });
+
+    request.fields['requirements_type'] = requirementsType;
+    request.fields['admission_id'] = admissionId;
+    request.fields['required_doc_id'] = requiredDocId;
+    request.fields['bucket_name'] = bucketName;
+
+    for (var file in _selectedFiles!) {
+      try {
+        final fileBytes = await _getFileBytes(file);
+        if (fileBytes != null) {
+          final mimeType = _getMimeType(file.extension ?? '');
+          if (mimeType == null) {
+            print('Unsupported file type: ${file.extension}');
+            continue;
+          }
+
+          request.files.add(http.MultipartFile.fromBytes(
+            'file',
+            fileBytes,
+            filename: file.name,
+            contentType: MediaType.parse(mimeType),
+          ));
+        } else {
+          print('Error reading file bytes for ${file.name}');
+        }
+      } catch (e) {
+        print('Error processing file ${file.name}: $e');
+      }
+    }
+
+    var response = await request.send().timeout(const Duration(seconds: 10));
+
+    if (response.statusCode == 200) {
+      final responseData = await response.stream.bytesToString();
+      final data = json.decode(responseData);
+      print('Upload successful: $data');
+      return true;
+    } else {
+      final responseData = await response.stream.bytesToString();
+      final data = json.decode(responseData);
+      print('Upload failed with status ${response.statusCode}: ${data['error'] ?? data}');
+      return false;
+    }
+  } on TimeoutException {
+    print('The request timed out. Please try again later.');
+    return false;
+  } catch (e) {
+    print('Unexpected error: $e');
+    return false;
+  }
+}
+
+String? _getMimeType(String extension) {
+  switch (extension.toLowerCase()) {
+    case 'pdf':
+      return 'application/pdf';
+    case 'jpg':
+    case 'jpeg':
+      return 'image/jpeg';
+    case 'png':
+      return 'image/png';
+    default:
+      return null;
+  }
+}
 
 
   @override
@@ -2271,13 +2367,13 @@ void showUploadDialog(
                                                                                 if(_selectedFiles!.isEmpty && _selectedFiles==null){
                                                                                   _showMessage('Please select a recommendation file to upload', "Error: File upload is required");
                                                                                   setState(() {
-                                                                                    _selectedFiles = null;
+                                                                                    _selectedFiles = [];
                                                                                   });
                                                                                 }else{
                                                                                   setState(() {
                                                                                     _isLoading = true; // Start loading
                                                                                   });
-                                                                                  /*bool isStated = await _uploadRecommendation(
+                                                                                  bool isStated = await _uploadRecommendation(
                                                                                     request['requirements_type'].toString(),
                                                                                     request['admission_id'].toString(),
                                                                                     'document_upload',
@@ -2285,7 +2381,7 @@ void showUploadDialog(
                                                                                   );
 
                                                                                   setState(() {
-                                                                                    _selectedFiles = null;
+                                                                                    _selectedFiles = [];
                                                                                     _isLoading = false; // Stop loading
                                                                                   });
                                                                                     
@@ -2298,7 +2394,7 @@ void showUploadDialog(
                                                                                     Navigator.of(context).popUntil((route) => route.isFirst);
                                                                                     _showMessage('Failed to upload file',
                                                                                         'Error');
-                                                                                  }*/
+                                                                                  }
                                                                                 }
                                                                               }catch(error){
                                                                                 _showMessage('Connection timeout', "Error: File upload failed");
