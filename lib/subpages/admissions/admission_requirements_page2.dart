@@ -138,22 +138,6 @@ class _AdmissionRequirementsPage2State
   }
 
 
-  Future<Uint8List> _getFileBytes(PlatformFile file) async {
-    final reader = html.FileReader();
-    final completer = Completer<Uint8List>();
-
-    // Create a Blob from the file's bytes
-    final blob = html.Blob(
-        [file.bytes]); // Assuming 'file.bytes' gives you the byte data
-
-    reader.readAsArrayBuffer(blob);
-    reader.onLoadEnd.listen((e) {
-      completer.complete(reader.result as Uint8List);
-    });
-
-    return completer.future;
-  }
-
   Future<bool> _uploadRecommendation(
   String requirementsType,
   String admissionId,
@@ -235,6 +219,24 @@ String? _getMimeType(String extension) {
       return null;
   }
 }
+
+  Future<Uint8List> _getFileBytes(PlatformFile file) async {
+    final reader = html.FileReader();
+    final completer = Completer<Uint8List>();
+
+    // Create a Blob from the file's bytes
+    final blob = html.Blob(
+        [file.bytes]); // Assuming 'file.bytes' gives you the byte data
+
+    reader.readAsArrayBuffer(blob);
+    reader.onLoadEnd.listen((e) {
+      completer.complete(reader.result as Uint8List);
+    });
+
+    return completer.future;
+  }
+
+  
 
 
   @override
