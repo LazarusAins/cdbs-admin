@@ -994,7 +994,7 @@ class _AdmissionSlotsPage1State extends State<AdmissionSlotsPage1> {
                                       children: [
                                         const Icon(Icons.block, color: Color(0xff000000)),
                                         SizedBox(width: 8 * scale),
-                                        Text("CLOSED", style: TextStyle(fontSize: 18 * scale, color: const Color(0xff000000))),
+                                        Text("CLOSE SLOT", style: TextStyle(fontSize: 18 * scale, color: const Color(0xff000000))),
                                       ],
                                     ),
                                   ),

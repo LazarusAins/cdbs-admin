@@ -416,13 +416,13 @@ const SizedBox(height: 40),
               style: TextStyle(fontSize: 16 * scale, fontFamily: 'Roboto-L'),
             ),
           ),
-          Expanded(
+         /* Expanded(
             flex: 2,
             child: Text(
               'Reference No',
               style: TextStyle(fontSize: 16 * scale, fontFamily: 'Roboto-L'),
             ),
-          ),
+          ),*/
           Expanded(
             flex: 2,
             child: Text(
@@ -508,12 +508,12 @@ const SizedBox(height: 40),
                         style: TextStyle(fontFamily: 'Roboto-R', fontSize: 16 * scale),
                       ),
                     ),
-                    Expanded(
+                   /* Expanded(
                       flex: 2,
                       child: Text( request['reference_no'] ?? '',
                         style: TextStyle(fontFamily: 'Roboto-R', fontSize: 16 * scale),
                       ),
-                    ),
+                    ),*/
                     Expanded(
                       flex: 2,
                       child: Text(!isPaid?stat=='complete' && isRequired?'PENDING':stat.toUpperCase():'COMPLETE',
