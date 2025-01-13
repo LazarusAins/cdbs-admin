@@ -105,8 +105,8 @@ class _AdmissionRequirementsPage2State
     }
   }
 
-  Future<void> _pickFiles(StateSetter setState) async {
-  //try {
+  /*Future<void> _pickFiles(StateSetter setState) async {
+  try {
     final result = await FilePicker.platform.pickFiles(
       allowMultiple: true,
       type: FileType.custom,
@@ -121,10 +121,41 @@ class _AdmissionRequirementsPage2State
         _selectedFiles = []; // Allow _selectedFiles to be empty
       });
     }
-  /*} catch (e) {
+  } catch (e) {
     print('Error picking files: $e');
-  }*/
+  }
+}*/
+
+Future<void> _pickFiles(StateSetter setState) async {
+  try {
+    // Create the file upload input element
+    html.FileUploadInputElement uploadInput = html.FileUploadInputElement();
+    uploadInput.accept = '.pdf'; // Accept PDF files only
+    uploadInput.multiple = true; // Allow multiple files
+
+    uploadInput.click(); // Trigger the file picker dialog
+
+    // Listen for the file selection
+    uploadInput.onChange.listen((e) async {
+      final files = uploadInput.files;
+      if (files != null && files.isNotEmpty) {
+        // Convert the selected files into PlatformFile objects
+        setState(() {
+          _selectedFiles = files.map((file) {
+            return PlatformFile(
+              name: file.name,
+              size: file.size, // Required size parameter
+              path: null,// Extract file extension
+            );
+          }).toList();
+        });
+      }
+    });
+  } catch (e) {
+    print('Error picking files: $e');
+  }
 }
+
 
   String formatDate(DateTime date) {
     // Convert the UTC date to local time
@@ -2366,7 +2397,7 @@ void showUploadDialog(
                                                                           ),
                                                                           onPressed: () async {
                                                                              try{
-                                                                                if(_selectedFiles!.isEmpty && _selectedFiles==null){
+                                                                                if(_selectedFiles.isEmpty){
                                                                                   _showMessage('Please select a recommendation file to upload', "Error: File upload is required");
                                                                                   setState(() {
                                                                                     _selectedFiles = [];
