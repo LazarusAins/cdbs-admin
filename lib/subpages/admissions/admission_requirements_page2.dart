@@ -38,12 +38,12 @@ class AdmissionRequirementsPage2 extends StatefulWidget {
 class _AdmissionRequirementsPage2State
     extends State<AdmissionRequirementsPage2> {
   TextEditingController rejectController = TextEditingController();
-  String? applicationId;
-  String? fullName;
-  String? status;
-  String? dateCreatedString;
-  String? formattedDate;
-  String? docStatus;
+  String applicationId='';
+  String fullName='';
+  String status='';
+  String dateCreatedString='';
+  String formattedDate='';
+  String docStatus='';
   bool isLoading = false;
   List<Map<String, dynamic>> myformDetails = [];
   List<PlatformFile> _selectedFiles =[];
@@ -51,13 +51,20 @@ class _AdmissionRequirementsPage2State
   @override
   void initState() {
     super.initState();
-    myformDetails = widget.formDetails!;
+    if (widget.formDetails != null) {
+      myformDetails = widget.formDetails!;
+    } else {
+      // Handle the case where formDetails is null
+      myformDetails = []; // Default to an empty list
+    }
+
+    /*myformDetails = widget.formDetails!;
     applicationId = myformDetails[0]['db_admission_table']['admission_form_id'];
     fullName = '${myformDetails[0]['db_admission_table']['first_name']} ${myformDetails[0]['db_admission_table']['last_name']}';
     status = myformDetails[0]['db_admission_table']['admission_status'];
     dateCreatedString = myformDetails[0]['db_admission_table']['created_at'];
     DateTime dateCreated = DateTime.parse(dateCreatedString!);
-    formattedDate = formatDate(dateCreated);
+    formattedDate = formatDate(dateCreated);*/
   }
 
   Future<void> updateData(int admissionId) async {
