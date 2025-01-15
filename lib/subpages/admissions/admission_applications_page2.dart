@@ -456,7 +456,8 @@ void addItemDescription(double scale) {
      DateTime today = DateTime.now();
      int age = today.year - dateOfBirth.year;
 
-    if(widget.formDetails![0]['db_admission_table']['db_special_concerns_table'].isNotEmpty){
+      
+    if(widget.formDetails![0]['db_admission_table']['db_special_concerns_table'].isNotEmpty && widget.formDetails![0]['db_admission_table']['db_special_concerns_table'] != null){
        specialConcernController.text=widget.formDetails![0]['db_admission_table']['db_special_concerns_table'][0]['special_concern'] ?? '';
       mdpConditionController.text=widget.formDetails![0]['db_admission_table']['db_special_concerns_table'][0]['medical_condition'] ?? '';
       medicationController.text=widget.formDetails![0]['db_admission_table']['db_special_concerns_table'][0]['medication'] ?? '';
@@ -3469,7 +3470,7 @@ const SizedBox(height: 16),
                 ),
               ),
             */ElevatedButton(
-                              onPressed: widget.formDetails![0]['db_admission_table']['db_special_concerns_table'][0]['supporting_documents'] != null
+                              onPressed: encodedUrl.isNotEmpty
                                   ? () async {
                                       // Ensure imagePath is a valid URL
 

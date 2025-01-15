@@ -34,6 +34,7 @@ class _AdmissionPaymentsPage2State extends State<AdmissionPaymentsPage2> {
   String? dateCreatedString;
   String? formattedDate;
   String? docStatus;
+  String? refNo;
 
   List<Map<String, dynamic>> myformDetails=[];
 
@@ -41,6 +42,7 @@ class _AdmissionPaymentsPage2State extends State<AdmissionPaymentsPage2> {
   void initState() {
     super.initState();
     myformDetails=widget.formDetails!;
+    refNo= myformDetails[0]['db_admission_table']['reference_no'];
     applicationId = myformDetails[0]['db_admission_table']['admission_form_id'];
     fullName='${myformDetails[0]['db_admission_table']['first_name']} ${myformDetails[0]['db_admission_table']['last_name']}';
     status=myformDetails[0]['db_admission_table']['admission_status'];
@@ -52,6 +54,9 @@ class _AdmissionPaymentsPage2State extends State<AdmissionPaymentsPage2> {
     }else{
       formattedDate='---';
     }
+
+    
+    print(refNo);
 
     if(isPaid){
       isGreenExpanded=true;
