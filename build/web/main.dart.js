@@ -45354,17 +45354,19 @@ o=14*f
 return A.aq(m,A.Q(A.a([B.be,A.U(A.a([j,B.a1,i,B.a1,s,B.a1,r,B.a1,A.y(n.tY("Date Created",f,q),2)],p),B.h,B.U,B.e,m),B.Sk,B.eB,A.U(A.a([A.l("Attached Document/s",m,m,m,A.p(m,m,m,m,m,m,m,m,"Roboto-R",m,m,16*f,m,m,m,m,m,!0,m,m,m,m,m,m,m,m),m,m,m)],p),B.h,B.U,B.e,m),B.be,A.E(A.U(A.a([A.y(A.l("Document Type",m,m,m,A.p(m,m,m,m,m,m,m,m,k,m,m,o,m,m,m,m,m,!0,m,m,m,m,m,m,m,m),m,m,m),3),B.aE,A.y(A.l("View Documents",m,m,m,A.p(m,m,m,m,m,m,m,m,k,m,m,o,m,m,m,m,m,!0,m,m,m,m,m,m,m,m),m,m,m),2),B.aE,A.y(A.l("Status",m,m,m,A.p(m,m,m,m,m,m,m,m,k,m,m,o,m,m,m,m,m,!0,m,m,m,m,m,m,m,m),m,m,m),2),B.aE,A.y(A.l("Actions",m,m,m,A.p(m,m,m,m,m,m,m,m,k,m,m,o,m,m,m,m,m,!0,m,m,m,m,m,m,m,m),m,m,m),2)],p),B.h,B.f,B.e,m),m,1100),A.E(A.ic(new A.aoM(n,f),J.b3(J.c(J.c(J.c(n.Q,0),l),"db_required_documents_table"))),400,1100)],p),B.q,B.f,B.e),B.m,m,m,m,m,m,m,B.S,m,m,m)},
 tY(a,b,c){var s=null,r=t.p
 return A.Q(A.a([A.U(A.a([A.l(a,s,s,s,A.p(s,s,s,s,s,s,s,s,"Roboto-R",s,s,11*b,s,s,s,s,s,!0,s,s,s,s,s,s,s,s),s,s,s),B.ho,A.l(c,s,s,s,A.p(s,s,s,s,s,s,s,s,"Roboto-B",s,s,12*b,s,s,s,s,s,!0,s,s,s,s,s,s,s,s),s,s,s)],r),B.h,B.f,B.e,s),B.hp,A.aq(s,s,B.m,B.a5,s,s,s,1,s,s,s,s,s)],r),B.q,B.f,B.e)},
-vi(a,b){var s,r,q,p,o,n,m,l,k="db_requirement_type_table",j=a.toLowerCase()==="pre-kinder"||a.toLowerCase()==="kinder",i=t.t,h=j?A.a([1,2,4],i):A.a([1,2,3,5],i)
-for(j=h.length,s=0;s<h.length;h.length===j||(0,A.W)(h),++s){r=h[s]
-i=b.length
-p=0
-while(!0){if(!(p<b.length)){q=!1
-break}o=b[p]
-n=J.ag(o)
-if(n.h(o,k)!=null){m=J.c(n.h(o,k),"doc_id")
-l=n.h(o,"document_status")
-if(J.d(m,r)&&J.d(l,"accepted")){q=!0
-break}}b.length===i||(0,A.W)(b);++p}if(!q)return!1}return!0},
+vi(a,b){var s,r,q,p,o,n,m,l,k,j,i,h="db_requirement_type_table"
+if(a.toLowerCase()==="pre-kinder"||a.toLowerCase()==="kinder")s=A.a([1,2,4],t.t)
+else{r=t.t
+s=a.toLowerCase()==="grade 1"?A.a([1,2,5,14],r):A.a([1,2,3,5,14],r)}for(r=s.length,q=0;q<s.length;s.length===r||(0,A.W)(s),++q){p=s[q]
+n=b.length
+m=0
+while(!0){if(!(m<b.length)){o=!1
+break}l=b[m]
+k=J.ag(l)
+if(k.h(l,h)!=null){j=J.c(k.h(l,h),"doc_id")
+i=k.h(l,"document_status")
+if(J.d(j,p)&&J.d(i,"accepted")){o=!0
+break}}b.length===n||(0,A.W)(b);++m}if(!o)return!1}return!0},
 a1g(a,b,c){var s=null,r={}
 r.a=!1
 A.ch(s,s,!1,s,new A.aoZ(r,this,b),a,s,!0,t.z)},

@@ -1387,12 +1387,22 @@ String? _getMimeType(String extension) {
         4
       ]; // For 'pre-kinder' or 'kinder', require doc_ids 1, 2, and 4
     } else {
-      requiredDocIds = [
-        1,
-        2,
-        3,
-        5
-      ]; // For other grade levels, require doc_ids 1, 2, 3, and 5
+      if(gradeLevel.toLowerCase() == 'grade 1'){
+        requiredDocIds = [
+          1,
+          2,
+          5,
+          14
+        ];
+      }else{
+        requiredDocIds = [
+          1,
+          2,
+          3,
+          5,
+          14
+        ];
+      } // For other grade levels, require doc_ids 1, 2, 3, and 5
     }
 
     // Loop through the required doc_ids
