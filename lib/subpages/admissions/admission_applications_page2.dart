@@ -1017,21 +1017,51 @@ Expanded(
     //FULLNAME TEXTFIELDS
         Row(
     children: [
-       Expanded(
-        flex: 1,
-        child: SizedBox(
-          height: 40,
-          child: TextField(
-            controller: fnameController,
-            enabled: isEditable, 
-            decoration: InputDecoration(
-              border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(8 * scale),
-              ),
-            ),
+      Expanded(
+  flex: 1,
+  child: SizedBox(
+    height: 40,
+    child: TextField(
+      controller: fnameController,
+      enabled: isEditable,
+      style: TextStyle(
+        color: isEditable ? const Color(0XFF012169) : Colors.black, // Dynamically change text color
+      ),
+      decoration: InputDecoration(
+        border: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(8),
+          borderSide: BorderSide(
+            color: isEditable ? const Color(0XFF012169) : Colors.black, // Match text and border color
+            width: 1.0,
+          ),
+        ),
+        enabledBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(8),
+          borderSide: BorderSide(
+            color: isEditable ? const Color(0XFF012169) : Colors.black, // Match text and border color when enabled
+            width: 1.0,
+          ),
+        ),
+        focusedBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(8),
+          borderSide: BorderSide(
+            color: isEditable ? const Color(0XFF012169) : Colors.black, // Match text and border color when focused
+            width: 2.0,
+          ),
+        ),
+        disabledBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(8),
+          borderSide: BorderSide(
+            color: isEditable ? const Color(0XFF012169) : Colors.black, // Match text and border color when disabled
+            width: 1.0,
           ),
         ),
       ),
+    ),
+  ),
+),
+
+
       const SizedBox(width: 8),
       Expanded(
         flex: 1,
