@@ -42,7 +42,7 @@ class _AdmissionPaymentsPage2State extends State<AdmissionPaymentsPage2> {
   void initState() {
     super.initState();
     myformDetails=widget.formDetails!;
-    refNo= myformDetails[0]['db_admission_table']['reference_no'];
+    refNo= myformDetails[0]['db_admission_table']['reference_no'] ?? '';
     applicationId = myformDetails[0]['db_admission_table']['admission_form_id'];
     fullName='${myformDetails[0]['db_admission_table']['first_name']} ${myformDetails[0]['db_admission_table']['last_name']}';
     status=myformDetails[0]['db_admission_table']['admission_status'];
@@ -54,9 +54,6 @@ class _AdmissionPaymentsPage2State extends State<AdmissionPaymentsPage2> {
     }else{
       formattedDate='---';
     }
-
-    
-    print(refNo);
 
     if(isPaid){
       isGreenExpanded=true;
@@ -623,6 +620,15 @@ class _AdmissionPaymentsPage2State extends State<AdmissionPaymentsPage2> {
                       Expanded(
                         flex: 3,
                         child: _buildInfoColumn(
+                          label: 'Reference No: ',
+                          value: refNo!,
+                          scale: scale,
+                        ),
+                      ),
+                      const SizedBox(width: 16),
+                      Expanded(
+                        flex: 3,
+                        child: _buildInfoColumn(
                           label: 'Payment Type',
                           value: 'Application Fee',
                           scale: scale,
@@ -630,7 +636,7 @@ class _AdmissionPaymentsPage2State extends State<AdmissionPaymentsPage2> {
                       ),
                       const SizedBox(width: 16),
                       Expanded(
-                        flex: 3,
+                        flex: 2,
                         child: _buildInfoColumn(
                           label: 'Total Amount',
                           value: '600.00',
