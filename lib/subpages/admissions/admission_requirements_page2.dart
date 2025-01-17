@@ -368,7 +368,7 @@ String? _getMimeType(String extension) {
           // Row of Images
 
           SizedBox(
-              width: 1100,
+              width: 1200,
               child: Row(
                 children: [
                   Expanded(
@@ -386,8 +386,15 @@ String? _getMimeType(String extension) {
                   ),
                   const SizedBox(width: 40),
                   Expanded(
-                    flex: 2,
+                    flex: 1,
                     child: Text('Status',
+                        style: TextStyle(
+                            fontSize: 14 * scale, fontFamily: 'Roboto-L')),
+                  ),
+                  const SizedBox(width: 40),
+                  Expanded(
+                    flex: 2,
+                    child: Text('Reject Reason',
                         style: TextStyle(
                             fontSize: 14 * scale, fontFamily: 'Roboto-L')),
                   ),
@@ -402,7 +409,7 @@ String? _getMimeType(String extension) {
               )),
 
           SizedBox(
-            width: 1100,
+            width: 1200,
             height: 400,
             child: ListView.builder(
                 itemCount: myformDetails[0]['db_admission_table']['db_required_documents_table'].length,
@@ -415,6 +422,7 @@ String? _getMimeType(String extension) {
                         2, document[index]['document_url'].length - 2);
                   }
                   String encodedUrl = Uri.encodeFull(originalUrl);
+                  String reject =  document[index]['reject_reason'] ?? 'N/A';
                   return Column(children: [
                     const SizedBox(height: 10),
                     Row(
@@ -482,10 +490,18 @@ String? _getMimeType(String extension) {
                           ),
                           const SizedBox(width: 40),
                           Expanded(
-                              flex: 2,
+                              flex: 1,
                               child: Text(
                                 document[index]['document_status']
                                     .toUpperCase(),
+                                style: TextStyle(
+                                    fontFamily: 'Roboto-R',
+                                    fontSize: 14 * scale),
+                              )),
+                              const SizedBox(width: 40),
+                          Expanded(
+                              flex: 2,
+                              child: Text(reject,
                                 style: TextStyle(
                                     fontFamily: 'Roboto-R',
                                     fontSize: 14 * scale),
@@ -497,11 +513,9 @@ String? _getMimeType(String extension) {
                                 children: [
                                   ElevatedButton(
                                     onPressed:
-                                        document[index]['document_status'] ==
-                                                'pending'
+                                        document[index]['document_status'] == 'pending'
                                             ? () {
                                                 // Handle accept action
-
                                                 showDialog(
                                                   context: context,
                                                   builder: (context) => Dialog(
