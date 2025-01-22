@@ -63,6 +63,7 @@ bool isLoading = false;
 
 String originalUrl = '';
 String encodedUrl='';
+String noSibling='';
 
 TextEditingController dateController = TextEditingController();
 TextEditingController fnameController = TextEditingController();
@@ -126,7 +127,7 @@ TextEditingController guardianSalaryScaleController = TextEditingController();
 String? guardianRelationTo;
 
 
-String? parentStatus;
+String parentStatus = 'Married';
 TextEditingController civilWeddingController = TextEditingController();
 TextEditingController churchNameController = TextEditingController();
 
@@ -251,17 +252,13 @@ void addItemDescription(double scale) {
       schoolBisControllers.add(TextEditingController());
     }
     while (nameControllers.length > quantityReceived) {
-      TextEditingController removedController =
-          nameControllers.removeLast();
+      TextEditingController removedController = nameControllers.removeLast();
       removedController.dispose(); // Dispose the removed controller
-      TextEditingController removedQuantityController =
-          ageControllers.removeLast();
+      TextEditingController removedQuantityController = ageControllers.removeLast();
       removedQuantityController.dispose(); // Dispose the removed controller
-      TextEditingController removedpriceController =
-          gradeLevelControllers.removeLast();
+      TextEditingController removedpriceController = gradeLevelControllers.removeLast();
       removedpriceController.dispose();
-      TextEditingController removedorderDocController =
-          schoolBisControllers.removeLast();
+      TextEditingController removedorderDocController = schoolBisControllers.removeLast();
       removedorderDocController.dispose();
     }
     List<Widget> newDescriptions = [];
@@ -414,7 +411,6 @@ void addItemDescription(double scale) {
     }
   }
 
-
   @override
   void initState() {
     super.initState();
@@ -430,7 +426,7 @@ void addItemDescription(double scale) {
     }
 
 
-     String noSibling = widget.formDetails![0]['db_admission_table']['db_family_background_table'][0]['no_of_siblings'].toString();
+     
     
      selectedGender =widget.formDetails![0]['db_admission_table']['sex'] ??'';
      fnameController.text=widget.formDetails![0]['db_admission_table']['first_name']??'';
@@ -448,102 +444,127 @@ void addItemDescription(double scale) {
      contactController.text=widget.formDetails![0]['db_admission_table']['contact_no']??'';
      languageSpokenController.text=widget.formDetails![0]['db_admission_table']['language_dialect_spoken']??'';
      companionController.text=widget.formDetails![0]['db_admission_table']['usual_companion_at_home']??'';
-     parentStatus=widget.formDetails![0]['db_admission_table']['db_family_background_table'][0]['parent_status'];
-     civilWeddingController.text=widget.formDetails![0]['db_admission_table']['db_family_background_table'][0]['civil_wedding'] ?? '';
-     churchNameController.text=widget.formDetails![0]['db_admission_table']['db_family_background_table'][0]['church_name'] ?? '';
-     siblingQuantityController.text=noSibling == 'null' ?'0':noSibling;
+
+      
      DateTime dateOfBirth = DateTime.parse(dateController.text);
      DateTime today = DateTime.now();
      int age = today.year - dateOfBirth.year;
+     if(widget.formDetails![0]['db_admission_table']['db_family_background_table'].isNotEmpty){
+      noSibling = widget.formDetails![0]['db_admission_table']['db_family_background_table'][0]['no_of_siblings'].toString();
+      parentStatus=widget.formDetails![0]['db_admission_table']['db_family_background_table'][0]['parent_status'] ?? '';
+      civilWeddingController.text=widget.formDetails![0]['db_admission_table']['db_family_background_table'][0]['civil_wedding'] ?? '';
+      churchNameController.text=widget.formDetails![0]['db_admission_table']['db_family_background_table'][0]['church_name'] ?? '';
+      for(int i=0; i<widget.formDetails![0]['db_admission_table']['db_family_background_table'][0]['db_sibling_table'].length;i++){
+        var sibling = widget.formDetails![0]['db_admission_table']['db_family_background_table'][0]['db_sibling_table'][i];
+        String sdate=sibling['sibling_bday'];
+        DateTime siblingBday = DateTime.parse(sdate);
+        int siblingAge = today.year - siblingBday.year;
+        if (today.month < siblingBday.month || (today.month == siblingBday.month && today.day < siblingBday.day)) {
+          siblingAge--;
+        }
+        nameControllers.add(TextEditingController());
+        ageControllers.add(TextEditingController());
+        gradeLevelControllers.add(TextEditingController());
+        schoolBisControllers.add(TextEditingController());
+        name = nameControllers[i];
+        ageSibling=ageControllers[i];
+        gradeLevel = gradeLevelControllers[i];
+        schoolBis = schoolBisControllers[i];
+
+        name.text='${sibling['sibling_first_name']} ${sibling['sibling_middle_name']} ${sibling['sibling_last_name']}';
+        ageSibling.text=siblingAge.toString();
+        gradeLevel.text=sibling['sibling_grade_course_occupation'];
+        schoolBis.text=sibling['sibling_school_business'];
+      }
+      if (today.month < dateOfBirth.month || (today.month == dateOfBirth.month && today.day < dateOfBirth.day)) {
+        age--;
+      }
+      ageController.text=age.toString();
+      updateQuantity();
+      addItemDescription(widget.formDetails![0]['db_admission_table']['db_family_background_table'][0]['db_sibling_table'].length);
+     }
+     
+     siblingQuantityController.text=noSibling == 'null' ?'0':noSibling;
+     
+     
+
+     if(widget.formDetails![0]['db_admission_table']['db_special_concerns_table'].isNotEmpty && widget.formDetails![0]['db_admission_table']['db_special_concerns_table'] != null){
+       specialConcernController.text=widget.formDetails![0]['db_admission_table']['db_special_concerns_table'][0]['special_concern'] ?? '';
+        mdpConditionController.text=widget.formDetails![0]['db_admission_table']['db_special_concerns_table'][0]['medical_condition'] ?? '';
+        medicationController.text=widget.formDetails![0]['db_admission_table']['db_special_concerns_table'][0]['medication'] ?? '';
+        interventionController.text=widget.formDetails![0]['db_admission_table']['db_special_concerns_table'][0]['intervention'] ?? '';
+        if (widget.formDetails![0]['db_admission_table']['db_special_concerns_table'][0]['supporting_documents'] != null) {
+                      originalUrl = widget.formDetails![0]['db_admission_table']['db_special_concerns_table'][0]['supporting_documents'].substring(
+                          2, widget.formDetails![0]['db_admission_table']['db_special_concerns_table'][0]['supporting_documents'].length - 2);
+                          encodedUrl = Uri.encodeFull(originalUrl);
+                    }
+      }
+
+       
+
+
+     if(widget.formDetails![0]['db_admission_table']['db_special_concerns_table'].isNotEmpty && widget.formDetails![0]['db_admission_table']['db_special_concerns_table'] != null){
+       specialConcernController.text=widget.formDetails![0]['db_admission_table']['db_special_concerns_table'][0]['special_concern'] ?? '';
+        mdpConditionController.text=widget.formDetails![0]['db_admission_table']['db_special_concerns_table'][0]['medical_condition'] ?? '';
+        medicationController.text=widget.formDetails![0]['db_admission_table']['db_special_concerns_table'][0]['medication'] ?? '';
+        interventionController.text=widget.formDetails![0]['db_admission_table']['db_special_concerns_table'][0]['intervention'] ?? '';
+        if (widget.formDetails![0]['db_admission_table']['db_special_concerns_table'][0]['supporting_documents'] != null) {
+                      originalUrl = widget.formDetails![0]['db_admission_table']['db_special_concerns_table'][0]['supporting_documents'].substring(
+                          2, widget.formDetails![0]['db_admission_table']['db_special_concerns_table'][0]['supporting_documents'].length - 2);
+                          encodedUrl = Uri.encodeFull(originalUrl);
+                    }
+      }
+
+ 
+ 
+ if(widget.formDetails![0]['db_admission_table']['db_family_background_table'].isNotEmpty){
+        if(widget.formDetails![0]['db_admission_table']['db_family_background_table'][0]['db_parent_table'].length>0){
+            for(int i=0; i<widget.formDetails![0]['db_admission_table']['db_family_background_table'][0]['db_parent_table'].length;i++){
+              var parent = widget.formDetails![0]['db_admission_table']['db_family_background_table'][0]['db_parent_table'][i];
+              String fullName='${parent['first_name']} ${parent['last_name']}';
+              DateTime dateOfBirth = DateTime.parse(parent['date_of_birth']);
+              DateTime today = DateTime.now();
+              int age = today.year - dateOfBirth.year;
+              if(parent['relationship_to_child']=='mother'){
+                motherNameController.text = fullName;
+                motherAgeController.text = age.toString();
+                motherEduAttainController.text=parent['educational_attainment'];
+                motherEmploymentStatus = parent['employment_status'];
+                motherEmployedAtController.text = parent['employed_at'] ?? '';
+                motherOfficeAddressController.text=parent['office_address'] ?? '';
+                motherContactController.text=parent['contact_no'] ?? '';
+                motherWorkPositionController.text = parent['job_position'] ?? '';
+                motherSalary = parent['salary_scale'] ?? '';
+              }else if(parent['relationship_to_child']=='father'){
+                fatherNameController.text = fullName;
+                fatherAgeController.text = age.toString();
+                fatherEduAttainController.text=parent['educational_attainment'];
+                fatherEmploymentStatus = parent['employment_status'];
+                fatherEmployedAtController.text = parent['employed_at'] ?? '';
+                fatherOfficeAddressController.text=parent['office_address'] ?? '';
+                fatherContactController.text=parent['contact_no'] ?? '';
+                fatherWorkPositionController.text = parent['job_position'] ?? '';
+                fatherSalary = parent['salary_scale'] ?? '';
+              }else if(parent['relationship_to_child']=='guardian'){
+                guardianNameController.text = fullName;
+                guardianAgeController.text = age.toString();
+                guardianEduAttainController.text=parent['educational_attainment'];
+                guardianEmploymentStatus = parent['employment_status']??'';
+                guardianEmployedAtController.text = parent['employed_at'] ?? '';
+                guardianOfficeAddressController.text=parent['office_address'] ?? '';
+                guardianContactController.text=parent['contact_no'] ?? '';
+                guardianWorkPositionController.text = parent['job_position'] ?? '';
+                guardianRelationTo = parent['relationship_to_child'] ?? '';
+                guardianSalary = parent['salary_scale'] ?? '';
+              }
+            }
+        }
+    }     
 
       
-    if(widget.formDetails![0]['db_admission_table']['db_special_concerns_table'].isNotEmpty && widget.formDetails![0]['db_admission_table']['db_special_concerns_table'] != null){
-       specialConcernController.text=widget.formDetails![0]['db_admission_table']['db_special_concerns_table'][0]['special_concern'] ?? '';
-      mdpConditionController.text=widget.formDetails![0]['db_admission_table']['db_special_concerns_table'][0]['medical_condition'] ?? '';
-      medicationController.text=widget.formDetails![0]['db_admission_table']['db_special_concerns_table'][0]['medication'] ?? '';
-      interventionController.text=widget.formDetails![0]['db_admission_table']['db_special_concerns_table'][0]['intervention'] ?? '';
-      if (widget.formDetails![0]['db_admission_table']['db_special_concerns_table'][0]['supporting_documents'] != null) {
-                    originalUrl = widget.formDetails![0]['db_admission_table']['db_special_concerns_table'][0]['supporting_documents'].substring(
-                        2, widget.formDetails![0]['db_admission_table']['db_special_concerns_table'][0]['supporting_documents'].length - 2);
-                        encodedUrl = Uri.encodeFull(originalUrl);
-                  }
-    }
     
-
-    for(int i=0; i<widget.formDetails![0]['db_admission_table']['db_family_background_table'][0]['db_sibling_table'].length;i++){
-      var sibling = widget.formDetails![0]['db_admission_table']['db_family_background_table'][0]['db_sibling_table'][i];
-      String sdate=sibling['sibling_bday'];
-      DateTime siblingBday = DateTime.parse(sdate);
-      int siblingAge = today.year - siblingBday.year;
-      if (today.month < siblingBday.month || (today.month == siblingBday.month && today.day < siblingBday.day)) {
-        siblingAge--;
-      }
-      nameControllers.add(TextEditingController());
-      ageControllers.add(TextEditingController());
-      gradeLevelControllers.add(TextEditingController());
-      schoolBisControllers.add(TextEditingController());
-      name = nameControllers[i];
-      ageSibling=ageControllers[i];
-      gradeLevel = gradeLevelControllers[i];
-      schoolBis = schoolBisControllers[i];
-
-      name.text='${sibling['sibling_first_name']} ${sibling['sibling_middle_name']} ${sibling['sibling_last_name']}';
-      ageSibling.text=siblingAge.toString();
-      gradeLevel.text=sibling['sibling_grade_course_occupation'];
-      schoolBis.text=sibling['sibling_school_business'];
-    }
-
-  // // Adjust for whether the birthday has passed this year or not
-    if (today.month < dateOfBirth.month || (today.month == dateOfBirth.month && today.day < dateOfBirth.day)) {
-      age--;
-    }
-    ageController.text=age.toString();
-    updateQuantity();
-    addItemDescription(widget.formDetails![0]['db_admission_table']['db_family_background_table'][0]['db_sibling_table'].length);
-
-
-    if(widget.formDetails![0]['db_admission_table']['db_family_background_table'][0]['db_parent_table'].length>0){
-      for(int i=0; i<widget.formDetails![0]['db_admission_table']['db_family_background_table'][0]['db_parent_table'].length;i++){
-        var parent = widget.formDetails![0]['db_admission_table']['db_family_background_table'][0]['db_parent_table'][i];
-        String fullName='${parent['first_name']} ${parent['last_name']}';
-        DateTime dateOfBirth = DateTime.parse(parent['date_of_birth']);
-        DateTime today = DateTime.now();
-        int age = today.year - dateOfBirth.year;
-        if(parent['relationship_to_child']=='mother'){
-          motherNameController.text = fullName;
-          motherAgeController.text = age.toString();
-          motherEduAttainController.text=parent['educational_attainment'];
-          motherEmploymentStatus = parent['employment_status'];
-          motherEmployedAtController.text = parent['employed_at'] ?? '';
-          motherOfficeAddressController.text=parent['office_address'] ?? '';
-          motherContactController.text=parent['contact_no'] ?? '';
-          motherWorkPositionController.text = parent['job_position'] ?? '';
-          motherSalary = parent['salary_scale'] ?? '';
-        }else if(parent['relationship_to_child']=='father'){
-          fatherNameController.text = fullName;
-          fatherAgeController.text = age.toString();
-          fatherEduAttainController.text=parent['educational_attainment'];
-          fatherEmploymentStatus = parent['employment_status'];
-          fatherEmployedAtController.text = parent['employed_at'] ?? '';
-          fatherOfficeAddressController.text=parent['office_address'] ?? '';
-          fatherContactController.text=parent['contact_no'] ?? '';
-          fatherWorkPositionController.text = parent['job_position'] ?? '';
-          fatherSalary = parent['salary_scale'] ?? '';
-        }else if(parent['relationship_to_child']=='guardian'){
-          guardianNameController.text = fullName;
-          guardianAgeController.text = age.toString();
-          guardianEduAttainController.text=parent['educational_attainment'];
-          guardianEmploymentStatus = parent['employment_status']??'';
-          guardianEmployedAtController.text = parent['employed_at'] ?? '';
-          guardianOfficeAddressController.text=parent['office_address'] ?? '';
-          guardianContactController.text=parent['contact_no'] ?? '';
-          guardianWorkPositionController.text = parent['job_position'] ?? '';
-          guardianRelationTo = parent['relationship_to_child'] ?? '';
-          guardianSalary = parent['salary_scale'] ?? '';
-        }
-      }
-    }
   }
+  
 
 
   
@@ -559,7 +580,7 @@ void addItemDescription(double scale) {
     double scale = widthScale < heightScale ? widthScale : heightScale;
 
 
-   addressController.text='${parts[0]}, $districtName, $city, $province';
+   //addressController.text='${parts[0]}, $districtName, $city, $province';
 
 
     return SingleChildScrollView(
