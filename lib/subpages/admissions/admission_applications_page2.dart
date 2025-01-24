@@ -424,9 +424,6 @@ void addItemDescription(double scale) {
       fetchCityName(cityId);
       fetchProvinceName(provinceId);
     }
-
-
-     
     
      selectedGender =widget.formDetails![0]['db_admission_table']['sex'] ??'';
      fnameController.text=widget.formDetails![0]['db_admission_table']['first_name']??'';
@@ -454,7 +451,12 @@ void addItemDescription(double scale) {
       parentStatus=widget.formDetails![0]['db_admission_table']['db_family_background_table'][0]['parent_status'] ?? '';
       civilWeddingController.text=widget.formDetails![0]['db_admission_table']['db_family_background_table'][0]['civil_wedding'] ?? '';
       churchNameController.text=widget.formDetails![0]['db_admission_table']['db_family_background_table'][0]['church_name'] ?? '';
-      for(int i=0; i<widget.formDetails![0]['db_admission_table']['db_family_background_table'][0]['db_sibling_table'].length;i++){
+      
+     }
+     
+     siblingQuantityController.text=noSibling == 'null' ?'0':noSibling;
+
+     for(int i=0; i<widget.formDetails![0]['db_admission_table']['db_family_background_table'][0]['db_sibling_table'].length;i++){
         var sibling = widget.formDetails![0]['db_admission_table']['db_family_background_table'][0]['db_sibling_table'][i];
         String sdate=sibling['sibling_bday'];
         DateTime siblingBday = DateTime.parse(sdate);
@@ -482,9 +484,6 @@ void addItemDescription(double scale) {
       ageController.text=age.toString();
       updateQuantity();
       addItemDescription(widget.formDetails![0]['db_admission_table']['db_family_background_table'][0]['db_sibling_table'].length);
-     }
-     
-     siblingQuantityController.text=noSibling == 'null' ?'0':noSibling;
      
      
 
@@ -580,7 +579,7 @@ void addItemDescription(double scale) {
     double scale = widthScale < heightScale ? widthScale : heightScale;
 
 
-   //addressController.text='${parts[0]}, $districtName, $city, $province';
+    addressController.text='${parts[0]}, $districtName, $city, $province';
 
 
     return SingleChildScrollView(
