@@ -399,7 +399,7 @@ String formatDate(DateTime date) {
                                       children: [
                                         const Icon(Icons.visibility, color: Colors.black),
                                         SizedBox(width: 8 * scale),
-                                        Text("VIEW", style: TextStyle(fontSize: 16 * scale)),
+                                        Text("VIEW1", style: TextStyle(fontSize: 16 * scale)),
                                       ],
                                     ),
                                   ),
