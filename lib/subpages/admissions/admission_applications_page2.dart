@@ -3,6 +3,7 @@
 import 'package:cdbs_admin/bloc/admission_bloc/admission_bloc.dart';
 import 'package:cdbs_admin/services/ggx_connection.dart';
 import 'package:cdbs_admin/shared/api.dart';
+import 'package:cdbs_admin/widget/checkbox_readonly.dart';
 import 'package:cdbs_admin/widget/custom_spinner.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -26,6 +27,14 @@ class AdmissionApplicationsPage2 extends StatefulWidget {
 class _AdmissionApplicationsPage2State
     extends State<AdmissionApplicationsPage2> {
   int _currentPage = 1; // Variable to track the current page (1, 2, or 3)
+  TextEditingController othersController = TextEditingController();
+  Set<String> selectedOptions = {};
+  String heardAboutSchool ='';
+  void onSelectionChanged(Set<String> selected) {
+    setState(() {
+      selectedOptions = selected;
+    });
+  }
 
   void _nextPage() {
     setState(() {
@@ -424,7 +433,10 @@ void addItemDescription(double scale) {
       fetchCityName(cityId);
       fetchProvinceName(provinceId);
     }
-    
+    heardAboutSchool =widget.formDetails![0]['db_admission_table']['db_survey_table'][0]['heard_about_school'];
+    List<String> heardAboutList = heardAboutSchool.split(',');
+    selectedOptions.addAll(heardAboutList);
+
      selectedGender =widget.formDetails![0]['db_admission_table']['sex'] ??'';
      fnameController.text=widget.formDetails![0]['db_admission_table']['first_name']??'';
      mnameController.text=widget.formDetails![0]['db_admission_table']['middle_name']??'';
@@ -4509,9 +4521,25 @@ const SizedBox(height: 16),
     ),
 
     
+    Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children:[
+        const SizedBox(height: 25),
+        Text('Survey',style: TextStyle(fontSize: 20, fontFamily: 'Roboto-R')),
+        const SizedBox(height: 15),
+        Text('How did you first hear about our school?',style: TextStyle(fontSize: 15, fontFamily: 'Roboto-R')),
+        HeardAboutSchoolCheckboxes(
+                heardAboutSchool: heardAboutSchool,  // Pass the default value
+                onSelectionChanged: onSelectionChanged, // Pass the callback
+                othersController: othersController, // Pass the controller for "Others" text field
+              ),
+      ]
+    ),
+
+    
 
 
-const SizedBox(height: 350),
+const SizedBox(height: 120),
 
 
 
