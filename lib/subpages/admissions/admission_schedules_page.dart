@@ -509,6 +509,7 @@ TextField(
                                               // Handle failure
                                               final responseBody = jsonDecode(response.body);
                                               print('Error: ${responseBody['error']}');
+                                              showMessageDialog(context, '${responseBody['error']}', true);
                                             }
                                           } catch (error) {
                                             // Handle error (e.g., network error)

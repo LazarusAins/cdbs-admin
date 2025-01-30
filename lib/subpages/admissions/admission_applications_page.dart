@@ -166,7 +166,6 @@ String formatDate(DateTime date) {
                       
                     }).toList();
 
-
                 if (snapshot.hasError) {
                   return Center(child: Text('Error: ${snapshot.error}'));
                 }
