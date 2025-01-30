@@ -535,10 +535,10 @@ return Column(
             if(authState.adminType=='Admin' || authState.adminType=='Principal' || authState.adminType=='IT' || authState.adminType=='Sisters'){
               dropdownOptions = ["Slots", "Overview", "Applications", "Requirements", "Payments", "Schedules", "Results"];
             }else if(authState.adminType=='Cashier'){
-              dropdownOptions = ["Payments"];
+              dropdownOptions = ["Requirements","Payments"];
             }else if(authState.adminType=='Registrar'){
               dropdownOptions = ["Slots","Overview", "Applications", "Requirements", "Payments", "Schedules"];
-            }else if(authState.adminType=='Admission' || authState.adminType=='Center for Learner Wellness'){
+            }else if(authState.adminType=='Center for Learner Wellness'){
               dropdownOptions = ["Slots", "Overview", "Applications", "Requirements", "Schedules", "Results"];
             }
             return Column(
