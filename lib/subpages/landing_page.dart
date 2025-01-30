@@ -794,6 +794,8 @@ return Column(
       }else if(adminType =='Cashier'){
         switch (_selectedAdmissionDropdownOption) {
           case 0:
+            return const AdmissionRequirementsPage();
+          case 1:
             return const AdmissionPaymentsPage();
           default:
             return const AdmissionPaymentsPage();
