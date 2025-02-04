@@ -18,7 +18,7 @@ class GradeLevelDropdown extends StatefulWidget {
 class _GradeLevelDropdownState extends State<GradeLevelDropdown> {
   List<String> levels = [
     'Pre-Kinder', 'Kinder', 'Grade 1', 'Grade 2', 'Grade 3', 'Grade 4', 'Grade 5', 'Grade 6',
-    'Grade 7', 'Grade 8', 'Grade 9', 'Grade 10', 'Grade 11', 'Grade 12', 'All'
+    'Grade 7', 'Grade 8', 'Grade 9', 'Grade 10', 'Grade 11', 'Grade 12'
   ];
 
   String _sortOrder = 'A-Z';  // Default sorting order
@@ -89,6 +89,46 @@ class _GradeLevelDropdownState extends State<GradeLevelDropdown> {
               // Level options with checkboxes for multi-selection
               ...levels.map((level) {
                 return PopupMenuItem<String>(
+                          value: level,
+                          child: StatefulBuilder(
+                            builder: (BuildContext context, StateSetter setState) {
+                              return GestureDetector(
+                                onTap: () {
+                                  // This will toggle the checkbox when the entire row is clicked
+                                  bool isSelected = widget.selectedLevels.contains(level);
+                                  setState(() {
+                                    if (isSelected) {
+                                      widget.selectedLevels.remove(level);  // Deselect the level
+                                    } else {
+                                      widget.selectedLevels.add(level);  // Select the level
+                                    }
+                                  });
+                                  widget.onChanged(widget.selectedLevels);  // Notify parent of the change
+                                },
+                                child: Row(
+                                  children: [
+                                    Checkbox(
+                                      value: widget.selectedLevels.contains(level),
+                                      onChanged: (bool? isSelected) {
+                                        setState(() {
+                                          if (isSelected == true) {
+                                            widget.selectedLevels.add(level);
+                                          } else {
+                                            widget.selectedLevels.remove(level);
+                                          }
+                                        });
+                                        widget.onChanged(widget.selectedLevels); // Notify parent
+                                      },
+                                    ),
+                                    Text(level),
+                                  ],
+                                ),
+                              );
+                            },
+                          ),
+                        );
+
+                 /*PopupMenuItem<String>(
                   value: level,
                   child: StatefulBuilder(
                     builder: (BuildContext context, StateSetter setState) {
@@ -112,7 +152,7 @@ class _GradeLevelDropdownState extends State<GradeLevelDropdown> {
                       );
                     },
                   ),
-                );
+                );*/
               }).toList(),
             ];
           },
