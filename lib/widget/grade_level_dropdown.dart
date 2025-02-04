@@ -3,11 +3,12 @@ import 'package:flutter/material.dart';
 class GradeLevelDropdown extends StatefulWidget {
   final List<String> selectedLevels;
   final ValueChanged<List<String>> onChanged;
+  final ValueChanged<String> onSortChanged;
 
-  // Constructor to accept selectedLevels and callback function for changes
   GradeLevelDropdown({
     required this.selectedLevels,
     required this.onChanged,
+    required this.onSortChanged,
   });
 
   @override
@@ -24,46 +25,104 @@ class _GradeLevelDropdownState extends State<GradeLevelDropdown> {
 
   @override
   Widget build(BuildContext context) {
-    // Sort levels based on selected order
-    levels.sort((a, b) {
-      if (_sortOrder == 'A-Z') {
-        return a.compareTo(b);
-      } else {
-        return b.compareTo(a);
-      }
-    });
-
     return Column(
       children: [
-        // Dropdown for level selection and sorting
-        DropdownButton<String>(
-          value: null,
-          hint: const Text("Select Level"),
-          onChanged: (selectedLevel) {
-            if (selectedLevel == 'A-Z' || selectedLevel == 'Z-A') {
-              // Change the sorting order when A-Z or Z-A is selected
+        // PopupMenuButton for multi-selection and sorting options
+        PopupMenuButton<String>(
+          onSelected: (selected) {
+            if (selected == 'A-Z' || selected == 'Z-A') {
               setState(() {
-                _sortOrder = selectedLevel!;
+                _sortOrder = selected;  // Update the sorting order
               });
-            } else {
-              // Handle selection of a grade level
-              List<String> updatedSelection = List.from(widget.selectedLevels);
-              if (updatedSelection.contains(selectedLevel)) {
-                updatedSelection.remove(selectedLevel);
-              } else {
-                updatedSelection.add(selectedLevel!);
-              }
-              widget.onChanged(updatedSelection);
+              widget.onSortChanged(_sortOrder);  // Notify parent of sorting change
             }
           },
-          items: [
-            'A-Z', 'Z-A', ...levels
-          ].map((String level) {
-            return DropdownMenuItem<String>(
-              value: level,
-              child: Text(level),
-            );
-          }).toList(),
+          itemBuilder: (BuildContext context) {
+            return [
+              // Sorting options with checkboxes (allow only one to be selected)
+              PopupMenuItem<String>(
+                value: 'A-Z',
+                child: StatefulBuilder(
+                  builder: (BuildContext context, StateSetter setState) {
+                    return Row(
+                      children: [
+                        Checkbox(
+                          value: _sortOrder == 'A-Z',  // Checked if A-Z is selected
+                          onChanged: (bool? isSelected) {
+                            setState(() {
+                              if (isSelected == true) {
+                                _sortOrder = 'A-Z';  // Select A-Z
+                              }
+                            });
+                            widget.onSortChanged(_sortOrder);  // Notify parent of sorting change
+                          },
+                        ),
+                        Text('A - Z'),
+                      ],
+                    );
+                  },
+                ),
+              ),
+              PopupMenuItem<String>(
+                value: 'Z-A',
+                child: StatefulBuilder(
+                  builder: (BuildContext context, StateSetter setState) {
+                    return Row(
+                      children: [
+                        Checkbox(
+                          value: _sortOrder == 'Z-A',  // Checked if Z-A is selected
+                          onChanged: (bool? isSelected) {
+                            setState(() {
+                              if (isSelected == true) {
+                                _sortOrder = 'Z-A';  // Select Z-A
+                              }
+                            });
+                            widget.onSortChanged(_sortOrder);  // Notify parent of sorting change
+                          },
+                        ),
+                        Text('Z - A'),
+                      ],
+                    );
+                  },
+                ),
+              ),
+              // Level options with checkboxes for multi-selection
+              ...levels.map((level) {
+                return PopupMenuItem<String>(
+                  value: level,
+                  child: StatefulBuilder(
+                    builder: (BuildContext context, StateSetter setState) {
+                      return Row(
+                        children: [
+                          Checkbox(
+                            value: widget.selectedLevels.contains(level),
+                            onChanged: (bool? isSelected) {
+                              setState(() {
+                                if (isSelected == true) {
+                                  widget.selectedLevels.add(level);
+                                } else {
+                                  widget.selectedLevels.remove(level);
+                                }
+                              });
+                              widget.onChanged(widget.selectedLevels); // Notify parent
+                            },
+                          ),
+                          Text(level),
+                        ],
+                      );
+                    },
+                  ),
+                );
+              }).toList(),
+            ];
+          },
+          child: const Row(
+            children: [
+              Icon(Icons.filter_list),
+              SizedBox(width: 8),
+              Text('Select Level(s) and Sort'),
+            ],
+          ),
         ),
       ],
     );

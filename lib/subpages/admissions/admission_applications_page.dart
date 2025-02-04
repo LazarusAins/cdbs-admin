@@ -6,6 +6,7 @@ import 'package:cdbs_admin/shared/api.dart';
 import 'package:cdbs_admin/subpages/admissions/admission_applications_page2.dart';
 import 'package:cdbs_admin/subpages/landing_page.dart';
 import 'package:cdbs_admin/widget/custom_spinner.dart';
+import 'package:cdbs_admin/widget/grade_level_dropdown.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
@@ -33,6 +34,9 @@ class _AdmissionApplicationsPageState extends State<AdmissionApplicationsPage> {
   late ApiService _apiService;
   final TextEditingController searchController = TextEditingController();
   String searchQuery = '';
+  List<String> selectedLevels = [];
+  String sortOrder = 'A-Z';
+
 
   int id=0;
   List<Map<String, dynamic>>? formDetails;
@@ -48,6 +52,45 @@ class _AdmissionApplicationsPageState extends State<AdmissionApplicationsPage> {
   void _onSearchChanged(String value) {
     setState(() {
       searchQuery = value.toLowerCase();
+    });
+  }
+
+  List<Map<String, dynamic>> filterRequestsByLevelAndSort(
+      List<String> selectedLevels, 
+      String sortOrder, 
+      List<Map<String, dynamic>> requests) {
+    
+    // Filter the requests based on the selected levels
+    List<Map<String, dynamic>> filteredRequests = requests.where((request) {
+      String level = request['db_admission_table']['level_applying_for'];
+      return selectedLevels.contains(level) || selectedLevels.contains('All');
+    }).toList();
+
+    // Sort the filtered requests based on the level_applying_for field
+    filteredRequests.sort((a, b) {
+      String levelA = a['db_admission_table']['level_applying_for'];
+      String levelB = b['db_admission_table']['level_applying_for'];
+
+      if (sortOrder == 'A-Z') {
+        return levelA.compareTo(levelB);
+      } else {
+        return levelB.compareTo(levelA);
+      }
+    });
+
+    return filteredRequests;
+  }
+
+
+  void onLevelSelectionChanged(List<String> newSelectedLevels) {
+    setState(() {
+      selectedLevels = newSelectedLevels;
+    });
+  }
+
+  void onSortChanged(String newSortOrder) {
+    setState(() {
+      sortOrder = newSortOrder;
     });
   }
 
@@ -159,7 +202,7 @@ String formatDate(DateTime date) {
                   );
                 }
                 requests = snapshot.data ?? []; // Use the data from the snapshot
-                filteredRequest = sortRequests(requests);
+                filteredRequest = sortRequests(filterRequestsByLevelAndSort(selectedLevels,sortOrder,requests)).isEmpty?sortRequests(requests): sortRequests(filterRequestsByLevelAndSort(selectedLevels,sortOrder,requests));
                 filteredRequest = filteredRequest.where((request) {
                         final formId = request['db_admission_table']['admission_form_id']?.toLowerCase() ?? '';
                         return formId.contains(searchQuery);
@@ -217,6 +260,12 @@ String formatDate(DateTime date) {
                   ),
                 ),
                 const Spacer(),
+                GradeLevelDropdown(
+                  selectedLevels: selectedLevels,
+                  onChanged: onLevelSelectionChanged,
+                  onSortChanged: onSortChanged,
+                ),
+                const SizedBox(width: 15),
                 ElevatedButton(
                     onPressed: ()=> _saveExcel(context),
                     style: ElevatedButton.styleFrom(
