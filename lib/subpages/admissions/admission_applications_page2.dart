@@ -296,9 +296,9 @@ void addItemDescription(double scale) {
                         Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Text(
+                            const Text(
                               'Name*',
-                              style: TextStyle(fontSize: 11 * scale, fontFamily: 'Roboto-R'), // Adjust font size as needed
+                              style: TextStyle(fontSize: 14, fontFamily: 'Roboto-R'), // Adjust font size as needed
                             ),
                             const SizedBox(height: 8),
                             SizedBox(
@@ -321,9 +321,9 @@ void addItemDescription(double scale) {
                         Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Text(
+                            const Text(
                               'Age*',
-                              style: TextStyle(fontSize: 11 * scale, fontFamily: 'Roboto-R'),
+                              style: TextStyle(fontSize: 14, fontFamily: 'Roboto-R'),
                             ),
                             const SizedBox(height: 8),
                             SizedBox(
@@ -347,9 +347,9 @@ void addItemDescription(double scale) {
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              Text(
+                              const Text(
                                 'Grade Level/ Course/ Occupation*',
-                                style: TextStyle(fontSize: 11 * scale, fontFamily: 'Roboto-R'),
+                                style: TextStyle(fontSize: 14, fontFamily: 'Roboto-R'),
                               ),
                               const SizedBox(height: 8),
                               SizedBox(
@@ -373,9 +373,9 @@ void addItemDescription(double scale) {
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              Text(
+                              const Text(
                                 'School/ Business Office*',
-                                style: TextStyle(fontSize: 11 * scale, fontFamily: 'Roboto-R'),
+                                style: TextStyle(fontSize: 14, fontFamily: 'Roboto-R'),
                               ),
                               const SizedBox(height: 8),
                               SizedBox(
@@ -2882,6 +2882,10 @@ Expanded(
               value: 'PhP 100,000+',
               child: Text('PhP 100,000+'),
             ),
+            DropdownMenuItem(
+              value: '',
+              child: Text('N/A'),
+            ),
           ],
           onChanged: null,
           // onChanged: (value) {
@@ -4489,7 +4493,7 @@ const SizedBox(height: 16),
                                       // Ensure imagePath is a valid URL
 
                                       // Use the browser's built-in window.open method
-                                      try {
+                                      /*try {
                                         html.window.open(encodedUrl,
                                             '_blank'); // Open URL in a new tab
                                       } catch (e) {
@@ -4499,7 +4503,22 @@ const SizedBox(height: 16),
                                               content: Text(
                                                   'Could not open the link')),
                                         );
-                                      }
+                                      }*/
+                                      List<String> urls = List<String>.from(json.decode(widget.formDetails![0]['db_admission_table']['db_special_concerns_table'][0]['supporting_documents']));
+                          
+                                          try {
+                                            for (var url in urls) {
+                                              // Open each URL in a new tab
+                                              html.window.open(url, '_blank');
+                                            }
+                                          } catch (e) {
+                                            // If an error occurs, show a SnackBar with the error message
+                                            ScaffoldMessenger.of(context).showSnackBar(
+                                              const SnackBar(
+                                                content: Text('Could not open the link'),
+                                              ),
+                                            );
+                                          }
                                     }
                                   : null,
                               style: ElevatedButton.styleFrom(

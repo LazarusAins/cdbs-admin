@@ -2800,15 +2800,21 @@ void showUploadDialog(
                                                                                   if (isStated) {
                                                                                     updateData(request['admission_id']);
                                                                                     Navigator.of(context).popUntil((route) => route.isFirst);
+                                                                                    _selectedFiles = [];
+                                                                                    isSelect=false;
                                                                                     _showMessage('Recommendation for: ${request['admission_id']} has been uploaded',
                                                                                         'Upload Completed');
                                                                                   } else {
                                                                                     Navigator.of(context).popUntil((route) => route.isFirst);
-                                                                                    _showMessage('Failed to upload file',
+                                                                                    _selectedFiles = [];
+                                                                                    isSelect=false;
+                                                                                    _showMessage('File upload failed. The file size exceeds the 4 MB limit. Please ensure the file is under 4 MB in size.',
                                                                                         'Error');
                                                                                   }
                                                                                 }
                                                                               }catch(error){
+                                                                                _selectedFiles = [];
+                                                                                isSelect=false;
                                                                                 _showMessage('Connection timeout', "Error: File upload failed");
                                                                               }
                                                                           }:null,
