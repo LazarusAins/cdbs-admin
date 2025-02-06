@@ -493,15 +493,15 @@ const SizedBox(height: 40),
                             flex: 2,
                             child: Row(
                               children: [
-                                Checkbox(
-                                  value: checkboxStates[index],
-                                  onChanged: (value) {
-                                    setState(() {
-                                      checkboxStates[index] = value ?? false;
-                                    });
-                                  },
-                                  activeColor: const Color(0XFF012169), // Set the active color to pink
-                                ),
+                                // Checkbox(
+                                //   value: checkboxStates[index],
+                                //   onChanged: (value) {
+                                //     setState(() {
+                                //       checkboxStates[index] = value ?? false;
+                                //     });
+                                //   },
+                                //   activeColor: const Color(0XFF012169), // Set the active color to pink
+                                // ),
                                 SelectableText(
                                   request['db_admission_table']['admission_form_id'].toString(),
                                   style: TextStyle(fontSize: 16 * scale),
@@ -509,13 +509,30 @@ const SizedBox(height: 40),
                               ],
                             ),
                           ),
-                    Expanded(
-                      flex: 3,
-                      child: SelectableText(
-                        fullName,
-                        style: TextStyle(fontFamily: 'Roboto-R', fontSize: 16 * scale),
-                      ),
-                    ),
+                   Expanded(
+  flex: 3,
+  child: Tooltip(
+    message: fullName, // Full name shown on hover
+    padding: const EdgeInsets.all(8.0),
+    decoration: BoxDecoration(
+      color: const Color(0xff012169),
+      borderRadius: BorderRadius.circular(8),
+    ),
+    textStyle: const TextStyle(
+      color: Colors.white,
+      fontSize: 14,
+    ),
+    child: Text(
+      fullName,
+      style: TextStyle(
+        fontFamily: 'Roboto-R',
+        fontSize: 16 * scale,
+      ),
+      overflow: TextOverflow.ellipsis,
+      maxLines: 1,
+    ),
+  ),
+),
                     Expanded(
                       flex: 2,
                       child: SelectableText(
@@ -854,7 +871,7 @@ Future<void> _saveExcel(BuildContext context) async {
 
   // Show a SnackBar or a message that the file is saved
   ScaffoldMessenger.of(context).showSnackBar(
-    SnackBar(content: Text('Excel file downloaded successfully!')),
+    const SnackBar(content: Text('Excel file downloaded successfully!')),
   );
 }
  
