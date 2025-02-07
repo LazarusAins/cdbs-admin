@@ -74,8 +74,10 @@ class _AdmissionPaymentsPage2State extends State<AdmissionPaymentsPage2> {
     }
   }
 
-  Future<void> updateData(int admissionId) async  {
-    myformDetails = await ApiService(apiUrl).getFormsDetailsById(admissionId, supabaseUrl, supabaseKey);
+  Future<void> updateData(int admissionId) async {
+    setState(() async {
+      myformDetails = await ApiService(apiUrl).getFormsDetailsById(admissionId, supabaseUrl, supabaseKey);  
+    });
   }
 
   String formatDate(DateTime date) {
