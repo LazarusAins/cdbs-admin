@@ -1,6 +1,7 @@
 import 'package:cdbs_admin/class/admission_forms.dart';
 import 'package:cdbs_admin/shared/api.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:intl/intl.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
@@ -25,6 +26,8 @@ class _AdmissionSchedulesPage2State extends State<AdmissionSchedulesPage2> {
   String? examDate;
   DateTime? dateExam;
   String? formattedExamDate;
+  bool isLoad=false;
+  List<bool> isLoading = [];
 
   List<Map<String, dynamic>> cancelledSchedules = [];
   List<Map<String, dynamic>> activeSchedules = [];
@@ -49,7 +52,7 @@ class _AdmissionSchedulesPage2State extends State<AdmissionSchedulesPage2> {
         cancelledSchedules.add(schedule);
       } else {
         activeSchedules.add(schedule);
-        
+        isLoading = List.generate(activeSchedules.length, (index) => false);
       }
     }
 
@@ -97,7 +100,6 @@ class _AdmissionSchedulesPage2State extends State<AdmissionSchedulesPage2> {
   print("No valid schedule found to update.");
 }
 
-print(activeSchedules);
 
 }
 
@@ -393,7 +395,7 @@ print(activeSchedules);
                   String admissionCreated = admissionSchedule['db_admission_table']['created_at'];
                   DateTime admissionDate = DateTime.parse(admissionCreated);
                   String formattedAdmissionDate = formatDate(admissionDate);
-                  final List<bool> isLoading = List.generate(activeSchedules.length, (index) => false);
+                  
                   return Container(
                     padding: const EdgeInsets.all(16),
                     decoration: BoxDecoration(
@@ -453,7 +455,8 @@ print(activeSchedules);
                         ),
                 const SizedBox(width: 16),
                  if(isExamToday(formattedExamDate!))
-                 admissionSchedule['schedule_status']!='cancelled'?Row(
+                 !isLoading[i]?
+                 Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           // Green Check Button
@@ -468,7 +471,6 @@ print(activeSchedules);
                                         setState(() {
                                           isLoading[i] = true; // Set loading state to true when the button is pressed
                                         });
-
                                         try {
                                           final response = await http.post(
                                             Uri.parse('$apiUrl/api/admin/update_admission'),
@@ -516,11 +518,7 @@ print(activeSchedules);
                                   ),
                                   padding: EdgeInsets.zero,
                                 ),
-                                child: isLoading[i]
-                                    ? const CircularProgressIndicator(
-                                        color: Colors.white,
-                                      ) // Show spinner if loading
-                                    : const Icon(
+                                child:  const Icon(
                                         Icons.check,
                                         color: Colors.white,
                                       ),
@@ -588,27 +586,18 @@ print(activeSchedules);
                                   ),
                                   padding: EdgeInsets.zero,
                                 ),
-                                child: isLoading[i]
-                                    ? const CircularProgressIndicator(
-                                        color: Colors.white,
-                                      ) // Show spinner if loading
-                                    : const Icon(
+                                child: const Icon(
                                         Icons.close,
                                         color: Colors.white,
                                       ),
                               ),
                             ),
                         ],
-                      ):
-                      
-                      Expanded(
-                        flex: 9,
-                        child: _buildInfoColumn(
-                          label: 'Cancel Reason',
-                          value: admissionSchedule['schedule_cancel_reason'] ??'', // Example, adjust according to your data
-                          scale: scale,
-                        ),
-                      ) // This could still be removed if unnecessary
+                      ):const SpinKitCircle(
+                        color: Color(0xff012169), // Change the color as needed
+                        size: 50.0, // Adjust size as needed
+                      )
+                       // This could still be removed if unnecessary
               ],
                         ),
                         const SizedBox(height: 16),
