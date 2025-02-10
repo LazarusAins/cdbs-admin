@@ -51030,7 +51030,7 @@ n=i.mo("Application Status",c,n)
 m=A.b([],g)
 if(!i.w){l=i.r?99:47
 k=i.a.f
-k=k==="Admin"||k==="Principal"||k==="IT"||k==="Sisters"?new A.aux(i,a,s):h
+k=k==="Admin"||k==="Principal"||k==="Cashier"||k==="IT"||k==="Sisters"?new A.aux(i,a,s):h
 j=new A.b5(10,10)
 m.push(A.vZ(A.b0(B.m0,k,A.bw(h,h,B.jt,h,h,h,h,h,h,h,h,h,h,B.aL,h,new A.ak(new A.cW(j,j,j,j),B.m),h,h,h,h)),B.ai,B.bG,44,l))}if(!i.r)m.push(B.k_)
 q=A.Z(A.b([new A.f8(3,B.bw,q,h),B.a1,new A.f8(5,B.bw,p,h),B.a1,new A.f8(3,B.bw,o,h),B.a1,new A.f8(3,B.bw,n,h),B.a1,A.Z(m,B.j,B.aE,B.e,h)],g),B.j,B.Z,B.e,h)
@@ -51854,7 +51854,7 @@ return A.X(A.b([A.Z(A.b([A.q(a,s,s,s,A.o(s,s,s,s,s,s,s,s,"Roboto-R",s,s,11*b,s,s
 xg(a,b){var s,r,q,p,o,n,m,l,k,j,i,h="db_requirement_type_table"
 if(a.toLowerCase()==="pre-kinder"||a.toLowerCase()==="kinder")s=A.b([1,2,4],t.t)
 else{r=t.t
-s=a.toLowerCase()==="grade 1"?A.b([1,2,5,14],r):A.b([1,2,3,5,14],r)}for(r=s.length,q=0;q<s.length;s.length===r||(0,A.V)(s),++q){p=s[q]
+s=a.toLowerCase()==="grade 1"?A.b([1,2,5,14,15],r):A.b([1,2,3,5,14,15],r)}for(r=s.length,q=0;q<s.length;s.length===r||(0,A.V)(s),++q){p=s[q]
 n=b.length
 m=0
 while(!0){if(!(m<b.length)){o=!1
@@ -51985,24 +51985,24 @@ if(b instanceof A.fm){s=this.a
 return A.iz(new A.avA(s,this.b,b),J.bd(J.c(J.c(J.c(s.Q,0),"db_admission_table"),"db_required_documents_table")))}return A.az(r,r,B.q,r,r,r,r,r,r,r,r,r,r)},
 $S:294}
 A.avA.prototype={
-$2(a,b){var s,r,q,p,o,n,m="db_admission_table",l="document_url",k=null,j="Roboto-R",i="document_status",h=this.a,g=J.c(J.c(J.c(h.Q,0),m),"db_required_documents_table"),f=J.c(J.c(J.c(h.Q,0),m),"level_applying_for"),e=J.ac(g)
-A.r1(B.ep,J.c(e.h(g,b),l)!=null?J.a6K(J.c(e.h(g,b),l),2,J.NY(J.bd(J.c(e.h(g,b),l)),2)):"",B.af,!1)
-s=J.c(e.h(g,b),"reject_reason")
+$2(a,b){var s,r,q,p,o,n,m="db_admission_table",l="document_url",k=null,j="Roboto-R",i="requirements_type",h="document_status",g=this.a,f=J.c(J.c(J.c(g.Q,0),m),"db_required_documents_table"),e=J.c(J.c(J.c(g.Q,0),m),"level_applying_for"),d=J.ac(f)
+A.r1(B.ep,J.c(d.h(f,b),l)!=null?J.a6K(J.c(d.h(f,b),l),2,J.NY(J.bd(J.c(d.h(f,b),l)),2)):"",B.af,!1)
+s=J.c(d.h(f,b),"reject_reason")
 if(s==null)s="N/A"
 r=14*this.b
-q=A.x(A.q(J.c(J.c(e.h(g,b),"db_requirement_type_table"),"doc_type"),k,k,k,A.o(k,k,k,k,k,k,k,k,j,k,k,r,k,k,k,k,k,!0,k,k,k,k,k,k,k,k),k,k,k),3)
-if(J.e(J.c(e.h(g,b),"requirements_type"),5)&&J.c(e.h(g,b),l)==null)p=A.b0(B.a01,new A.avu(h,a,g,b),A.bw(k,k,B.Hy,k,k,k,k,k,k,k,k,k,k,k,k,new A.ak(A.r(5),B.m),k,k,k,k))
-else{p=J.c(e.h(g,b),l)!=null?new A.avv(g,b,a):k
+q=A.x(A.q(J.c(J.c(d.h(f,b),"db_requirement_type_table"),"doc_type"),k,k,k,A.o(k,k,k,k,k,k,k,k,j,k,k,r,k,k,k,k,k,!0,k,k,k,k,k,k,k,k),k,k,k),3)
+if((J.e(J.c(d.h(f,b),i),5)||J.e(J.c(d.h(f,b),i),15))&&J.c(d.h(f,b),l)==null)p=A.b0(B.a01,new A.avu(g,a,f,b),A.bw(k,k,B.Hy,k,k,k,k,k,k,k,k,k,k,k,k,new A.ak(A.r(5),B.m),k,k,k,k))
+else{p=J.c(d.h(f,b),l)!=null?new A.avv(f,b,a):k
 p=A.b0(B.CX,p,A.bw(k,k,B.k,k,k,k,k,k,k,k,k,k,k,k,k,new A.ak(A.r(5),B.m),k,k,k,k))}p=A.x(p,2)
-o=A.x(A.q(J.B9(J.c(e.h(g,b),i)),k,k,k,A.o(k,k,k,k,k,k,k,k,j,k,k,r,k,k,k,k,k,!0,k,k,k,k,k,k,k,k),k,k,k),1)
+o=A.x(A.q(J.B9(J.c(d.h(f,b),h)),k,k,k,A.o(k,k,k,k,k,k,k,k,j,k,k,r,k,k,k,k,k,!0,k,k,k,k,k,k,k,k),k,k,k),1)
 r=A.x(A.q(s,k,k,k,A.o(k,k,k,k,k,k,k,k,j,k,k,r,k,k,k,k,k,!0,k,k,k,k,k,k,k,k),k,k,k),2)
 n=this.c.b
-if(n==="Admin"||n==="Principal"||n==="IT"||n==="Sisters"||n==="Center for Learner Wellness"){n=J.e(J.c(e.h(g,b),i),"pending")?new A.avw(h,a,g,b,f):k
+if(n==="Admin"||n==="Principal"||n==="Registrar"||n==="IT"||n==="Sisters"||n==="Center for Learner Wellness"){n=J.e(J.c(d.h(f,b),h),"pending")?new A.avw(g,a,f,b,e):k
 n=A.b0(B.a_H,n,A.bw(k,k,B.H7,k,k,k,k,k,k,k,k,k,k,B.aR,k,B.Sr,k,k,k,k))
-h=J.e(J.c(e.h(g,b),i),"pending")?new A.avx(h,a,g,b,f):k
-h=A.x(A.Z(A.b([n,B.k_,A.b0(B.a_U,h,A.bw(k,k,B.ee,k,k,k,k,k,k,k,k,k,k,B.aR,k,B.Ss,k,k,k,k))],t.p),B.j,B.f,B.e,k),2)}else h=A.x(A.az(k,k,B.q,k,k,k,k,k,k,k,k,k,k),2)
-e=t.p
-return A.X(A.b([B.bg,A.Z(A.b([q,B.aA,p,B.aA,o,B.aA,r,B.aA,h],e),B.j,B.f,B.e,k),B.av],e),B.j,B.f,B.e)},
+g=J.e(J.c(d.h(f,b),h),"pending")?new A.avx(g,a,f,b,e):k
+g=A.x(A.Z(A.b([n,B.k_,A.b0(B.a_U,g,A.bw(k,k,B.ee,k,k,k,k,k,k,k,k,k,k,B.aR,k,B.Ss,k,k,k,k))],t.p),B.j,B.f,B.e,k),2)}else g=A.x(A.az(k,k,B.q,k,k,k,k,k,k,k,k,k,k),2)
+d=t.p
+return A.X(A.b([B.bg,A.Z(A.b([q,B.aA,p,B.aA,o,B.aA,r,B.aA,g],d),B.j,B.f,B.e,k),B.av],d),B.j,B.f,B.e)},
 $S:37}
 A.avu.prototype={
 $0(){var s=this,r=s.a

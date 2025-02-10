@@ -669,7 +669,7 @@ Future<Uint8List?> _getFileBytes(PlatformFile file) async {
                               const SizedBox(width: 40),
                               Expanded(
                                 flex: 2,
-                                child: document[index]['requirements_type'] == 5 && document[index]['document_url'] == null
+                                child: (document[index]['requirements_type'] == 5 || document[index]['requirements_type'] == 15) && document[index]['document_url'] == null
                                 ? ElevatedButton(
                                     onPressed: () {
                                       // Upload button action
@@ -752,7 +752,7 @@ Future<Uint8List?> _getFileBytes(PlatformFile file) async {
                                         fontSize: 14 * scale),
                                   )),
                               const SizedBox(width: 40),
-                              authState.adminType=='Admin' || authState.adminType=='Principal' || authState.adminType=='IT' || authState.adminType=='Sisters' || authState.adminType=='Center for Learner Wellness'?
+                              authState.adminType=='Admin' || authState.adminType=='Principal' || authState.adminType=='Registrar' || authState.adminType=='IT' || authState.adminType=='Sisters' || authState.adminType=='Center for Learner Wellness'?
                               Expanded(
                                   flex: 2,
                                   child: Row(
@@ -1510,7 +1510,8 @@ Future<Uint8List?> _getFileBytes(PlatformFile file) async {
           1,
           2,
           5,
-          14
+          14,
+          15
         ];
       }else{
         requiredDocIds = [
@@ -1518,7 +1519,8 @@ Future<Uint8List?> _getFileBytes(PlatformFile file) async {
           2,
           3,
           5,
-          14
+          14,
+          15
         ];
       } // For other grade levels, require doc_ids 1, 2, 3, and 5
     }

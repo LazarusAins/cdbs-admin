@@ -170,7 +170,7 @@ class _AdmissionPaymentsPage2State extends State<AdmissionPaymentsPage2> {
                               width: isGreenExpanded ? 99 : 47,
                               height: 44,
                               child: ElevatedButton(
-                                onPressed: widget.adminType=='Admin' || widget.adminType=='Principal' || widget.adminType=='IT' || widget.adminType=='Sisters'?() async {
+                                onPressed: widget.adminType=='Admin' || widget.adminType=='Principal' || widget.adminType=='Cashier' || widget.adminType=='IT' || widget.adminType=='Sisters'?() async {
                                   bool _isLoading=false;
                                   showDialog(
                                 context: context,
