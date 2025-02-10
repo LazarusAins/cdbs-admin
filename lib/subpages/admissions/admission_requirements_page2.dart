@@ -273,7 +273,8 @@ Future<void> _pickFiles(StateSetter setState) async {
 
 Future<bool> uploadFile(String bucketName, List<PlatformFile> selectedFiles, String admissionId) async {
   final uploadURL = '$supabaseUrl/storage/v1/upload/resumable';
-   // To store uploaded file URLs
+  // To store uploaded file URLs
+  List<String> fileUrls = [];
 
   // Convert List<PlatformFile> to List<XFile>
   List<XFile> xFiles = selectedFiles.map((platformFile) {
@@ -317,7 +318,7 @@ Future<bool> uploadFile(String bucketName, List<PlatformFile> selectedFiles, Str
           'contentType': 'application/pdf', // Ensure to use correct mime type
           'cacheControl': '3600',
         },
-        timeout: Duration(seconds: 10), // Optional: Set your timeout
+        timeout: Duration(seconds: 30), // Optional: Set your timeout to handle slow uploads
         httpClient: http.Client(),
       );
 
@@ -335,24 +336,6 @@ Future<bool> uploadFile(String bucketName, List<PlatformFile> selectedFiles, Str
           allUploadsSuccessful = false; // Mark as unsuccessful if timeout occurs
         },
       );
-
-      // Example: Pause upload after 6 seconds
-      await Future.delayed(const Duration(seconds: 6), () async {
-        await tusClient.pauseUpload();
-        print('Upload paused for $fileName. State: ${tusClient.state}');
-      });
-
-      // Example: Cancel upload after 6 more seconds
-      await Future.delayed(const Duration(seconds: 6), () async {
-        await tusClient.cancelUpload();
-        print('Upload cancelled for $fileName. State: ${tusClient.state}');
-      });
-
-      // Example: Resume upload after 8 more seconds
-      await Future.delayed(const Duration(seconds: 8), () async {
-        tusClient.resumeUpload();
-        print('Upload resumed for $fileName. State: ${tusClient.state}');
-      });
     } catch (error) {
       print('Error uploading $file: $error');
       allUploadsSuccessful = false; // Mark as unsuccessful if error occurs
@@ -361,6 +344,7 @@ Future<bool> uploadFile(String bucketName, List<PlatformFile> selectedFiles, Str
 
   return allUploadsSuccessful;
 }
+
 
 
 
