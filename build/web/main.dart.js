@@ -9000,9 +9000,9 @@ this.a=c},
 WO:function WO(a,b,c,d){var _=this
 _.x=_.w=_.r=_.f=_.e=_.d=null
 _.z=a
-_.Q=b
-_.as=c
-_.at=d
+_.as=b
+_.at=c
+_.ax=d
 _.c=_.a=null},
 axe:function axe(a){this.a=a},
 axf:function axf(){},
@@ -52918,20 +52918,20 @@ A.WO.prototype={
 ac(){var s,r,q,p,o,n,m,l,k=this
 k.au()
 s=k.a.c
-k.at=s
+k.ax=s
 s=J.c(J.c(s,0),"create_at")
 k.d=s
 s.toString
 s=A.eF(s)
 k.e=s
 k.f=k.jm(s)
-s=J.c(J.c(k.at,0),"exam_date")
+s=J.c(J.c(k.ax,0),"exam_date")
 k.r=s
 s.toString
 s=A.eF(s)
 k.w=s
 k.x=k.jm(s)
-for(s=J.aP(J.c(J.c(k.at,0),"db_exam_admission_schedule")),r=t.HZ,q=k.as,p=k.Q;s.u();){o=s.gL(s)
+for(s=J.aP(J.c(J.c(k.ax,0),"db_exam_admission_schedule")),r=t.HZ,q=k.at,p=k.as;s.u();){o=s.gL(s)
 if(J.e(J.c(o,"schedule_status"),"cancelled"))p.push(o)
 else{q.push(o)
 n=q.length
@@ -52944,9 +52944,9 @@ var $async$zs=A.z(function(c,d){if(c===1)return A.F(d,r)
 while(true)switch(s){case 0:s=2
 return A.E(new A.eE("https://donboscoapi.vercel.app").y_(b,u.y,u.I),$async$zs)
 case 2:n=d
-q.at=n
+q.ax=n
 p=J.b3l(J.c(J.c(n,0),"db_exam_admission_schedule"),new A.axe(a),new A.axf())
-if(p!=null){n=q.as
+if(p!=null){n=q.at
 B.b.MG(n,new A.axg(a))
 o=B.b.MG(n,new A.axh(a))
 if(o!==-1)q.I(new A.axi(q,o,p))
@@ -52960,27 +52960,27 @@ return p.a===q.a&&p.b===q.b||p.qL(q)},
 y9(a){var s=A.dE("HH:mm").nP(a,!1,!1)
 return A.dE("hh a").e5(s)},
 H(a0){var s,r,q,p,o,n,m,l,k,j,i,h,g=this,f=null,e=t.w,d=A.a7(a0,f,e).w,c=A.a7(a0,f,e).w.a.a/400,b=d.a.b/800,a=c<b?c:b
-e=g.as
+e=g.at
 d=t.y
 s=A.afW(e.length,new A.ax9(g),!0,d)
 r=A.afW(e.length,new A.axa(g),!0,d)
-q=J.be(J.c(J.c(g.at,0),"db_exam_admission_schedule"))
+q=J.be(J.c(J.c(g.ax,0),"db_exam_admission_schedule"))
 p=J.eK(q,d)
 for(o=0;o<q;++o)p[o]=!1
 d=A.r(8)
 n=g.x
 n.toString
 n=A.w(g.hD("Exam Date",a,n),2)
-m=A.w(g.hD("Exam Time",a,g.y9(J.c(J.c(g.at,0),"start_time"))+" - "+g.y9(J.c(J.c(g.at,0),"end_time"))),2)
-l=A.w(g.hD("Meeting Place",a,J.c(J.c(g.at,0),"location")),2)
-k=A.w(g.acy("Grade Level",a,J.c(J.c(g.at,0),"grade_level")),2)
-j=A.w(g.hD("Slots",a,"2/10"),1)
+m=A.w(g.hD("Exam Time",a,g.y9(J.c(J.c(g.ax,0),"start_time"))+" - "+g.y9(J.c(J.c(g.ax,0),"end_time"))),2)
+l=A.w(g.hD("Meeting Place",a,J.c(J.c(g.ax,0),"location")),2)
+k=A.w(g.acy("Grade Level",a,J.c(J.c(g.ax,0),"grade_level")),2)
+j=A.w(g.hD("Slots",a,""+e.length+"/"+A.j(J.c(J.c(g.ax,0),"slots"))),1)
 i=g.f
 i.toString
 h=t.p
 d=A.az(f,A.X(A.b([A.Z(A.b([n,B.Y,m,B.Y,l,B.Y,k,B.Y,j,B.Y,A.w(g.hD("Date Created",a,i),2),B.Y,A.P(A.b0(B.a_O,new A.axb(),A.bw(f,f,B.k,f,f,f,f,f,f,f,f,f,f,B.aL,f,new A.ak(A.r(5),B.m),f,f,f,f)),37,99)],h),B.j,B.Z,B.e,f)],h),B.j,B.f,B.e),B.q,f,f,new A.c3(B.eY,f,f,d,f,f,B.ak),f,f,B.hf,B.X,f,f,f)
 e=e.length
-i=g.Q
+i=g.as
 return A.az(f,A.X(A.b([B.hY,d,B.hY,A.q("APPLICANT ("+e+") ",f,f,f,B.nL,f,f,f),A.P(A.iy(new A.axc(g,a,r,s,p),e),300,1500),B.hY,A.Z(A.b([A.q("RESCHEDULE ("+i.length+")",f,f,f,B.nL,f,f,f),B.UB,B.Ks],h),B.j,B.f,B.e,f),A.P(A.iy(new A.axd(g,a,r,s,p),i.length),300,1500)],h),B.v,B.f,B.e),B.q,f,f,f,f,f,f,B.hg,f,f,f)},
 hD(a,b,c){var s=null,r=t.p
 return A.X(A.b([A.Z(A.b([A.q(a,s,s,s,A.o(s,s,s,s,s,s,s,s,"Roboto-R",s,s,11*b,s,s,s,s,s,!0,s,s,s,s,s,s,s,s),s,s,s),B.fy,A.q(c,1,B.as,s,A.o(s,s,s,s,s,s,s,s,"Roboto-B",s,s,12*b,s,s,s,s,s,!0,s,s,s,s,s,s,s,s),s,s,s)],r),B.j,B.f,B.e,s),B.eD,A.az(s,s,B.q,B.aa,s,s,s,1,s,s,s,s,s)],r),B.v,B.f,B.e)},
@@ -53004,14 +53004,14 @@ $1(a){var s=J.ad(a)
 return J.e(s.h(a,"admission_id"),this.a)&&s.h(a,"schedule_status")==null},
 $S:24}
 A.axi.prototype={
-$0(){this.a.as[this.b]=this.c},
+$0(){this.a.at[this.b]=this.c},
 $S:0}
 A.ax9.prototype={
-$1(a){var s=J.c(this.a.as[a],"is_attended")
+$1(a){var s=J.c(this.a.at[a],"is_attended")
 return s==null?!1:s},
 $S:62}
 A.axa.prototype={
-$1(a){var s="is_attended",r=this.a.as,q=J.c(r[a],s)
+$1(a){var s="is_attended",r=this.a.at,q=J.c(r[a],s)
 if(q==null)q=!1
 if(J.c(r[a],s)==null)return q
 else return!q},
@@ -53020,7 +53020,7 @@ A.axb.prototype={
 $0(){},
 $S:0}
 A.axc.prototype={
-$2(a,b){var s,r,q,p,o,n,m,l,k,j=this,i="db_admission_table",h=null,g="is_attended",f=j.a,e=f.as
+$2(a,b){var s,r,q,p,o,n,m,l,k,j=this,i="db_admission_table",h=null,g="is_attended",f=j.a,e=f.at
 B.b.dZ(e,new A.ax4())
 s=e[b]
 r=J.ad(s)
@@ -53162,8 +53162,8 @@ $0(){},
 $S:0}
 A.axd.prototype={
 $2(a,b){var s,r,q,p,o,n,m,l,k,j,i=this,h="db_admission_table",g=null,f="schedule_status",e="cancelled",d=i.a
-B.b.dZ(d.as,new A.ax1())
-s=d.Q[b]
+B.b.dZ(d.at,new A.ax1())
+s=d.as[b]
 r=J.ad(s)
 q=d.jm(A.eF(J.c(r.h(s,h),"created_at")))
 p=A.r(8)

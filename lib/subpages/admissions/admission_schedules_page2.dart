@@ -28,6 +28,7 @@ class _AdmissionSchedulesPage2State extends State<AdmissionSchedulesPage2> {
   String? formattedExamDate;
   bool isLoad=false;
   List<bool> isLoading = [];
+  String? totalSlotNumber;
 
   List<Map<String, dynamic>> cancelledSchedules = [];
   List<Map<String, dynamic>> activeSchedules = [];
@@ -55,8 +56,6 @@ class _AdmissionSchedulesPage2State extends State<AdmissionSchedulesPage2> {
         isLoading = List.generate(activeSchedules.length, (index) => false);
       }
     }
-
-
   }
 
   /*Future<void> updateData(int admissionId) async  {
@@ -229,7 +228,7 @@ class _AdmissionSchedulesPage2State extends State<AdmissionSchedulesPage2> {
                         flex: 1,
                         child: _buildInfoColumn(
                           label: 'Slots',
-                          value: '2/10',
+                          value: '${activeSchedules.length}/${myformDetails[0]['slots']}',
                           scale: scale,
                         ),
                       ),
