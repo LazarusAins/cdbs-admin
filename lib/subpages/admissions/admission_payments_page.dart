@@ -109,35 +109,9 @@ List<Map<String, dynamic>> sortRequests(List<Map<String, dynamic>> requests, Str
 
 
   requests.sort((a, b) {
-    // Extract the admission statuses
-    String admissionStatusA = a['db_admission_table']['admission_status'] ?? '';
-    String admissionStatusB = b['db_admission_table']['admission_status'] ?? '';
-
     // Extract the is_complete_view flag
     bool isCompleteA = a['db_admission_table']['is_paid'];
     bool isCompleteB = b['db_admission_table']['is_paid'];
-
-    // 1. First, check for 'pending' - it should come first.
-    if (admissionStatusA == 'pending' && admissionStatusB != 'pending' && !isCompleteA) {
-      return -1; // 'a' (pending) should come before 'b'
-    } else if (admissionStatusB == 'pending' && admissionStatusA != 'pending' && !isCompleteB) {
-      return 1; // 'b' (pending) should come before 'a'
-    }
-
-    // 2. Next, check for 'in review' - it should come after 'pending', but before other statuses.
-    if (admissionStatusA == 'in review' && admissionStatusB != 'pending' && admissionStatusB != 'in review') {
-      return -1; // 'a' (in review) should come before 'b'
-    } else if (admissionStatusB == 'in review' && admissionStatusA != 'pending' && admissionStatusA != 'in review') {
-      return 1; // 'b' (in review) should come before 'a'
-    }
-
-    // 3. If one of the statuses is 'pending' or 'in review' and its is_complete_view is true, push it to the end.
-    // However, we only do this after sorting 'pending' and 'in review'.
-    if ((admissionStatusA == 'pending' || admissionStatusA == 'in review') && isCompleteA) {
-      return 1; // 'a' (pending/in review with complete) should go after 'b'
-    } else if ((admissionStatusB == 'pending' || admissionStatusB == 'in review') && isCompleteB) {
-      return -1; // 'b' (pending/in review with complete) should go after 'a'
-    }
 
     // 4. Now, use _getSortOrder to compare other statuses based on is_complete_view
     // This will be applied to statuses that are neither 'pending' nor 'in review'.
@@ -214,8 +188,8 @@ List<Map<String, dynamic>> sortRequests(List<Map<String, dynamic>> requests, Str
                 requests = snapshot.data ?? []; // Use the data from the snapshot
                 filteredRequest = sortRequests(requests, authState.adminType);
                 filteredRequest = statusFilter.isEmpty
-                                            ? requests
-                                            : requests
+                                            ? sortRequests(requests, authState.adminType)
+                                            : sortRequests(requests, authState.adminType)
                                                 .where((request) =>
                                                     request['db_admission_table']['db_payment_method_table']['payment_method'] ==
                                                     statusFilter)

@@ -983,6 +983,9 @@ String formatDate(DateTime date) {
     }).toList();
   }
 
+    requests = requests.where((request) {
+      return request['db_admission_table']['db_required_documents_table'].isNotEmpty;
+    }).toList();
 
   requests.sort((a, b) {
     // Extract the admission statuses
