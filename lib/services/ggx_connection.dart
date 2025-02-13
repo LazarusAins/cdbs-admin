@@ -11,7 +11,7 @@ class GgxApi {
         .replaceAll("/", "_")
         .replaceAll("=", "");
   }
-
+//test
   String urlSafe(String data) {
   return data.replaceAll(RegExp(r'\+'), '-').replaceAll(RegExp(r'\/'), '_').replaceAll(RegExp(r'\=+$'), '');
 }
