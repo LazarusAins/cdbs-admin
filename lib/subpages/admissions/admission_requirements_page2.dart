@@ -46,6 +46,9 @@ class _AdmissionRequirementsPage2State
   TextEditingController rejectController = TextEditingController();
   String? applicationId;
   String? fullName;
+  String? parentName;
+  String? parentEmail;
+  String? parentContact;
   String? status;
   String? dateCreatedString;
   String? formattedDate;
@@ -62,10 +65,14 @@ class _AdmissionRequirementsPage2State
     myformDetails = widget.formDetails!;
     applicationId = myformDetails[0]['db_admission_table']['admission_form_id'];
     fullName = '${myformDetails[0]['db_admission_table']['first_name']} ${myformDetails[0]['db_admission_table']['last_name']}';
+    parentName = '${myformDetails[0]['db_admission_users_table']['last_name']}, ${myformDetails[0]['db_admission_users_table']['first_name']}';
+    parentEmail = '${myformDetails[0]['db_admission_users_table']['email_address']}';
+    parentContact = '${myformDetails[0]['db_admission_users_table']['contact_no']}';
     status = myformDetails[0]['db_admission_table']['admission_status'];
     dateCreatedString = myformDetails[0]['db_admission_table']['created_at'];
     DateTime dateCreated = DateTime.parse(dateCreatedString!);
     formattedDate = formatDate(dateCreated);
+
   }
 
   Future<void> updateData(int admissionId) async {
@@ -543,6 +550,55 @@ Future<Uint8List?> _getFileBytes(PlatformFile file) async {
                   scale: scale,
                 ),
               ),
+            ],
+          ),
+
+          const SizedBox(height: 20),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              // Application ID
+              Expanded(
+                flex: 2,
+                child: _buildInfoColumn(
+                  label: "Parent Name",
+                  value: parentName!,
+                  scale: scale,
+                ),
+              ),
+              const SizedBox(width: 16),
+
+              // Applicant Name
+              Expanded(
+                flex: 3,
+                child: _buildInfoColumn(
+                  label: 'Email Address',
+                  value: parentEmail!,
+                  scale: scale,
+                ),
+              ),
+              const SizedBox(width: 16),
+
+              // Grade Level
+              Expanded(
+                flex: 2,
+                child: _buildInfoColumn(
+                  label: 'Contact Number',
+                  value: parentContact!,
+                  scale: scale,
+                ),
+              ),
+              const SizedBox(width: 16),
+              const Expanded(
+                flex: 2,
+                child: SizedBox()
+              ),
+              const SizedBox(width: 16),
+              const Expanded(
+                flex: 2,
+                child: SizedBox()
+              ),
+              
             ],
           ),
 
