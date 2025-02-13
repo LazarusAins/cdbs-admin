@@ -741,17 +741,7 @@ showDialog(
                           //   ),
                           // ),
 
-                          Expanded(
-                            flex: 3,
-                            child: Row(
-                              children: [
-                                SelectableText(
-                                  fullName,
-                                  style: TextStyle(fontSize: 16 * scale),
-                                ),
-                              ],
-                            ),
-                          ),
+                          
 
 //                           Expanded(
 //   flex: 3,
