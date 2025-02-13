@@ -279,51 +279,7 @@ String formatDate(DateTime date) {
 
 
 
-                          // Expanded(
-                          //   flex: 3,
-                          //   child: Row(
-                          //     children: [
-                          //       // Checkbox(
-                          //       //   value: checkboxStates[index],
-                          //       //   onChanged: (value) {
-                          //       //     setState(() {
-                          //       //       checkboxStates[index] = value ?? false;
-                          //       //     });
-                          //       //   },
-                          //       //   activeColor: const Color(0XFF012169), // Set the active color to pink
-                          //       // ),
-                          //       Text(
-                          //         fullName,
-                          //         style: TextStyle(fontSize: 16 * scale),
-                          //       ),
-                          //     ],
-                          //   ),
-                          // ),
-
-//                           Expanded(
-//   flex: 3,
-//   child: Tooltip(
-//     message: fullName, // Full name shown on hover
-//     padding: const EdgeInsets.all(8.0),
-//     decoration: BoxDecoration(
-//       color: const Color(0xff012169),
-//       borderRadius: BorderRadius.circular(8),
-//     ),
-//     textStyle: const TextStyle(
-//       color: Colors.white,
-//       fontSize: 14,
-//     ),
-//     child: Text(
-//       fullName,
-//       style: TextStyle(
-//         fontFamily: 'Roboto-R',
-//         fontSize: 16 * scale,
-//       ),
-//       overflow: TextOverflow.ellipsis,
-//       maxLines: 1,
-//     ),
-//   ),
-// ),
+                          
 
 
                           const SizedBox(width: 40,),
