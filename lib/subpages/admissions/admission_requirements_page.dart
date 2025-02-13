@@ -545,11 +545,14 @@ String formatDate(DateTime date) {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           TextButton.icon(
-            onPressed: () {
+            onPressed: () async{
               context.read<AdmissionBloc>().add(MarkAsCompleteClicked(false));
-              setState(()async {
+              try {
+                
+              setState(() {
                 _selectedAction = 0; // Go back to default content
-                try {
+                
+              });
                                           final response = await http.post(
                                             Uri.parse('$apiUrl/api/admin/update_admission'),
                                             headers: {
@@ -575,7 +578,6 @@ String formatDate(DateTime date) {
                                           // Handle error (e.g., network error)
                                           print('Error: $error');
                                         }
-              });
             },
             icon: const Icon(Icons.arrow_back, color: Colors.black),
             label: Text(
