@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:io';
 import 'package:cdbs_admin/bloc/admission_bloc/admission_bloc.dart';
 import 'package:cdbs_admin/bloc/auth/auth_bloc.dart';
@@ -34,6 +35,11 @@ class _AdmissionApplicationsPageState extends State<AdmissionApplicationsPage> {
   final TextEditingController searchController = TextEditingController();
   String searchQuery = '';
 
+
+StreamController<List<Map<String, dynamic>>> searchStreamController = StreamController<List<Map<String, dynamic>>>();
+
+Stream<List<Map<String, dynamic>>> get searchResultsStream => searchStreamController.stream;
+
   int id=0;
   List<Map<String, dynamic>>? formDetails;
   @override
@@ -45,10 +51,33 @@ class _AdmissionApplicationsPageState extends State<AdmissionApplicationsPage> {
    
   }
 
-  void _onSearchChanged(String value) {
-    setState(() {
+  void _onSearchChanged(String value) async{
+    /*setState(() {
       searchQuery = value.toLowerCase();
-    });
+    });*/
+    final response = await http.get(
+    Uri.parse('$apiUrl/api/admin/search_overview?search=$value'), // Pass the search query as a query parameter
+    headers: {
+      "supabase-url": supabaseUrl,
+      "supabase-key": supabaseKey,
+    },
+  );
+
+  if (response.statusCode == 200) {
+    final Map<String, dynamic> data = json.decode(response.body);
+
+    // Check if the response contains user data
+    if (data['userData'] != null) {
+      // Add the filtered user data to the stream
+      searchStreamController.add(List<Map<String, dynamic>>.from(data['userData'] ?? []));
+    } else {
+      // If no user data found, add an empty list to the stream
+      searchStreamController.add([]);
+    }
+  } else {
+    // If the request failed, you can optionally add an error to the stream
+    searchStreamController.addError('Failed to load search results');
+  }
   }
 
   Future<void> fetchFormDetails(int id) async {

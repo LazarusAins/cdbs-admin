@@ -47,7 +47,7 @@ class ApiService {
     }
 
     // Delay the next fetch
-    await Future.delayed(const Duration(seconds: 3)); // Refresh every 3 seconds
+    await Future.delayed(const Duration(seconds: 100000)); // Refresh every 3 seconds
   }
 }
 

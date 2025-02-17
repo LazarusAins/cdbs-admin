@@ -27,14 +27,16 @@ class _StatusDropdownState extends State<StatusDropdown> {
     return DropdownButtonFormField<String>(
       decoration:  InputDecoration(
               labelText: widget.title,
-              labelStyle: const TextStyle(color: Color(0xFF990000)),
+              labelStyle: const TextStyle(color: Color(0xff012169)),
               enabledBorder: OutlineInputBorder(
-                borderSide: BorderSide(color: const Color(0xFF990000).withOpacity(0.35),
+                borderSide: BorderSide(color: const Color(0xff012169).withOpacity(0.35),
                 width: 2.0,),
               ),
               focusedBorder: const OutlineInputBorder(
-                borderSide: BorderSide(color: Color(0xFF990000)),
+                borderSide: BorderSide(color: Color(0xff012169)),
               ),
+              focusColor: Colors.white,
+              fillColor: Colors.white,
             ),
       value: selectedStatus,
       icon: Icon(
@@ -44,7 +46,7 @@ class _StatusDropdownState extends State<StatusDropdown> {
       items: statuses.map((status) {
         return DropdownMenuItem<String>(
           value: status,
-          child: Text(status, style: const TextStyle(color: Color(0xFF990000), fontWeight: FontWeight.normal),),
+          child: Text(status, style: const TextStyle(color: Color(0xff012169), fontWeight: FontWeight.normal),),
         );
       }).toList(),
       onChanged: (value) {
