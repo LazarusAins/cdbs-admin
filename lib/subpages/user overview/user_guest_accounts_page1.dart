@@ -286,7 +286,7 @@ String formatDate(DateTime date) {
 
                           Expanded(
                             flex: 2,
-                            child: Text(request['contact_no'],
+                            child: SelectableText(request['contact_no'],
                               style: TextStyle(fontFamily: 'Roboto-R', fontSize: 16 * scale),
                             ),
                           ),
@@ -295,7 +295,7 @@ String formatDate(DateTime date) {
                           
                           Expanded(
                             flex: 3,
-                            child: Text(request['email_address'],
+                            child: SelectableText(request['email_address'],
                               style: TextStyle(fontFamily: 'Roboto-R', fontSize: 16 * scale),
                             ),
                           ),
@@ -304,7 +304,7 @@ String formatDate(DateTime date) {
 
                           Expanded(
                             flex: 2,
-                            child: Text(today==loginDate?'ACTIVE':"INACTIVE",
+                            child: SelectableText(today==loginDate?'ACTIVE':"INACTIVE",
                               style: TextStyle(fontFamily: 'Roboto-R', fontSize: 16 * scale),
                             ),
                           ),
@@ -313,7 +313,7 @@ String formatDate(DateTime date) {
 
                           Expanded(
                             flex: 2,
-                            child: Text(
+                            child: SelectableText(
                               formattedDate ??"",
                               style: TextStyle(fontFamily: 'Roboto-R', fontSize: 16 * scale),
                             ),
