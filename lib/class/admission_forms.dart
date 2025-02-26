@@ -4,8 +4,13 @@ import 'dart:async';
 
 class ApiService {
   final String apiUrl;
+  late StreamController<List<Map<String, dynamic>>> _streamController;
+  Timer? _timer;
+  ApiService(this.apiUrl){
+    _streamController = StreamController<List<Map<String, dynamic>>>.broadcast();
+  }
 
-  ApiService(this.apiUrl);
+  Stream<List<Map<String, dynamic>>> get admissionFormsStream => _streamController.stream;
 
   Future<List<Map<String, dynamic>>> fetchAdmissionForms(String supabaseUrl, String supabaseKey) async {
     final response = await http.get(
@@ -27,6 +32,53 @@ class ApiService {
     }
   }
 
+
+
+  void startStreaming(String supabaseUrl, String supabaseKey) {
+    _timer?.cancel(); // Cancel any existing timer
+    _timer = Timer.periodic(const Duration(seconds: 3), (timer) async {
+      try {
+        final members = await fetchAdmissionForms(supabaseUrl, supabaseKey);
+        final filteredMembers = members.where((member) => member['db_admission_table'] != null).toList();
+        _streamController.add(filteredMembers);
+      } catch (e) {
+        print('Error fetching members: $e');
+        _streamController.add([]);
+      }
+    });
+  }
+
+  // Stop the stream when searching
+  void stopStreaming() {
+    _timer?.cancel();
+  }
+
+  // Fetch data manually (for search)
+  Future<void> searchAdmissionForms(String supabaseUrl, String supabaseKey, String query) async {
+    stopStreaming(); // Stop the automatic refresh
+    try {
+      final response = await http.get(
+        Uri.parse('$apiUrl/api/admin/search_overview?search=$query'),
+        headers: {
+          "supabase-url": supabaseUrl,
+          "supabase-key": supabaseKey,
+        },
+      );
+
+      if (response.statusCode == 200) {
+        final Map<String, dynamic> data = json.decode(response.body);
+        final searchResults = List<Map<String, dynamic>>.from(data['userData'] ?? []);
+        _streamController.add(searchResults);
+      } else {
+        throw Exception('Failed to fetch search results');
+      }
+    } catch (e) {
+      print('Error searching: $e');
+      _streamController.add([]);
+    }
+  }
+
+
   Stream<List<Map<String, dynamic>>> streamAdmissionForms(String supabaseUrl, String supabaseKey) async* {
   while (true) {
     try {
@@ -47,7 +99,7 @@ class ApiService {
     }
 
     // Delay the next fetch
-    await Future.delayed(const Duration(seconds: 100000)); // Refresh every 3 seconds
+    await Future.delayed(const Duration(seconds: 3)); // Refresh every 3 seconds
   }
 }
 
@@ -84,6 +136,48 @@ class ApiService {
   try {
     final response = await http.post(
       Uri.parse('$apiUrl/api/admin/get_admission_details'),
+      headers: {
+        'Content-Type': 'application/json',
+        'supabase-url': supabaseUrl,
+        'supabase-key': supabaseKey,
+      },
+      body: json.encode({
+        'admission_id': admissionId,  // Send customer_id in the request body
+      }),
+    );
+
+    if (response.statusCode == 200) {
+      final data = json.decode(response.body);
+
+      //print('Response data: $data');  // Debugging output
+
+      // Check if 'members' is a list or a map
+      if (data['detail'] is List) {
+        // If it's already a list, return it as a List<Map<String, dynamic>>
+        return List<Map<String, dynamic>>.from(data['detail']);
+      } else if (data['detail'] is Map) {
+        // If it's a map (single member), convert it to a list with that single map
+        return [data['detail']];
+      } else {
+        // Return an empty list if 'members' is neither a List nor a Map
+        return [];
+      }
+    } else {
+      throw Exception('Failed to load member');
+    }
+  } catch (e) {
+    print('Error: $e');
+    return []; // Return an empty list on error
+  }
+}
+
+
+
+
+Future<List<Map<String, dynamic>>> getReservationDetailsById(int admissionId, String supabaseUrl, String supabaseKey) async {
+  try {
+    final response = await http.post(
+      Uri.parse('$apiUrl/api/admin/get_reservation_details'),
       headers: {
         'Content-Type': 'application/json',
         'supabase-url': supabaseUrl,
@@ -261,6 +355,48 @@ Future<List<Map<String, dynamic>>> fetchPaymentForms(String supabaseUrl, String 
     }
   }
 
+
+
+
+  void startPaymentStreaming(String supabaseUrl, String supabaseKey) {
+    _timer?.cancel(); // Cancel any existing timer
+    _timer = Timer.periodic(const Duration(seconds: 3), (timer) async {
+      try {
+        final members = await fetchPaymentForms(supabaseUrl, supabaseKey);
+        final filteredMembers = members.where((member) => member['db_admission_table'] != null).toList();
+        _streamController.add(filteredMembers);
+      } catch (e) {
+        print('Error fetching members: $e');
+        _streamController.add([]);
+      }
+    });
+  }
+
+  // Fetch data manually (for search)
+  Future<void> searchPaymentAdmissionForms(String supabaseUrl, String supabaseKey, String query) async {
+    stopStreaming(); // Stop the automatic refresh
+    try {
+      final response = await http.get(
+        Uri.parse('$apiUrl/api/admin/search_payments?search=$query'),
+        headers: {
+          "supabase-url": supabaseUrl,
+          "supabase-key": supabaseKey,
+        },
+      );
+
+      if (response.statusCode == 200) {
+        final Map<String, dynamic> data = json.decode(response.body);
+        final searchResults = List<Map<String, dynamic>>.from(data['userData'] ?? []);
+        _streamController.add(searchResults);
+      } else {
+        throw Exception('Failed to fetch search results');
+      }
+    } catch (e) {
+      print('Error searching: $e');
+      _streamController.add([]);
+    }
+  }
+
   Stream<List<Map<String, dynamic>>> streamPaymentForms(String supabaseUrl, String supabaseKey) async* {
   while (true) {
     try {
@@ -284,6 +420,57 @@ Future<List<Map<String, dynamic>>> fetchPaymentForms(String supabaseUrl, String 
     await Future.delayed(const Duration(seconds: 3)); // Refresh every 3 seconds
   }
 }
+
+
+
+Future<List<Map<String, dynamic>>> fetchReservation(String supabaseUrl, String supabaseKey) async {
+    final response = await http.get(
+      Uri.parse('$apiUrl/api/admin/get_admission_preenrollment'),
+      headers: {
+        "supabase-url": supabaseUrl,
+        "supabase-key": supabaseKey,
+      },
+    );
+
+    if (response.statusCode == 200) {
+      final Map<String, dynamic> data = json.decode(response.body);
+      
+      // Ensure the type safety by converting to List<Map<String, dynamic>>
+      return List<Map<String, dynamic>>.from(data['user'] ?? []);
+      
+    } else {
+      throw Exception('Failed to form data');
+    }
+  }
+
+
+
+Stream<List<Map<String, dynamic>>> streamReservation(String supabaseUrl, String supabaseKey) async* {
+  while (true) {
+    try {
+      // Fetch the reservation data (assuming fetchReservation is already defined)
+      final members = await fetchReservation(supabaseUrl, supabaseKey);
+      
+      // Filter out the members where db_admission_table is null or db_payments_table is empty
+      final filteredMembers = members.where((member) {
+        // Ensure db_admission_table is not null and db_payments_table is not empty
+        return member['db_admission_table'] != null &&
+               member['db_admission_table']['db_payments_table'] != null &&
+               (member['db_admission_table']['db_payments_table'] as List).isNotEmpty;
+      }).toList(); // Convert the iterable to a list
+
+      // Emit the filtered list of members
+      yield filteredMembers;
+    } catch (e) {
+      print('Error fetching members: $e');
+      yield []; // Emit an empty list on error
+    }
+
+    // Delay the next fetch
+    await Future.delayed(const Duration(seconds: 3)); // Refresh every 3 seconds
+  }
+}
+
 
 
 
@@ -447,7 +634,7 @@ Future<List<Map<String, dynamic>>> fetchAdminForms(String supabaseUrl, String su
 
 
 
-  Future<List<Map<String, dynamic>>> fetchAdmissionResult(String supabaseUrl, String supabaseKey) async {
+ /* Future<List<Map<String, dynamic>>> fetchAdmissionResult(String supabaseUrl, String supabaseKey) async {
     final response = await http.get(
       Uri.parse('$apiUrl/api/admin/get_admission_for_result'),
       headers: {
@@ -465,7 +652,39 @@ Future<List<Map<String, dynamic>>> fetchAdminForms(String supabaseUrl, String su
     } else {
       throw Exception('Failed to form data');
     }
+  }*/
+
+  Future<List<Map<String, dynamic>>> fetchAdmissionResult(String supabaseUrl, String supabaseKey) async {
+  final response = await http.get(
+    Uri.parse('$apiUrl/api/admin/get_admission_for_result'),
+    headers: {
+      "supabase-url": supabaseUrl,
+      "supabase-key": supabaseKey,
+    },
+  );
+
+  if (response.statusCode == 200) {
+    final Map<String, dynamic> data = json.decode(response.body);
+    
+    // Ensure the type safety by converting to List<Map<String, dynamic>>
+    List<Map<String, dynamic>> members = List<Map<String, dynamic>>.from(data['user'] ?? []);
+
+    // Filter out duplicates by admission_id
+    Map<int, Map<String, dynamic>> uniqueMembers = {};
+
+    for (var member in members) {
+      int admissionId = member['admission_id'];
+      if (!uniqueMembers.containsKey(admissionId)) {
+        uniqueMembers[admissionId] = member;
+      }
+    }
+
+    // Return the list of unique members (based on admission_id)
+    return uniqueMembers.values.toList();
+  } else {
+    throw Exception('Failed to fetch data');
   }
+}
 
   Stream<List<Map<String, dynamic>>> streamAdmissionResult(String supabaseUrl, String supabaseKey) async* {
   while (true) {

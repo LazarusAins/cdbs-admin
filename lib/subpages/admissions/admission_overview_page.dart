@@ -35,14 +35,22 @@ class _AdmissionOverviewPageState extends State<AdmissionOverviewPage> {
   void initState() {
     super.initState();
     _apiService = ApiService(apiUrl); // Replace with your actual API URL
-    admissionForms = _apiService.streamAdmissionForms(supabaseUrl, supabaseKey);
+    //admissionForms = _apiService.streamAdmissionForms(supabaseUrl, supabaseKey);
     // Initialize the service with your endpoint
+    _onSearchChanged('');
   }
 
   void _onSearchChanged(String value) {
-    setState(() {
+    /*setState(() {
       searchQuery = value.toLowerCase();
-    });
+    });*/
+    if (value.isEmpty) {
+       _apiService.startStreaming(supabaseUrl, supabaseKey); // Restart normal streaming
+      admissionForms = _apiService.admissionFormsStream;
+    } else {
+      _apiService.searchAdmissionForms(supabaseUrl,supabaseKey,value); // Perform search
+      admissionForms = _apiService.admissionFormsStream;
+    }
   }
 
 
@@ -133,12 +141,12 @@ class _AdmissionOverviewPageState extends State<AdmissionOverviewPage> {
                   );
                 }
                 requests = snapshot.data ?? []; // Use the data from the snapshot
-                filteredRequest = sortRequests(requests);
-                 filteredRequest = filteredRequest.where((request) {
+                filteredRequest = searchController.text.isEmpty? sortRequests(requests):requests;
+                 /*filteredRequest = filteredRequest.where((request) {
                         final formId = request['db_admission_table']['admission_form_id']?.toLowerCase() ?? '';
                         return formId.contains(searchQuery);
                       
-                    }).toList();
+                    }).toList();*/
                 if (snapshot.hasError) {
                   return Center(child: Text('Error: ${snapshot.error}'));
                 }

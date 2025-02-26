@@ -370,7 +370,7 @@ String formatDate(DateTime date) {
                       ),
                     ),
                     Expanded(
-                      flex: 1,
+                      flex: 2,
                       child: SelectableText(
                         request['db_admission_table']['is_final_result']?'COMPLETE':request['db_admission_table']['admission_status'],
                         style: TextStyle(fontFamily: 'Roboto-R', fontSize: 16 * scale,

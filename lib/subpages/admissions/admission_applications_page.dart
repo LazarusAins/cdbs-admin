@@ -35,49 +35,34 @@ class _AdmissionApplicationsPageState extends State<AdmissionApplicationsPage> {
   final TextEditingController searchController = TextEditingController();
   String searchQuery = '';
 
-
-StreamController<List<Map<String, dynamic>>> searchStreamController = StreamController<List<Map<String, dynamic>>>();
-
-Stream<List<Map<String, dynamic>>> get searchResultsStream => searchStreamController.stream;
-
   int id=0;
   List<Map<String, dynamic>>? formDetails;
   @override
   void initState() {
     super.initState();
     _apiService = ApiService(apiUrl); // Replace with your actual API URL
-    admissionForms = _apiService.streamAdmissionForms(supabaseUrl, supabaseKey);
+    //admissionForms = _apiService.streamAdmissionForms(supabaseUrl, supabaseKey);
     // Initialize the service with your endpoint
+    //_apiService.startStreaming(supabaseUrl, supabaseKey); // Start streaming data
+
+    // Listen to stream
+    //admissionForms = _apiService.admissionFormsStream;
+    _onSearchChanged('');
    
   }
 
-  void _onSearchChanged(String value) async{
+  void _onSearchChanged(String query) async{
     /*setState(() {
       searchQuery = value.toLowerCase();
     });*/
-    final response = await http.get(
-    Uri.parse('$apiUrl/api/admin/search_overview?search=$value'), // Pass the search query as a query parameter
-    headers: {
-      "supabase-url": supabaseUrl,
-      "supabase-key": supabaseKey,
-    },
-  );
-
-  if (response.statusCode == 200) {
-    final Map<String, dynamic> data = json.decode(response.body);
-
-    // Check if the response contains user data
-    if (data['userData'] != null) {
-      // Add the filtered user data to the stream
-      searchStreamController.add(List<Map<String, dynamic>>.from(data['userData'] ?? []));
+    if (query.isEmpty) {
+       _apiService.startStreaming(supabaseUrl, supabaseKey); // Restart normal streaming
+      admissionForms = _apiService.admissionFormsStream;
     } else {
-      // If no user data found, add an empty list to the stream
-      searchStreamController.add([]);
+      
+      _apiService.searchAdmissionForms(supabaseUrl,supabaseKey,query); // Perform search
+      admissionForms = _apiService.admissionFormsStream;
     }
-  } else {
-    // If the request failed, you can optionally add an error to the stream
-    searchStreamController.addError('Failed to load search results');
-  }
   }
 
   Future<void> fetchFormDetails(int id) async {
@@ -189,11 +174,13 @@ String formatDate(DateTime date) {
                 }
                 requests = snapshot.data ?? []; // Use the data from the snapshot
                 filteredRequest = sortRequests(requests);
-                filteredRequest = filteredRequest.where((request) {
+                /*filteredRequest = filteredRequest.where((request) {
+                        
                         final formId = request['db_admission_table']['admission_form_id']?.toLowerCase() ?? '';
+
                         return formId.contains(searchQuery);
                       
-                    }).toList();
+                    }).toList();*/
 
 
                 if (snapshot.hasError) {

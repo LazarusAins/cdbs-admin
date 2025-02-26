@@ -454,7 +454,7 @@ class _AdmissionSchedulesPage2State extends State<AdmissionSchedulesPage2> {
                           ),
                         ),
                 const SizedBox(width: 16),
-                 !isExamToday(formattedExamDate!)?
+                 isExamToday(formattedExamDate!)?
                  !isLoading[i]?
                  Row(
                         mainAxisAlignment: MainAxisAlignment.center,
@@ -483,7 +483,8 @@ class _AdmissionSchedulesPage2State extends State<AdmissionSchedulesPage2> {
                                               'admission_id': admissionSchedule['db_admission_table']['admission_id'],
                                               'user_id': widget.userId,
                                               'is_assessment': true,
-                                              'is_attended': true
+                                              'is_attended': true,
+                                              'admission_status':'pending'
                                             }),
                                           );
 
