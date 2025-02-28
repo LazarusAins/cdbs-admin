@@ -7,6 +7,7 @@ import 'package:cdbs_admin/subpages/admissions/admission_applications_page.dart'
 import 'package:cdbs_admin/subpages/admissions/admission_overview_page.dart';
 import 'package:cdbs_admin/subpages/admissions/admission_payments_page.dart';
 import 'package:cdbs_admin/subpages/admissions/admission_pre_enrollment_page.dart';
+import 'package:cdbs_admin/subpages/admissions/admission_presubmission.dart';
 import 'package:cdbs_admin/subpages/admissions/admission_requirements_page.dart';
 import 'package:cdbs_admin/subpages/admissions/admission_results_page.dart';
 import 'package:cdbs_admin/subpages/admissions/admission_schedules_page.dart';
@@ -831,7 +832,7 @@ return Column(
         case 0:
           return const PreEnrollmentPage();
         case 1:
-          return const S1Page();
+          return const PreSubmission();
         default:
           return const Page6();
       }

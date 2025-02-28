@@ -18,6 +18,7 @@ import 'package:file_picker/file_picker.dart';
 import 'dart:convert';
 
 class AdmissionApplicationsPage extends StatefulWidget {
+  
   const AdmissionApplicationsPage({super.key});
 
   @override

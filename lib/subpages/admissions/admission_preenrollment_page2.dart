@@ -325,9 +325,8 @@ String capitalizeEachWord(String input) {
                                   
                                                                               if (response.statusCode == 200) {
                                                                                 final responseBody = jsonDecode(response.body);
-                                                                                context.read<AdmissionBloc>().add(IsLoadingClicked(false));
-                                                                                updateData(myformDetails[0]['db_admission_table']['admission_id']);
-                                                                                await http.post(
+                                                                                
+                                                                                final result = await http.post(
                                                                                     Uri.parse('$apiUrl/api/admin/update_payments'),
                                                                                     headers: {
                                                                                       'Content-Type': 'application/json',
@@ -339,6 +338,10 @@ String capitalizeEachWord(String input) {
                                                                                       'status':'paid'
                                                                                     }),
                                                                                   );
+                                                                                  if(result.statusCode==200){
+                                                                                    updateData(myformDetails[0]['db_admission_table']['admission_id']);
+                                                                                    context.read<AdmissionBloc>().add(IsLoadingClicked(false));
+                                                                                  }
                                                                                   setState(() {
                                                                                     isGreenExpanded = true;
                                                                                     isRedExpanded = false;

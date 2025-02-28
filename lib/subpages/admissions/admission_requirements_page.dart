@@ -494,7 +494,7 @@ String formatDate(DateTime date) {
                                 formDetails=members;
                               _selectedAction = value; // Change the selected action
                             });
-                            if(!isRequired){
+                            if(request['db_admission_table']['is_all_required_file_uploaded'] != true){
                               try {
                                           final response = await http.post(
                                             Uri.parse('$apiUrl/api/admin/update_admission'),

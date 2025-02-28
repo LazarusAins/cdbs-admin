@@ -2,7 +2,7 @@ import 'package:cdbs_admin/bloc/admission_bloc/admission_bloc.dart';
 import 'package:cdbs_admin/bloc/auth/auth_bloc.dart';
 import 'package:cdbs_admin/class/admission_forms.dart';
 import 'package:cdbs_admin/shared/api.dart';
-import 'package:cdbs_admin/subpages/admissions/admission_preenrollment_page2.dart';
+import 'package:cdbs_admin/subpages/admissions/admission_presubmission2.dart';
 import 'package:cdbs_admin/subpages/landing_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -11,14 +11,14 @@ import 'package:intl/intl.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 
-class PreEnrollmentPage extends StatefulWidget {
-  const PreEnrollmentPage({super.key});
+class PreSubmission extends StatefulWidget {
+  const PreSubmission({super.key});
 
   @override
-  State<PreEnrollmentPage> createState() => _PreEnrollmentPageState();
+  State<PreSubmission> createState() => _PreSubmissionState();
 }
 
-class _PreEnrollmentPageState extends State<PreEnrollmentPage> {
+class _PreSubmissionState extends State<PreSubmission> {
 //List<bool> checkboxStates = List.generate(10, (_) => false);
 
   int _selectedAction = 0; // 0: Default, 1: View, 2: Reminder, 3: Deactivate
@@ -68,7 +68,7 @@ class _PreEnrollmentPageState extends State<PreEnrollmentPage> {
   void initState() {
     super.initState();
     _apiService = ApiService(apiUrl); // Replace with your actual API URL
-    admissionForms = _apiService.streamReservation(supabaseUrl, supabaseKey);
+    admissionForms = _apiService.streamToSubmitRequirements(supabaseUrl, supabaseKey);
     // Initialize the service with your endpoint
   }
 
@@ -404,7 +404,7 @@ const SizedBox(height: 40),
                         child: PopupMenuButton<int>(
                           icon: const Icon(Icons.more_vert),
                           onSelected: (value) async {
-                            List<Map<String, dynamic>> members = await ApiService(apiUrl).getReservationDetailsById(request['admission_id'], supabaseUrl, supabaseKey);
+                            List<Map<String, dynamic>> members = await ApiService(apiUrl).getFormsDetailsById(request['admission_id'], supabaseUrl, supabaseKey);
                                      if(members.isNotEmpty){
                                         setState(()  {
                                           formDetails=members;
@@ -520,9 +520,9 @@ const SizedBox(height: 40),
       ),
       
       // Adding AdmissionApplicationsPage2 below the buttons
-       PreEnrollmentPage2(formDetails: details, onNextPressed: (bool isClicked) {
+       PreSubmission2(formDetails: details, onNextPressed: (bool isClicked) {
          context.read<AdmissionBloc>().add(MarkAsCompleteClicked(isClicked));
-       },userId: userId, adminType: adminType,),
+       },userId: userId, adminType: adminType),
     ],
   ),
 );

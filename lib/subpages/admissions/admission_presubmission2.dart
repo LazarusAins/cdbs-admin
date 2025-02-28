@@ -25,24 +25,25 @@ import 'package:flutter/foundation.dart' show kIsWeb;
 
 
 // Name of your class
-class AdmissionRequirementsPage2 extends StatefulWidget {
+class PreSubmission2 extends StatefulWidget {
   List<Map<String, dynamic>>? formDetails;
   final Function(bool isClicked) onNextPressed;
   int userId;
-
-  AdmissionRequirementsPage2(
+  final String adminType;
+  PreSubmission2(
       {super.key,
       required this.formDetails,
       required this.onNextPressed,
-      required this.userId});
+      required this.userId,
+      required this.adminType});
 
   @override
-  State<AdmissionRequirementsPage2> createState() =>
-      _AdmissionRequirementsPage2State();
+  State<PreSubmission2> createState() =>
+      _PreSubmission2State();
 }
 
-class _AdmissionRequirementsPage2State
-    extends State<AdmissionRequirementsPage2> {
+class _PreSubmission2State
+    extends State<PreSubmission2> {
   TextEditingController rejectController = TextEditingController();
   String? applicationId;
   String? fullName;
@@ -53,7 +54,9 @@ class _AdmissionRequirementsPage2State
   String? dateCreatedString;
   String? formattedDate;
   String? docStatus;
+  String originalUrl = '';
   bool isLoading = false;
+  int index =-1;
   List<Map<String, dynamic>> myformDetails = [];
   List<PlatformFile> _selectedFiles =[];
   bool isSelect = false;
@@ -76,47 +79,13 @@ class _AdmissionRequirementsPage2State
 
   Future<void> updateData(int admissionId) async {
     myformDetails = await ApiService(apiUrl).getFormsDetailsById(admissionId, supabaseUrl, supabaseKey);
-    bool isDone = checkDocumentRequirements(myformDetails[0]['db_admission_table']['level_applying_for'],List<Map<String, dynamic>>.from(myformDetails[0]['db_admission_table']['db_required_documents_table']));
-    if (isDone) {
-      try {
-        final response = await http.post(
-          Uri.parse('$apiUrl/api/admin/update_admission'),
-          headers: {
-            'Content-Type': 'application/json',
-            'supabase-url': supabaseUrl,
-            'supabase-key': supabaseKey,
-          },
-          body: json.encode({
-            'admission_id': myformDetails[0]['admission_id'], // Send admission_id in the request body
-            'is_all_required_file_uploaded': true,
-            'user_id': widget.userId,
-            'admission_status': 'pending',
-            'is_done': true,
-          }),
-        );
-      } catch (error) {
-        // Handle error (e.g., network error)
-        print('Error: $error');
-
-        // Show error modal
-        showDialog(
-          context: context,
-          builder: (context) => AlertDialog(
-            title: const Text("Error"),
-            content: const Text(
-                "An unexpected error occurred. Please try again later."),
-            actions: [
-              TextButton(
-                onPressed: () {
-                  Navigator.of(context).pop(); // Close the dialog
-                },
-                child: const Text("OK"),
-              ),
-            ],
-          ),
-        );
+    setState(() {
+      var document = myformDetails[0]['db_admission_table']['db_required_documents_table'];
+      index = document.indexWhere((doc) => doc['requirements_type'] == 16);
+      if (index != -1) {
+        originalUrl = document[index]['document_url'];
       }
-    }
+    });
   }
 
 
@@ -207,75 +176,6 @@ Future<void> _pickFiles(StateSetter setState) async {
     // Return the formatted date in local time
     return formatter.format(localDate);
   }
-
-
-/*Future<bool> _uploadRecommendation(
-  String requirementsType,
-  String admissionId,
-  String bucketName,
-  String requiredDocId,
-) async {
-  try {
-    var request = http.MultipartRequest(
-      'POST',
-      Uri.parse('$apiUrl/api/admin/upload_requirements'),
-    );
-
-    request.headers.addAll({
-      'supabase-url': supabaseUrl,
-      'supabase-key': supabaseKey,
-    });
-
-    request.fields['requirements_type'] = requirementsType;
-    request.fields['admission_id'] = admissionId;
-    request.fields['required_doc_id'] = requiredDocId;
-    request.fields['bucket_name'] = bucketName;
-
-    for (var file in _selectedFiles!) {
-      try {
-        final fileBytes = await _getFileBytes(file);
-        if (fileBytes != null) {
-          final mimeType = _getMimeType(file.extension ?? '');
-          if (mimeType == null) {
-            print('Unsupported file type: ${file.extension}');
-            continue;
-          }
-
-          request.files.add(http.MultipartFile.fromBytes(
-            'files',
-            fileBytes,
-            filename: file.name,
-            contentType: MediaType.parse(mimeType),
-          ));
-        } else {
-          print('Error reading file bytes for ${file.name}');
-        }
-      } catch (e) {
-        print('Error processing file ${file.name}: $e');
-      }
-    }
-
-    var response = await request.send().timeout(const Duration(seconds: 10));
-
-    if (response.statusCode == 200) {
-      final responseData = await response.stream.bytesToString();
-      final data = json.decode(responseData);
-      print('Upload successful: $data');
-      return true;
-    } else {
-      final responseData = await response.stream.bytesToString();
-      final data = json.decode(responseData);
-      print('Upload failed with status ${response.statusCode}: ${data['error'] ?? data}');
-      return false;
-    }
-  } on TimeoutException {
-    print('The request timed out. Please try again later.');
-    return false;
-  } catch (e) {
-    print('Unexpected error: $e');
-    return false;
-  }
-}*/
 
 Future<bool> uploadFile(String bucketName, List<PlatformFile> selectedFiles, String admissionId) async {
   final uploadURL = '$supabaseUrl/storage/v1/upload/resumable';
@@ -376,7 +276,7 @@ Future<bool> _uploadRecommendation(
   String requirementsType,
   String admissionId,
   String bucketName,
-  String requiredDocId,
+  String status
 ) async {
   try {
    final response = await http.post(
@@ -388,10 +288,10 @@ Future<bool> _uploadRecommendation(
         },
         body: json.encode({
           'requirements_type': requirementsType,
-          'admission_id':admissionId, // Send customer_id in the request body
-          'required_doc_id': requiredDocId,
+          'admission_id':admissionId,
           'bucket_name': bucketName,
-          'file_urls': jsonEncode(fileUrls)
+          'file_urls': jsonEncode(fileUrls),
+          'status':status
         }),
       );
       if (response.statusCode == 200) {
@@ -637,33 +537,26 @@ Future<Uint8List?> _getFileBytes(PlatformFile file) async {
           // Row of Images
 
           SizedBox(
-              width: 1200,
+              width: 800,
               child: Row(
                 children: [
                   Expanded(
-                    flex: 3,
+                    flex: 2,
                     child: Text('Document Type',
                         style: TextStyle(
                             fontSize: 14 * scale, fontFamily: 'Roboto-L')),
                   ),
                   const SizedBox(width: 40),
                   Expanded(
-                    flex: 2,
+                    flex: 3,
                     child: Text('View Documents',
                         style: TextStyle(
                             fontSize: 14 * scale, fontFamily: 'Roboto-L')),
                   ),
                   const SizedBox(width: 40),
                   Expanded(
-                    flex: 1,
-                    child: Text('Status',
-                        style: TextStyle(
-                            fontSize: 14 * scale, fontFamily: 'Roboto-L')),
-                  ),
-                  const SizedBox(width: 40),
-                  Expanded(
                     flex: 2,
-                    child: Text('Reject Reason',
+                    child: Text('Status',
                         style: TextStyle(
                             fontSize: 14 * scale, fontFamily: 'Roboto-L')),
                   ),
@@ -677,58 +570,50 @@ Future<Uint8List?> _getFileBytes(PlatformFile file) async {
                 ],
               )),
 
-          SizedBox(
-            width: 1200,
-            height: 400,
-            child: BlocConsumer<AuthBloc, AuthState>(
-              listener: (context, state) {
-                if (state is AuthInitial) {
-                  Navigator.pushAndRemoveUntil(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => const LoginPage(),
-                    ),
-                    (route) => false,
-                  );
-                }
-              },
-              builder: (context, authState) {
-                
-              if (authState is AuthSuccess) {
-                return ListView.builder(
-                    itemCount: myformDetails[0]['db_admission_table']['db_required_documents_table'].length,
-                    itemBuilder: (context, index) {
-                      var document = myformDetails[0]['db_admission_table']['db_required_documents_table'];
-                      String gradeLevel = myformDetails[0]['db_admission_table']['level_applying_for'];
-                      String originalUrl = '';
-                      if (document[index]['document_url'] != null) {
-                        originalUrl = document[index]['document_url'].substring(
-                            2, document[index]['document_url'].length - 2);
+              SizedBox(
+                  width: 800,
+                  height: 400,
+                  child: BlocConsumer<AuthBloc, AuthState>(
+                    listener: (context, state) {
+                      if (state is AuthInitial) {
+                        Navigator.pushAndRemoveUntil(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => const LoginPage(),
+                          ),
+                          (route) => false,
+                        );
                       }
-                      String encodedUrl = Uri.encodeFull(originalUrl);
-                      String reject =  document[index]['reject_reason'] ?? 'N/A';
+                    },
+                    builder: (context, authState) {
+                      
+                    if (authState is AuthSuccess) {
+                      var document = myformDetails[0]['db_admission_table']['db_required_documents_table'];
+                      index = document.indexWhere((doc) => doc['requirements_type'] == 16);
+                      if (index != -1) {
+                        originalUrl = document[index]['document_url'];
+                      }
                       return Column(children: [
                         const SizedBox(height: 10),
                         Row(
                             crossAxisAlignment: CrossAxisAlignment.center,
                             children: [
                               Expanded(
-                                flex: 3,
-                                child: Text(
-                                  document[index]['db_requirement_type_table']['doc_type'],
+                                flex: 2,
+                                child: Text('Pre-Requirement',
                                   style: TextStyle(
                                       fontFamily: 'Roboto-R', fontSize: 14 * scale),
                                 ),
                               ),
                               const SizedBox(width: 40),
                               Expanded(
-                                flex: 2,
-                                child: (document[index]['requirements_type'] == 5 || document[index]['requirements_type'] == 15) && document[index]['document_url'] == null
+                                flex: 3,
+                                child: originalUrl.isEmpty
                                 ? ElevatedButton(
                                     onPressed: () {
                                       // Upload button action
                                       // Implement the upload functionality here\
-                                      showUploadDialog(context, document[index], setState);
+                                      showUploadDialog(context, myformDetails[0]['db_admission_table']['admission_id'], setState);
                                     },
                                     style: ElevatedButton.styleFrom(
                                       backgroundColor: const Color(0xff28a745), // Green color for upload
@@ -742,24 +627,9 @@ Future<Uint8List?> _getFileBytes(PlatformFile file) async {
                                     ),
                                   )
                                 :ElevatedButton(
-                                  onPressed: document[index]['document_url'] != null
+                                  onPressed: originalUrl.isNotEmpty
                                       ? () async {
-                                          // Ensure imagePath is a valid URL
-                
-                                          // Use the browser's built-in window.open method
-                                         /* try {
-                                            html.window.open(encodedUrl,
-                                                '_blank'); // Open URL in a new tab
-                                          } catch (e) {
-                                            ScaffoldMessenger.of(context)
-                                                .showSnackBar(
-                                              const SnackBar(
-                                                  content: Text(
-                                                      'Could not open the link')),
-                                            );
-                                          }*/
-                                          List<String> urls = List<String>.from(json.decode(document[index]['document_url']));
-                          
+                                          List<String> urls = List<String>.from(json.decode(originalUrl));
                                           try {
                                             for (var url in urls) {
                                               // Open each URL in a new tab
@@ -789,10 +659,8 @@ Future<Uint8List?> _getFileBytes(PlatformFile file) async {
                               ),
                               const SizedBox(width: 40),
                               Expanded(
-                                  flex: 1,
-                                  child: Text(
-                                    document[index]['document_status']
-                                        .toUpperCase(),
+                                  flex: 2,
+                                  child: Text(myformDetails[0]['db_admission_table']['is_pre_requirement_submitted'] ?'COMPLETE':'PENDING',
                                     style: TextStyle(
                                         fontFamily: 'Roboto-R',
                                         fontSize: 14 * scale),
@@ -800,24 +668,17 @@ Future<Uint8List?> _getFileBytes(PlatformFile file) async {
                                   const SizedBox(width: 40),
                               Expanded(
                                   flex: 2,
-                                  child: Text(reject,
-                                    style: TextStyle(
-                                        fontFamily: 'Roboto-R',
-                                        fontSize: 14 * scale),
-                                  )),
-                              const SizedBox(width: 40),
-                              authState.adminType=='Admin' || authState.adminType=='Principal' || authState.adminType=='Registrar' || authState.adminType=='IT' || authState.adminType=='Sisters' || authState.adminType=='Center for Learner Wellness'?
-                              Expanded(
-                                  flex: 2,
                                   child: Row(
                                     children: [
                                       ElevatedButton(
-                                        onPressed:
-                                            document[index]['document_status'] == 'pending'
+                                        onPressed:!myformDetails[0]['db_admission_table']['is_pre_requirement_submitted']
                                                 ? () {
-                                                    // Handle accept action
-                                                    showDialog(
-                                                      context: context,
+                                                  if(myformDetails[0]['db_admission_table']['admission_status']=='PROBATIONARY'){
+                                                    if(originalUrl.isEmpty){
+                                                      _showMessage('Please upload the probationary contract first','error');
+                                                    }else{
+                                                      
+showDialog(context: context,
                                                       builder: (context) => Dialog(
                                                         shape:
                                                             RoundedRectangleBorder(
@@ -980,16 +841,17 @@ Future<Uint8List?> _getFileBytes(PlatformFile file) async {
                                                                                 context.read<AdmissionBloc>().add(IsLoadingClicked(true));
                                                                                 try {
                                                                                   final response = await http.post(
-                                                                                    Uri.parse('$apiUrl/api/admin/update_required_form'),
+                                                                                    Uri.parse('$apiUrl/api/admin/update_admission'),
                                                                                     headers: {
                                                                                       'Content-Type': 'application/json',
                                                                                       'supabase-url': supabaseUrl,
                                                                                       'supabase-key': supabaseKey,
                                                                                     },
                                                                                     body: json.encode({
-                                                                                      'document_status': 'accepted',
-                                                                                      'required_doc_id': document[index]['required_doc_id'],
-                                                                                      'reject_reason': '',
+                                                                                      'admission_id': myformDetails[0]['admission_id'], // Send admission_id in the request body
+                                                                                      'is_pre_require': true,
+                                                                                      'user_id': widget.userId,
+                                                                                      'is_done': true,
                                                                                     }),
                                                                                   );
                 
@@ -997,7 +859,7 @@ Future<Uint8List?> _getFileBytes(PlatformFile file) async {
                                                                                     final responseBody = jsonDecode(response.body);
                                                                                     setState(() {
                                                                                       updateData(document[index]['admission_id']);
-                                                                                      bool isDone = checkDocumentRequirements(gradeLevel, List<Map<String, dynamic>>.from(document));
+                                                                                      //bool isDone = checkDocumentRequirements(gradeLevel, List<Map<String, dynamic>>.from(document));
                                                                                     });
                                                                                     // Show success modal
                                                                                     context.read<AdmissionBloc>().add(IsLoadingClicked(false));
@@ -1047,7 +909,339 @@ Future<Uint8List?> _getFileBytes(PlatformFile file) async {
                                                                                                     const SizedBox(height: 20),
                                                                                                     // No Form Submitted Text
                                                                                                     const Text(
-                                                                                                      "Attached Documents has beeen Accepted!",
+                                                                                                      "Done updating data",
+                                                                                                      style: TextStyle(
+                                                                                                        fontSize: 20,
+                                                                                                        fontWeight: FontWeight.bold,
+                                                                                                      ),
+                                                                                                      textAlign: TextAlign.center,
+                                                                                                    ),
+                                                                                                  ],
+                                                                                                ),
+                                                                                                // Divider
+                                                                                                const Divider(
+                                                                                                  thickness: 1,
+                                                                                                  color: Colors.grey,
+                                                                                                ),
+                                                                                                // Close Button
+                                                                                                Align(
+                                                                                                  alignment: Alignment.bottomCenter,
+                                                                                                  child: ElevatedButton(
+                                                                                                    onPressed: () {
+                                                                                                      Navigator.of(context).pop(); // Close the modal
+                                                                                                    },
+                                                                                                    style: ElevatedButton.styleFrom(
+                                                                                                      backgroundColor: const Color(0xff012169), // Button color
+                                                                                                      shape: RoundedRectangleBorder(
+                                                                                                        borderRadius: BorderRadius.circular(8),
+                                                                                                      ),
+                                                                                                      minimumSize: const Size(double.infinity, 50), // Expand width and set height
+                                                                                                    ),
+                                                                                                    child: const Text(
+                                                                                                      "Close",
+                                                                                                      style: TextStyle(fontSize: 16, color: Colors.white),
+                                                                                                    ),
+                                                                                                  ),
+                                                                                                ),
+                                                                                              ],
+                                                                                            ),
+                                                                                          ),
+                                                                                        );
+                                                                                      },
+                                                                                    );
+                                                                                  } else {
+                                                                                    // Handle failure
+                                                                                    final responseBody = jsonDecode(response.body);
+                                                                                    print('Error: ${responseBody['error']}');
+                                                                                    Navigator.of(context).pop();
+                                                                                    showDialog(
+                                                                                      context: context,
+                                                                                      builder: (context) => AlertDialog(
+                                                                                        title: const Text("Error"),
+                                                                                        content: Text("Failed to complete review: ${responseBody['error']}"),
+                                                                                        actions: [
+                                                                                          TextButton(
+                                                                                            onPressed: () {
+                                                                                              Navigator.of(context).pop(); // Close dialog
+                                                                                            },
+                                                                                            child: const Text("OK"),
+                                                                                          ),
+                                                                                        ],
+                                                                                      ),
+                                                                                    );
+                                                                                  }
+                                                                                } catch (error) {
+                                                                                  // Handle network error
+                                                                                  print('Error: $error');
+                                                                                  Navigator.of(context).pop();
+                                                                                  showDialog(
+                                                                                    context: context,
+                                                                                    builder: (context) => AlertDialog(
+                                                                                      title: const Text("Error"),
+                                                                                      content: const Text("An unexpected error occurred. Please try again later."),
+                                                                                      actions: [
+                                                                                        TextButton(
+                                                                                          onPressed: () {
+                                                                                            Navigator.of(context).pop(); // Close dialog
+                                                                                          },
+                                                                                          child: const Text("OK"),
+                                                                                        ),
+                                                                                      ],
+                                                                                    ),
+                                                                                  );
+                                                                                } // Close dialog
+                                                                              },
+                                                                              child:
+                                                                                  const Text(
+                                                                                "Yes",
+                                                                                style:
+                                                                                    TextStyle(color: Colors.white),
+                                                                              ),
+                                                                            ),
+                                                                          ),
+                                                                        ),
+                                                                      ],
+                                                                    ),
+                                                            );
+                                                          },
+                                                        ),
+                                                      ),
+                                                    );
+                                                    }
+                                                  }else{
+                                                    
+showDialog(context: context,
+                                                      builder: (context) => Dialog(
+                                                        shape:
+                                                            RoundedRectangleBorder(
+                                                                borderRadius:
+                                                                    BorderRadius
+                                                                        .circular(
+                                                                            8.0)),
+                                                        child: BlocConsumer<
+                                                            AdmissionBloc,
+                                                            AdmissionState>(
+                                                          listener:
+                                                              (context, state) {},
+                                                          builder:
+                                                              (context, state) {
+                                                            if (state
+                                                                is AdmissionIsLoading) {
+                                                              isLoading =
+                                                                  state.isLoading;
+                                                            }
+                                                            return SizedBox(
+                                                              width: 349.0,
+                                                              height: 272.0,
+                                                              child: isLoading
+                                                                  ? const CustomSpinner(
+                                                                      color: Color(
+                                                                          0xff13322b), // Change the spinner color if needed
+                                                                      size:
+                                                                          60.0, // Change the size of the spinner if needed
+                                                                    )
+                                                                  : Column(
+                                                                      mainAxisAlignment:
+                                                                          MainAxisAlignment
+                                                                              .center,
+                                                                      children: [
+                                                                        // Title
+                                                                        const Padding(
+                                                                          padding: EdgeInsets.only(
+                                                                              top:
+                                                                                  16.0,
+                                                                              bottom:
+                                                                                  8.0),
+                                                                          child:
+                                                                              Text(
+                                                                            "Confirmation",
+                                                                            style:
+                                                                                TextStyle(
+                                                                              fontFamily:
+                                                                                  'Roboto',
+                                                                              fontSize:
+                                                                                  20,
+                                                                              fontWeight:
+                                                                                  FontWeight.bold,
+                                                                            ),
+                                                                            textAlign:
+                                                                                TextAlign.center,
+                                                                          ),
+                                                                        ),
+                                                                        // Content
+                                                                        const Padding(
+                                                                          padding: EdgeInsets.symmetric(
+                                                                              horizontal:
+                                                                                  24.0),
+                                                                          child:
+                                                                              Text(
+                                                                            "Are you sure you want to confirm?",
+                                                                            style:
+                                                                                TextStyle(
+                                                                              fontFamily:
+                                                                                  'Roboto',
+                                                                              fontSize:
+                                                                                  13,
+                                                                              fontWeight:
+                                                                                  FontWeight.normal,
+                                                                            ),
+                                                                            textAlign:
+                                                                                TextAlign.center,
+                                                                          ),
+                                                                        ),
+                                                                        const SizedBox(
+                                                                            height:
+                                                                                16.0),
+                                                                        // Divider
+                                                                        const Padding(
+                                                                          padding: EdgeInsets.only(
+                                                                              left:
+                                                                                  20,
+                                                                              right:
+                                                                                  20),
+                                                                          child: Divider(
+                                                                              thickness:
+                                                                                  1),
+                                                                        ),
+                                                                        const SizedBox(
+                                                                            height:
+                                                                                16.0),
+                                                                        // No Button
+                                                                        Padding(
+                                                                          padding: const EdgeInsets
+                                                                              .symmetric(
+                                                                              horizontal:
+                                                                                  30.0),
+                                                                          child:
+                                                                              SizedBox(
+                                                                            width:
+                                                                                289,
+                                                                            height:
+                                                                                35,
+                                                                            child:
+                                                                                TextButton(
+                                                                              style:
+                                                                                  TextButton.styleFrom(
+                                                                                backgroundColor:
+                                                                                    const Color(0xffD3D3D3), // No button color
+                                                                                shape:
+                                                                                    RoundedRectangleBorder(
+                                                                                  borderRadius: BorderRadius.circular(8),
+                                                                                ),
+                                                                              ),
+                                                                              onPressed:
+                                                                                  () {
+                                                                                Navigator.of(context).pop(); // Close dialog
+                                                                              },
+                                                                              child:
+                                                                                  const Text(
+                                                                                "No",
+                                                                                style:
+                                                                                    TextStyle(color: Colors.black),
+                                                                              ),
+                                                                            ),
+                                                                          ),
+                                                                        ),
+                                                                        const SizedBox(
+                                                                            height:
+                                                                                12.0), // Spacing between buttons
+                                                                        // Yes Button
+                                                                        Padding(
+                                                                          padding: const EdgeInsets
+                                                                              .symmetric(
+                                                                              horizontal:
+                                                                                  30.0),
+                                                                          child:
+                                                                              SizedBox(
+                                                                            width:
+                                                                                289,
+                                                                            height:
+                                                                                35,
+                                                                            child:
+                                                                                TextButton(
+                                                                              style:
+                                                                                  TextButton.styleFrom(
+                                                                                backgroundColor:
+                                                                                    const Color(0xff012169), // Amber button color
+                                                                                shape:
+                                                                                    RoundedRectangleBorder(
+                                                                                  borderRadius: BorderRadius.circular(8),
+                                                                                ),
+                                                                              ),
+                                                                              onPressed:
+                                                                                  () async {
+                                                                                context.read<AdmissionBloc>().add(IsLoadingClicked(true));
+                                                                                try {
+                                                                                  final response = await http.post(
+                                                                                    Uri.parse('$apiUrl/api/admin/update_admission'),
+                                                                                    headers: {
+                                                                                      'Content-Type': 'application/json',
+                                                                                      'supabase-url': supabaseUrl,
+                                                                                      'supabase-key': supabaseKey,
+                                                                                    },
+                                                                                    body: json.encode({
+                                                                                      'admission_id': myformDetails[0]['admission_id'], // Send admission_id in the request body
+                                                                                      'is_pre_require': true,
+                                                                                      'user_id': widget.userId,
+                                                                                      'is_done': true,
+                                                                                    }),
+                                                                                  );
+                
+                                                                                  if (response.statusCode == 200) {
+                                                                                    final responseBody = jsonDecode(response.body);
+                                                                                    setState(() {
+                                                                                      updateData(document[index]['admission_id']);
+                                                                                      //bool isDone = checkDocumentRequirements(gradeLevel, List<Map<String, dynamic>>.from(document));
+                                                                                    });
+                                                                                    // Show success modal
+                                                                                    context.read<AdmissionBloc>().add(IsLoadingClicked(false));
+                                                                                    Navigator.of(context).popUntil((route) => route.isFirst);
+                                                                                    showDialog(
+                                                                                      context: context,
+                                                                                      builder: (BuildContext context) {
+                                                                                        return Dialog(
+                                                                                          shape: RoundedRectangleBorder(
+                                                                                            borderRadius: BorderRadius.circular(10),
+                                                                                          ),
+                                                                                          child: Container(
+                                                                                            width: 349,
+                                                                                            height: 272,
+                                                                                            padding: const EdgeInsets.all(16),
+                                                                                            child: Column(
+                                                                                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                                                                              children: [
+                                                                                                // Centered Text
+                                                                                                const Center(
+                                                                                                    // child: Text(
+                                                                                                    //   "",
+                                                                                                    //   style: TextStyle(
+                                                                                                    //     fontSize: 20,
+                                                                                                    //   ),
+                                                                                                    //   textAlign: TextAlign.center,
+                                                                                                    // ),
+                                                                                                    ),
+                                                                                                // Red X Icon with Circular Outline
+                                                                                                Column(
+                                                                                                  children: [
+                                                                                                    Container(
+                                                                                                      width: 90,
+                                                                                                      height: 90,
+                                                                                                      decoration: BoxDecoration(
+                                                                                                        shape: BoxShape.circle,
+                                                                                                        border: Border.all(color: const Color(0XFF012169), width: 2),
+                                                                                                      ),
+                                                                                                      child: const Center(
+                                                                                                        child: Icon(
+                                                                                                          Icons.check,
+                                                                                                          color: Color(0XFF012169),
+                                                                                                          size: 40,
+                                                                                                        ),
+                                                                                                      ),
+                                                                                                    ),
+                                                                                                    const SizedBox(height: 20),
+                                                                                                    // No Form Submitted Text
+                                                                                                    const Text(
+                                                                                                      "Done updating data",
                                                                                                       style: TextStyle(
                                                                                                         fontSize: 20,
                                                                                                         fontWeight: FontWeight.bold,
@@ -1146,360 +1340,35 @@ Future<Uint8List?> _getFileBytes(PlatformFile file) async {
                                                       ),
                                                     );
                                                   }
+                                                  }
                                                 : null,
                                         style: ElevatedButton.styleFrom(
                                           backgroundColor: const Color(0xff007937),
                                           padding: const EdgeInsets.symmetric(
                                               horizontal: 30),
                                           shape: const RoundedRectangleBorder(
-                                            borderRadius: BorderRadius.only(
-                                              topLeft: Radius.circular(10),
-                                              bottomLeft: Radius.circular(10),
+                                            borderRadius: BorderRadius.all(Radius.circular(10)
                                             ),
                                           ),
                                         ),
                                         child: const Text(
-                                          'Accept',
+                                          'SAVE',
                                           style: TextStyle(color: Colors.white),
                                         ),
                                       ),
-                                      const SizedBox(width: 2),
-                                      ElevatedButton(
-                                        onPressed:
-                                            document[index]['document_status'] ==
-                                                    'pending'
-                                                ? () {
-                                                    showDialog(
-                                                      context: context,
-                                                      builder: (context) {
-                                                        return Dialog(
-                                                          shape:
-                                                              RoundedRectangleBorder(
-                                                                  borderRadius:
-                                                                      BorderRadius
-                                                                          .circular(
-                                                                              8.0)),
-                                                          child: BlocConsumer<AdmissionBloc, AdmissionState>(
-                                                            listener:(context, state) {},
-                                                            builder: (context, state) {
-                                                              if (state is AdmissionIsLoading) {
-                                                                isLoading = state.isLoading;
-                                                              }
-                                                              return SizedBox(
-                                                                width: 349.0,
-                                                                height: 320.0,
-                                                                child: isLoading
-                                                                  ? const CustomSpinner(
-                                                                      color:
-                                                                          Color(0xff13322b), // Change the spinner color if needed
-                                                                      size: 60.0, // Change the size of the spinner if needed
-                                                                    ): Column(
-                                                                  mainAxisSize:
-                                                                      MainAxisSize
-                                                                          .min,
-                                                                  children: [
-                                                                    Padding(
-                                                                      padding:
-                                                                          const EdgeInsets
-                                                                              .all(
-                                                                              16.0),
-                                                                      child: Column(
-                                                                        crossAxisAlignment:
-                                                                            CrossAxisAlignment
-                                                                                .start,
-                                                                        children: [
-                                                                          // const Text(
-                                                                          //   "Reject",
-                                                                          //   style: TextStyle(
-                                                                          //     fontSize: 18,
-                                                                          //     fontWeight: FontWeight.bold,
-                                                                          //   ),
-                                                                          // ),
-                                                                          const SizedBox(
-                                                                              height:
-                                                                                  10),
-                                                                          const Text(
-                                                                              "Please provide a reason for rejection:"),
-                                                                          const SizedBox(
-                                                                              height:
-                                                                                  10),
-                                                                          TextField(
-                                                                            controller:
-                                                                                rejectController,
-                                                                            decoration:
-                                                                                const InputDecoration(
-                                                                              border:
-                                                                                  OutlineInputBorder(),
-                                                                              hintText:
-                                                                                  "Enter rejection reason",
-                                                                            ),
-                                                                            maxLines:
-                                                                                3,
-                                                                          ),
-                                                                        ],
-                                                                      ),
-                                                                    ),
-                                                                    const Padding(
-                                                                      padding: EdgeInsets
-                                                                          .only(
-                                                                              left:
-                                                                                  20,
-                                                                              right:
-                                                                                  20),
-                                                                      child: Divider(
-                                                                          thickness:
-                                                                              1),
-                                                                    ),
-                                                                    Padding(
-                                                                      padding: const EdgeInsets
-                                                                          .symmetric(
-                                                                          horizontal:
-                                                                              16.0,
-                                                                          vertical:
-                                                                              8.0),
-                                                                      child: Column(
-                                                                        children: [
-                                                                          // Close button on the first row
-                                                                          SizedBox(
-                                                                            width: double
-                                                                                .infinity,
-                                                                            height:
-                                                                                35,
-                                                                            child:
-                                                                                TextButton(
-                                                                              style:
-                                                                                  TextButton.styleFrom(
-                                                                                backgroundColor:
-                                                                                    const Color(0xffD3D3D3),
-                                                                                shape:
-                                                                                    RoundedRectangleBorder(
-                                                                                  borderRadius: BorderRadius.circular(8),
-                                                                                ),
-                                                                              ),
-                                                                              onPressed:
-                                                                                  () {
-                                                                                Navigator.of(context).pop(); // Close dialog
-                                                                              },
-                                                                              child:
-                                                                                  const Text(
-                                                                                "Close",
-                                                                                style:
-                                                                                    TextStyle(fontSize: 16, color: Colors.black),
-                                                                              ),
-                                                                            ),
-                                                                          ),
-                                                                          const SizedBox(
-                                                                              height:
-                                                                                  10), // Spacer between the buttons
-                                                                          // Submit button on the second row
-                                                                          SizedBox(
-                                                                            width: double
-                                                                                .infinity,
-                                                                            height:
-                                                                                35,
-                                                                            child:
-                                                                                ElevatedButton(
-                                                                              style:
-                                                                                  ElevatedButton.styleFrom(
-                                                                                backgroundColor:
-                                                                                    const Color(0xff012169),
-                                                                                shape:
-                                                                                    RoundedRectangleBorder(
-                                                                                  borderRadius: BorderRadius.circular(8),
-                                                                                ),
-                                                                              ),
-                                                                              onPressed:
-                                                                                  () async {
-                                                                                // Handle rejection submission logic
-                                                                                context.read<AdmissionBloc>().add(IsLoadingClicked(true));
-                                                                                try {
-                                                                                  final response = await http.post(
-                                                                                    Uri.parse('$apiUrl/api/admin/update_required_form'),
-                                                                                    headers: {
-                                                                                      'Content-Type': 'application/json',
-                                                                                      'supabase-url': supabaseUrl,
-                                                                                      'supabase-key': supabaseKey,
-                                                                                    },
-                                                                                    body: json.encode({
-                                                                                      'document_status': 'rejected',
-                                                                                      'required_doc_id': document[index]['required_doc_id'],
-                                                                                      'reject_reason': rejectController.text,
-                                                                                      'doc_type_id': document[index]['requirements_type'],
-                                                                                      'user_id': myformDetails[0]['user_id']
-                                                                                    }),
-                                                                                  );
-                
-                                                                                  if (response.statusCode == 200) {
-                                                                                    final responseBody = jsonDecode(response.body);
-                                                                                    setState(() {
-                                                                                      updateData(document[index]['admission_id']);
-                                                                                      checkDocumentRequirements(gradeLevel, List<Map<String, dynamic>>.from(myformDetails[0]['db_admission_table']['db_required_documents_table']));
-                                                                                    });
-                                                                                    context.read<AdmissionBloc>().add(IsLoadingClicked(false));
-                                                                                    Navigator.of(context).popUntil((route) => route.isFirst);
-                                                                                    showDialog(
-                                                                                      context: context,
-                                                                                      builder: (BuildContext context) {
-                                                                                        return Dialog(
-                                                                                          shape: RoundedRectangleBorder(
-                                                                                            borderRadius: BorderRadius.circular(10),
-                                                                                          ),
-                                                                                          child: Container(
-                                                                                            width: 349,
-                                                                                            height: 272,
-                                                                                            padding: const EdgeInsets.all(16),
-                                                                                            child: Column(
-                                                                                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                                                                              children: [
-                                                                                                // Centered Text
-                                                                                                const Center(
-                                                                                                    // child: Text(
-                                                                                                    //   "",
-                                                                                                    //   style: TextStyle(
-                                                                                                    //     fontSize: 20,
-                                                                                                    //   ),
-                                                                                                    //   textAlign: TextAlign.center,
-                                                                                                    // ),
-                                                                                                    ),
-                                                                                                // Red X Icon with Circular Outline
-                                                                                                Column(
-                                                                                                  children: [
-                                                                                                    Container(
-                                                                                                      width: 90,
-                                                                                                      height: 90,
-                                                                                                      decoration: BoxDecoration(
-                                                                                                        shape: BoxShape.circle,
-                                                                                                        border: Border.all(color: const Color(0XFF012169), width: 2),
-                                                                                                      ),
-                                                                                                      child: const Center(
-                                                                                                        child: Icon(
-                                                                                                          Icons.check,
-                                                                                                          color: Color(0XFF012169),
-                                                                                                          size: 40,
-                                                                                                        ),
-                                                                                                      ),
-                                                                                                    ),
-                                                                                                    const SizedBox(height: 20),
-                                                                                                    // No Form Submitted Text
-                                                                                                    const Text(
-                                                                                                      "Attached Documents has beeen Rejected!",
-                                                                                                      style: TextStyle(
-                                                                                                        fontSize: 20,
-                                                                                                        fontWeight: FontWeight.bold,
-                                                                                                      ),
-                                                                                                      textAlign: TextAlign.center,
-                                                                                                    ),
-                                                                                                  ],
-                                                                                                ),
-                                                                                                // Divider
-                                                                                                const Divider(
-                                                                                                  thickness: 1,
-                                                                                                  color: Colors.grey,
-                                                                                                ),
-                                                                                                // Close Button
-                                                                                                Align(
-                                                                                                  alignment: Alignment.bottomCenter,
-                                                                                                  child: ElevatedButton(
-                                                                                                    onPressed: () {
-                                                                                                      Navigator.of(context).pop(); // Close the modal
-                                                                                                    },
-                                                                                                    style: ElevatedButton.styleFrom(
-                                                                                                      backgroundColor: const Color(0xff012169), // Button color
-                                                                                                      shape: RoundedRectangleBorder(
-                                                                                                        borderRadius: BorderRadius.circular(8),
-                                                                                                      ),
-                                                                                                      minimumSize: const Size(double.infinity, 50), // Expand width and set height
-                                                                                                    ),
-                                                                                                    child: const Text(
-                                                                                                      "Close",
-                                                                                                      style: TextStyle(fontSize: 16, color: Colors.white),
-                                                                                                    ),
-                                                                                                  ),
-                                                                                                ),
-                                                                                              ],
-                                                                                            ),
-                                                                                          ),
-                                                                                        );
-                                                                                      },
-                                                                                    );
-                                                                                  } else {
-                                                                                    final responseBody = jsonDecode(response.body);
-                                                                                    print('Error: ${responseBody['error']}');
-                                                                                    Navigator.of(context).pop();
-                                                                                    context.read<AdmissionBloc>().add(IsLoadingClicked(false));
-                                                                                    showDialog(
-                                                                                      context: context,
-                                                                                      builder: (context) => AlertDialog(
-                                                                                        title: const Text("Error"),
-                                                                                        content: Text("Failed to complete review: ${responseBody['error']}"),
-                                                                                        actions: [
-                                                                                          TextButton(
-                                                                                            onPressed: () {
-                                                                                              Navigator.of(context).pop(); // Close dialog
-                                                                                            },
-                                                                                            child: const Text("OK"),
-                                                                                          ),
-                                                                                        ],
-                                                                                      ),
-                                                                                    );
-                                                                                  }
-                                                                                } catch (error) {
-                                                                                  context.read<AdmissionBloc>().add(IsLoadingClicked(false));
-                                                                                  print('Error: $error');
-                                                                                  Navigator.of(context).pop();
-                                                                                }
-                                                                              },
-                                                                              child: const Text(
-                                                                                  "Submit",
-                                                                                  style: TextStyle(fontSize: 16, fontFamily: 'Roboto-R', color: Colors.white)),
-                                                                            ),
-                                                                          ),
-                                                                        ],
-                                                                      ),
-                                                                    ),
-                                                                  ],
-                                                                ),
-                                                              );
-                                                            },
-                                                          ),
-                                                        );
-                                                      },
-                                                    );
-                                                  }
-                                                : null,
-                                        style: ElevatedButton.styleFrom(
-                                          backgroundColor: const Color(0xffC8102E),
-                                          padding: const EdgeInsets.symmetric(
-                                              horizontal: 30),
-                                          shape: const RoundedRectangleBorder(
-                                            borderRadius: BorderRadius.only(
-                                              topRight: Radius.circular(10),
-                                              bottomRight: Radius.circular(10),
-                                            ),
-                                          ),
-                                        ),
-                                        child: const Text(
-                                          'Reject',
-                                          style: TextStyle(color: Colors.white),
-                                        ),
-                                      )
                                     ],
-                                  )):
-
-                                  Expanded(
-                                      flex: 2,
-                                      child: Container(),
-                                  )    
-                            ]),
-                        const Divider(color: Colors.grey, thickness: 1),
+                                  ))
+                            ]
+                        )
+                        
                       ]);
-                    });
-              }
-              
-              return Container();
-              }
-            )
-          )
+                    }
+                    return Container();
+                    }
+                  )
+              )
+
+          
         ],
       ),
     );
@@ -1666,7 +1535,7 @@ Future<Uint8List?> _getFileBytes(PlatformFile file) async {
   
   
 void showUploadDialog(
-      BuildContext context, final request, StateSetter setState) {
+      BuildContext context, int admissionId, StateSetter setState) {
     bool _isLoading = false;
     showDialog(
       context: context,
@@ -1875,7 +1744,7 @@ void showUploadDialog(
                                                                           onPressed: _selectedFiles.isNotEmpty? () async {
                                                                              try{
                                                                                 if(_selectedFiles.isEmpty){
-                                                                                  _showMessage('Please select a recommendation file to upload', "Error: File upload is required");
+                                                                                  _showMessage('Please select a recommendation file to upload', "error");
                                                                                   setState(() {
                                                                                     _selectedFiles = [];
                                                                                   });
@@ -1883,34 +1752,35 @@ void showUploadDialog(
                                                                                   setState(() {
                                                                                     _isLoading = true; // Start loading
                                                                                   });
-                                                                                  bool isDone = await uploadFile('document_upload',_selectedFiles, request['admission_id'].toString());
+                                                                                  bool isDone = await uploadFile('document_upload',_selectedFiles, admissionId.toString());
                                                                                   if(isDone){
                                                                                     
                                                                                     bool isStated = await _uploadRecommendation(
-                                                                                      request['requirements_type'].toString(),
-                                                                                      request['admission_id'].toString(),
+                                                                                      '16',
+                                                                                      admissionId.toString(),
                                                                                       'document_upload',
-                                                                                      request['required_doc_id'].toString()
+                                                                                      'accepted'
                                                                                     );
                                                                 
                                                                                     setState(() {
                                                                                       _selectedFiles = [];
                                                                                       _isLoading = false; // Stop loading
+                                                                                      
                                                                                     });
                                                                                       
                                                                                     if (isStated) {
-                                                                                      updateData(request['admission_id']);
+                                                                                      updateData(admissionId);
                                                                                       Navigator.of(context).popUntil((route) => route.isFirst);
                                                                                       _selectedFiles = [];
                                                                                       isSelect=false;
-                                                                                      _showMessage('Recommendation for: ${request['admission_id']} has been uploaded',
+                                                                                      _showMessage('Pre-Requirement for: $admissionId has been uploaded',
                                                                                           'Upload Completed');
                                                                                     } else {
                                                                                       Navigator.of(context).popUntil((route) => route.isFirst);
                                                                                       _selectedFiles = [];
                                                                                       isSelect=false;
                                                                                       _showMessage('File upload failed. The file size exceeds the 4 MB limit. Please ensure the file is under 4 MB in size.',
-                                                                                          'Error');
+                                                                                          'error');
                                                                                     }
 
                                                                                   }
@@ -1918,7 +1788,7 @@ void showUploadDialog(
                                                                               }catch(error){
                                                                                 _selectedFiles = [];
                                                                                 isSelect=false;
-                                                                                _showMessage('Connection timeout', "Error: File upload failed");
+                                                                                _showMessage('Connection timeout', "error");
                                                                               }
                                                                           }:null,
                                                                           child:
@@ -1946,31 +1816,85 @@ void showUploadDialog(
     showDialog(
       context: context,
       builder: (context) {
-        return AlertDialog(
-          backgroundColor: Colors.white,
-          shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(20.0),
-              side: const BorderSide(color: Color(0xff13322b), width: 2)),
-          title: Center(
-              child: Text(
-            title,
-            style: const TextStyle(
-                fontSize: 16,
-                fontWeight: FontWeight.w700,
-                color: Color(0xff13322b)),
-          )),
-          content: Text(message,
-              style: const TextStyle(fontSize: 16, color: Color(0xff13322b))),
-          actions: <Widget>[
-            TextButton(
-              child: const Text("OK",
-                  style: TextStyle(fontSize: 16, color: Color(0xff13322b))),
+        return Dialog(
+    shape: RoundedRectangleBorder(
+      borderRadius: BorderRadius.circular(10),
+    ),
+    child: Container(
+      width: 349,
+      height: 272,
+      padding: const EdgeInsets.all(16),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          // Centered Text
+          const Center(
+              // child: Text(
+              //   "",
+              //   style: TextStyle(
+              //     fontSize: 20,
+              //   ),
+              //   textAlign: TextAlign.center,
+              // ),
+              ),
+          // Red X Icon with Circular Outline
+          Column(
+            children: [
+              Container(
+                width: 90,
+                height: 90,
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  border: Border.all(color: title!='error'? const Color(0XFF012169) : const Color(0XFFE15252), width: 2),
+                ),
+                child:  Center(
+                  child: Icon(title!='error'?
+                    Icons.check:Icons.close_rounded,
+                    color: title!='error'?const  Color(0XFF012169):const Color(0XFFE15252),
+                    size: 40,
+                  ),
+                ),
+              ),
+              const SizedBox(height: 20),
+              // No Form Submitted Text
+               Text(message,
+                style: const TextStyle(
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold,
+                ),
+                textAlign: TextAlign.center,
+              ),
+            ],
+          ),
+          // Divider
+          const Divider(
+            thickness: 1,
+            color: Colors.grey,
+          ),
+          // Close Button
+          Align(
+            alignment: Alignment.bottomCenter,
+            child: ElevatedButton(
               onPressed: () {
-                Navigator.of(context).pop();
+                Navigator.of(context).pop(); // Close the modal
               },
+              style: ElevatedButton.styleFrom(
+                backgroundColor: const Color(0xff012169), // Button color
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(8),
+                ),
+                minimumSize: const Size(double.infinity, 50), // Expand width and set height
+              ),
+              child: const Text(
+                "Close",
+                style: TextStyle(fontSize: 16, color: Colors.white),
+              ),
             ),
-          ],
-        );
+          ),
+        ],
+      ),
+    ),
+  );
       },
     );
   }

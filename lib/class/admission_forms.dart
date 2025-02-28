@@ -474,6 +474,49 @@ Stream<List<Map<String, dynamic>>> streamReservation(String supabaseUrl, String 
 
 
 
+Stream<List<Map<String, dynamic>>> streamToSubmitRequirements(String supabaseUrl, String supabaseKey) async* {
+  while (true) {
+    try {
+      // Fetch the reservation data (assuming fetchReservation is already defined)
+      final members = await fetchReservation(supabaseUrl, supabaseKey);
+
+      // Filter out the members where db_admission_table is null or db_payments_table is empty
+      final filteredMembers = members.where((member) {
+        // Ensure db_admission_table is not null and db_payments_table is not empty
+        return member['db_admission_table'] != null &&
+            member['db_admission_table']['db_payments_table'] != null &&
+            (member['db_admission_table']['db_payments_table'] as List).isNotEmpty;
+      }).toList(); // Convert the iterable to a list
+
+      // Process and filter payments based on the "status" value being "paid"
+      final filteredPayments = filteredMembers.map((member) {
+        // Get the payments and filter by "status": "paid"
+        final payments = (member['db_admission_table']['db_payments_table'] as List)
+            .where((payment) => payment['status'] == 'paid')
+            .toList();
+
+        // Replace db_payments_table with only the "paid" payments
+        member['db_admission_table']['db_payments_table'] = payments;
+
+        return member;
+      }).toList();
+
+      // Emit the filtered list of members with only "paid" payments
+      yield filteredPayments;
+    } catch (e) {
+      print('Error fetching members: $e');
+      yield []; // Emit an empty list on error
+    }
+
+    // Delay the next fetch
+    await Future.delayed(const Duration(seconds: 3)); // Refresh every 3 seconds
+  }
+}
+
+
+
+
+
 
 //EXAM SCHEDULE
 Future<List<Map<String, dynamic>>> fetchSchedule(String supabaseUrl, String supabaseKey) async {
